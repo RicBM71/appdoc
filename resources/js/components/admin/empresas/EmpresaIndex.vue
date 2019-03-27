@@ -22,6 +22,7 @@
 						<td>{{ props.item.id }}</td>
                         <td>{{ props.item.nombre }}</td>
 						<td>{{ props.item.cif }}</td>
+                        <td>{{ props.item.contacto }}</td>
                         <td>{{ props.item.telefono1 }}</td>
 						<td class="justify-center layout px-0">
 							<v-icon
@@ -72,6 +73,11 @@ import MyDialog from '@/components/shared/MyDialog'
             text: 'CIF',
             align: 'left',
             value: 'cif'
+          },
+          {
+            text: 'Contacto',
+            align: 'left',
+            value: 'contacto'
           },
           {
             text: 'Teléfono',

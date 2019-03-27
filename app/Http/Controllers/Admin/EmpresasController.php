@@ -88,7 +88,8 @@ class EmpresasController extends Controller
     {
         if (request()->wantsJson())
             return [
-                'empresa' =>$empresa
+                'empresa' =>$empresa,
+                'empresas'=>Empresa::all()
             ];
 
     }

@@ -151,6 +151,7 @@
                     <v-flex sm3>
                         <v-text-field
                             v-model="empresa.email"
+                            v-validate="'email'"
                             :error-messages="errors.collect('email')"
                             label="email"
                             data-vv-name="email"
@@ -238,10 +239,13 @@
 
                 </v-layout>
                 <v-layout row wrap>
-                    <v-flex sm3 d-flex>
+                    <v-flex sm4 d-flex>
                         <v-select
-                        :items="items"
-                        label="Standard"
+                        v-model="empresa.carpeta_id"
+                        item-text="name"
+                        item-value="id"
+                        :items="empresas"
+                        label="Link Empresa"
                         ></v-select>
                     </v-flex>
                     <v-flex sm2>
@@ -328,6 +332,8 @@ import ModMenu from '@/components/shared/ModMenu'
                     updated_at:"",
                     created_at:"",
                 },
+                empresas:[],
+                kk:"",
                 empresa_id: "",
 
         		status: false,
@@ -355,6 +361,11 @@ import ModMenu from '@/components/shared/ModMenu'
                 axios.get('/admin/empresas/'+id+'/edit')
                     .then(res => {
                         this.empresa = res.data.empresa;
+                        res.data.empresas.map((e) =>
+                            {
+                                this.empresas.push({id: e.id, name: e.nombre});
+                            })
+
                         this.show = true;
 
                     })
@@ -389,7 +400,7 @@ import ModMenu from '@/components/shared/ModMenu'
             },
             submit() {
 
-                //console.log(this.empresa);
+                console.log(this.empresa);
                 this.enviando = true;
 
                 var url = "/admin/empresas/"+this.empresa.id;

@@ -3587,6 +3587,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3627,6 +3631,8 @@ __webpack_require__.r(__webpack_exports__);
         updated_at: "",
         created_at: ""
       },
+      empresas: [],
+      kk: "",
       empresa_id: "",
       status: false,
       enviando: false,
@@ -3656,6 +3662,12 @@ __webpack_require__.r(__webpack_exports__);
 
     if (id > 0) axios.get('/admin/empresas/' + id + '/edit').then(function (res) {
       _this.empresa = res.data.empresa;
+      res.data.empresas.map(function (e) {
+        _this.empresas.push({
+          id: e.id,
+          name: e.nombre
+        });
+      });
       _this.show = true;
     }).catch(function (err) {
       _this.$toast.error(err.response.data.message);
@@ -3690,7 +3702,7 @@ __webpack_require__.r(__webpack_exports__);
     submit: function submit() {
       var _this3 = this;
 
-      //console.log(this.empresa);
+      console.log(this.empresa);
       this.enviando = true;
       var url = "/admin/empresas/" + this.empresa.id;
       this.$validator.validateAll().then(function (result) {
@@ -3791,6 +3803,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3810,6 +3823,10 @@ __webpack_require__.r(__webpack_exports__);
         text: 'CIF',
         align: 'left',
         value: 'cif'
+      }, {
+        text: 'Contacto',
+        align: 'left',
+        value: 'contacto'
       }, {
         text: 'Teléfono',
         align: 'Left',
@@ -40241,6 +40258,14 @@ var render = function() {
                     { attrs: { sm3: "" } },
                     [
                       _c("v-text-field", {
+                        directives: [
+                          {
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: "email",
+                            expression: "'email'"
+                          }
+                        ],
                         attrs: {
                           "error-messages": _vm.errors.collect("email"),
                           label: "email",
@@ -40578,10 +40603,22 @@ var render = function() {
                 [
                   _c(
                     "v-flex",
-                    { attrs: { sm3: "", "d-flex": "" } },
+                    { attrs: { sm4: "", "d-flex": "" } },
                     [
                       _c("v-select", {
-                        attrs: { items: _vm.items, label: "Standard" }
+                        attrs: {
+                          "item-text": "name",
+                          "item-value": "id",
+                          items: _vm.empresas,
+                          label: "Link Empresa"
+                        },
+                        model: {
+                          value: _vm.empresa.carpeta_id,
+                          callback: function($$v) {
+                            _vm.$set(_vm.empresa, "carpeta_id", $$v)
+                          },
+                          expression: "empresa.carpeta_id"
+                        }
                       })
                     ],
                     1
@@ -40789,6 +40826,8 @@ var render = function() {
                               _vm._v(" "),
                               _c("td", [_vm._v(_vm._s(props.item.cif))]),
                               _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(props.item.contacto))]),
+                              _vm._v(" "),
                               _c("td", [_vm._v(_vm._s(props.item.telefono1))]),
                               _vm._v(" "),
                               _c(
@@ -40854,7 +40893,7 @@ var render = function() {
                       ],
                       null,
                       false,
-                      884202816
+                      1688352350
                     )
                   })
                 ],

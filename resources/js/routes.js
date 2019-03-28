@@ -27,6 +27,11 @@ import EmpresaCreate from './components/admin/empresas/EmpresaCreate.vue';
 import EmpresaEdit from './components/admin/empresas/EmpresaEdit.vue';
 
 
+import ClienteIndex from './components/clientes/ClienteIndex.vue';
+import ClienteCreate from './components/clientes/ClienteCreate.vue';
+import ClienteEdit from './components/clientes/ClienteEdit.vue';
+
+
 import EditPassword from './components/profile/edit-password/EditPassword.vue';
 
 export default [
@@ -142,6 +147,21 @@ export default [
                 path: '/empresas/:id/edit',
                 name: 'empresa.edit',
                 component: EmpresaEdit,
+            },
+            {
+                path: '/clientes',
+                name: 'cliente.index',
+                component: ClienteIndex,
+            },
+            {
+                path: '/clientes/create',
+                name: 'cliente.create',
+                component: ClienteCreate,
+            },
+            {
+                path: '/clientes/:id/edit',
+                name: 'cliente.edit',
+                component: ClienteEdit,
             },
             // {
             //     path: '*',

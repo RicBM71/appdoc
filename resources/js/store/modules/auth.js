@@ -12,9 +12,11 @@ export const UNSET_USER = 'UNSET_USER';
 |--------------------------------------------------------------------------
 */
 const initialState = {
+    id: null,
 	name: null,
     username: null,
     avatar: null,
+    empresa: null,
     roles: [],
     permisos: []
 };
@@ -26,16 +28,20 @@ const initialState = {
 */
 const mutations = {
 	[SET_USER](state, payload) {
+        state.id = payload.user.id;
 		state.name = payload.user.name;
         state.username = payload.user.username;
         state.avatar = payload.user.avatar;
+        state.empresa = payload.user.empresa;
         state.roles = payload.user.roles;
         state.permisos = payload.user.permisos;
 	},
 	[UNSET_USER](state, payload) {
+        state.name = null;
 		state.name = null;
         state.username = null;
         state.avatar = null;
+        state.empresa=null;
         state.roles = [];
         state.permisos = [];
 	}

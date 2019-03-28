@@ -1,8 +1,9 @@
 <?php
 
-use App\Retencion;
 use App\Iva;
 use App\Carpeta;
+use App\Empresa;
+use App\Retencion;
 use Carbon\Carbon;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
@@ -22,11 +23,10 @@ class GenericasSeeder extends Seeder
         Retencion::truncate();
         Iva::truncate();
         Carpeta::truncate();
+        Empresa::truncate();
 
-        // DB::table('retenciones')->insert([
-        //     'nombre' => 'IRPF 15',
-        //     'importe' => 15
-        // ]);
+        DB::table('empresa_user')->truncate();
+
 
         $reg = new Retencion;
         $reg->nombre = "IRPF ";
@@ -37,6 +37,12 @@ class GenericasSeeder extends Seeder
         $reg->nombre = "General ";
         $reg->importe = 21;
         $reg->save();
+
+        $emp = new Empresa;
+        $emp->nombre = "Sanaval";
+        $emp->razon = "Sanaval";
+        $emp->titulo = "Sanaval";
+        $emp->save();
 
         $json = File::get("database/data/carpetas.json");
         $data = json_decode($json);
@@ -50,6 +56,10 @@ class GenericasSeeder extends Seeder
              'updated_at'=> $obj->updated_at
            ));
         }
+
+        DB::table('empresa_user')->insert(
+            ['empresa_id' => 1, 'user_id' => '1']
+        );
 
     }
 }

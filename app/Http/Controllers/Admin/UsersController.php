@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\User;
+use App\Empresa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Events\UsuarioFueCreado;
@@ -138,12 +139,15 @@ class UsersController extends Controller
             $permisos_user[]=$permiso->name;
         }
 
+        $emp_user = $user->empresas->pluck('id');
+
         if (request()->wantsJson())
             return [
                 'user'          =>$user,
                 'role_user'     => $role_user,
                 'permisos'      =>$permisos,
-                'permisos_user' => $permisos_user
+                'permisos_user' => $permisos_user,
+                'emp_user'      => $emp_user
             ];
 
         return redirect()->route('home');
@@ -177,6 +181,8 @@ class UsersController extends Controller
            $data['password'] = Hash::make($data['password']);
 
         $user->update($data);
+
+        $user->syncEmpresas($request->get('empresas'));
 
         if (request()->wantsJson())
             return ['status'=>'U','user'=>$user, 'msg' => 'EL Usuario ha sido modficado'];
@@ -223,5 +229,16 @@ class UsersController extends Controller
 
         return response('Se ha modificado correctamente la password', 200);
 		//return response()->json(compact('user'));
-	}
+    }
+
+    public function updateEmpresa(Request $request, User $user){
+
+        if ($request->empresa > 0){
+            $user->update(['empresa_id' => $request->empresa]);
+            $request->session()->put('empresa', $request->empresa);
+        }
+        else
+            $user->update(['empresa_id' => 0]);
+
+    }
 }

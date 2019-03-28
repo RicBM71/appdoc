@@ -7,22 +7,36 @@
             </v-flex>
 			<v-flex xs2>
 				<v-btn v-on:click="create" small >
-					<v-icon small>add</v-icon> Crear Empresa
+					<v-icon small>add</v-icon> Crear Cliente
 				</v-btn>
 			</v-flex>
         </v-layout>
         <v-layout row wrap>
+            <v-flex xs6></v-flex>
+            <v-flex xs6>
+                <v-spacer></v-spacer>
+                <v-text-field
+                    v-model="search"
+                    append-icon="search"
+                    label="Buscar"
+                    single-line
+                    hide-details
+                ></v-text-field>
+            </v-flex>
+        </v-layout>
+        <br/>
+        <v-layout row wrap>
 			<v-flex xs12>
 				<v-data-table
 				:headers="headers"
-				:items="empresas"
-
+				:items="clientes"
+                :search="search"
 				>
 					<template slot="items" slot-scope="props">
 						<td>{{ props.item.id }}</td>
                         <td>{{ props.item.nombre }}</td>
 						<td>{{ props.item.cif }}</td>
-                        <td>{{ props.item.contacto }}</td>
+                        <td>{{ props.item.email }}</td>
                         <td>{{ props.item.telefono1 }}</td>
 						<td class="justify-center layout px-0">
 							<v-icon
@@ -58,6 +72,8 @@ import MyDialog from '@/components/shared/MyDialog'
     },
     data () {
       return {
+        titulo:"Clientes",
+        search:"",
         headers: [
           {
             text: 'ID',
@@ -75,9 +91,9 @@ import MyDialog from '@/components/shared/MyDialog'
             value: 'cif'
           },
           {
-            text: 'Contacto',
+            text: 'email',
             align: 'left',
-            value: 'contacto'
+            value: 'email'
           },
           {
             text: 'Teléfono',
@@ -90,21 +106,21 @@ import MyDialog from '@/components/shared/MyDialog'
             value: ''
           }
         ],
-        empresas:[],
+        clientes:[],
         status: false,
 		registros: false,
         dialog: false,
-        empresa_id: 0,
-        titulo:"Empresas"
+        cliente_id: 0,
+
       }
     },
     mounted()
     {
 
-        axios.get('/admin/empresas')
+        axios.get('/mto/clientes')
             .then(res => {
 
-                this.empresas = res.data;
+                this.clientes = res.data;
                 this.registros = true;
             })
             .catch(err =>{
@@ -115,24 +131,24 @@ import MyDialog from '@/components/shared/MyDialog'
     },
     methods:{
         create(){
-            this.$router.push({ name: 'empresa.create'})
+            this.$router.push({ name: 'cliente.create'})
         },
         editItem (id) {
-            this.$router.push({ name: 'empresa.edit', params: { id: id } })
+            this.$router.push({ name: 'cliente.edit', params: { id: id } })
         },
         openDialog (id){
             this.dialog = true;
-            this.empresa_id = id;
+            this.cliente_id = id;
         },
         destroyReg () {
             this.dialog = false;
 
-            axios.post('/admin/empresas/'+this.empresa_id,{_method: 'delete'})
+            axios.post('/clientes/'+this.cliente_id,{_method: 'delete'})
                 .then(response => {
 
-                this.empresas = response.data;
-                this.$toast.success('Empresa eliminada!');
-                    console.log(this.empresas);
+                this.clientes = response.data;
+                this.$toast.success('Cliente eliminado!');
+                    console.log(this.clientes);
 
             })
             .catch(err => {

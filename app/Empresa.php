@@ -35,4 +35,10 @@ class Empresa extends Model
         $this->attributes['web'] = strtolower($web);
 
     }
+
+       // establecemos la relación muchos a muchos
+       public function users()
+       {
+           return $this->belongsToMany(User::class);
+       }
 }

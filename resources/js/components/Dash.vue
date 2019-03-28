@@ -1,5 +1,47 @@
 <template>
     <v-app>
+          <div class="text-xs-center">
+            <v-dialog
+            v-model="myEmpresa"
+            width="500"
+            >
+            <v-card>
+                <v-card-title
+                class="headline grey lighten-2"
+                primary-title
+                >
+                Seleccionar empresa
+                </v-card-title>
+
+                <v-card-text>
+                    <v-flex sm2 d-flex></v-flex>
+                    <v-flex sm8 d-flex>
+                        <v-select
+                            v-on:change="setEmpresa"
+                            v-model="empresa_id"
+                            item-text="name"
+                            item-value="id"
+                            :items="empresas"
+                            label="Empresa"
+                        ></v-select>
+                    </v-flex>
+                </v-card-text>
+
+                <v-divider></v-divider>
+
+                <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="primary"
+                    flat
+                    @click="myEmpresa=false"
+                >
+                    Cerrar
+                </v-btn>
+                </v-card-actions>
+            </v-card>
+            </v-dialog>
+        </div>
         <div v-if="isLoggedIn">
         <v-navigation-drawer
             v-if="isLoggedIn"
@@ -18,7 +60,7 @@
                 >
                     <v-flex xs6>
                     <v-subheader v-if="item.heading">
-                        {{ item.heading }}
+                        {{ item.heading }}head
                     </v-subheader>
                     </v-flex>
                     <v-flex xs6 class="text-xs-center">
@@ -77,9 +119,12 @@
             >
             <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
                 <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-                <span class="hidden-sm-and-down">Sanaval</span>
+                <span class="hidden-sm-and-down">{{ empresaTxt }}</span>
             </v-toolbar-title>
             <v-spacer></v-spacer>
+            <v-btn icon v-on:click="empresa">
+                <v-icon>work_outline</v-icon>
+            </v-btn>
             <v-btn icon v-on:click="home">
                 <v-icon>home</v-icon>
             </v-btn>
@@ -127,6 +172,11 @@ export default {
         drawer: true,
         show: true,
 
+        empresaTxt:"Sanaval",
+        empresas:[],
+        myEmpresa:false,
+        empresa_id:0,
+
         // user: {
         //     name : ""
         // },
@@ -161,7 +211,7 @@ export default {
         },
 
         items: [
-            { icon: 'settings', text: 'Settings' },
+            { icon: 'people', text: 'Clientes', name:'cliente.index' },
         ]
     }),
     mounted(){
@@ -169,11 +219,22 @@ export default {
         axios.get('/dash')
             .then(res => {
                 this.setAuthUser(res.data.user);
+
+                this.empresa_id = this.user.empresa;
                 //this.show = true;
                 if (this.isRoot)
                     this.items.push(this.root);
                 else if(this.isAdmin)
                     this.items.push(this.admin);
+
+                res.data.user.empresas.map((e) =>{
+                    if (e.id == this.empresa_id)
+                        this.empresaTxt = e.titulo;
+                    this.empresas.push({id: e.id, name: e.titulo});
+                })
+
+
+
             })
             .catch(err => {
                 //console.log(err);
@@ -190,7 +251,7 @@ export default {
 				'setAuthUser'
 			]),
         abrir(name){
-            this.$router.push({path: name});
+            this.$router.push({name: name});
         },
         home(){
             this.$router.push({name: 'dash'});
@@ -198,10 +259,30 @@ export default {
         passwd(){
             this.$router.push({name: 'edit.password'});
         },
+        empresa(){
+            this.myEmpresa=true;
+        },
+        setEmpresa(){
+
+            this.empresas.map((e) =>{
+                   if (e.id == this.empresa_id)
+                        this.empresaTxt = e.name;
+                });
+
+            axios({
+                    method: 'put',
+                    url: '/admin/users/'+this.user.id+'/empresa',
+                    data:{ empresa: this.empresa_id }
+                })
+                .catch(err => {
+                    this.$toast.error("No se ha podido seleccionar la empresa");
+                });
+
+            this.myEmpresa=false;
+        },
         Logout() {
             this.$toast.success('Logout, espere...');
             axios.post('/logout').then(res => {
-                //console.log(res);
                 this.$store.dispatch('unsetAuthUser')
                 this.$router.push({name: 'index'});
 			})

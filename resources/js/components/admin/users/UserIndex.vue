@@ -15,7 +15,7 @@
 			<v-flex xs12>
 				<v-data-table
 				:headers="headers"
-				:items="this.usuarios"
+				:items="usuarios"
 
 				>
 					<template slot="items" slot-scope="props">

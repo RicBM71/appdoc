@@ -54,6 +54,7 @@ class UsersTableSeeder extends Seeder
             $user->name = "User ".$i;
             $user->email = "user".$i."@rr.es";
             $user->username = "User".$i;
+            $user->empresa_id = 1;
             $user->password = Hash::make('123');
             $user->save();
             $user->assignRole($userRole);

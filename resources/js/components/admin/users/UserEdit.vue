@@ -139,7 +139,7 @@
                     </v-flex>
                     <v-flex sm6>
                         <div v-if="showPer">
-                            <!-- <user-role v-bind:user_id="this.user.id" v-bind:role_user="this.role_user"></user-role> -->
+                            <user-emp :user_id="this.user.id" :emp_user="this.emp_user"></user-emp>
                             <user-role :user_id="this.user.id" :role_user="this.role_user"></user-role>
                             <user-permiso :user_id="this.user.id" :permisos="this.permisos" :permisos_selected="permisos_selected"></user-permiso>
                         </div>
@@ -182,6 +182,7 @@
     import moment from 'moment'
     import UserRole from './UserRole'
     import UserPermiso from './UserPermiso'
+    import UserEmp from './UserEmp'
     import ModMenu from '@/components/shared/ModMenu'
     import {mapGetters} from 'vuex';
     import MyDialog from '@/components/shared/MyDialog'
@@ -193,6 +194,7 @@
       		validator: 'new'
     	},
         components: {
+            'user-emp': UserEmp,
             'user-role': UserRole,
             'user-permiso': UserPermiso,
             'mod-menu': ModMenu,
@@ -211,12 +213,15 @@
                     avatar:   "",
                     blocked_at:"",
                     blocked:  "",
+                    empresa_id:"",
                     updated_at:"",
                     created_at:"",
                 },
                 password: "",
                 password_confirmation:"",
                 titulo:   "Usuarios",
+
+                emp_user:[],
                 role_user: [],
                 permisos:[],
                 permisos_selected:[],
@@ -272,20 +277,24 @@
                 var id = this.$route.params.id;
                 axios.get('/admin/users/'+id+'/edit')
                     .then(res => {
-                        //console.log(res.data);
-                        this.showPer=true;
+                       // console.log(res.data);
+
 
                         this.user = res.data.user;
                         this.role_user = res.data.role_user;
                         this.permisos = res.data.permisos;
                         this.permisos_selected = res.data.permisos_user;
 
+                        this.emp_user = res.data.emp_user;
+
+                        this.showPer=true;
+
                     })
                     .catch(err => {
 
                         if (err.response.status != 401){
                            this.$toast.error(err.response.data.message);
-                            this.$router.push({ name: 'users'});
+                          //  this.$router.push({ name: 'users'});
                         }
 
                     })

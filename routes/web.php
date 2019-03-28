@@ -26,9 +26,14 @@ Route::group([
             ->put('users/{user}/roles','UsersRolesController@update');
         Route::middleware('role:Root|Admin')
             ->put('users/{user}/permissions','UsersPermissionsController@update');
+        Route::middleware('role:Root|Admin')
+            ->put('users/{user}/empresas','UsersEmpresasController@update');
+        Route::put('users/{user}/empresa', 'UsersController@updateEmpresa');
 
         Route::post('users/{user}/avatar', 'AvatarsController@store');
         Route::delete('avatars/{user}/delete', 'AvatarsController@destroy');
+
+        Route::resource('clientes', 'ClientesController', ['except'=>'show','as' => 'admin']);
 
         Route::middleware('role:Root|Admin')->group(function () {
             Route::resource('retenciones', 'RetencionesController', ['except'=>'show','as' => 'admin']);
@@ -41,6 +46,17 @@ Route::group([
 
     }
 );
+
+
+Route::group([
+    'prefix' => 'mto',
+    'namespace' => 'Mto',
+    'middleware' => 'auth'],
+    function (){
+        Route::resource('clientes', 'ClientesController', ['except'=>'show','as' => 'mto']);
+    }
+);
+
 
 Route::any('{all}', function () {
     return view('welcome');

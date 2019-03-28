@@ -25,10 +25,9 @@ class StoreEmpresas extends FormRequest
     public function rules()
     {
 
-        return [
+        $data = [
             'nombre'        => ['required', 'string', 'max:50'],
             'razon'         => ['nullable','string', 'max:50'],
-            'cif'           => ['nullable','string', 'max:20', Rule::unique('empresas')->ignore($this->route('empresa')->id)],
             'poblacion'     => ['nullable','string', 'max:50'],
             'direccion'     => ['nullable','string', 'max:50'],
             'cpostal'       => ['nullable','string', 'max:20'],
@@ -50,5 +49,9 @@ class StoreEmpresas extends FormRequest
             'carpeta_id'    => ['nullable','integer'],
         ];
 
+        if ($this->filled('id'))
+            $data['cif'] = ['nullable','string', 'max:20', Rule::unique('empresas')->ignore($this->route('empresa')->id)];
+
+        return $data;
     }
 }

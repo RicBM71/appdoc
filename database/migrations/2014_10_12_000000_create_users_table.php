@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('avatar')->nullable();
             $table->timestamp('blocked_at')->nullable();
             $table->boolean('blocked')->default(false);
+            $table->unsignedInteger('empresa_id')->default(1);
             $table->timestamps();
         });
     }

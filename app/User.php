@@ -23,7 +23,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name','lastname', 'email', 'username', 'password', 'avatar','blocked', 'blocked_at'
+        'name','lastname', 'email', 'username', 'password', 'avatar','blocked', 'blocked_at','empresa_id'
     ];
 
 
@@ -132,6 +132,22 @@ class User extends Authenticatable
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+       // establecemos la relación muchos a muchos
+    public function empresas()
+    {
+        return $this->belongsToMany(Empresa::class);
+    }
+
+    public function syncEmpresas($empresas)
+    {
+        $empresasIds = collect($empresas)->map(function($empresa){
+            return Empresa::find($empresa) ? $empresa : false;
+        });
+
+
+         return $this->empresas()->sync($empresasIds);
     }
 
 }

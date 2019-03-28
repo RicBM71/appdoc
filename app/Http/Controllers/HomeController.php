@@ -48,13 +48,18 @@ class HomeController extends Controller
         }
 
         $user = [
+            'id'   => $authUser->id,
             'name' => $authUser->name,
             'username' => $authUser->username,
             'avatar'=> $authUser->avatar,
+            'empresa'=> $authUser->empresa_id,
             'roles' => $role_user,
-            'permisos'=> $permisos_user
+            'permisos'=> $permisos_user,
+            'empresas'=>$authUser->empresas
         ];
 
+
+        $request->session()->put('empresa', $authUser->empresa_id);
 
         if (request()->wantsJson())
             return (compact('user'));

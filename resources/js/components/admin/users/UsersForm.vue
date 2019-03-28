@@ -218,7 +218,7 @@
                 this.items.splice(2,1)
 
             var id = this.$route.params.id;
-            console.log(id);
+            //console.log(id);
 
             if (id > 0){
                 var id = this.$route.params.id;

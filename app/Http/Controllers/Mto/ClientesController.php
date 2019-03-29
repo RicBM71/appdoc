@@ -17,6 +17,11 @@ class ClientesController extends Controller
     {
         $data = Cliente::all();
 
+
+        dd(Cliente::get()->toSql());
+
+        //\Log::info(Cliente::all()->toSql());
+
         if (request()->wantsJson())
             return $data;
 
@@ -60,8 +65,19 @@ class ClientesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Cliente $cliente )
+    public function edit($id)
     {
+
+        $empresa_id =  session()->get('empresa');
+
+        //$cliente = Cliente::where('id', '=', $id)->findOrFail();
+
+        $cliente = Cliente::where('empresa_id', '=', $empresa_id)->findOrFail($id);
+        // if (is_null($cliente))
+        //     return response(401);
+
+
+
         if (request()->wantsJson())
             return [
                 'cliente' =>$cliente,

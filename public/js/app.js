@@ -7902,12 +7902,11 @@ __webpack_require__.r(__webpack_exports__);
     if (id > 0) axios.get('/mto/clientes/' + id + '/edit').then(function (res) {
       _this.cliente = res.data.cliente;
       _this.show = true;
-      console.log(_this.cliente);
     }).catch(function (err) {
-      _this.$toast.error(err.response.data.message);
+      if (err.response.status == 404) _this.$toast.error("Cliente No encontrado!");else _this.$toast.error(err.response.data.message);
 
       _this.$router.push({
-        name: 'clientes.index'
+        name: 'cliente.index'
       });
     });
   },

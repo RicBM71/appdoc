@@ -235,7 +235,7 @@ class UsersController extends Controller
 
         if ($request->empresa > 0){
             $user->update(['empresa_id' => $request->empresa]);
-            $request->session()->put('empresa', $request->empresa);
+            session(['empresa' => $request->empresa]);
         }
         else
             $user->update(['empresa_id' => 0]);

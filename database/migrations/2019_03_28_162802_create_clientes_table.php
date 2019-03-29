@@ -29,7 +29,7 @@ class CreateClientesTable extends Migration
             $table->String('email',50)->nullable()->default(null);
             $table->String('contacto',50)->nullable()->default(null);
             $table->String('tipodoc',1)->nullable()->default(null);
-            $table->String('dni',20)->nullable()->default(null);
+            $table->String('cif',20)->nullable()->default(null);
             $table->timestamp('fechaalta')->nullable()->default(null);
             $table->timestamp('fechabaja')->nullable()->default(null);
             $table->String('web',50)->nullable()->default(null);

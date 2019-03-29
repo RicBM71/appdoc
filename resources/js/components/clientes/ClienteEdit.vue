@@ -368,12 +368,15 @@ import ModMenu from '@/components/shared/ModMenu'
                     .then(res => {
                         this.cliente = res.data.cliente;
                         this.show=true;
-                        console.log(this.cliente);
+
 
                     })
                     .catch(err => {
-                        this.$toast.error(err.response.data.message);
-                        this.$router.push({ name: 'clientes.index'})
+                        if (err.response.status == 404)
+                            this.$toast.error("Cliente No encontrado!");
+                        else
+                            this.$toast.error(err.response.data.message);
+                        this.$router.push({ name: 'cliente.index'})
                     })
         },
         computed: {

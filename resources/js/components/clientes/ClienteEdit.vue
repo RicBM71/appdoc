@@ -55,9 +55,10 @@
                         <v-text-field
                             v-model="cliente.telefono1"
                             :error-messages="errors.collect('telefono1')"
-                            label="Telefono"
+                            label="Teléfono"
                             data-vv-name="telefono1"
                             data-vv-as="Teléfono"
+                            mask="### ### ###"
                             v-on:keyup.enter="submit"
                         >
                         </v-text-field>
@@ -66,9 +67,10 @@
                         <v-text-field
                             v-model="cliente.telefono2"
                             :error-messages="errors.collect('telefono2')"
-                            label="Telefono"
+                            label="Teléfono"
                             data-vv-name="telefono2"
                             data-vv-as="Teléfono"
+                            mask="### ### ###"
                             v-on:keyup.enter="submit"
                         >
                         </v-text-field>
@@ -117,28 +119,18 @@
                     </v-flex>
                     <v-flex sm2>
                         <v-text-field
-                            v-model="cliente.sigla"
-                            :error-messages="errors.collect('sigla')"
-                            label="Sigla"
-                            data-vv-name="sigla"
+                            v-model="cliente.tfmovil"
+                            :error-messages="errors.collect('tfmovil')"
+                            label="Tf. Móvil"
+                            data-vv-name="tfmovil"
+                            mask="### ### ###"
                             v-on:keyup.enter="submit"
                         >
                         </v-text-field>
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
-                    <v-flex sm3>
-                        <v-text-field
-                            v-model="cliente.titulo"
-                            v-validate="'required'"
-                            :error-messages="errors.collect('titulo')"
-                            label="Tíitulo"
-                            data-vv-name="titulo"
-                            v-on:keyup.enter="submit"
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm3>
+                    <v-flex sm4>
                         <v-text-field
                             v-model="cliente.contacto"
                             :error-messages="errors.collect('contacto')"
@@ -148,7 +140,7 @@
                         >
                         </v-text-field>
                     </v-flex>
-                    <v-flex sm3>
+                    <v-flex sm4>
                         <v-text-field
                             v-model="cliente.email"
                             v-validate="'email'"
@@ -159,7 +151,7 @@
                         >
                         </v-text-field>
                     </v-flex>
-                    <v-flex sm3>
+                    <v-flex sm4>
                         <v-text-field
                             v-model="cliente.web"
                             :error-messages="errors.collect('web')"
@@ -171,83 +163,148 @@
                     </v-flex>
                 </v-layout>
                 <v-layout row wrap>
-                    <v-flex sm3>
-                        <v-text-field
-                            v-model="cliente.carpeta"
-                            :error-messages="errors.collect('carpeta')"
-                            label="Carpeta"
-                            data-vv-name="carpeta"
-                            v-on:keyup.enter="submit"
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm3>
-                        <v-text-field
-                            v-model="cliente.certificado"
-                            :error-messages="errors.collect('certificado')"
-                            label="Certificado"
-                            data-vv-name="certificado"
-                            v-on:keyup.enter="submit"
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm3>
-                        <v-text-field
-                            v-model="cliente.passwd_cer"
-                            :error-messages="errors.collect('passwd_cer')"
-                            label="Password"
-                            data-vv-name="password"
-                            v-on:keyup.enter="submit"
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm3>
-                        <v-text-field
-                            v-model="cliente.logo"
-                            :error-messages="errors.collect('logo')"
-                            label="Logo"
-                            data-vv-name="logo"
-                            v-on:keyup.enter="submit"
-                        >
-                        </v-text-field>
-                    </v-flex>
-
-                </v-layout>
-                <v-layout row wrap>
-                    <v-flex sm12>
-                        <v-text-field
-                            v-model="cliente.txtpie1"
-                            :error-messages="errors.collect('txtpie1')"
-                            label="Pie"
-                            data-vv-name="txtpie1"
-                            v-on:keyup.enter="submit"
-                        >
-                        </v-text-field>
-                    </v-flex>
-                </v-layout>
-                <v-layout row wrap>
-                    <v-flex sm12>
-                        <v-text-field
-                            v-model="cliente.txtpie2"
-                            :error-messages="errors.collect('txtpie2')"
-                            label="Pie"
-                            data-vv-name="txtpie2"
-                            v-on:keyup.enter="submit"
-                        >
-                        </v-text-field>
-                    </v-flex>
-
-                </v-layout>
-                <v-layout row wrap>
                     <v-flex sm4 d-flex>
                         <v-select
                         v-model="cliente.carpeta_id"
                         item-text="name"
                         item-value="id"
-                        :items="clientes"
-                        label="Link cliente"
+                        :items="carpetas"
+                        label="Carpeta"
                         ></v-select>
                     </v-flex>
+                    <v-flex sm3>
+                        <v-text-field
+                            v-model="cliente.patron"
+                            :error-messages="errors.collect('patron')"
+                            label="Patrón N.43"
+                            data-vv-name="patron"
+                            v-on:keyup.enter="submit"
+                        >
+                        </v-text-field>
+                    </v-flex>
+                    <v-flex sm3 d-flex>
+                        <v-select
+                        v-model="cliente.fpago_id"
+                        item-text="name"
+                        item-value="id"
+                        :items="fpagos"
+                        label="Forma de Pago"
+                        ></v-select>
+                    </v-flex>
+                    <v-flex sm2>
+                        <v-menu
+                                v-model="calfbaja"
+                                :close-on-content-click="false"
+                                :nudge-right="40"
+                                lazy
+                                transition="scale-transition"
+                                offset-y
+                                full-width
+                                min-width="290px"
+                            >
+
+                                <v-text-field
+                                    slot="activator"
+                                    :value="computedFechaBaja"
+                                    clearable
+                                    label="Fecha Baja"
+                                    prepend-icon="event"
+                                    readonly
+                                    data-vv-as="F. Baja"
+                                    @click:clear="clearDate"
+                                    ></v-text-field>
+                                <v-date-picker
+                                    v-model="cliente.fechabaja"
+                                    no-title
+                                    locale="es"
+                                    first-day-of-week=1
+                                    @input="calfbaja = false"
+
+                                ></v-date-picker>
+                        </v-menu>
+                    </v-flex>
+                </v-layout>
+                <v-layout row wrap>
+                    <v-flex sm4>
+                        <v-text-field
+                            v-model="cliente.iban"
+                            :error-messages="errors.collect('iban')"
+                            label="IBAN"
+                            mask="AA## ####-####-####-####-####"
+                            counter=24
+                            data-vv-name="iban"
+                            v-on:keyup.enter="submit"
+                        >
+                        </v-text-field>
+                    </v-flex>
+                    <v-flex sm3>
+                        <v-text-field
+                            v-model="cliente.ref19"
+                            :error-messages="errors.collect('ref19')"
+                            label="Ref. Recibos N.19"
+                            data-vv-name="ref19"
+                            v-on:keyup.enter="submit"
+                        >
+                        </v-text-field>
+                    </v-flex>
+                    <v-flex sm2>
+                        <v-select
+                            v-model="cliente.factusn"
+                            item-text="name"
+                            item-value="id"
+                            :items="sino"
+                            label="Factura"
+                        ></v-select>
+                    </v-flex>
+
+                </v-layout>
+                <v-layout row wrap>
+                    <v-flex sm4>
+                        <v-text-field
+                            v-model="cliente.efact"
+                            :error-messages="errors.collect('efact')"
+                            label="Sitio"
+                            data-vv-name="efact"
+                            v-on:keyup.enter="submit"
+                        >
+                        </v-text-field>
+                    </v-flex>
+                    <v-flex sm4>
+                        <v-text-field
+                            v-model="cliente.eusr"
+                            :error-messages="errors.collect('eusr')"
+                            label="Usuario"
+                            data-vv-name="eusr"
+                            v-on:keyup.enter="submit"
+                        >
+                        </v-text-field>
+                    </v-flex>
+                    <v-flex sm4>
+                        <v-text-field
+                            v-model="cliente.epass"
+                            :error-messages="errors.collect('epass')"
+                            label="Password"
+                            data-vv-name="epass"
+                            v-on:keyup.enter="submit"
+                        >
+                        </v-text-field>
+                    </v-flex>
+
+                </v-layout>
+                <v-layout row wrap>
+                    <v-flex sm12>
+                        <v-text-field
+                            v-model="cliente.notas1"
+                            :error-messages="errors.collect('notas1')"
+                            label="Notas"
+                            data-vv-name="notas1"
+                            v-on:keyup.enter="submit"
+                        >
+                        </v-text-field>
+                    </v-flex>
+                </v-layout>
+                <v-layout row wrap>
+
                     <v-flex sm2>
                         <v-text-field
                             v-model="cliente.username"
@@ -275,8 +332,7 @@
                         >
                         </v-text-field>
                     </v-flex>
-                    <v-flex sm5>
-                    </v-flex>
+                    <v-flex sm3></v-flex>
                     <v-flex sm2>
                         <div class="text-xs-center">
                                     <v-btn @click="submit"  :loading="enviando" block  color="primary">
@@ -318,9 +374,7 @@ import ModMenu from '@/components/shared/ModMenu'
                     tfmovil:"",
                     email:"",
                     contacto:"",
-                    tipodoc:"",
-                    dni:"",
-                    fechaalta:"",
+                    cif:"",
                     fechabaja:"",
                     web:"",
                     carpeta_id:"",
@@ -338,13 +392,20 @@ import ModMenu from '@/components/shared/ModMenu'
                     updated_at:"",
                     created_at:"",
                 },
+
+                sino:[
+                    {id: "S", name:"Si"}, {id: "N", name:"No"},
+                ],
                 clientes:[],
+                carpetas:[],
+                fpagos:[],
 
                 cliente_id: "",
 
         		status: false,
                 enviando: false,
 
+                calfbaja:false,
                 show: false,
 
                 showMenuCli: false,
@@ -367,9 +428,15 @@ import ModMenu from '@/components/shared/ModMenu'
                 axios.get('/mto/clientes/'+id+'/edit')
                     .then(res => {
                         this.cliente = res.data.cliente;
+                        res.data.carpetas.map((e) =>
+                            {
+                                this.carpetas.push({id: e.id, name: e.nombre});
+                            })
+                        res.data.fpagos.map((e) =>
+                            {
+                                this.fpagos.push({id: e.id, name: e.nombre});
+                            })
                         this.show=true;
-
-
                     })
                     .catch(err => {
                         if (err.response.status == 404)
@@ -386,7 +453,11 @@ import ModMenu from '@/components/shared/ModMenu'
             },
             computedFCreFormat() {
                 moment.locale('es');
-                return this.cliente.updated_at ? moment(this.cliente.created_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.cliente.created_at ? moment(this.cliente.created_at).format('D/MM/YYYY H:mm:ss') : '';
+            },
+            computedFechaBaja() {
+                moment.locale('es');
+                return this.cliente.fechabaja ? moment(this.cliente.fechabaja).format('D/MM/YYYY') : '';
             }
 
         },
@@ -405,10 +476,9 @@ import ModMenu from '@/components/shared/ModMenu'
             },
             submit() {
 
-                console.log(this.cliente);
                 this.enviando = true;
 
-                var url = "/admin/clientes/"+this.cliente.id;
+                var url = "/mto/clientes/"+this.cliente.id;
 
                 this.$validator.validateAll().then((result) => {
                     if (result){
@@ -441,6 +511,9 @@ import ModMenu from '@/components/shared/ModMenu'
                     }
                 });
 
+            },
+            clearDate(){
+                this.user.fechabaja = null;
             },
 
     }

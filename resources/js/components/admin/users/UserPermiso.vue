@@ -2,7 +2,7 @@
     <div v-show="show">
         <h3>Permisos Específicos</h3>
         <v-layout row wrap>
-            <v-flex sm2
+            <v-flex sm6
                 v-for="item in this.permisos"
                 :key="'p'+item.id"
             >

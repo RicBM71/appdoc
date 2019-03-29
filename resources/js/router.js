@@ -15,7 +15,8 @@ const router = new VueRouter({
 
 
 
-// router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+    //console.log(to);
 //     // just logged in: localStorage has token, but state does not have auth user
 
 //     // if(jwtToken.exp < Date.now()){
@@ -61,7 +62,7 @@ const router = new VueRouter({
 // 	// 		return next({name: 'login'});
 // 	// }
 
-// 	 next();
-// });
+	 next();
+});
 
 export default router;

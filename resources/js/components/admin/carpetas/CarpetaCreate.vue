@@ -135,7 +135,7 @@ import ModMenu from '@/components/shared/ModMenu'
             },
             computedFCreFormat() {
                 moment.locale('es');
-                return this.carpeta.updated_at ? moment(this.carpeta.created_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.carpeta.created_at ? moment(this.carpeta.created_at).format('D/MM/YYYY H:mm:ss') : '';
             }
 
         },

@@ -40,6 +40,7 @@ Route::group([
             Route::resource('ivas', 'IvasController', ['except'=>'show','as' => 'admin']);
             Route::resource('carpetas', 'CarpetasController', ['except'=>'show','as' => 'admin']);
             Route::resource('empresas', 'EmpresasController', ['except'=>'show','as' => 'admin']);
+            Route::resource('fpagos', 'FpagosController', ['except'=>'show','as' => 'admin']);
         });
 
 

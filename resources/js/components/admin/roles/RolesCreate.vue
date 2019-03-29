@@ -133,7 +133,7 @@ import RolePermisos from './RolePermisos'
             },
             computedFCreFormat() {
                 moment.locale('es');
-                return this.role.updated_at ? moment(this.role.created_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.role.created_at ? moment(this.role.created_at).format('D/MM/YYYY H:mm:ss') : '';
             }
 
         },

@@ -137,7 +137,7 @@ import ModMenu from '@/components/shared/ModMenu'
             },
             computedFCreFormat() {
                 moment.locale('es');
-                return this.iva.updated_at ? moment(this.iva.created_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.iva.created_at ? moment(this.iva.created_at).format('D/MM/YYYY H:mm:ss') : '';
             }
 
         },

@@ -1,6 +1,7 @@
 <?php
 
 use App\Iva;
+use App\Fpago;
 use App\Carpeta;
 use App\Empresa;
 use App\Retencion;
@@ -24,6 +25,7 @@ class GenericasSeeder extends Seeder
         Iva::truncate();
         Carpeta::truncate();
         Empresa::truncate();
+        Fpago::truncate();
 
         DB::table('empresa_user')->truncate();
 
@@ -49,7 +51,7 @@ class GenericasSeeder extends Seeder
         foreach ($data as $obj) {
             Carpeta::create(array(
              'id' => $obj->id,
-             'empresa' => $obj->empresa,
+             'empresa_id' => $obj->empresa,
              'nombre' => $obj->nombre,
              'color' => $obj->color,
              'created_at'=> $obj->created_at,
@@ -60,6 +62,10 @@ class GenericasSeeder extends Seeder
         DB::table('empresa_user')->insert(
             ['empresa_id' => 1, 'user_id' => '1']
         );
+
+        $fp = new Fpago;
+        $fp->nombre = "Recibo Domiciliado";
+        $fp->save();
 
     }
 }

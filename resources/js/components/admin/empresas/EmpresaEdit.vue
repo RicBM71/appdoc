@@ -381,7 +381,7 @@ import ModMenu from '@/components/shared/ModMenu'
             },
             computedFCreFormat() {
                 moment.locale('es');
-                return this.empresa.updated_at ? moment(this.empresa.created_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.empresa.created_at ? moment(this.empresa.created_at).format('D/MM/YYYY H:mm:ss') : '';
             }
 
         },

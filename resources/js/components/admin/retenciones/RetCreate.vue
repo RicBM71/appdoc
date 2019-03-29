@@ -138,7 +138,7 @@ import ModMenu from '@/components/shared/ModMenu'
             },
             computedFCreFormat() {
                 moment.locale('es');
-                return this.retencion.updated_at ? moment(this.retencion.created_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.retencion.created_at ? moment(this.retencion.created_at).format('D/MM/YYYY H:mm:ss') : '';
             }
 
         },

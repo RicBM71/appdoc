@@ -15,6 +15,7 @@
                         label="password"
                         hint="Indicar password "
                         data-vv-name="new_password"
+                        data-vv-as="password"
                         :disabled="loading"
                         @click:append="show = !show"
                         >

@@ -143,12 +143,12 @@ import MyDialog from '@/components/shared/MyDialog'
         destroyReg () {
             this.dialog = false;
 
-            axios.post('/clientes/'+this.cliente_id,{_method: 'delete'})
+            axios.post('/mto/clientes/'+this.cliente_id,{_method: 'delete'})
                 .then(response => {
 
                 this.clientes = response.data;
                 this.$toast.success('Cliente eliminado!');
-                    console.log(this.clientes);
+                    
 
             })
             .catch(err => {

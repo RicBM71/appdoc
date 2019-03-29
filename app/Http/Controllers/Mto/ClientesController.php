@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Mto;
 
+use App\Fpago;
+use App\Carpeta;
 use App\Cliente;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreClientes;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class ClientesController extends Controller
 {
@@ -18,7 +22,7 @@ class ClientesController extends Controller
         $data = Cliente::all();
 
 
-        dd(Cliente::get()->toSql());
+        // dd(Cliente::get()->toSql());
 
         //\Log::info(Cliente::all()->toSql());
 
@@ -34,7 +38,11 @@ class ClientesController extends Controller
      */
     public function create()
     {
-        //
+        if (request()->wantsJson())
+            return [
+                'carpetas'=> Carpeta::all(),
+                'fpagos'=> Fpago::all(),
+            ];
     }
 
     /**
@@ -43,9 +51,20 @@ class ClientesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreClientes $request)
     {
-        //
+        $data = $request->validated();
+
+        //\Log::info('enviando mensaje...'.session()->get('empresa'));
+        $data['empresa_id'] =  session()->get('empresa');
+
+        $data['username'] = $request->user()->username;
+
+
+        $reg = Cliente::create($data);
+
+        if (request()->wantsJson())
+            return ['cliente'=>$reg, 'message' => 'EL registro ha sido creado'];
     }
 
     /**
@@ -65,22 +84,15 @@ class ClientesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Cliente $cliente)
     {
-
-        $empresa_id =  session()->get('empresa');
-
-        //$cliente = Cliente::where('id', '=', $id)->findOrFail();
-
-        $cliente = Cliente::where('empresa_id', '=', $empresa_id)->findOrFail($id);
-        // if (is_null($cliente))
-        //     return response(401);
-
-
-
+        $this->authorize('update', $cliente);
+            
         if (request()->wantsJson())
             return [
                 'cliente' =>$cliente,
+                'carpetas'=> Carpeta::all(),
+                'fpagos'=> Fpago::all(),
             ];
 
     }
@@ -92,9 +104,18 @@ class ClientesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreClientes $request, Cliente $cliente)
     {
-        //
+        $this->authorize('update', $cliente);
+
+        $data = $request->validated();
+
+        $data['username'] = $request->user()->username;
+
+        $cliente->update($data);
+
+        if (request()->wantsJson())
+            return ['cliente'=>$cliente, 'message' => 'EL cliente ha sido modficado'];
     }
 
     /**
@@ -103,8 +124,16 @@ class ClientesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Cliente $cliente)
     {
-        //
+
+        $this->authorize('delete', $cliente);
+
+        $cliente->delete();
+
+
+        if (request()->wantsJson()){
+            return response()->json(Cliente::all());
+        }
     }
 }

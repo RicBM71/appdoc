@@ -35,14 +35,14 @@ class UpdateUserRequest extends FormRequest
         //     'name' => 'required|min:10'];
 
         $rules = [
-            'name' => 'required',
-            'blocked' => 'boolean',
-            'username'=> ['min:6','required', Rule::unique('users')->ignore($this->route('user')->id)],
-            'email'=> ['required','email', Rule::unique('users')->ignore($this->route('user')->id)]
+            'name'      => 'required',
+            'blocked'   => 'boolean',
+            'username'  => ['min:6','required', Rule::unique('users')->ignore($this->route('user')->id)],
+            'email'     => ['required','email', Rule::unique('users')->ignore($this->route('user')->id)],
         ];
 
         if ($this->filled('password')){ //va a actualizar la password
-            $rules['password'] = ['confirmed','min:6'];
+            $rules['password'] = ['confirmed','min:2','password'];
         }
 
         if ($this->filled('blocked_at')){

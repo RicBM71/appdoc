@@ -54,12 +54,12 @@
                         >
                         </v-text-field>
                         <v-text-field
-                            v-model="password"
+                            v-model="user.password"
                             ref="password"
                             :append-icon="show ? 'visibility_off' : 'visibility'"
                             :type="show ? 'text' : 'password'"
                             :error-messages="errors.collect('password')"
-                            v-validate="'min:8'"
+                            v-validate="'min:6'"
                             label="password"
                             hint="Indicar password solo si va a modificarla"
                             data-vv-name="password"
@@ -67,8 +67,8 @@
                             >
                         </v-text-field>
                         <v-text-field
-                            v-model="password_confirmation"
-                            v-validate="'min:8|confirmed:password'"
+                            v-model="user.password_confirmation"
+                            v-validate="'min:6|confirmed:password'"
                             :append-icon="show ? 'visibility_off' : 'visibility'"
                             :type="show ? 'text' : 'password'"
                             :error-messages="errors.collect('password_confirmation')"
@@ -120,6 +120,7 @@
                                 v-model="user.blocked_at"
                                 no-title
                                 locale="es"
+                                first-day-of-week=1
                                 @input="menu2 = false"
 
                             ></v-date-picker>
@@ -214,11 +215,12 @@
                     blocked_at:"",
                     blocked:  "",
                     empresa_id:"",
-                    updated_at:"",
-                    created_at:"",
+                    password: "",
+                    password_confirmation:"",
+
+                    // updated_at:"",
+                    // created_at:"",
                 },
-                password: "",
-                password_confirmation:"",
                 titulo:   "Usuarios",
 
                 emp_user:[],
@@ -314,7 +316,7 @@
             },
             computedFCreFormat() {
                 moment.locale('es');
-                return this.user.updated_at ? moment(this.user.created_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.user.created_at ? moment(this.user.created_at).format('D/MM/YYYY H:mm:ss') : '';
             },
             computedId(){
                 if (this.user.id == 1) return true; else return false;

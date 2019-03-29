@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCarpetasTable extends Migration
+class CreateFpagosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateCarpetasTable extends Migration
      */
     public function up()
     {
-        Schema::create('carpetas', function (Blueprint $table) {
+        Schema::create('fpagos', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('empresa_id');
-            $table->string('nombre');
-            $table->string('color');
+            $table->string('nombre',50);
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateCarpetasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('carpetas');
+        Schema::dropIfExists('fpagos');
     }
 }

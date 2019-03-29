@@ -255,7 +255,7 @@
             },
             computedFCreFormat() {
                 moment.locale('es');
-                return this.user.updated_at ? moment(this.user.created_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.user.created_at ? moment(this.user.created_at).format('D/MM/YYYY H:mm:ss') : '';
             },
             computedId(){
                 if (this.user.id == 1) return true; else return false;

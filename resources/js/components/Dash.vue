@@ -218,6 +218,7 @@ export default {
 
         axios.get('/dash')
             .then(res => {
+                console.log(res.data.user);
                 this.setAuthUser(res.data.user);
 
                 this.empresa_id = this.user.empresa;
@@ -273,6 +274,10 @@ export default {
                     method: 'put',
                     url: '/admin/users/'+this.user.id+'/empresa',
                     data:{ empresa: this.empresa_id }
+                })
+                .then(res => {
+                    //this.$toast.success("Cambiando de empresa...");
+                    this.$router.push({name: 'dash'});
                 })
                 .catch(err => {
                     this.$toast.error("No se ha podido seleccionar la empresa");

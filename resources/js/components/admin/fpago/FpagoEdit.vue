@@ -17,9 +17,9 @@
                 </v-btn>
                 <v-layout row wrap>
                     <v-flex sm1></v-flex>
-                    <v-flex sm3>
+                    <v-flex sm4>
                         <v-text-field
-                            v-model="iva.nombre"
+                            v-model="fpago.nombre"
                             v-validate="'required'"
                             :error-messages="errors.collect('nombre')"
                             label="Nombre"
@@ -30,23 +30,7 @@
                         >
                         </v-text-field>
                     </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="iva.importe"
-                            v-validate="'required|decimal:2'"
-                            :error-messages="errors.collect('importe')"
-                            label="Valor"
-                            data-vv-name="importe"
-                            data-vv-as="Valor"
-                            required
-                            class="inputPrice"
-                            type="number"
-                            v-on:keyup.enter="submit"
-
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
+                    <v-flex sm3>
                         <v-text-field
                             v-model="computedFModFormat"
                             label="Modificado"
@@ -54,7 +38,7 @@
                         >
                         </v-text-field>
                     </v-flex>
-                    <v-flex sm2>
+                    <v-flex sm3>
                         <v-text-field
                             v-model="computedFCreFormat"
                             label="Creado"
@@ -90,11 +74,10 @@ import ModMenu from '@/components/shared/ModMenu'
 		},
     	data () {
       		return {
-                titulo:"Tipos de IVA",
-                iva: {
+                titulo:"Formas de Pago",
+                fpago: {
                     id:       0,
                     nombre:  "",
-                    importe: "",
                     updated_at:"",
                     created_at:"",
                 },
@@ -108,9 +91,8 @@ import ModMenu from '@/components/shared/ModMenu'
                 x: 0,
                 y: 0,
                 items: [
-                    { title: 'Tipos Iva', name: 'iva.index', icon: 'list' },
-                    { title: 'Nuevo tipo', name: 'iva.create', icon: 'add' },
-                    { title: 'Retenciones', name: 'ret.index', icon: 'functions' },
+                    { title: 'F. Pago', name: 'fpago.index', icon: 'list' },
+                    { title: 'Nueva F. Pago', name: 'fpago.create', icon: 'add' },
                     { title: 'Home', name: 'dash', icon: 'home' },
 
                 ]
@@ -121,25 +103,25 @@ import ModMenu from '@/components/shared/ModMenu'
             var id = this.$route.params.id;
             //console.log(this.$route.params);
             if (id > 0)
-                axios.get('/admin/ivas/'+id+'/edit')
+                axios.get('/admin/fpagos/'+id+'/edit')
                     .then(res => {
 
-                        this.iva = res.data.iva;
+                        this.fpago = res.data.fpago;
                         this.show = true;
                     })
                     .catch(err => {
                         this.$toast.error(err.response.data.message);
-                        this.$router.push({ name: 'ret.index'})
+                        this.$router.push({ name: 'fpago.index'})
                     })
         },
         computed: {
             computedFModFormat() {
                 moment.locale('es');
-                return this.iva.updated_at ? moment(this.iva.updated_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.fpago.updated_at ? moment(this.fpago.updated_at).format('D/MM/YYYY H:mm:ss') : '';
             },
             computedFCreFormat() {
                 moment.locale('es');
-                return this.iva.created_at ? moment(this.iva.created_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.fpago.created_at ? moment(this.fpago.created_at).format('D/MM/YYYY H:mm:ss') : '';
             }
 
         },
@@ -158,10 +140,10 @@ import ModMenu from '@/components/shared/ModMenu'
             },
             submit() {
 
-                //console.log("Edit user (submit):"+this.iva.id);
+                //console.log("Edit user (submit):"+this.fpago.id);
                 this.enviando = true;
 
-                var url = "/admin/ivas/"+this.iva.id;
+                var url = "/admin/fpagos/"+this.fpago.id;
                 var metodo = "put";
                 this.$validator.validateAll().then((result) => {
                     if (result){
@@ -170,14 +152,13 @@ import ModMenu from '@/components/shared/ModMenu'
                             url: url,
                             data:
                                 {
-                                    nombre: this.iva.nombre,
-                                    importe: this.iva.importe,
+                                    nombre: this.fpago.nombre,
 
                                 }
                             })
                             .then(response => {
                                 this.$toast.success(response.data.message);
-                                this.iva = response.data.iva;
+                                this.fpago = response.data.fpago;
                                 this.enviando = false;
                             })
                             .catch(err => {
@@ -206,19 +187,3 @@ import ModMenu from '@/components/shared/ModMenu'
     }
   }
 </script>
-<style scoped>
-
-
-.inputPrice >>> input {
-  text-align: center;
-  -moz-appearance:textfield;
-}
-
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin: 0;
-}
-</style>

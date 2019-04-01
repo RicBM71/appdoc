@@ -26,10 +26,22 @@ import EmpresaIndex from './components/admin/empresas/EmpresaIndex.vue';
 import EmpresaCreate from './components/admin/empresas/EmpresaCreate.vue';
 import EmpresaEdit from './components/admin/empresas/EmpresaEdit.vue';
 
+import FpagoIndex from './components/admin/fpago/FpagoIndex.vue';
+import FpagoCreate from './components/admin/fpago/FpagoCreate.vue';
+import FpagoEdit from './components/admin/fpago/FpagoEdit.vue';
+
+import ContadorIndex from './components/admin/contador/ContadorIndex.vue';
+import ContadorCreate from './components/admin/contador/ContadorCreate.vue';
+import ContadorEdit from './components/admin/contador/ContadorEdit.vue';
+
 
 import ClienteIndex from './components/clientes/ClienteIndex.vue';
 import ClienteCreate from './components/clientes/ClienteCreate.vue';
 import ClienteEdit from './components/clientes/ClienteEdit.vue';
+import ProductoIndex from './components/productos/ProductoIndex.vue';
+import ProductoCreate from './components/productos/ProductoCreate.vue';
+import ProductoEdit from './components/productos/ProductoEdit.vue';
+
 
 
 import EditPassword from './components/profile/edit-password/EditPassword.vue';
@@ -162,6 +174,51 @@ export default [
                 path: '/clientes/:id/edit',
                 name: 'cliente.edit',
                 component: ClienteEdit,
+            },
+            {
+                path: '/fpagos',
+                name: 'fpago.index',
+                component: FpagoIndex,
+            },
+            {
+                path: '/fpagos/create',
+                name: 'fpago.create',
+                component: FpagoCreate,
+            },
+            {
+                path: '/fpagos/:id/edit',
+                name: 'fpago.edit',
+                component: FpagoEdit,
+            },
+            {
+                path: '/productos',
+                name: 'producto.index',
+                component: ProductoIndex,
+            },
+            {
+                path: '/productos/create',
+                name: 'producto.create',
+                component: ProductoCreate,
+            },
+            {
+                path: '/productos/:id/edit',
+                name: 'producto.edit',
+                component: ProductoEdit,
+            },
+            {
+                path: '/contadores',
+                name: 'contador.index',
+                component: ContadorIndex,
+            },
+            {
+                path: '/contadores/create',
+                name: 'contador.create',
+                component: ContadorCreate,
+            },
+            {
+                path: '/contadores/:id/edit',
+                name: 'contador.edit',
+                component: ContadorEdit,
             },
             // {
             //     path: '*',

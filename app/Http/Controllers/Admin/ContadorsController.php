@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Fpago;
+use App\Contador;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreContadores;
 
-class FpagosController extends Controller
+class ContadorsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +17,10 @@ class FpagosController extends Controller
     public function index()
     {
         if (request()->wantsJson())
-            return Fpago::all();
+            return Contador::all();
     }
 
-    /**
+     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -35,31 +36,34 @@ class FpagosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreContadores $request, Contador $contador)
     {
-        $data = $request->validate([
-            'nombre' => ['required', 'string', 'max:255'],
-        ]);
 
-        $ret = Fpago::create($data);
+        $data = $request->validated();
+
+        $data['username'] = $request->user()->username;
+
+
+        $reg = Contador::create($data);
 
         if (request()->wantsJson())
-            return ['fpago'=>$ret, 'message' => 'EL registro ha sido creado'];
+            return ['contador'=>$reg, 'message' => 'EL registro ha sido creado'];
+
 
     }
 
-    /**
+     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Fpago $fpago)
+    public function edit(Contador $contador )
     {
         if (request()->wantsJson())
-        return [
-            'fpago' =>$fpago
-        ];
+            return [
+                'contador' =>$contador,
+            ];
 
     }
 
@@ -70,16 +74,17 @@ class FpagosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Fpago $fpago)
+    public function update(StoreContadores $request, Contador $contador)
     {
-        $data = $request->validate([
-            'nombre' => ['required', 'string', 'max:255'],
-        ]);
 
-        $fpago->update($data);
+        $data = $request->validated();
+
+        $data['username'] = $request->user()->username;
+
+        $contador->update($data);
 
         if (request()->wantsJson())
-            return ['fpago'=>$fpago, 'message' => 'EL registro ha sido modficado'];
+            return ['contador'=>$contador, 'message' => 'EL registro ha sido modficado'];
     }
 
     /**
@@ -88,13 +93,13 @@ class FpagosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Fpago $fpago)
+    public function destroy(Contador $contador)
     {
-        $fpago->delete();
+        $contador->delete();
 
 
         if (request()->wantsJson()){
-            return response()->json(Fpago::all());
+            return response()->json(Contador::all());
         }
     }
 }

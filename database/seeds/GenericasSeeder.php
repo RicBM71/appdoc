@@ -4,6 +4,7 @@ use App\Iva;
 use App\Fpago;
 use App\Carpeta;
 use App\Empresa;
+use App\Contador;
 use App\Retencion;
 use Carbon\Carbon;
 use Faker\Factory as Faker;
@@ -26,6 +27,8 @@ class GenericasSeeder extends Seeder
         Carpeta::truncate();
         Empresa::truncate();
         Fpago::truncate();
+
+        Contador::truncate();
 
         DB::table('empresa_user')->truncate();
 
@@ -66,6 +69,18 @@ class GenericasSeeder extends Seeder
         $fp = new Fpago;
         $fp->nombre = "Recibo Domiciliado";
         $fp->save();
+
+        $con = new Contador;
+        $con->ejercicio = date('Y');
+        $con->empresa_id = 1;
+        $con->seriealb="ALB";
+        $con->albaran=1000;
+        $con->seriefac="F";
+        $con->factura=1000;
+        $con->serieabo="AB";
+        $con->abono=1000;
+
+        $con->save();
 
     }
 }

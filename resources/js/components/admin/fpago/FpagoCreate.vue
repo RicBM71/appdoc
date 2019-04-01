@@ -17,9 +17,9 @@
                 </v-btn>
                 <v-layout row wrap>
                     <v-flex sm1></v-flex>
-                    <v-flex sm3>
+                    <v-flex sm4>
                         <v-text-field
-                            v-model="iva.nombre"
+                            v-model="fpago.nombre"
                             v-validate="'required'"
                             :error-messages="errors.collect('nombre')"
                             label="Nombre"
@@ -30,23 +30,7 @@
                         >
                         </v-text-field>
                     </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="iva.importe"
-                            v-validate="'required|decimal:2'"
-                            :error-messages="errors.collect('importe')"
-                            label="Valor"
-                            data-vv-name="importe"
-                            data-vv-as="Valor"
-                            required
-                            class="inputPrice"
-                            type="number"
-                            v-on:keyup.enter="submit"
-
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
+                    <v-flex sm3>
                         <v-text-field
                             v-model="computedFModFormat"
                             label="Modificado"
@@ -54,7 +38,7 @@
                         >
                         </v-text-field>
                     </v-flex>
-                    <v-flex sm2>
+                    <v-flex sm3>
                         <v-text-field
                             v-model="computedFCreFormat"
                             label="Creado"
@@ -90,56 +74,52 @@ import ModMenu from '@/components/shared/ModMenu'
 		},
     	data () {
       		return {
-                titulo:"Tipos de IVA",
-                iva: {
+                titulo:"Formas de pago",
+                fpago: {
                     id:       0,
                     nombre:  "",
-                    importe: "",
                     updated_at:"",
                     created_at:"",
                 },
+                fpago_id: "",
 
         		status: false,
                 enviando: false,
 
                 show: false,
-
                 showMenuCli: false,
+
                 x: 0,
                 y: 0,
                 items: [
-                    { title: 'Tipos Iva', name: 'iva.index', icon: 'list' },
-                    { title: 'Nuevo tipo', name: 'iva.create', icon: 'add' },
-                    { title: 'Retenciones', name: 'ret.index', icon: 'functions' },
+                    { title: 'Formas de pago', name: 'fpago.index', icon: 'list' },
+                    { title: 'Nueva F. Pago', name: 'fpago.create', icon: 'add' },
                     { title: 'Home', name: 'dash', icon: 'home' },
 
                 ]
 
+
       		}
         },
         mounted(){
-            var id = this.$route.params.id;
-            //console.log(this.$route.params);
-            if (id > 0)
-                axios.get('/admin/ivas/'+id+'/edit')
-                    .then(res => {
-
-                        this.iva = res.data.iva;
-                        this.show = true;
-                    })
-                    .catch(err => {
-                        this.$toast.error(err.response.data.message);
-                        this.$router.push({ name: 'ret.index'})
-                    })
+            axios.get('/admin/fpagos/create')
+                .then(res => {
+                    this.show = true;
+                })
+                .catch(err => {
+                    this.$toast.error(err.response.data.message);
+                    this.$router.push({ name: 'fpago.index'})
+                })
         },
+
         computed: {
             computedFModFormat() {
                 moment.locale('es');
-                return this.iva.updated_at ? moment(this.iva.updated_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.fpago.updated_at ? moment(this.fpago.updated_at).format('D/MM/YYYY H:mm:ss') : '';
             },
             computedFCreFormat() {
                 moment.locale('es');
-                return this.iva.created_at ? moment(this.iva.created_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.fpago.created_at ? moment(this.fpago.created_at).format('D/MM/YYYY H:mm:ss') : '';
             }
 
         },
@@ -158,11 +138,12 @@ import ModMenu from '@/components/shared/ModMenu'
             },
             submit() {
 
-                //console.log("Edit user (submit):"+this.iva.id);
+                //console.log("Edit user (submit):"+this.fpago.id);
                 this.enviando = true;
 
-                var url = "/admin/ivas/"+this.iva.id;
-                var metodo = "put";
+                var url = "/admin/fpagos";
+                var metodo = "post";
+
                 this.$validator.validateAll().then((result) => {
                     if (result){
                         axios({
@@ -170,15 +151,16 @@ import ModMenu from '@/components/shared/ModMenu'
                             url: url,
                             data:
                                 {
-                                    nombre: this.iva.nombre,
-                                    importe: this.iva.importe,
+                                    nombre: this.fpago.nombre,
 
                                 }
                             })
                             .then(response => {
+                                //console.log(response.data);
                                 this.$toast.success(response.data.message);
-                                this.iva = response.data.iva;
+
                                 this.enviando = false;
+                                this.$router.push({ name: 'fpago.edit', params: { id: response.data.fpago.id } })
                             })
                             .catch(err => {
 
@@ -206,9 +188,7 @@ import ModMenu from '@/components/shared/ModMenu'
     }
   }
 </script>
-<style scoped>
-
-
+<style>
 .inputPrice >>> input {
   text-align: center;
   -moz-appearance:textfield;

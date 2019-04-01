@@ -193,6 +193,7 @@ export default {
                 { text: 'Retenciones (IRPF)', name: 'ret.index' },
                 { text: 'Tipos de IVA', name: 'iva.index' },
                 { text: 'Carpetas', name: 'carpeta.index' },
+                { text: 'Contadores', name: 'contador.index' },
             ]
         },
 
@@ -207,18 +208,21 @@ export default {
                 { text: 'Retenciones (IRPF)', name: 'ret.index' },
                 { text: 'Tipos de IVA', name: 'iva.index' },
                 { text: 'Carpetas', name: 'carpeta.index' },
+                { text: 'Formas de Pago', name: 'fpago.index' },
+                { text: 'Contadores', name: 'contador.index' },
             ]
         },
 
         items: [
             { icon: 'people', text: 'Clientes', name:'cliente.index' },
+            { icon: 'list', text: 'Productos', name:'producto.index' },
         ]
     }),
     mounted(){
 
         axios.get('/dash')
             .then(res => {
-                console.log(res.data.user);
+                //console.log(res.data.user);
                 this.setAuthUser(res.data.user);
 
                 this.empresa_id = this.user.empresa;

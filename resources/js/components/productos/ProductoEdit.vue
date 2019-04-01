@@ -16,10 +16,9 @@
                     <v-icon>add</v-icon>
                 </v-btn>
                 <v-layout row wrap>
-                    <v-flex sm1></v-flex>
-                    <v-flex sm3>
+                    <v-flex sm4>
                         <v-text-field
-                            v-model="iva.nombre"
+                            v-model="producto.nombre"
                             v-validate="'required'"
                             :error-messages="errors.collect('nombre')"
                             label="Nombre"
@@ -32,17 +31,55 @@
                     </v-flex>
                     <v-flex sm2>
                         <v-text-field
-                            v-model="iva.importe"
+                            v-model="producto.importe"
                             v-validate="'required|decimal:2'"
                             :error-messages="errors.collect('importe')"
-                            label="Valor"
+                            label="Importe"
                             data-vv-name="importe"
                             data-vv-as="Valor"
                             required
                             class="inputPrice"
                             type="number"
                             v-on:keyup.enter="submit"
-
+                        >
+                        </v-text-field>
+                    </v-flex>
+                </v-layout>
+                <v-layout row wrap>
+                    <v-flex sm4 d-flex>
+                        <v-select
+                        v-model="producto.retencion_id"
+                        :error-messages="errors.collect('retencion_id')"
+                        v-validate="'required'"
+                        data-vv-name="retencion_id"
+                        item-text="name"
+                        item-value="id"
+                        :items="retenciones"
+                        label="IRPF"
+                        ></v-select>
+                    </v-flex>
+                    <v-flex sm4 d-flex>
+                        <v-select
+                        v-model="producto.iva_id"
+                        :error-messages="errors.collect('iva_id')"
+                        v-validate="'required'"
+                        data-vv-name="iva_id"
+                        item-text="name"
+                        item-value="id"
+                        :items="ivas"
+                        label="IVA"
+                        ></v-select>
+                    </v-flex>
+                </v-layout>
+                <v-layout row wrap>
+                    <v-flex sm2>
+                        <v-text-field
+                            v-model="producto.username"
+                            :error-messages="errors.collect('username')"
+                            label="User"
+                            data-vv-name="username"
+                            readonly
+                            v-on:keyup.enter="submit"
                         >
                         </v-text-field>
                     </v-flex>
@@ -62,8 +99,7 @@
                         >
                         </v-text-field>
                     </v-flex>
-                    <v-flex sm5>
-                    </v-flex>
+                    <v-flex sm3></v-flex>
                     <v-flex sm2>
                         <div class="text-xs-center">
                                     <v-btn @click="submit"  :loading="enviando" block  color="primary">
@@ -74,7 +110,6 @@
                 </v-layout>
             </v-container>
         </v-form>
-
 	</div>
 </template>
 <script>
@@ -90,30 +125,39 @@ import ModMenu from '@/components/shared/ModMenu'
 		},
     	data () {
       		return {
-                titulo:"Tipos de IVA",
-                iva: {
-                    id:       0,
-                    nombre:  "",
-                    importe: "",
+                titulo:"Productos",
+                producto: {
+                    id:"",
+                    empresa_id:"",
+                    nombre:"",
+                    iva_id:"",
+                    retencion_id:"",
+                    importe: 0,
+                    username: "",
                     updated_at:"",
                     created_at:"",
                 },
 
+                ivas:[],
+                retenciones:[],
+                productos:[],
+
+                producto_id: "",
+
         		status: false,
                 enviando: false,
-
-                show: false,
+                show: true,
 
                 showMenuCli: false,
                 x: 0,
                 y: 0,
                 items: [
-                    { title: 'Tipos Iva', name: 'iva.index', icon: 'list' },
-                    { title: 'Nuevo tipo', name: 'iva.create', icon: 'add' },
-                    { title: 'Retenciones', name: 'ret.index', icon: 'functions' },
+                    { title: 'Productos', name: 'producto.index', icon: 'list' },
+                    { title: 'Nuevo producto', name: 'producto.create', icon: 'add' },
                     { title: 'Home', name: 'dash', icon: 'home' },
 
                 ]
+
 
       		}
         },
@@ -121,25 +165,35 @@ import ModMenu from '@/components/shared/ModMenu'
             var id = this.$route.params.id;
             //console.log(this.$route.params);
             if (id > 0)
-                axios.get('/admin/ivas/'+id+'/edit')
+                axios.get('/mto/productos/'+id+'/edit')
                     .then(res => {
-
-                        this.iva = res.data.iva;
-                        this.show = true;
+                        this.producto = res.data.producto;
+                        res.data.ivas.map((e) =>
+                            {
+                                this.ivas.push({id: e.id, name: e.nombre});
+                            })
+                        res.data.retenciones.map((e) =>
+                            {
+                                this.retenciones.push({id: e.id, name: e.nombre});
+                            })
+                        this.show=true;
                     })
                     .catch(err => {
-                        this.$toast.error(err.response.data.message);
-                        this.$router.push({ name: 'ret.index'})
+                        if (err.response.status == 404)
+                            this.$toast.error("producto No encontrado!");
+                        else
+                            this.$toast.error(err.response.data.message);
+                        this.$router.push({ name: 'producto.index'})
                     })
         },
         computed: {
             computedFModFormat() {
                 moment.locale('es');
-                return this.iva.updated_at ? moment(this.iva.updated_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.producto.updated_at ? moment(this.producto.updated_at).format('D/MM/YYYY H:mm:ss') : '';
             },
             computedFCreFormat() {
                 moment.locale('es');
-                return this.iva.created_at ? moment(this.iva.created_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.producto.created_at ? moment(this.producto.created_at).format('D/MM/YYYY H:mm:ss') : '';
             }
 
         },
@@ -158,33 +212,26 @@ import ModMenu from '@/components/shared/ModMenu'
             },
             submit() {
 
-                //console.log("Edit user (submit):"+this.iva.id);
                 this.enviando = true;
 
-                var url = "/admin/ivas/"+this.iva.id;
-                var metodo = "put";
+                var url = "/mto/productos/"+this.producto.id;
+
                 this.$validator.validateAll().then((result) => {
                     if (result){
-                        axios({
-                            method: metodo,
-                            url: url,
-                            data:
-                                {
-                                    nombre: this.iva.nombre,
-                                    importe: this.iva.importe,
 
-                                }
-                            })
+                        axios.put(url, this.producto)
                             .then(response => {
                                 this.$toast.success(response.data.message);
-                                this.iva = response.data.iva;
+                                this.producto = response.data.producto;
                                 this.enviando = false;
                             })
                             .catch(err => {
-
+                                //console.log(err.response.data.errors);
                                 if (err.request.status == 422){ // fallo de validated.
                                     const msg_valid = err.response.data.errors;
                                     for (const prop in msg_valid) {
+                                        // this.$toast.error(`${msg_valid[prop]}`);
+                                        //console.log(prop);
                                         this.errors.add({
                                             field: prop,
                                             msg: `${msg_valid[prop]}`
@@ -201,11 +248,11 @@ import ModMenu from '@/components/shared/ModMenu'
                     }
                 });
 
-            },
-
+            }
     }
   }
 </script>
+
 <style scoped>
 
 

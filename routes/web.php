@@ -33,14 +33,13 @@ Route::group([
         Route::post('users/{user}/avatar', 'AvatarsController@store');
         Route::delete('avatars/{user}/delete', 'AvatarsController@destroy');
 
-        Route::resource('clientes', 'ClientesController', ['except'=>'show','as' => 'admin']);
-
         Route::middleware('role:Root|Admin')->group(function () {
             Route::resource('retenciones', 'RetencionesController', ['except'=>'show','as' => 'admin']);
             Route::resource('ivas', 'IvasController', ['except'=>'show','as' => 'admin']);
             Route::resource('carpetas', 'CarpetasController', ['except'=>'show','as' => 'admin']);
             Route::resource('empresas', 'EmpresasController', ['except'=>'show','as' => 'admin']);
             Route::resource('fpagos', 'FpagosController', ['except'=>'show','as' => 'admin']);
+            Route::resource('contadors', 'ContadorsController', ['except'=>'show','as' => 'admin']);
         });
 
 
@@ -55,6 +54,7 @@ Route::group([
     'middleware' => 'auth'],
     function (){
         Route::resource('clientes', 'ClientesController', ['except'=>'show','as' => 'mto']);
+        Route::resource('productos', 'ProductosController', ['except'=>'show','as' => 'mto']);
     }
 );
 

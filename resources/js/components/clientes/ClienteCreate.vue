@@ -44,9 +44,10 @@
                     <v-flex sm2>
                         <v-text-field
                             v-model="cliente.cif"
-                            v-validate="'required'"
+                            v-validate="'required|min:4'"
                             :error-messages="errors.collect('cif')"
                             label="CIF"
+                            required
                             data-vv-name="cif"
                             v-on:keyup.enter="submit"
                         >
@@ -251,6 +252,10 @@
                     <v-flex sm2>
                         <v-select
                             v-model="cliente.factusn"
+                            v-validate="'required'"
+                            :error-messages="errors.collect('factusn')"
+                            data-vv-name="factusn"
+                            data-vv-as="Factura"
                             item-text="name"
                             item-value="id"
                             :items="sino"
@@ -414,7 +419,7 @@ import ModMenu from '@/components/shared/ModMenu'
                 y: 0,
                 items: [
                     { title: 'clientes', name: 'cliente.index', icon: 'list' },
-                    { title: 'Nueva cliente', name: 'cliente.create', icon: 'add' },
+                    { title: 'Nuevo cliente', name: 'cliente.create', icon: 'add' },
                     { title: 'Home', name: 'dash', icon: 'home' },
 
                 ]

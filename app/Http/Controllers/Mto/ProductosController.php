@@ -51,7 +51,7 @@ class ProductosController extends Controller
     {
         $data = $request->validated();
 
-        \Log::info('enviando mensaje...'.session()->get('empresa'));
+      // \Log::info('enviando mensaje...'.session()->get('empresa'));
         $data['empresa_id'] =  session()->get('empresa');
 
         $data['username'] = $request->user()->username;

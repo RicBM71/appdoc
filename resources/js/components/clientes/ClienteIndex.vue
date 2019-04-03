@@ -31,6 +31,7 @@
 				:headers="headers"
 				:items="clientes"
                 :search="search"
+                rows-per-page-text="Registros por página"
 				>
 					<template slot="items" slot-scope="props">
 						<td>{{ props.item.id }}</td>
@@ -148,7 +149,7 @@ import MyDialog from '@/components/shared/MyDialog'
 
                 this.clientes = response.data;
                 this.$toast.success('Cliente eliminado!');
-                    
+
 
             })
             .catch(err => {

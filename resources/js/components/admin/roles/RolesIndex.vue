@@ -15,7 +15,7 @@
 				<v-data-table
 				:headers="headers"
 				:items="this.roles"
-
+                rows-per-page-text="Registros por página"
 				>
 					<template slot="items" slot-scope="props">
 						<td>{{ props.item.id }}</td>

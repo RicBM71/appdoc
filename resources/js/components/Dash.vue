@@ -216,6 +216,15 @@ export default {
         items: [
             { icon: 'people', text: 'Clientes', name:'cliente.index' },
             { icon: 'list', text: 'Productos', name:'producto.index' },
+            {
+            icon: 'keyboard_arrow_up',
+            'icon-alt': 'keyboard_arrow_down',
+            text: 'Facturación',
+            model: false,
+            children: [
+                { text: 'Albaranes', name: 'albaranes.index' },
+            ]
+        },
         ]
     }),
     mounted(){

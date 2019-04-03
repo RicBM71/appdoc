@@ -76,7 +76,7 @@
                         <v-text-field
                             v-model="producto.username"
                             :error-messages="errors.collect('username')"
-                            label="User"
+                            label="Usuario"
                             data-vv-name="username"
                             readonly
                             v-on:keyup.enter="submit"

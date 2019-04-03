@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Fpago;
 use Illuminate\Database\Eloquent\Model;
 
 class Fpago extends Model
@@ -9,4 +10,15 @@ class Fpago extends Model
     protected $fillable = [
         'nombre'
     ];
+
+    public static function selectFPagos(){
+
+        return Fpago::select('id AS id', 'nombre AS name')
+            ->orderBy('nombre', 'asc')
+            ->get();
+
+        // return DB::table('fpagos')->select('id AS field', 'nombre AS text')
+        //             ->orderBy('nombre', 'asc')
+        //             ->get();
+    }
 }

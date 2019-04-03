@@ -7,6 +7,7 @@ use App\Empresa;
 use App\Contador;
 use App\Retencion;
 use Carbon\Carbon;
+use App\Vencimiento;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
@@ -81,6 +82,10 @@ class GenericasSeeder extends Seeder
         $con->abono=1000;
 
         $con->save();
+
+        $vto = new Vencimiento;
+        $vto->nombre = "Fecha Factura";
+        $vto->save();
 
     }
 }

@@ -31,6 +31,7 @@
 				:headers="headers"
 				:items="productos"
                 :search="search"
+                rows-per-page-text="Registros por página"
 				>
 					<template slot="items" slot-scope="props">
 						<td>{{ props.item.id }}</td>

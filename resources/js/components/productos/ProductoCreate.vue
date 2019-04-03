@@ -52,6 +52,7 @@
                         :error-messages="errors.collect('retencion_id')"
                         v-validate="'required'"
                         data-vv-name="retencion_id"
+                        data-vv-as="retención"
                         item-text="name"
                         item-value="id"
                         :items="retenciones"
@@ -64,6 +65,7 @@
                         :error-messages="errors.collect('iva_id')"
                         v-validate="'required'"
                         data-vv-name="iva_id"
+                        data-vv-as="iva"
                         item-text="name"
                         item-value="id"
                         :items="ivas"
@@ -76,7 +78,7 @@
                         <v-text-field
                             v-model="producto.username"
                             :error-messages="errors.collect('username')"
-                            label="User"
+                            label="Usuario"
                             data-vv-name="username"
                             readonly
                             v-on:keyup.enter="submit"

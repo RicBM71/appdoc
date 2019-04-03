@@ -248,7 +248,7 @@
                         <v-text-field
                             v-model="empresa.username"
                             :error-messages="errors.collect('username')"
-                            label="User"
+                            label="Usuario"
                             data-vv-name="username"
                             readonly
                             v-on:keyup.enter="submit"

@@ -42,7 +42,9 @@ import ProductoIndex from './components/productos/ProductoIndex.vue';
 import ProductoCreate from './components/productos/ProductoCreate.vue';
 import ProductoEdit from './components/productos/ProductoEdit.vue';
 
-
+import AlbaranIndex from './components/albaranes/AlbaranIndex.vue';
+//import AlbaranCreate from './components/albaranes/AlbaranCreate.vue';
+import AlbaranEdit from './components/albaranes/AlbaranEdit.vue';
 
 import EditPassword from './components/profile/edit-password/EditPassword.vue';
 
@@ -220,6 +222,17 @@ export default [
                 name: 'contador.edit',
                 component: ContadorEdit,
             },
+            {
+                path: '/albaranes',
+                name: 'albaranes.index',
+                component: AlbaranIndex,
+            },
+            {
+                path: '/albaranes/:id/edit',
+                name: 'albaran.edit',
+                component: AlbaranEdit,
+            },
+
             // {
             //     path: '*',
             //     redirect: {

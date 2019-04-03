@@ -19,7 +19,7 @@
                     <v-flex sm3>
                         <v-text-field
                             v-model="contador.ejercicio"
-                            v-validate="'required'"
+                            v-validate="'required|integer|max_value:2050'"
                             :error-messages="errors.collect('ejercicio')"
                             label="Ejercicio"
                             data-vv-name="ejercicio"
@@ -115,7 +115,7 @@
                         <v-text-field
                             v-model="contador.username"
                             :error-messages="errors.collect('username')"
-                            label="User"
+                            label="Usuario"
                             data-vv-name="username"
                             readonly
                             v-on:keyup.enter="submit"
@@ -203,7 +203,6 @@ import ModMenu from '@/components/shared/ModMenu'
             if (id > 0)
                 axios.get('/admin/contadors/'+id+'/edit')
                     .then(res => {
-                    console.log(res);
                         this.contador = res.data.contador;
                         this.show = true;
                     })

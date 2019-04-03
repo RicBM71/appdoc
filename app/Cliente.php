@@ -43,10 +43,28 @@ class Cliente extends Model
 
     }
 
+    public function albacabs()
+    {
+
+         return $this->hasMany(Albacabs::class);
+
+    }
+
+    public static function scopeFacturables($query, $nombre)
+    {
+
+        if (is_null($nombre))
+            return $query->where('factusn', '=', true);
+        else
+            return $query->where('factusn', '=', true)
+                         ->where('nombre', 'LIKE', '%' . $nombre . '%');
+
+    }
+
        // establecemos la relación muchos a muchos
-       public function users()
-       {
-           return $this->belongsToMany(User::class);
-       }
+    //    public function users()
+    //    {
+    //        return $this->belongsToMany(User::class);
+    //    }
 }
 

@@ -7,22 +7,38 @@
             </v-flex>
 			<v-flex xs2>
 				<v-btn v-on:click="create" small >
-					<v-icon small>add</v-icon> Crear Carpeta
+					<v-icon small>add</v-icon> Crear Albarán
 				</v-btn>
 			</v-flex>
         </v-layout>
         <v-layout row wrap>
+            <v-flex xs6></v-flex>
+            <v-flex xs6>
+                <v-spacer></v-spacer>
+                <v-text-field
+                    v-model="search"
+                    append-icon="search"
+                    label="Buscar"
+                    single-line
+                    hide-details
+                ></v-text-field>
+            </v-flex>
+        </v-layout>
+        <br/>
+        <v-layout row wrap>
 			<v-flex xs12>
 				<v-data-table
 				:headers="headers"
-				:items="this.carpetas"
+				:items="albaranes"
+                :search="search"
                 rows-per-page-text="Registros por página"
 				>
 					<template slot="items" slot-scope="props">
-						<td>{{ props.item.id }}</td>
-                        <td>{{ props.item.nombre }}</td>
-						<td>{{ props.item.empresa }}</td>
-                        <td :class="props.item.color"><span class="white--text">{{ props.item.color }}</span></td>
+						<td>{{ props.item.alb_ser }}</td>
+                        <td>{{ formatDate(props.item.fecha_alb) }}</td>
+                        <td>{{ props.item.cliente.razon }}</td>
+                        <td class="text-xs-right">{{ totalImpLinea(props.item.albalins) | currency('€', 2, { decimalSeparator: ',', symbolOnLeft: false })}}</td>
+						<td>{{ props.item.factura }}</td>
 						<td class="justify-center layout px-0">
 							<v-icon
 								small
@@ -34,6 +50,7 @@
 
 
 							<v-icon
+                            v-if="props.item.factura==null"
 							small
 							@click="openDialog(props.item.id)"
 							>
@@ -50,6 +67,7 @@
     </div>
 </template>
 <script>
+import moment from 'moment';
 import MyDialog from '@/components/shared/MyDialog'
   export default {
     components: {
@@ -57,26 +75,34 @@ import MyDialog from '@/components/shared/MyDialog'
     },
     data () {
       return {
+        titulo:"Albaranes",
+        search:"",
         headers: [
           {
-            text: 'ID',
+            text: 'Albarán',
             align: 'center',
-            value: 'id'
+            value: 'albaran1'
           },
           {
-            text: 'Nombre',
+            text: 'Fecha',
             align: 'left',
-            value: 'nombre'
+            value: 'fecha_alb'
           },
           {
-            text: 'Empresa',
+            text: 'Cliente',
             align: 'left',
-            value: 'empresa'
+            value: 'cliente'
           },
           {
-            text: 'Color',
+            text: 'Importe',
+            align: 'right',
+            value: 'importe',
+            sortable: false
+          },
+          {
+            text: 'Factura',
             align: 'Left',
-            value: 'color'
+            value: 'factura'
           },
           {
             text: 'Acciones',
@@ -84,21 +110,21 @@ import MyDialog from '@/components/shared/MyDialog'
             value: ''
           }
         ],
-        carpetas:[],
+        albaranes:[],
         status: false,
 		registros: false,
         dialog: false,
-        carpeta_id: 0,
-        titulo:"Carpetas"
+        producto_id: 0,
+
       }
     },
     mounted()
     {
 
-        axios.get('/admin/carpetas')
+        axios.get('/ventas/albacabs')
             .then(res => {
-
-                this.carpetas = res.data;
+                console.log(res);
+                this.albaranes = res.data;
                 this.registros = true;
             })
             .catch(err =>{
@@ -108,27 +134,42 @@ import MyDialog from '@/components/shared/MyDialog'
             })
     },
     methods:{
+        formatDate(f){
+            moment.locale('es');
+            return moment(f).format('DD/MM/YYYY');
+        },
+        totalImpLinea(lineas){
+            var total = 0;
+            lineas.map((lin) =>
+            {
+                var imp = parseFloat(lin.importe);
+                var iva = parseFloat(lin.iva)
+                var irpf= parseFloat(lin.irpf)
+                total += (imp + (imp * iva / 100) - (imp * irpf / 100));
+
+            })
+            return total.toFixed(2);
+        },
         create(){
-            this.$router.push({ name: 'carpeta.create'})
+            this.$router.push({ name: 'albaran.create'})
         },
         editItem (id) {
-            this.$router.push({ name: 'carpeta.edit', params: { id: id } })
+            this.$router.push({ name: 'albaran.edit', params: { id: id } })
         },
         openDialog (id){
             this.dialog = true;
-            this.carpeta_id = id;
+            this.albaran_id = id;
         },
         destroyReg () {
             this.dialog = false;
 
-            axios.post('/admin/carpetas/'+this.carpeta_id,{_method: 'delete'})
+            axios.post('/ventas/albcabs/'+this.albaran_id,{_method: 'delete'})
                 .then(response => {
 
-                if (response.status == 200){
-                    this.$toast.success('Carpeta eliminada!');
-                    this.carpetas = response.data;
-                }
-                })
+                this.albaranes = response.data;
+                this.$toast.success('Albarán eliminado!');
+
+            })
             .catch(err => {
                 this.status = true;
                // console.log(err.response.data.message);

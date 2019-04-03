@@ -16,33 +16,109 @@
                     <v-icon>add</v-icon>
                 </v-btn>
                 <v-layout row wrap>
-                    <v-flex sm1></v-flex>
                     <v-flex sm3>
                         <v-text-field
-                            v-model="iva.nombre"
+                            v-model="contador.ejercicio"
                             v-validate="'required'"
-                            :error-messages="errors.collect('nombre')"
-                            label="Nombre"
-                            data-vv-name="nombre"
-                            data-vv-as="nombre"
+                            :error-messages="errors.collect('ejercicio')"
+                            label="Ejercicio"
+                            data-vv-name="ejercicio"
+                            data-vv-as="ejercicio"
                             required
+                            v-on:keyup.enter="submit"
+                        >
+                        </v-text-field>
+                    </v-flex>
+                </v-layout>
+                <v-layout row wrap>
+                    <v-flex sm2>
+                        <v-text-field
+                            v-model="contador.seriealb"
+                            v-validate="'required|max:3'"
+                            :error-messages="errors.collect('seriealb')"
+                            label="Serie Albarán"
+                            data-vv-name="seriealb"
+                            data-vv-as="Serie"
+                            required
+                            v-on:keyup.enter="submit"                        >
+                        </v-text-field>
+                    </v-flex>
+                    <v-flex sm2>
+                        <v-text-field
+                            v-model="contador.albaran"
+                            v-validate="'required|numeric'"
+                            :error-messages="errors.collect('albaran')"
+                            label="Albarán"
+                            data-vv-name="albaran"
+                            data-vv-as="albarán"
+                            required
+                            type="number"
                             v-on:keyup.enter="submit"
                         >
                         </v-text-field>
                     </v-flex>
                     <v-flex sm2>
                         <v-text-field
-                            v-model="iva.importe"
-                            v-validate="'required|decimal:2'"
-                            :error-messages="errors.collect('importe')"
-                            label="Valor"
-                            data-vv-name="importe"
-                            data-vv-as="Valor"
+                            v-model="contador.seriefac"
+                            v-validate="'required|max:3'"
+                            :error-messages="errors.collect('seriefac')"
+                            label="Serie Factura"
+                            data-vv-name="seriefac"
+                            data-vv-as="Serie"
                             required
-                            class="inputPrice"
+                            v-on:keyup.enter="submit"                        >
+                        </v-text-field>
+                    </v-flex>
+                    <v-flex sm2>
+                        <v-text-field
+                            v-model="contador.factura"
+                            v-validate="'required|numeric'"
+                            :error-messages="errors.collect('factura')"
+                            label="Factura"
+                            data-vv-name="factura"
+                            data-vv-as="factura"
+                            required
                             type="number"
                             v-on:keyup.enter="submit"
-
+                        >
+                        </v-text-field>
+                    </v-flex>
+                    <v-flex sm2>
+                        <v-text-field
+                            v-model="contador.serieabo"
+                            v-validate="'required|max:3'"
+                            :error-messages="errors.collect('serieabo')"
+                            label="Serie Abonos"
+                            data-vv-name="serieabo"
+                            data-vv-as="Serie"
+                            required
+                            v-on:keyup.enter="submit"                        >
+                        </v-text-field>
+                    </v-flex>
+                    <v-flex sm2>
+                        <v-text-field
+                            v-model="contador.abono"
+                            v-validate="'required|numeric'"
+                            :error-messages="errors.collect('abono')"
+                            label="Abono"
+                            data-vv-name="abono"
+                            data-vv-as="abono"
+                            required
+                            type="number"
+                            v-on:keyup.enter="submit"
+                        >
+                        </v-text-field>
+                    </v-flex>
+                </v-layout>
+                <v-layout row wrap>
+                    <v-flex sm2>
+                        <v-text-field
+                            v-model="contador.username"
+                            :error-messages="errors.collect('username')"
+                            label="Usuario"
+                            data-vv-name="username"
+                            readonly
+                            v-on:keyup.enter="submit"
                         >
                         </v-text-field>
                     </v-flex>
@@ -62,7 +138,7 @@
                         >
                         </v-text-field>
                     </v-flex>
-                    <v-flex sm5>
+                    <v-flex sm3>
                     </v-flex>
                     <v-flex sm2>
                         <div class="text-xs-center">
@@ -90,54 +166,48 @@ import ModMenu from '@/components/shared/ModMenu'
 		},
     	data () {
       		return {
-                titulo:"Tipos de IVA",
-                iva: {
+                titulo:"Contadores",
+                contador: {
                     id:       0,
-                    nombre:  "",
-                    importe: "",
+                    ejercicio:  "",
+                    albaran: 0,
+                    seriealb: "",
+                    factura: 0,
+                    seriefac: "",
+                    abono: 0,
+                    serieabo: "",
                     updated_at:"",
                     created_at:"",
                 },
-                iva_id: "",
 
         		status: false,
                 enviando: false,
 
-                show: false,
-                showMenuCli: false,
+                show: true,
 
+                showMenuCli: false,
                 x: 0,
                 y: 0,
                 items: [
-                    { title: 'Tipos Iva', name: 'iva.index', icon: 'list' },
-                    { title: 'Nuevo tipo', name: 'iva.create', icon: 'add' },
-                    { title: 'Retenciones', name: 'ret.index', icon: 'functions' },
+                    { title: 'Contadores', name: 'contador.index', icon: 'list' },
+                    { title: 'Nuevo contador', name: 'contador.create', icon: 'add' },
                     { title: 'Home', name: 'dash', icon: 'home' },
 
                 ]
 
-
       		}
         },
         mounted(){
-            axios.get('/admin/ivas/create')
-                .then(res => {
-                    this.show = true;
-                })
-                .catch(err => {
-                    this.$toast.error(err.response.data.message);
-                    this.$router.push({ name: 'iva.index'})
-                })
+            var id = this.$route.params.id;
         },
-
         computed: {
             computedFModFormat() {
                 moment.locale('es');
-                return this.iva.updated_at ? moment(this.iva.updated_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.contador.updated_at ? moment(this.contador.updated_at).format('D/MM/YYYY H:mm:ss') : '';
             },
             computedFCreFormat() {
                 moment.locale('es');
-                return this.iva.created_at ? moment(this.iva.created_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.contador.created_at ? moment(this.contador.created_at).format('D/MM/YYYY H:mm:ss') : '';
             }
 
         },
@@ -156,36 +226,25 @@ import ModMenu from '@/components/shared/ModMenu'
             },
             submit() {
 
-                //console.log("Edit user (submit):"+this.iva.id);
                 this.enviando = true;
 
-                var url = "/admin/ivas";
-                var metodo = "post";
+                var url = "/admin/contadors";
 
                 this.$validator.validateAll().then((result) => {
                     if (result){
-                        axios({
-                            method: metodo,
-                            url: url,
-                            data:
-                                {
-                                    nombre: this.iva.nombre,
-                                    importe: this.iva.importe,
 
-                                }
-                            })
+                        axios.post(url, this.contador)
                             .then(response => {
-                                //console.log(response.data);
-                                this.$toast.success(response.data.message);
-
+                                this.$router.push({ name: 'contador.edit', params: { id: response.data.contador.id } })
                                 this.enviando = false;
-                                this.$router.push({ name: 'iva.edit', params: { id: response.data.iva.id } })
                             })
                             .catch(err => {
-
+                                //console.log(err.response.data.errors);
                                 if (err.request.status == 422){ // fallo de validated.
                                     const msg_valid = err.response.data.errors;
                                     for (const prop in msg_valid) {
+                                        // this.$toast.error(`${msg_valid[prop]}`);
+                                        //console.log(prop);
                                         this.errors.add({
                                             field: prop,
                                             msg: `${msg_valid[prop]}`
@@ -207,17 +266,4 @@ import ModMenu from '@/components/shared/ModMenu'
     }
   }
 </script>
-<style>
-.inputPrice >>> input {
-  text-align: center;
-  -moz-appearance:textfield;
-}
-
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin: 0;
-}
-</style>
+<style scoped>

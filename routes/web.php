@@ -55,6 +55,17 @@ Route::group([
     function (){
         Route::resource('clientes', 'ClientesController', ['except'=>'show','as' => 'mto']);
         Route::resource('productos', 'ProductosController', ['except'=>'show','as' => 'mto']);
+        Route::resource('vencimientos', 'VencimientosController', ['except'=>'show','as' => 'mto']);
+    }
+);
+
+
+Route::group([
+    'prefix' => 'ventas',
+    'namespace' => 'Ventas',
+    'middleware' => 'auth'],
+    function (){
+        Route::resource('albacabs', 'AlbacabsController', ['except'=>'show','as' => 'ventas']);
     }
 );
 

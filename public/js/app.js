@@ -2026,7 +2026,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         model: false,
         children: [{
           text: 'Albaranes',
-          name: 'albaranes.index'
+          name: 'albaran.index'
         }]
       }]
     };
@@ -8305,10 +8305,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -8317,9 +8317,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_shared_ModMenu__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/components/shared/ModMenu */ "./resources/js/components/shared/ModMenu.vue");
-//
-//
-//
 //
 //
 //
@@ -8530,17 +8527,17 @@ __webpack_require__.r(__webpack_exports__);
       albaran: {
         id: "",
         empresa_id: "",
-        ejercicio: "",
+        ejercicio: 0,
         albaran: "",
         serie: "",
-        fecha_alb: "",
+        fecha_alb: new Date().toISOString().substr(0, 10),
         cliente_id: "",
         ejefac: "",
         factura: "",
-        fecha_fac: "",
-        fpago_id: "",
-        vencimiento_id: 0,
-        notificado: "",
+        fecha_fac: null,
+        fpago_id: 1,
+        vencimiento_id: 1,
+        notificado: false,
         notas: "",
         username: "",
         updated_at: "",
@@ -8551,6 +8548,7 @@ __webpack_require__.r(__webpack_exports__);
       retenciones: [],
       productos: [],
       fpagos: [],
+      vencimientos: [],
       clientes: [],
       loading: false,
       search: null,
@@ -8580,10 +8578,8 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    var id = this.$route.params.id; //console.log(this.$route.params);
-
-    if (id > 0) axios.get('/ventas/albacabs/' + id + '/edit').then(function (res) {
-      console.log(res);
+    axios.get('/ventas/albacabs/create').then(function (res) {
+      //console.log(res);
       res.data.ivas.map(function (e) {
         _this.ivas.push({
           id: e.id,
@@ -8598,10 +8594,10 @@ __webpack_require__.r(__webpack_exports__);
       });
       _this.clientes = res.data.clientes;
       _this.fpagos = res.data.fpagos;
-      _this.albaran = res.data.albaran;
+      _this.vencimientos = res.data.vencimientos;
       _this.show = true;
     }).catch(function (err) {
-      if (err.response.status == 404) _this.$toast.error("Albarán No encontrado!");else _this.$toast.error(err.response.data.message);
+      _this.$toast.error(err.response.data.message);
 
       _this.$router.push({
         name: 'albaran.index'
@@ -8642,12 +8638,440 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       this.enviando = true;
+      var url = "/ventas/albacabs";
+      this.$validator.validateAll().then(function (result) {
+        if (result) {
+          axios.post(url, _this3.albaran).then(function (response) {
+            _this3.$router.push({
+              name: 'albaran.edit',
+              params: {
+                id: response.data.albaran.id
+              }
+            });
+
+            _this3.enviando = false;
+          }).catch(function (err) {
+            if (err.request.status == 422) {
+              // fallo de validated.
+              var msg_valid = err.response.data.errors;
+
+              for (var prop in msg_valid) {
+                // this.$toast.error(`${msg_valid[prop]}`);
+                //console.log(prop);
+                _this3.errors.add({
+                  field: prop,
+                  msg: "".concat(msg_valid[prop])
+                });
+              }
+            } else {
+              _this3.$toast.error(err.response.data.message);
+            }
+
+            _this3.enviando = false;
+          });
+        } else {
+          _this3.enviando = false;
+        }
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_shared_ModMenu__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/components/shared/ModMenu */ "./resources/js/components/shared/ModMenu.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  $_veeValidate: {
+    validator: 'new'
+  },
+  components: {
+    'mod-menu': _components_shared_ModMenu__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  data: function data() {
+    return {
+      titulo: "Albaranes",
+      albaran: {
+        id: "",
+        empresa_id: "",
+        ejercicio: "",
+        albaran: "",
+        serie: "",
+        fecha_alb: "",
+        cliente_id: "",
+        ejefac: "",
+        factura: "",
+        fecha_fac: "",
+        fpago_id: "",
+        vencimiento_id: 0,
+        notificado: "",
+        notas: "",
+        username: "",
+        updated_at: "",
+        created_at: ""
+      },
+      ivas: [],
+      retenciones: [],
+      productos: [],
+      fpagos: [],
+      vencimientos: [],
+      clientes: [],
+      loading: false,
+      search: null,
+      albaran_id: "",
+      status: false,
+      enviando: false,
+      show: true,
+      menu2: false,
+      facturado: true,
+      menu3: false,
+      show_loading: false,
+      showMenuCli: false,
+      x: 0,
+      y: 0,
+      items: [{
+        title: 'Albaranes',
+        name: 'albaran.index',
+        icon: 'list'
+      }, {
+        title: 'Nuevo albarán',
+        name: 'albaran.create',
+        icon: 'add'
+      }, {
+        title: 'Home',
+        name: 'dash',
+        icon: 'home'
+      }]
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    var id = this.$route.params.id; //console.log(this.$route.params);
+
+    if (id > 0) axios.get('/ventas/albacabs/' + id + '/edit').then(function (res) {
+      res.data.ivas.map(function (e) {
+        _this.ivas.push({
+          id: e.id,
+          name: e.nombre
+        });
+      });
+      res.data.retenciones.map(function (e) {
+        _this.retenciones.push({
+          id: e.id,
+          name: e.nombre
+        });
+      });
+      _this.clientes = res.data.clientes;
+      _this.fpagos = res.data.fpagos;
+      _this.vencimientos = res.data.vencimientos;
+      _this.albaran = res.data.albaran;
+      _this.show = true;
+    }).catch(function (err) {
+      if (err.response.status == 404) _this.$toast.error("Albarán No encontrado!");else _this.$toast.error(err.response.data.message);
+
+      _this.$router.push({
+        name: 'albaran.index'
+      });
+    });
+  },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])(['isRoot', 'isAdmin']), {
+    computedFechaAlb: function computedFechaAlb() {
+      moment__WEBPACK_IMPORTED_MODULE_0___default.a.locale('es');
+      return this.albaran.fecha_alb ? moment__WEBPACK_IMPORTED_MODULE_0___default()(this.albaran.fecha_alb).format('L') : '';
+    },
+    computedFechaFac: function computedFechaFac() {
+      moment__WEBPACK_IMPORTED_MODULE_0___default.a.locale('es');
+      return this.albaran.fecha_fac ? moment__WEBPACK_IMPORTED_MODULE_0___default()(this.albaran.fecha_fac).format('L') : '';
+    },
+    computedFModFormat: function computedFModFormat() {
+      moment__WEBPACK_IMPORTED_MODULE_0___default.a.locale('es');
+      return this.albaran.updated_at ? moment__WEBPACK_IMPORTED_MODULE_0___default()(this.albaran.updated_at).format('DD/MM/YYYY H:mm:ss') : '';
+    },
+    computedFCreFormat: function computedFCreFormat() {
+      moment__WEBPACK_IMPORTED_MODULE_0___default.a.locale('es');
+      return this.albaran.created_at ? moment__WEBPACK_IMPORTED_MODULE_0___default()(this.albaran.created_at).format('DD/MM/YYYY H:mm:ss') : '';
+    }
+  }),
+  methods: {
+    showMenu: function showMenu(e) {
+      var _this2 = this;
+
+      e.preventDefault();
+      this.showMenuCli = false;
+      this.x = e.clientX;
+      this.y = e.clientY;
+      this.$nextTick(function () {
+        _this2.showMenuCli = true;
+      });
+    },
+    submit: function submit() {
+      var _this3 = this;
+
+      this.enviando = true;
       var url = "/ventas/albacabs/" + this.albaran.id;
       this.$validator.validateAll().then(function (result) {
         if (result) {
           axios.put(url, _this3.albaran).then(function (response) {
-            console.log(response);
-
             _this3.$toast.success(response.data.message);
 
             _this3.albaran = response.data.albaran;
@@ -8675,6 +9099,41 @@ __webpack_require__.r(__webpack_exports__);
         } else {
           _this3.enviando = false;
         }
+      });
+    },
+    facturar: function facturar(id) {
+      var _this4 = this;
+
+      console.log(id);
+      this.show_loading = true;
+      setTimeout(function () {
+        return _this4.show_loading = false;
+      }, 4000);
+      return;
+      axios.put('ventas/albacabs/' + id, this.albaran.fecha_fac).then(function (response) {
+        _this4.$toast.success(response.data.message);
+
+        _this4.albaran = response.data.albaran;
+        _this4.show_loading = false;
+      }).catch(function (err) {
+        //console.log(err.response.data.errors);
+        if (err.request.status == 422) {
+          // fallo de validated.
+          var msg_valid = err.response.data.errors;
+
+          for (var prop in msg_valid) {
+            // this.$toast.error(`${msg_valid[prop]}`);
+            //console.log(prop);
+            _this4.errors.add({
+              field: prop,
+              msg: "".concat(msg_valid[prop])
+            });
+          }
+        } else {
+          _this4.$toast.error(err.response.data.message);
+        }
+
+        _this4.show_loading = false;
       });
     }
   }
@@ -8809,7 +9268,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     axios.get('/ventas/albacabs').then(function (res) {
-      console.log(res);
+      //console.log(res);
       _this.albaranes = res.data;
       _this.registros = true;
     }).catch(function (err) {
@@ -8857,7 +9316,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.dialog = false;
-      axios.post('/ventas/albcabs/' + this.albaran_id, {
+      axios.post('/ventas/albacabs/' + this.albaran_id, {
         _method: 'delete'
       }).then(function (response) {
         _this2.albaranes = response.data;
@@ -11305,6 +11764,25 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 // module
 exports.push([module.i, "\n.inputPrice[data-v-107a50de] input {\n  text-align: center;\n  -moz-appearance:textfield;\n}\ninput[type=number][data-v-107a50de]::-webkit-inner-spin-button,\ninput[type=number][data-v-107a50de]::-webkit-outer-spin-button {\n    -webkit-appearance: none;\n    -moz-appearance: none;\n    appearance: none;\n    margin: 0;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=style&index=0&id=6d2b890a&scoped=true&lang=css&":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=style&index=0&id=6d2b890a&scoped=true&lang=css& ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.v-text-field[data-v-6d2b890a] {\n    padding-top: 2px;\n    margin-top: 4px;\n}\n.v-form>.container>.layout>.flex[data-v-6d2b890a]{\n    padding: 0px 8px;\n}\n.inputPrice[data-v-6d2b890a] input {\n  text-align: center;\n  -moz-appearance:textfield;\n}\ninput[type=number][data-v-6d2b890a]::-webkit-inner-spin-button,\ninput[type=number][data-v-6d2b890a]::-webkit-outer-spin-button {\n    -webkit-appearance: none;\n    -moz-appearance: none;\n    appearance: none;\n    margin: 0;\n}\n", ""]);
 
 // exports
 
@@ -30365,6 +30843,36 @@ options.transform = transform
 options.insertInto = undefined;
 
 var update = __webpack_require__(/*! ../../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=style&index=0&id=6d2b890a&scoped=true&lang=css&":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=style&index=0&id=6d2b890a&scoped=true&lang=css& ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./AlbaranCreate.vue?vue&type=style&index=0&id=6d2b890a&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=style&index=0&id=6d2b890a&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -51123,10 +51631,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=template&id=27c68498&scoped=true&":
-/*!************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=template&id=27c68498&scoped=true& ***!
-  \************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=template&id=6d2b890a&scoped=true&":
+/*!**************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=template&id=6d2b890a&scoped=true& ***!
+  \**************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -51190,14 +51698,6 @@ var render = function() {
                     { attrs: { sm1: "" } },
                     [
                       _c("v-text-field", {
-                        directives: [
-                          {
-                            name: "validate",
-                            rawName: "v-validate",
-                            value: "required",
-                            expression: "'required'"
-                          }
-                        ],
                         attrs: {
                           "error-messages": _vm.errors.collect("serie"),
                           label: "Serie",
@@ -51223,38 +51723,13 @@ var render = function() {
                     { attrs: { sm2: "" } },
                     [
                       _c("v-text-field", {
-                        directives: [
-                          {
-                            name: "validate",
-                            rawName: "v-validate",
-                            value: "required|numeric",
-                            expression: "'required|numeric'"
-                          }
-                        ],
                         attrs: {
                           "error-messages": _vm.errors.collect("albaran"),
                           label: "Albarán",
                           "data-vv-name": "albaran",
                           "data-vv-as": "albarán",
                           required: "",
-                          type: "number"
-                        },
-                        on: {
-                          keyup: function($event) {
-                            if (
-                              !$event.type.indexOf("key") &&
-                              _vm._k(
-                                $event.keyCode,
-                                "enter",
-                                13,
-                                $event.key,
-                                "Enter"
-                              )
-                            ) {
-                              return null
-                            }
-                            return _vm.submit($event)
-                          }
+                          readonly: ""
                         },
                         model: {
                           value: _vm.albaran.albaran,
@@ -51391,11 +51866,11 @@ var render = function() {
                           color: "primary"
                         },
                         model: {
-                          value: _vm.albaran.notficado,
+                          value: _vm.albaran.notificado,
                           callback: function($$v) {
-                            _vm.$set(_vm.albaran, "notficado", $$v)
+                            _vm.$set(_vm.albaran, "notificado", $$v)
                           },
-                          expression: "albaran.notficado"
+                          expression: "albaran.notificado"
                         }
                       })
                     ],
@@ -51510,7 +51985,642 @@ var render = function() {
                           "data-vv-as": "Vencimiento",
                           "item-text": "name",
                           "item-value": "id",
+                          items: _vm.vencimientos,
+                          label: "Vencimiento"
+                        },
+                        model: {
+                          value: _vm.albaran.vencimiento_id,
+                          callback: function($$v) {
+                            _vm.$set(_vm.albaran, "vencimiento_id", $$v)
+                          },
+                          expression: "albaran.vencimiento_id"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { sm2: "" } },
+                    [
+                      _c("v-text-field", {
+                        attrs: { label: "Usuario", readonly: "" },
+                        on: {
+                          keyup: function($event) {
+                            if (
+                              !$event.type.indexOf("key") &&
+                              _vm._k(
+                                $event.keyCode,
+                                "enter",
+                                13,
+                                $event.key,
+                                "Enter"
+                              )
+                            ) {
+                              return null
+                            }
+                            return _vm.submit($event)
+                          }
+                        },
+                        model: {
+                          value: _vm.albaran.username,
+                          callback: function($$v) {
+                            _vm.$set(_vm.albaran, "username", $$v)
+                          },
+                          expression: "albaran.username"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-layout",
+                { attrs: { row: "", wrap: "" } },
+                [
+                  _c(
+                    "v-flex",
+                    { attrs: { sm6: "", "d-flex": "" } },
+                    [
+                      _c("v-text-field", {
+                        attrs: { label: "Observaciones" },
+                        model: {
+                          value: _vm.albaran.notas,
+                          callback: function($$v) {
+                            _vm.$set(_vm.albaran, "notas", $$v)
+                          },
+                          expression: "albaran.notas"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { sm2: "" } },
+                    [
+                      _c("v-text-field", {
+                        attrs: { label: "Modificado", readonly: "" },
+                        model: {
+                          value: _vm.computedFModFormat,
+                          callback: function($$v) {
+                            _vm.computedFModFormat = $$v
+                          },
+                          expression: "computedFModFormat"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { sm2: "" } },
+                    [
+                      _c("v-text-field", {
+                        attrs: { label: "Creado", readonly: "" },
+                        model: {
+                          value: _vm.computedFCreFormat,
+                          callback: function($$v) {
+                            _vm.computedFCreFormat = $$v
+                          },
+                          expression: "computedFCreFormat"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-flex", { attrs: { sm2: "" } }, [
+                    _c(
+                      "div",
+                      { staticClass: "text-xs-center" },
+                      [
+                        _c(
+                          "v-btn",
+                          {
+                            attrs: {
+                              loading: _vm.enviando,
+                              block: "",
+                              color: "primary"
+                            },
+                            on: { click: _vm.submit }
+                          },
+                          [
+                            _vm._v(
+                              "\n                            Guardar\n                            "
+                            )
+                          ]
+                        )
+                      ],
+                      1
+                    )
+                  ])
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=template&id=27c68498&scoped=true&":
+/*!************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=template&id=27c68498&scoped=true& ***!
+  \************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      directives: [
+        { name: "show", rawName: "v-show", value: _vm.show, expression: "show" }
+      ]
+    },
+    [
+      _c(
+        "v-dialog",
+        {
+          attrs: { "hide-overlay": "", persistent: "", width: "300" },
+          model: {
+            value: _vm.show_loading,
+            callback: function($$v) {
+              _vm.show_loading = $$v
+            },
+            expression: "show_loading"
+          }
+        },
+        [
+          _c(
+            "v-card",
+            { attrs: { color: "primary", dark: "" } },
+            [
+              _c(
+                "v-card-text",
+                [
+                  _vm._v("\n\t\t\t\tPlease stand by\n\t\t\t\t"),
+                  _c("v-progress-linear", {
+                    staticClass: "mb-0",
+                    attrs: { indeterminate: "", color: "white" }
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("mod-menu", {
+        attrs: {
+          showMenuCli: _vm.showMenuCli,
+          x: _vm.x,
+          y: _vm.y,
+          items: _vm.items
+        }
+      }),
+      _vm._v(" "),
+      _c("h2", [_vm._v(_vm._s(_vm.titulo))]),
+      _vm._v(" "),
+      _c(
+        "v-form",
+        [
+          _c(
+            "v-container",
+            { on: { contextmenu: _vm.showMenu } },
+            [
+              _c(
+                "v-btn",
+                {
+                  attrs: {
+                    fixed: "",
+                    dark: "",
+                    fab: "",
+                    bottom: "",
+                    right: "",
+                    color: "teal accent-4"
+                  },
+                  on: { click: _vm.showMenu }
+                },
+                [_c("v-icon", [_vm._v("add")])],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-layout",
+                { attrs: { row: "", wrap: "" } },
+                [
+                  _c(
+                    "v-flex",
+                    { attrs: { sm1: "" } },
+                    [
+                      _c("v-text-field", {
+                        attrs: {
+                          "error-messages": _vm.errors.collect("serie"),
+                          label: "Serie",
+                          "data-vv-name": "serie",
+                          "data-vv-as": "serie",
+                          required: "",
+                          readonly: ""
+                        },
+                        model: {
+                          value: _vm.albaran.serie,
+                          callback: function($$v) {
+                            _vm.$set(_vm.albaran, "serie", $$v)
+                          },
+                          expression: "albaran.serie"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { sm2: "" } },
+                    [
+                      _c("v-text-field", {
+                        attrs: {
+                          "error-messages": _vm.errors.collect("albaran"),
+                          label: "Albarán",
+                          "data-vv-name": "albaran",
+                          "data-vv-as": "albarán",
+                          required: "",
+                          readonly: ""
+                        },
+                        model: {
+                          value: _vm.albaran.albaran,
+                          callback: function($$v) {
+                            _vm.$set(_vm.albaran, "albaran", $$v)
+                          },
+                          expression: "albaran.albaran"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { sm2: "" } },
+                    [
+                      _c(
+                        "v-menu",
+                        {
+                          attrs: {
+                            "close-on-content-click": false,
+                            "nudge-right": 40,
+                            lazy: "",
+                            transition: "scale-transition",
+                            "offset-y": "",
+                            "full-width": "",
+                            "min-width": "290px"
+                          },
+                          model: {
+                            value: _vm.menu2,
+                            callback: function($$v) {
+                              _vm.menu2 = $$v
+                            },
+                            expression: "menu2"
+                          }
+                        },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              slot: "activator",
+                              value: _vm.computedFechaAlb,
+                              label: "Fecha Albarán",
+                              "append-icon": "event",
+                              readonly: "",
+                              "data-vv-as": "Fecha Albarán"
+                            },
+                            slot: "activator"
+                          }),
+                          _vm._v(" "),
+                          _c("v-date-picker", {
+                            attrs: {
+                              "no-title": "",
+                              locale: "es",
+                              "first-day-of-week": "1"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.menu2 = false
+                              }
+                            },
+                            model: {
+                              value: _vm.albaran.fecha_alb,
+                              callback: function($$v) {
+                                _vm.$set(_vm.albaran, "fecha_alb", $$v)
+                              },
+                              expression: "albaran.fecha_alb"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { sm2: "" } },
+                    [
+                      _c(
+                        "v-text-field",
+                        {
+                          attrs: {
+                            "error-messages": _vm.errors.collect("factura"),
+                            label: "Factura",
+                            "data-vv-name": "factura",
+                            "data-vv-as": "factura",
+                            readonly: !_vm.isRoot
+                          },
+                          model: {
+                            value: _vm.albaran.factura,
+                            callback: function($$v) {
+                              _vm.$set(_vm.albaran, "factura", $$v)
+                            },
+                            expression: "albaran.factura"
+                          }
+                        },
+                        [
+                          _c(
+                            "v-tooltip",
+                            {
+                              attrs: {
+                                slot: "append",
+                                bottom: "",
+                                color: "black"
+                              },
+                              slot: "append"
+                            },
+                            [
+                              !_vm.albaran.factura
+                                ? _c(
+                                    "v-icon",
+                                    {
+                                      attrs: { slot: "activator" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.facturar(_vm.albaran.id)
+                                        }
+                                      },
+                                      slot: "activator"
+                                    },
+                                    [_vm._v("lock")]
+                                  )
+                                : _c(
+                                    "v-icon",
+                                    {
+                                      attrs: { slot: "activator" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.desfacturar(_vm.albaran.id)
+                                        }
+                                      },
+                                      slot: "activator"
+                                    },
+                                    [_vm._v("lock_open")]
+                                  ),
+                              _vm._v(" "),
+                              _c("span", [_vm._v("Generar factura automática")])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { sm2: "" } },
+                    [
+                      _c(
+                        "v-menu",
+                        {
+                          attrs: {
+                            "close-on-content-click": false,
+                            "nudge-right": 40,
+                            lazy: "",
+                            transition: "scale-transition",
+                            "offset-y": "",
+                            "full-width": "",
+                            "min-width": "290px",
+                            disabled: _vm.albaran.factura == ""
+                          },
+                          model: {
+                            value: _vm.menu3,
+                            callback: function($$v) {
+                              _vm.menu3 = $$v
+                            },
+                            expression: "menu3"
+                          }
+                        },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              slot: "activator",
+                              value: _vm.computedFechaFac,
+                              label: "Fecha Factura",
+                              "append-icon": "event",
+                              readonly: "",
+                              "data-vv-as": "Fecha Factura"
+                            },
+                            slot: "activator"
+                          }),
+                          _vm._v(" "),
+                          _c("v-date-picker", {
+                            attrs: {
+                              "no-title": "",
+                              locale: "es",
+                              "first-day-of-week": "1",
+                              disabled: _vm.albaran.factura == ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.menu3 = false
+                              }
+                            },
+                            model: {
+                              value: _vm.albaran.fecha_fac,
+                              callback: function($$v) {
+                                _vm.$set(_vm.albaran, "fecha_fac", $$v)
+                              },
+                              expression: "albaran.fecha_fac"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { sm2: "" } },
+                    [
+                      _c("v-switch", {
+                        attrs: {
+                          "data-vv-name": "notificado",
+                          "data-vv-as": "Notificado",
+                          label: "Notificado",
+                          color: "primary"
+                        },
+                        model: {
+                          value: _vm.albaran.notificado,
+                          callback: function($$v) {
+                            _vm.$set(_vm.albaran, "notificado", $$v)
+                          },
+                          expression: "albaran.notificado"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-layout",
+                { attrs: { row: "", wrap: "" } },
+                [
+                  _c(
+                    "v-flex",
+                    { attrs: { sm4: "" } },
+                    [
+                      _c("v-autocomplete", {
+                        directives: [
+                          {
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: "required",
+                            expression: "'required'"
+                          }
+                        ],
+                        attrs: {
+                          "data-vv-name": "cliente_id",
+                          "data-vv-as": "Cliente",
+                          "item-text": "name",
+                          "item-value": "id",
+                          "error-messages": _vm.errors.collect("cliente_id"),
+                          loading: _vm.loading,
+                          items: _vm.clientes,
+                          "search-input": _vm.search,
+                          flat: "",
+                          label: "Cliente",
+                          required: ""
+                        },
+                        on: {
+                          "update:searchInput": function($event) {
+                            _vm.search = $event
+                          },
+                          "update:search-input": function($event) {
+                            _vm.search = $event
+                          }
+                        },
+                        model: {
+                          value: _vm.albaran.cliente_id,
+                          callback: function($$v) {
+                            _vm.$set(_vm.albaran, "cliente_id", $$v)
+                          },
+                          expression: "albaran.cliente_id"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { sm3: "", "d-flex": "" } },
+                    [
+                      _c("v-select", {
+                        directives: [
+                          {
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: "required",
+                            expression: "'required'"
+                          }
+                        ],
+                        attrs: {
+                          "error-messages": _vm.errors.collect("fpago_id"),
+                          "data-vv-name": "fpago_id",
+                          "data-vv-as": "Forma de pago",
+                          "item-text": "name",
+                          "item-value": "id",
                           items: _vm.fpagos,
+                          label: "Forma de Pago"
+                        },
+                        model: {
+                          value: _vm.albaran.fpago_id,
+                          callback: function($$v) {
+                            _vm.$set(_vm.albaran, "fpago_id", $$v)
+                          },
+                          expression: "albaran.fpago_id"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { sm3: "", "d-flex": "" } },
+                    [
+                      _c("v-select", {
+                        directives: [
+                          {
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: "required",
+                            expression: "'required'"
+                          }
+                        ],
+                        attrs: {
+                          "error-messages": _vm.errors.collect(
+                            "vencimiento_id"
+                          ),
+                          "data-vv-name": "vencimiento_id",
+                          "data-vv-as": "Vencimiento",
+                          "item-text": "name",
+                          "item-value": "id",
+                          items: _vm.vencimientos,
                           label: "Vencimiento"
                         },
                         model: {
@@ -100748,6 +101858,93 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/albaranes/AlbaranCreate.vue":
+/*!*************************************************************!*\
+  !*** ./resources/js/components/albaranes/AlbaranCreate.vue ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AlbaranCreate_vue_vue_type_template_id_6d2b890a_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AlbaranCreate.vue?vue&type=template&id=6d2b890a&scoped=true& */ "./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=template&id=6d2b890a&scoped=true&");
+/* harmony import */ var _AlbaranCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AlbaranCreate.vue?vue&type=script&lang=js& */ "./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _AlbaranCreate_vue_vue_type_style_index_0_id_6d2b890a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AlbaranCreate.vue?vue&type=style&index=0&id=6d2b890a&scoped=true&lang=css& */ "./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=style&index=0&id=6d2b890a&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _AlbaranCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AlbaranCreate_vue_vue_type_template_id_6d2b890a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AlbaranCreate_vue_vue_type_template_id_6d2b890a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "6d2b890a",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/albaranes/AlbaranCreate.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./AlbaranCreate.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=style&index=0&id=6d2b890a&scoped=true&lang=css&":
+/*!**********************************************************************************************************************!*\
+  !*** ./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=style&index=0&id=6d2b890a&scoped=true&lang=css& ***!
+  \**********************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranCreate_vue_vue_type_style_index_0_id_6d2b890a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./AlbaranCreate.vue?vue&type=style&index=0&id=6d2b890a&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=style&index=0&id=6d2b890a&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranCreate_vue_vue_type_style_index_0_id_6d2b890a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranCreate_vue_vue_type_style_index_0_id_6d2b890a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranCreate_vue_vue_type_style_index_0_id_6d2b890a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranCreate_vue_vue_type_style_index_0_id_6d2b890a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranCreate_vue_vue_type_style_index_0_id_6d2b890a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=template&id=6d2b890a&scoped=true&":
+/*!********************************************************************************************************!*\
+  !*** ./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=template&id=6d2b890a&scoped=true& ***!
+  \********************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranCreate_vue_vue_type_template_id_6d2b890a_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./AlbaranCreate.vue?vue&type=template&id=6d2b890a&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranCreate.vue?vue&type=template&id=6d2b890a&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranCreate_vue_vue_type_template_id_6d2b890a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranCreate_vue_vue_type_template_id_6d2b890a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/albaranes/AlbaranEdit.vue":
 /*!***********************************************************!*\
   !*** ./resources/js/components/albaranes/AlbaranEdit.vue ***!
@@ -101925,8 +103122,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_productos_ProductoCreate_vue__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./components/productos/ProductoCreate.vue */ "./resources/js/components/productos/ProductoCreate.vue");
 /* harmony import */ var _components_productos_ProductoEdit_vue__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./components/productos/ProductoEdit.vue */ "./resources/js/components/productos/ProductoEdit.vue");
 /* harmony import */ var _components_albaranes_AlbaranIndex_vue__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./components/albaranes/AlbaranIndex.vue */ "./resources/js/components/albaranes/AlbaranIndex.vue");
-/* harmony import */ var _components_albaranes_AlbaranEdit_vue__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./components/albaranes/AlbaranEdit.vue */ "./resources/js/components/albaranes/AlbaranEdit.vue");
-/* harmony import */ var _components_profile_edit_password_EditPassword_vue__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./components/profile/edit-password/EditPassword.vue */ "./resources/js/components/profile/edit-password/EditPassword.vue");
+/* harmony import */ var _components_albaranes_AlbaranCreate_vue__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./components/albaranes/AlbaranCreate.vue */ "./resources/js/components/albaranes/AlbaranCreate.vue");
+/* harmony import */ var _components_albaranes_AlbaranEdit_vue__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./components/albaranes/AlbaranEdit.vue */ "./resources/js/components/albaranes/AlbaranEdit.vue");
+/* harmony import */ var _components_profile_edit_password_EditPassword_vue__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./components/profile/edit-password/EditPassword.vue */ "./resources/js/components/profile/edit-password/EditPassword.vue");
 
 
 
@@ -101961,7 +103159,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
- //import AlbaranCreate from './components/albaranes/AlbaranCreate.vue';
+
 
 
 
@@ -102006,7 +103204,7 @@ __webpack_require__.r(__webpack_exports__);
   }, {
     path: '/users/password',
     name: 'edit.password',
-    component: _components_profile_edit_password_EditPassword_vue__WEBPACK_IMPORTED_MODULE_36__["default"]
+    component: _components_profile_edit_password_EditPassword_vue__WEBPACK_IMPORTED_MODULE_37__["default"]
   }, {
     path: '/retenciones',
     name: 'ret.index',
@@ -102105,12 +103303,16 @@ __webpack_require__.r(__webpack_exports__);
     component: _components_admin_contador_ContadorEdit_vue__WEBPACK_IMPORTED_MODULE_27__["default"]
   }, {
     path: '/albaranes',
-    name: 'albaranes.index',
+    name: 'albaran.index',
     component: _components_albaranes_AlbaranIndex_vue__WEBPACK_IMPORTED_MODULE_34__["default"]
+  }, {
+    path: '/albaranes/create',
+    name: 'albaran.create',
+    component: _components_albaranes_AlbaranCreate_vue__WEBPACK_IMPORTED_MODULE_35__["default"]
   }, {
     path: '/albaranes/:id/edit',
     name: 'albaran.edit',
-    component: _components_albaranes_AlbaranEdit_vue__WEBPACK_IMPORTED_MODULE_35__["default"]
+    component: _components_albaranes_AlbaranEdit_vue__WEBPACK_IMPORTED_MODULE_36__["default"]
   }]
 }, {
   path: '*',

@@ -43,7 +43,7 @@ import ProductoCreate from './components/productos/ProductoCreate.vue';
 import ProductoEdit from './components/productos/ProductoEdit.vue';
 
 import AlbaranIndex from './components/albaranes/AlbaranIndex.vue';
-//import AlbaranCreate from './components/albaranes/AlbaranCreate.vue';
+import AlbaranCreate from './components/albaranes/AlbaranCreate.vue';
 import AlbaranEdit from './components/albaranes/AlbaranEdit.vue';
 
 import EditPassword from './components/profile/edit-password/EditPassword.vue';
@@ -224,8 +224,13 @@ export default [
             },
             {
                 path: '/albaranes',
-                name: 'albaranes.index',
+                name: 'albaran.index',
                 component: AlbaranIndex,
+            },
+            {
+                path: '/albaranes/create',
+                name: 'albaran.create',
+                component: AlbaranCreate,
             },
             {
                 path: '/albaranes/:id/edit',

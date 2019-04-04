@@ -11,7 +11,12 @@ class Fpago extends Model
         'nombre'
     ];
 
-    public static function selectFPagos(){
+    /**
+     *
+     * @return Array formateado para select Vuetify
+     *
+     */
+    public static function selFPagos(){
 
         return Fpago::select('id AS id', 'nombre AS name')
             ->orderBy('nombre', 'asc')

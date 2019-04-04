@@ -21,6 +21,7 @@ class UsersTableSeeder extends Seeder
         $rootRole = Role::create(['name'=>'Root']);
         $adminRole = Role::create(['name'=>'Admin']);
         $userRole = Role::create(['name'=>'Usuario']);
+        $userRole = Role::create(['name'=>'Facturación']);
 
         //$verPost = Permission::create(['name'=>'Ver Posts']);
         // $actPost = Permission::create(['name'=>'Actualizar Posts']);

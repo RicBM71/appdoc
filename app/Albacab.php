@@ -3,18 +3,31 @@
 namespace App;
 
 use App\Scopes\EmpresaScope;
+use Illuminate\Support\Carbon;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Model;
 
 class Albacab extends Model
 {
+
+    use HasRoles;
+
     protected $dates =['fecha_alb','fecha_fac'];
 
     protected $appends = ['alb_ser'];
 
     protected $fillable = [
         'empresa_id','ejercicio','albaran', 'serie', 'fecha_alb', 'cliente_id', 'ejefac', 'factura', 'fecha_fac',
-        'fpago_id', 'vencimiento_id', 'notificado', 'notas','username','created_at'
+        'fpago_id', 'vencimiento_id', 'notificado', 'notas','username',
     ];
+
+    public function getFechaAlbAttribute($value)
+    {
+
+        return Carbon::parse($this->attributes['fecha_alb'])->format('Y-m-d');
+
+    }
+
 
     protected static function boot()
     {

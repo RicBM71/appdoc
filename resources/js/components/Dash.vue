@@ -222,7 +222,7 @@ export default {
             text: 'Facturación',
             model: false,
             children: [
-                { text: 'Albaranes', name: 'albaranes.index' },
+                { text: 'Albaranes', name: 'albaran.index' },
             ]
         },
         ]

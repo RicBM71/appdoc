@@ -59,7 +59,10 @@ class HomeController extends Controller
         ];
 
 
-        session(['empresa' => $authUser->empresa_id]);
+        session([
+            'empresa' => $authUser->empresa_id,
+            'username'=> $authUser->username
+            ]);
 
         if (request()->wantsJson())
             return (compact('user'));

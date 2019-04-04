@@ -87,5 +87,8 @@ class GenericasSeeder extends Seeder
         $vto->nombre = "Fecha Factura";
         $vto->save();
 
+
+
+
     }
 }

@@ -6,12 +6,13 @@ use App\Iva;
 use App\Fpago;
 use App\Albacab;
 use App\Cliente;
+use App\Contador;
 use App\Retencion;
-use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Vencimiento;
+use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAlbaranes;
+use Spatie\Permission\Models\Permission;
 
 class AlbacabsController extends Controller
 {
@@ -37,7 +38,16 @@ class AlbacabsController extends Controller
      */
     public function create()
     {
-        //
+        $this->authorize('create', new Albacab);
+
+        if (request()->wantsJson())
+            return [
+                'clientes'=>  Cliente::selClientesFacturables(),
+                'fpagos'  =>  Fpago::selFPagos(),
+                'vencimientos'  =>  Vencimiento::selVencimientos(),
+                'ivas'=> Iva::all(),
+                'retenciones'=> Retencion::all(),
+        ];
     }
 
     /**
@@ -46,9 +56,28 @@ class AlbacabsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreAlbaranes $request)
     {
-        //
+
+        //return $request;
+
+        $data = $request->validated();
+
+        $data['ejercicio']   = date('Y',strtotime($data['fecha_alb']));
+        $data['empresa_id'] =  session()->get('empresa');
+        $data['username'] = $request->user()->username;
+
+        $contador = Contador::incrementaContador($data['ejercicio']);
+
+        $data['serie']= $contador->seriealb;
+        $data['albaran']= $contador->albaran;
+
+        //return $data;
+        $reg = Albacab::create($data);
+
+        if (request()->wantsJson())
+            return ['albaran'=>$reg, 'message' => 'EL registro ha sido creado'];
+
     }
 
     /**
@@ -70,14 +99,14 @@ class AlbacabsController extends Controller
      */
     public function edit(Albacab $albacab)
     {
-
-        //return $this->clientesFacturables();
+        $this->authorize('update', $albacab);
 
         if (request()->wantsJson())
             return [
                 'albaran' =>  $albacab,
-                'clientes'=>  $this->clientesFacturables(),
-                'fpagos'  =>  Fpago::selectFPagos(),
+                'clientes'=>  Cliente::selClientesFacturables(),
+                'fpagos'  =>  Fpago::selFPagos(),
+                'vencimientos'  =>  Vencimiento::selVencimientos(),
                 'ivas'=> Iva::all(),
                 'retenciones'=> Retencion::all(),
         ];
@@ -93,9 +122,9 @@ class AlbacabsController extends Controller
      */
     public function update(StoreAlbaranes $request, Albacab $albacab)
     {
-        //$this->authorize('update', $albacab);
 
-        
+        $this->authorize('update', $albacab);
+
         $data = $request->validated();
 
         $data['empresa_id'] =  session()->get('empresa');
@@ -115,28 +144,18 @@ class AlbacabsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Albacab $albacab)
     {
-        //
-    }
 
-    /**
-     *
-     * Selecciona clientes facturables y prepara para JSON select
-     *
-     */
+        $this->authorize('delete', $albacab);
 
-    private function clientesFacturables($nombre = null){
+        $albacab->delete();
 
-        $arr=[];
-
-        $cli = Cliente::Facturables($nombre)->get();
-        foreach($cli as $row){
-             $arr[] = ['name' => $row->nombre, 'id' => $row->id];
+        if (request()->wantsJson()){
+            return response()->json(Albacab::with(['cliente','albalins'])->get());
         }
 
-        return $arr;
-
     }
+
 
 }

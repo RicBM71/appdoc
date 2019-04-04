@@ -1,25 +1,5 @@
 <template>
 	<div v-show="show">
-		<v-dialog
-		v-model="show_loading"
-		hide-overlay
-		persistent
-		width="300"
-		>
-			<v-card
-			color="primary"
-			dark
-			>
-			<v-card-text>
-				Please stand by
-				<v-progress-linear
-                    indeterminate
-                    color="white"
-                    class="mb-0"
-				></v-progress-linear>
-			</v-card-text>
-			</v-card>
-		</v-dialog>
         <mod-menu :showMenuCli="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
         <h2>{{titulo}}</h2>
         <v-form>
@@ -51,7 +31,7 @@
                     <v-flex sm2>
                         <v-text-field
                             v-model="albaran.albaran"
-                             :error-messages="errors.collect('albaran')"
+                            :error-messages="errors.collect('albaran')"
                             label="Albarán"
                             data-vv-name="albaran"
                             data-vv-as="albarán"
@@ -90,7 +70,6 @@
                                 ></v-date-picker>
                             </v-menu>
                     </v-flex>
-
                     <v-flex sm2>
                         <v-text-field
                             v-model="albaran.factura"
@@ -98,45 +77,20 @@
                             label="Factura"
                             data-vv-name="factura"
                             data-vv-as="factura"
-                            :readonly="!isRoot"
+                            readonly
                         >
-                            <v-tooltip slot="append" bottom color="black">
-                                <v-icon v-if="!albaran.factura" slot="activator" @click="facturar(albaran.id)">lock</v-icon>
-                                <v-icon v-else slot="activator" @click="desfacturar(albaran.id)">lock_open</v-icon>
-                                <span>Generar factura automática</span>
-                            </v-tooltip>
                         </v-text-field>
                     </v-flex>
-                     <v-flex sm2>
-                        <v-menu
-                                v-model="menu3"
-                                :close-on-content-click="false"
-                                :nudge-right="40"
-                                lazy
-                                transition="scale-transition"
-                                offset-y
-                                full-width
-                                min-width="290px"
-                                :disabled="albaran.factura==''"
-                            >
-
-                                <v-text-field
-                                    slot="activator"
-                                    :value="computedFechaFac"
-                                    label="Fecha Factura"
-                                    append-icon="event"
-                                    readonly
-                                    data-vv-as="Fecha Factura"
-                                    ></v-text-field>
-                                <v-date-picker
-                                    v-model="albaran.fecha_fac"
-                                    no-title
-                                    locale="es"
-                                    first-day-of-week=1
-                                    @input="menu3 = false"
-                                    :disabled="albaran.factura==''"
-                                ></v-date-picker>
-                            </v-menu>
+                    <v-flex sm2>
+                        <v-text-field
+                            v-model="computedFechaFac"
+                            :error-messages="errors.collect('fecha_fac')"
+                            label="F. Factura"
+                            data-vv-name="fecha_fac"
+                            data-vv-as="F. factura"
+                            readonly
+                        >
+                        </v-text-field>
                     </v-flex>
                     <v-flex sm2>
                         <v-switch
@@ -242,7 +196,6 @@
 <script>
 import moment from 'moment'
 import ModMenu from '@/components/shared/ModMenu'
-import {mapGetters} from 'vuex';
 
 	export default {
 		$_veeValidate: {
@@ -257,33 +210,33 @@ import {mapGetters} from 'vuex';
                 albaran: {
                     id:"",
                     empresa_id:"",
-                    ejercicio:"",
+                    ejercicio:0,
                     albaran:"",
                     serie:"",
-                    fecha_alb:"",
+                    fecha_alb: new Date().toISOString().substr(0, 10),
                     cliente_id:"",
                     ejefac:"",
                     factura:"",
-                    fecha_fac:"",
-                    fpago_id: "",
-                    vencimiento_id:0,
-                    notificado:"",
+                    fecha_fac:null,
+                    fpago_id: 1,
+                    vencimiento_id:1,
+                    notificado:false,
                     notas:"",
                     username: "",
                     updated_at:"",
                     created_at:"",
                 },
 
+                kk:1,
                 ivas:[],
                 retenciones:[],
                 productos:[],
                 fpagos:[],
-                vencimientos:[],
+                vencimientos: [],
 
                 clientes:[],
                 loading: false,
                 search: null,
-
 
 
                 albaran_id: "",
@@ -293,10 +246,6 @@ import {mapGetters} from 'vuex';
                 show: true,
 
                 menu2:false,
-                facturado:true,
-                menu3:false,
-
-                show_loading: false,
 
                 showMenuCli: false,
                 x: 0,
@@ -312,42 +261,31 @@ import {mapGetters} from 'vuex';
       		}
         },
         mounted(){
-            var id = this.$route.params.id;
-            //console.log(this.$route.params);
-            if (id > 0)
-                axios.get('/ventas/albacabs/'+id+'/edit')
-                    .then(res => {
+            axios.get('/ventas/albacabs/create')
+                .then(res => {
+                    //console.log(res);
 
-                        res.data.ivas.map((e) =>
-                            {
-                                this.ivas.push({id: e.id, name: e.nombre});
-                            })
-                        res.data.retenciones.map((e) =>
-                            {
-                                this.retenciones.push({id: e.id, name: e.nombre});
-                            })
-                        this.clientes = res.data.clientes;
+                    res.data.ivas.map((e) =>
+                        {
+                            this.ivas.push({id: e.id, name: e.nombre});
+                        })
+                    res.data.retenciones.map((e) =>
+                        {
+                            this.retenciones.push({id: e.id, name: e.nombre});
+                        })
+                    this.clientes = res.data.clientes;
 
-                        this.fpagos = res.data.fpagos;
-                        this.vencimientos = res.data.vencimientos;
+                    this.fpagos = res.data.fpagos;
+                    this.vencimientos = res.data.vencimientos;
 
-                        this.albaran = res.data.albaran;
-
-                        this.show=true;
-                    })
-                    .catch(err => {
-                        if (err.response.status == 404)
-                            this.$toast.error("Albarán No encontrado!");
-                        else
-                            this.$toast.error(err.response.data.message);
-                        this.$router.push({ name: 'albaran.index'})
-                    })
+                    this.show=true;
+                })
+                .catch(err => {
+                    this.$toast.error(err.response.data.message);
+                    this.$router.push({ name: 'albaran.index'})
+                })
         },
         computed: {
-            ...mapGetters([
-                'isRoot',
-                'isAdmin'
-		    ]),
             computedFechaAlb() {
                 moment.locale('es');
                 return this.albaran.fecha_alb ? moment(this.albaran.fecha_alb).format('L') : '';
@@ -383,20 +321,17 @@ import {mapGetters} from 'vuex';
 
                 this.enviando = true;
 
-                var url = "/ventas/albacabs/"+this.albaran.id;
-
+                var url = "/ventas/albacabs";
+                
                 this.$validator.validateAll().then((result) => {
                     if (result){
-
-                        axios.put(url, this.albaran)
+                        axios.post(url, this.albaran)
                             .then(response => {
-
-                                this.$toast.success(response.data.message);
-                                this.albaran = response.data.albaran;
+                                this.$router.push({ name: 'albaran.edit', params: { id: response.data.albaran.id } })
                                 this.enviando = false;
                             })
                             .catch(err => {
-                                //console.log(err.response.data.errors);
+
                                 if (err.request.status == 422){ // fallo de validated.
                                     const msg_valid = err.response.data.errors;
                                     for (const prop in msg_valid) {
@@ -416,41 +351,6 @@ import {mapGetters} from 'vuex';
                     else{
                         this.enviando = false;
                     }
-                });
-
-            },
-            facturar(id){
-
-				console.log(id);
-
-                this.show_loading = true;
-
-                setTimeout(() => (this.show_loading = false), 4000)
-
-				return;
-
-                axios.put('ventas/albacabs/'+id, this.albaran.fecha_fac)
-                .then(response => {
-                    this.$toast.success(response.data.message);
-                    this.albaran = response.data.albaran;
-                    this.show_loading = false;
-                })
-                .catch(err => {
-                    //console.log(err.response.data.errors);
-                    if (err.request.status == 422){ // fallo de validated.
-                        const msg_valid = err.response.data.errors;
-                        for (const prop in msg_valid) {
-                            // this.$toast.error(`${msg_valid[prop]}`);
-                            //console.log(prop);
-                            this.errors.add({
-                                field: prop,
-                                msg: `${msg_valid[prop]}`
-                            })
-                        }
-                    }else{
-                        this.$toast.error(err.response.data.message);
-                    }
-                    this.show_loading = false;
                 });
 
             }

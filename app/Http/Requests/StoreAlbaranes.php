@@ -24,9 +24,9 @@ class StoreAlbaranes extends FormRequest
     public function rules()
     {
         return [
-            'ejercicio'      => ['required', 'integer'],
-            'albaran'        => ['required', 'integer'],
-            'serie'          => ['required', 'String', 'max:3'],
+            'ejercicio'      => ['integer'],
+            // 'albaran'        => ['required', 'integer'],
+            // 'serie'          => ['required', 'String', 'max:3'],
             'fecha_alb'      => ['required', 'Date',],
             'cliente_id'     => ['required', 'integer'],
             'ejefac'         => ['integer','nullable '],

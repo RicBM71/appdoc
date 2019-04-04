@@ -50,7 +50,7 @@ class Cliente extends Model
 
     }
 
-    public static function scopeFacturables($query, $nombre)
+    public function scopeFacturables($query, $nombre)
     {
 
         if (is_null($nombre))
@@ -58,6 +58,25 @@ class Cliente extends Model
         else
             return $query->where('factusn', '=', true)
                          ->where('nombre', 'LIKE', '%' . $nombre . '%');
+
+    }
+
+    /**
+     *
+     * Selecciona clientes facturables y prepara para JSON select
+     *
+     */
+
+    public static function selClientesFacturables($nombre = null){
+
+        $arr=[];
+
+        $cli = Cliente::Facturables($nombre)->get();
+        foreach($cli as $row){
+             $arr[] = ['name' => $row->nombre, 'id' => $row->id];
+        }
+
+        return $arr;
 
     }
 

@@ -48,7 +48,7 @@ class StoreClientes extends FormRequest
             'efact'          => ['nullable','string', 'max:50'],
             'eusr'          => ['nullable','string', 'max:50'],
             'epass'         => ['nullable','string', 'max:50'],
-            'factusn'         => ['nullable','string', 'max:1'],
+            'factura'         => ['nullable','boolean'],
         ];
 
         if ($this->filled('id'))

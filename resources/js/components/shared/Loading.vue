@@ -5,9 +5,7 @@
 			dark
 			>
 			<v-card-text>
-                <div v-if="process_titulo != ''"> {{process_titulo}}</div>
-                <div v-else>Procesando, espere...</div>
-
+                Procesando, espere...
 				<v-progress-linear
                     indeterminate
                     color="white"
@@ -20,8 +18,7 @@
 <script>
 export default {
     props:{
-        show_loading: Boolean,
-        process_titulo: String
+        show_loading: Boolean
     }
 }
 </script>

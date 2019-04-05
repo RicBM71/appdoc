@@ -44,8 +44,11 @@ class AlbaranesPolicy
             return true;
         else if ($authUser->hasRole('Facturación') &&
                 $albacab->username === $authUser->username &&
-                $albacab->ejefact == 0 &&
-                $albacab->fecha_alb == date('Y-m-d'))
+                $albacab->ejefact > 0 &&
+                $albacab->fecha_fac == date('Y-m-d'))
+                return true;
+        else if ($authUser->hasRole('Facturación') &&
+                $albacab->ejefact == 0 )
                 return true;
        else
             return $this->deny("Acceso denegado. No tiene permisos para editar el albarán.");

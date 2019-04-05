@@ -251,10 +251,10 @@
                     </v-flex>
                     <v-flex sm2>
                         <v-select
-                            v-model="cliente.factusn"
+                            v-model="cliente.factura"
                             v-validate="'required'"
-                            :error-messages="errors.collect('factusn')"
-                            data-vv-name="factusn"
+                            :error-messages="errors.collect('factura')"
+                            data-vv-name="factura"
                             data-vv-as="Factura"
                             item-text="name"
                             item-value="id"
@@ -391,7 +391,7 @@ import ModMenu from '@/components/shared/ModMenu'
                     epass:"",
                     egrupo:"",
                     fpago_id:"",
-                    factusn:"",
+                    factura:"",
                     iban:"",
                     ref19:"",
                     username: "",
@@ -400,7 +400,7 @@ import ModMenu from '@/components/shared/ModMenu'
                 },
 
                 sino:[
-                    {id: "S", name:"Si"}, {id: "N", name:"No"},
+                    {id: 0, name:"Si"}, {id: 1, name:"No"},
                 ],
                 clientes:[],
                 carpetas:[],

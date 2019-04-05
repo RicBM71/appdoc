@@ -82,6 +82,12 @@ const getters = {
 
     },
 
+    isFacturacion: (state) =>{
+        return (state.roles.indexOf('Facturación') >= 0) ? true : false;
+
+    },
+
+
 };
 
 /*

@@ -38,7 +38,7 @@ class CreateClientesTable extends Migration
             $table->String('eusr',50)->nullable()->default(null);
             $table->String('epass',50)->nullable()->default(null);
             $table->unsignedInteger('fpago_id')->nullable()->default(null);
-            $table->boolean('factusn')->default(true);
+            $table->boolean('factura')->default(true);
             $table->String('iban',50)->nullable()->default(null);
             $table->String('ref19',20)->nullable()->default(null);
             $table->String('username',20)->nullable()->default(null);

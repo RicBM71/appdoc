@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\User;
+use App\Producto;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ProductoPolicy
@@ -36,7 +37,7 @@ class ProductoPolicy
      * @param  \App\User  $model
      * @return mixed
      */
-    public function update(User $authUser, Cliente $cliente)
+    public function update(User $authUser, Producto $producto)
     {
 
         return $authUser->hasRole('Admin') ?: $this->deny("Acceso denegado, solo un administrador puede actualizar productos");
@@ -51,7 +52,7 @@ class ProductoPolicy
      * @param  \App\User  $model
      * @return mixed
      */
-    public function delete(User $authUser, Cliente $cliente)
+    public function delete(User $authUser, Producto $producto)
     {
 
         return $authUser->hasRole('Admin') ?: $this->deny("Acceso denegado, solo un administrador puede borrar productos");

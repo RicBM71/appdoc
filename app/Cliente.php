@@ -14,7 +14,7 @@ class Cliente extends Model
     protected $fillable = [
         'empresa_id','nombre', 'razon', 'cif', 'poblacion', 'direccion', 'cpostal','provincia', 'telefono1','telefono2','tfmovil',
         'fechaalta','fechabaja','web','carpeta_id','patron','notas1','efact','eusr','epass','contacto','email','patron',
-        'fpago_id','factusn','iban','ref19','username'
+        'fpago_id','factura','iban','ref19','username'
     ];
 
 
@@ -54,9 +54,9 @@ class Cliente extends Model
     {
 
         if (is_null($nombre))
-            return $query->where('factusn', '=', true);
+            return $query->where('factura', '=', true);
         else
-            return $query->where('factusn', '=', true)
+            return $query->where('factura', '=', true)
                          ->where('nombre', 'LIKE', '%' . $nombre . '%');
 
     }

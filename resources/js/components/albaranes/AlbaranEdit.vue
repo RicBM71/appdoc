@@ -1,6 +1,6 @@
 <template>
 	<div v-show="show">
-        <loading :show_loading="show_loading" :process_titulo="process_titulo"></loading>
+        <loading :show_loading="show_loading"></loading>
 		<!-- <v-dialog
 		v-model="show_loading"
 		hide-overlay
@@ -73,6 +73,7 @@
                                 offset-y
                                 full-width
                                 min-width="290px"
+                                :disabled="computedFactura"
                             >
 
                                 <v-text-field
@@ -90,7 +91,7 @@
                                     locale="es"
                                     first-day-of-week=1
                                     @input="menu2 = false"
-
+                                    :disabled="computedFactura"
                                 ></v-date-picker>
                             </v-menu>
                     </v-flex>
@@ -205,18 +206,6 @@
                             :disabled="computedFactura"
                         >
                         </v-autocomplete>
-                        <!-- <v-select
-                            v-model="albaran.vencimiento_id"
-                            :error-messages="errors.collect('vencimiento_id')"
-                            v-validate="'required'"
-                            data-vv-name="vencimiento_id"
-                            data-vv-as="Vencimiento"
-                            item-text="name"
-                            item-value="id"
-                            :items="vencimientos"
-                            label="Vencimiento"
-
-                        ></v-select> -->
                     </v-flex>
                     <v-flex sm2>
                         <v-text-field
@@ -290,7 +279,7 @@ import {mapGetters} from 'vuex';
 		},
     	data () {
       		return {
-                titulo:"Albaranes",
+                titulo:"Albarán",
                 albaran: {
                     id:"",
                     empresa_id:"",
@@ -334,7 +323,6 @@ import {mapGetters} from 'vuex';
                 menu3:false,
 
                 show_loading: false,
-                process_titulo:"",
 
                 showMenuCli: false,
                 x: 0,
@@ -371,6 +359,8 @@ import {mapGetters} from 'vuex';
 
                         this.albaran = res.data.albaran;
 
+                        this.albaran.ejefac ==  0 ? this.titulo ="Albarán" : this.titulo = "Factura";
+
                         this.show=true;
                     })
                     .catch(err => {
@@ -403,13 +393,13 @@ import {mapGetters} from 'vuex';
                 return this.albaran.created_at ? moment(this.albaran.created_at).format('DD/MM/YYYY H:mm:ss') : '';
             },
             computedFactura(){
-
-                if (this.albaran.ejefac != 0)
+                /*
+                * true: bloqueado, false: desbloqueado
+                */
+                if(this.albaran.ejefac != 0)
                     return true;
-                else if(this.isAdmin)
-                    return false;
 
-                return true;
+                return false;
             }
 
         },
@@ -468,13 +458,15 @@ import {mapGetters} from 'vuex';
             },
             facturar(id){
 
-                this.process_titulo = "Facturando albarán, espere";
                 this.show_loading = true;
 
                 axios.put('/ventas/albacabs/'+id+'/facturar', this.albaran)
                 .then(response => {
                     this.$toast.success(response.data.message);
+
                     this.albaran = response.data.albaran;
+                    this.albaran.ejefac ==  0 ? this.titulo ="Albarán" : this.titulo = "Factura";
+
                     this.show_loading = false;
                 })
                 .catch(err => {
@@ -484,13 +476,16 @@ import {mapGetters} from 'vuex';
             },
             desFacturar(id){
 
-                this.process_titulo = "Desfacturando albarán, espere";
                 this.show_loading = true;
 
                 axios.put('/ventas/albacabs/'+id+'/desfacturar', this.albaran)
                 .then(response => {
+
                     this.$toast.success(response.data.message);
+
                     this.albaran = response.data.albaran;
+                    this.albaran.ejefac ==  0 ? this.titulo ="Albarán" : this.titulo = "Factura";
+
                     this.show_loading = false;
                 })
                 .catch(err => {

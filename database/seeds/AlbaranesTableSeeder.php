@@ -13,6 +13,7 @@ class AlbaranesTableSeeder extends Seeder
     public function run()
     {
 
+        Albacab::truncate();
 
  		for ($i=1; $i <= 10; $i++) {
 

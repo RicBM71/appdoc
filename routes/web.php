@@ -66,6 +66,8 @@ Route::group([
     'middleware' => 'auth'],
     function (){
         Route::resource('albacabs', 'AlbacabsController', ['except'=>'show','as' => 'ventas']);
+        Route::put('albacabs/{albacab}/facturar', 'AlbacabsController@facturar');
+        Route::put('albacabs/{albacab}/desfacturar', 'AlbacabsController@desfacturar');
     }
 );
 

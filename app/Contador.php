@@ -72,7 +72,41 @@ class Contador extends Model
 
             Contador::where('id', $contador->id)->update($arr);
 
-            return $serie.'-'.$contador;
+            return $contador->seriefac.'-'.$contador->factura;
+
+          } catch (\Exception $e) {
+                return $e->getMessage();
+          }
+    }
+
+    /**
+     * @param integer ejercicio
+     * @param integer la factura para comparar si se puede o no retrasar el contador, solo si es la misma.
+     * @return App\contador $contador
+     */
+    public static function restaContadorFactura($ejercicio, $factura){
+
+        $obj = explode('-',$factura);
+
+        try {
+
+            $sincronizado = false;
+
+            $contador =  Contador::where('ejercicio',$ejercicio)->lockForUpdate()->firstOrFail();
+
+            if ($contador->factura == $obj[1]){
+                $sincronizado = true;
+                $contador->factura--;
+            }
+
+            $arr = [
+                'factura' => $contador->factura,
+                'username' => session()->get('username')
+            ];
+
+            Contador::where('id', $contador->id)->update($arr);
+
+            return $sincronizado;
 
           } catch (\Exception $e) {
                 return $e->getMessage();

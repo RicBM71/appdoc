@@ -17,7 +17,7 @@ class Vencimiento extends Model
      */
     public static function selVencimientos(){
 
-        return Vencimiento::select('id AS id', 'nombre AS name')
+        return Vencimiento::select('id AS value', 'nombre AS text')
             ->orderBy('nombre', 'asc')
             ->get();
 

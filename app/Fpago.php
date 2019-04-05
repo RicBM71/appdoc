@@ -18,7 +18,7 @@ class Fpago extends Model
      */
     public static function selFPagos(){
 
-        return Fpago::select('id AS id', 'nombre AS name')
+        return Fpago::select('id AS value', 'nombre AS text')
             ->orderBy('nombre', 'asc')
             ->get();
 

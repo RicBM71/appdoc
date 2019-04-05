@@ -9,6 +9,7 @@ use App\Cliente;
 use App\Contador;
 use App\Retencion;
 use App\Vencimiento;
+use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAlbaranes;
@@ -157,5 +158,69 @@ class AlbacabsController extends Controller
 
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function facturar(Request $request, Albacab $albacab)
+    {
+
+        $this->authorize('update', $albacab);
+
+        $data = $request->validate([
+            'factura' => 'nullable|string',
+            'fecha_fac' => 'nullable|date',
+        ]);
+
+        if (is_null($data['fecha_fac'])){
+            $data['fecha_fac'] = date('Y-m-d');
+            $data['ejefac'] = date('Y');
+        }else{
+            $data['ejefac'] = date('Y',strtotime($data['fecha_fac']));
+        }
+
+        if (is_null($data['factura'])){
+            $data['factura'] = Contador::incrementaContadorFactura($data['ejefac']);
+        }
+
+        $data['username'] = $request->user()->username;
+
+        $albacab->update($data);
+
+
+        if (request()->wantsJson())
+            return ['albaran'=>$albacab, 'message' => 'EL albarán ha sido facturado'];
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function desfacturar(Request $request, Albacab $albacab)
+    {
+
+        $this->authorize('update', $albacab);
+
+        $data = [
+            'factura'   => null,
+            'fecha_fac' => null,
+            'ejefac'   => 0
+        ];
+
+        Contador::restaContadorFactura( $albacab->ejefac, $albacab->factura) ?
+            $msg = 'Contador sincronizado' :
+            $msg = '¡Revisar contador!' ;
+
+        $albacab->update($data);
+
+        if (request()->wantsJson())
+            return ['albaran'=>$albacab, 'message' => 'EL albarán ha sido desfacturado '.$msg];
+    }
 
 }

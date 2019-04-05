@@ -39,6 +39,7 @@
                         <td>{{ props.item.cliente.razon }}</td>
                         <td class="text-xs-right">{{ totalImpLinea(props.item.albalins) | currency('€', 2, { decimalSeparator: ',', symbolOnLeft: false })}}</td>
 						<td>{{ props.item.factura }}</td>
+                        <td>{{ formatDate(props.item.fecha_fac) }}</td>
 						<td class="justify-center layout px-0">
 							<v-icon
 								small
@@ -103,6 +104,11 @@ import MyDialog from '@/components/shared/MyDialog'
             text: 'Factura',
             align: 'Left',
             value: 'factura'
+          },
+          {
+            text: 'F. Factura',
+            align: 'Left',
+            value: 'fecha_fac'
           },
           {
             text: 'Acciones',

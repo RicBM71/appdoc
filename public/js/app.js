@@ -8691,7 +8691,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_shared_ModMenu__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/components/shared/ModMenu */ "./resources/js/components/shared/ModMenu.vue");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _components_shared_Loading__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/components/shared/Loading */ "./resources/js/components/shared/Loading.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -8937,6 +8938,42 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -8945,7 +8982,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     validator: 'new'
   },
   components: {
-    'mod-menu': _components_shared_ModMenu__WEBPACK_IMPORTED_MODULE_1__["default"]
+    'mod-menu': _components_shared_ModMenu__WEBPACK_IMPORTED_MODULE_1__["default"],
+    'loading': _components_shared_Loading__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
@@ -8977,14 +9015,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       clientes: [],
       loading: false,
       search: null,
+      search_fp: null,
       albaran_id: "",
       status: false,
-      enviando: false,
       show: true,
       menu2: false,
       facturado: true,
       menu3: false,
       show_loading: false,
+      process_titulo: "",
       showMenuCli: false,
       x: 0,
       y: 0,
@@ -9009,6 +9048,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var id = this.$route.params.id; //console.log(this.$route.params);
 
     if (id > 0) axios.get('/ventas/albacabs/' + id + '/edit').then(function (res) {
+      console.log(res.data);
       res.data.ivas.map(function (e) {
         _this.ivas.push({
           id: e.id,
@@ -9034,7 +9074,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     });
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])(['isRoot', 'isAdmin']), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapGetters"])(['isRoot', 'isAdmin']), {
     computedFechaAlb: function computedFechaAlb() {
       moment__WEBPACK_IMPORTED_MODULE_0___default.a.locale('es');
       return this.albaran.fecha_alb ? moment__WEBPACK_IMPORTED_MODULE_0___default()(this.albaran.fecha_alb).format('L') : '';
@@ -9050,6 +9090,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     computedFCreFormat: function computedFCreFormat() {
       moment__WEBPACK_IMPORTED_MODULE_0___default.a.locale('es');
       return this.albaran.created_at ? moment__WEBPACK_IMPORTED_MODULE_0___default()(this.albaran.created_at).format('DD/MM/YYYY H:mm:ss') : '';
+    },
+    computedFactura: function computedFactura() {
+      if (this.albaran.ejefac != 0) return true;else if (this.isAdmin) return false;
+      return true;
     }
   }),
   methods: {
@@ -9067,7 +9111,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     submit: function submit() {
       var _this3 = this;
 
-      this.enviando = true;
+      this.show_loading = true;
       var url = "/ventas/albacabs/" + this.albaran.id;
       this.$validator.validateAll().then(function (result) {
         if (result) {
@@ -9075,7 +9119,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this3.$toast.success(response.data.message);
 
             _this3.albaran = response.data.albaran;
-            _this3.enviando = false;
+            _this3.show_loading = false;
           }).catch(function (err) {
             //console.log(err.response.data.errors);
             if (err.request.status == 422) {
@@ -9094,46 +9138,43 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this3.$toast.error(err.response.data.message);
             }
 
-            _this3.enviando = false;
+            _this3.show_loading = false;
           });
         } else {
-          _this3.enviando = false;
+          _this3.show_loading = false;
         }
       });
     },
     facturar: function facturar(id) {
       var _this4 = this;
 
-      console.log(id);
+      this.process_titulo = "Facturando albarán, espere";
       this.show_loading = true;
-      setTimeout(function () {
-        return _this4.show_loading = false;
-      }, 4000);
-      return;
-      axios.put('ventas/albacabs/' + id, this.albaran.fecha_fac).then(function (response) {
+      axios.put('/ventas/albacabs/' + id + '/facturar', this.albaran).then(function (response) {
         _this4.$toast.success(response.data.message);
 
         _this4.albaran = response.data.albaran;
         _this4.show_loading = false;
       }).catch(function (err) {
-        //console.log(err.response.data.errors);
-        if (err.request.status == 422) {
-          // fallo de validated.
-          var msg_valid = err.response.data.errors;
-
-          for (var prop in msg_valid) {
-            // this.$toast.error(`${msg_valid[prop]}`);
-            //console.log(prop);
-            _this4.errors.add({
-              field: prop,
-              msg: "".concat(msg_valid[prop])
-            });
-          }
-        } else {
-          _this4.$toast.error(err.response.data.message);
-        }
+        _this4.$toast.error(err.response.data.message);
 
         _this4.show_loading = false;
+      });
+    },
+    desFacturar: function desFacturar(id) {
+      var _this5 = this;
+
+      this.process_titulo = "Desfacturando albarán, espere";
+      this.show_loading = true;
+      axios.put('/ventas/albacabs/' + id + '/desfacturar', this.albaran).then(function (response) {
+        _this5.$toast.success(response.data.message);
+
+        _this5.albaran = response.data.albaran;
+        _this5.show_loading = false;
+      }).catch(function (err) {
+        _this5.$toast.error(err.response.data.message);
+
+        _this5.show_loading = false;
       });
     }
   }
@@ -9153,6 +9194,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_shared_MyDialog__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/components/shared/MyDialog */ "./resources/js/components/shared/MyDialog.vue");
+//
 //
 //
 //
@@ -9252,6 +9294,10 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Factura',
         align: 'Left',
         value: 'factura'
+      }, {
+        text: 'F. Factura',
+        align: 'Left',
+        value: 'fecha_fac'
       }, {
         text: 'Acciones',
         align: 'Center',
@@ -11568,6 +11614,43 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/shared/Loading.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/shared/Loading.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    show_loading: Boolean,
+    process_titulo: String
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/shared/ModMenu.vue?vue&type=script&lang=js&":
 /*!*************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/shared/ModMenu.vue?vue&type=script&lang=js& ***!
@@ -11789,10 +11872,10 @@ exports.push([module.i, "\n.v-text-field[data-v-6d2b890a] {\n    padding-top: 2p
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=style&index=0&id=27c68498&scoped=true&lang=css&":
-/*!***************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=style&index=0&id=27c68498&scoped=true&lang=css& ***!
-  \***************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=style&index=0&scope=true&lang=css&":
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=style&index=0&scope=true&lang=css& ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11801,7 +11884,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.v-text-field[data-v-27c68498] {\n    padding-top: 2px;\n    margin-top: 4px;\n}\n.v-form>.container>.layout>.flex[data-v-27c68498]{\n    padding: 0px 8px;\n}\n.inputPrice[data-v-27c68498] input {\n  text-align: center;\n  -moz-appearance:textfield;\n}\ninput[type=number][data-v-27c68498]::-webkit-inner-spin-button,\ninput[type=number][data-v-27c68498]::-webkit-outer-spin-button {\n    -webkit-appearance: none;\n    -moz-appearance: none;\n    appearance: none;\n    margin: 0;\n}\n", ""]);
+exports.push([module.i, "\n.v-text-field {\n    padding-top: 2px;\n    margin-top: 4px;\n}\n.theme--light.v-input--is-disabled,  .theme--light.v-input--is-disabled input, .theme--light.v-input--is-disabled textarea {\n    color: #263238;\n}\n.v-form>.container>.layout>.flex{\n    padding: 0px 8px;\n}\n.inputPrice >>> input {\n  text-align: center;\n  -moz-appearance:textfield;\n}\ninput[type=number]::-webkit-inner-spin-button,\ninput[type=number]::-webkit-outer-spin-button {\n    -webkit-appearance: none;\n    -moz-appearance: none;\n    appearance: none;\n    margin: 0;\n}\n", ""]);
 
 // exports
 
@@ -30880,15 +30963,15 @@ if(false) {}
 
 /***/ }),
 
-/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=style&index=0&id=27c68498&scoped=true&lang=css&":
-/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=style&index=0&id=27c68498&scoped=true&lang=css& ***!
-  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=style&index=0&scope=true&lang=css&":
+/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=style&index=0&scope=true&lang=css& ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./AlbaranEdit.vue?vue&type=style&index=0&id=27c68498&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=style&index=0&id=27c68498&scoped=true&lang=css&");
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./AlbaranEdit.vue?vue&type=style&index=0&scope=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=style&index=0&scope=true&lang=css&");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -52141,10 +52224,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=template&id=27c68498&scoped=true&":
-/*!************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=template&id=27c68498&scoped=true& ***!
-  \************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=template&id=27c68498&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=template&id=27c68498& ***!
+  \************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -52164,40 +52247,12 @@ var render = function() {
       ]
     },
     [
-      _c(
-        "v-dialog",
-        {
-          attrs: { "hide-overlay": "", persistent: "", width: "300" },
-          model: {
-            value: _vm.show_loading,
-            callback: function($$v) {
-              _vm.show_loading = $$v
-            },
-            expression: "show_loading"
-          }
-        },
-        [
-          _c(
-            "v-card",
-            { attrs: { color: "primary", dark: "" } },
-            [
-              _c(
-                "v-card-text",
-                [
-                  _vm._v("\n\t\t\t\tPlease stand by\n\t\t\t\t"),
-                  _c("v-progress-linear", {
-                    staticClass: "mb-0",
-                    attrs: { indeterminate: "", color: "white" }
-                  })
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
+      _c("loading", {
+        attrs: {
+          show_loading: _vm.show_loading,
+          process_titulo: _vm.process_titulo
+        }
+      }),
       _vm._v(" "),
       _c("mod-menu", {
         attrs: {
@@ -52249,7 +52304,8 @@ var render = function() {
                           "data-vv-name": "serie",
                           "data-vv-as": "serie",
                           required: "",
-                          readonly: ""
+                          readonly: "",
+                          disabled: _vm.computedFactura
                         },
                         model: {
                           value: _vm.albaran.serie,
@@ -52274,7 +52330,8 @@ var render = function() {
                           "data-vv-name": "albaran",
                           "data-vv-as": "albarán",
                           required: "",
-                          readonly: ""
+                          readonly: "",
+                          disabled: _vm.computedFactura
                         },
                         model: {
                           value: _vm.albaran.albaran,
@@ -52320,7 +52377,8 @@ var render = function() {
                               label: "Fecha Albarán",
                               "append-icon": "event",
                               readonly: "",
-                              "data-vv-as": "Fecha Albarán"
+                              "data-vv-as": "Fecha Albarán",
+                              disabled: _vm.computedFactura
                             },
                             slot: "activator"
                           }),
@@ -52363,7 +52421,8 @@ var render = function() {
                             label: "Factura",
                             "data-vv-name": "factura",
                             "data-vv-as": "factura",
-                            readonly: !_vm.isRoot
+                            readonly: _vm.computedFactura,
+                            disabled: _vm.computedFactura
                           },
                           model: {
                             value: _vm.albaran.factura,
@@ -52385,7 +52444,7 @@ var render = function() {
                               slot: "append"
                             },
                             [
-                              !_vm.albaran.factura
+                              _vm.albaran.ejefac == 0
                                 ? _c(
                                     "v-icon",
                                     {
@@ -52402,10 +52461,13 @@ var render = function() {
                                 : _c(
                                     "v-icon",
                                     {
-                                      attrs: { slot: "activator" },
+                                      attrs: {
+                                        slot: "activator",
+                                        if: "isAdmin"
+                                      },
                                       on: {
                                         click: function($event) {
-                                          return _vm.desfacturar(_vm.albaran.id)
+                                          return _vm.desFacturar(_vm.albaran.id)
                                         }
                                       },
                                       slot: "activator"
@@ -52413,7 +52475,11 @@ var render = function() {
                                     [_vm._v("lock_open")]
                                   ),
                               _vm._v(" "),
-                              _c("span", [_vm._v("Generar factura automática")])
+                              _vm.albaran.ejefac == 0
+                                ? _c("span", [
+                                    _vm._v("Generar factura automática")
+                                  ])
+                                : _c("span", [_vm._v("Desfacturar")])
                             ],
                             1
                           )
@@ -52439,7 +52505,7 @@ var render = function() {
                             "offset-y": "",
                             "full-width": "",
                             "min-width": "290px",
-                            disabled: _vm.albaran.factura == ""
+                            disabled: _vm.computedFactura
                           },
                           model: {
                             value: _vm.menu3,
@@ -52457,7 +52523,8 @@ var render = function() {
                               label: "Fecha Factura",
                               "append-icon": "event",
                               readonly: "",
-                              "data-vv-as": "Fecha Factura"
+                              "data-vv-as": "Fecha Factura",
+                              disabled: _vm.computedFactura
                             },
                             slot: "activator"
                           }),
@@ -52467,7 +52534,7 @@ var render = function() {
                               "no-title": "",
                               locale: "es",
                               "first-day-of-week": "1",
-                              disabled: _vm.albaran.factura == ""
+                              disabled: _vm.computedFactura
                             },
                             on: {
                               input: function($event) {
@@ -52497,8 +52564,12 @@ var render = function() {
                         attrs: {
                           "data-vv-name": "notificado",
                           "data-vv-as": "Notificado",
-                          label: "Notificado",
-                          color: "primary"
+                          label:
+                            _vm.albaran.notificado == "0"
+                              ? "Notificar"
+                              : "Notificado",
+                          color: "primary",
+                          disabled: _vm.computedFactura
                         },
                         model: {
                           value: _vm.albaran.notificado,
@@ -52543,7 +52614,8 @@ var render = function() {
                           "search-input": _vm.search,
                           flat: "",
                           label: "Cliente",
-                          required: ""
+                          required: "",
+                          disabled: _vm.computedFactura
                         },
                         on: {
                           "update:searchInput": function($event) {
@@ -52569,7 +52641,7 @@ var render = function() {
                     "v-flex",
                     { attrs: { sm3: "", "d-flex": "" } },
                     [
-                      _c("v-select", {
+                      _c("v-autocomplete", {
                         directives: [
                           {
                             name: "validate",
@@ -52579,13 +52651,14 @@ var render = function() {
                           }
                         ],
                         attrs: {
-                          "error-messages": _vm.errors.collect("fpago_id"),
                           "data-vv-name": "fpago_id",
-                          "data-vv-as": "Forma de pago",
-                          "item-text": "name",
-                          "item-value": "id",
+                          "data-vv-as": "F. Pago",
+                          "error-messages": _vm.errors.collect("fpago_id"),
                           items: _vm.fpagos,
-                          label: "Forma de Pago"
+                          flat: "",
+                          label: "F. Pago",
+                          required: "",
+                          disabled: _vm.computedFactura
                         },
                         model: {
                           value: _vm.albaran.fpago_id,
@@ -52603,7 +52676,7 @@ var render = function() {
                     "v-flex",
                     { attrs: { sm3: "", "d-flex": "" } },
                     [
-                      _c("v-select", {
+                      _c("v-autocomplete", {
                         directives: [
                           {
                             name: "validate",
@@ -52613,15 +52686,16 @@ var render = function() {
                           }
                         ],
                         attrs: {
+                          "data-vv-name": "vencimiento_id",
+                          "data-vv-as": "Vencimiento",
                           "error-messages": _vm.errors.collect(
                             "vencimiento_id"
                           ),
-                          "data-vv-name": "vencimiento_id",
-                          "data-vv-as": "Vencimiento",
-                          "item-text": "name",
-                          "item-value": "id",
                           items: _vm.vencimientos,
-                          label: "Vencimiento"
+                          flat: "",
+                          label: "Vencimiento",
+                          required: "",
+                          disabled: _vm.computedFactura
                         },
                         model: {
                           value: _vm.albaran.vencimiento_id,
@@ -52640,7 +52714,11 @@ var render = function() {
                     { attrs: { sm2: "" } },
                     [
                       _c("v-text-field", {
-                        attrs: { label: "Usuario", readonly: "" },
+                        attrs: {
+                          label: "Usuario",
+                          readonly: "",
+                          disabled: _vm.computedFactura
+                        },
                         on: {
                           keyup: function($event) {
                             if (
@@ -52682,7 +52760,10 @@ var render = function() {
                     { attrs: { sm6: "", "d-flex": "" } },
                     [
                       _c("v-text-field", {
-                        attrs: { label: "Observaciones" },
+                        attrs: {
+                          label: "Observaciones",
+                          disabled: _vm.computedFactura
+                        },
                         model: {
                           value: _vm.albaran.notas,
                           callback: function($$v) {
@@ -52700,7 +52781,11 @@ var render = function() {
                     { attrs: { sm2: "" } },
                     [
                       _c("v-text-field", {
-                        attrs: { label: "Modificado", readonly: "" },
+                        attrs: {
+                          label: "Modificado",
+                          readonly: "",
+                          disabled: _vm.computedFactura
+                        },
                         model: {
                           value: _vm.computedFModFormat,
                           callback: function($$v) {
@@ -52718,7 +52803,11 @@ var render = function() {
                     { attrs: { sm2: "" } },
                     [
                       _c("v-text-field", {
-                        attrs: { label: "Creado", readonly: "" },
+                        attrs: {
+                          label: "Creado",
+                          readonly: "",
+                          disabled: _vm.computedFactura
+                        },
                         model: {
                           value: _vm.computedFCreFormat,
                           callback: function($$v) {
@@ -52740,15 +52829,16 @@ var render = function() {
                           "v-btn",
                           {
                             attrs: {
-                              loading: _vm.enviando,
+                              loading: _vm.show_loading,
                               block: "",
-                              color: "primary"
+                              color: "primary",
+                              disabled: _vm.computedFactura
                             },
                             on: { click: _vm.submit }
                           },
                           [
                             _vm._v(
-                              "\n                            Guardar\n                            "
+                              "\n                                Guardar\n                            "
                             )
                           ]
                         )
@@ -52920,6 +53010,12 @@ var render = function() {
                               _vm._v(" "),
                               _c("td", [_vm._v(_vm._s(props.item.factura))]),
                               _vm._v(" "),
+                              _c("td", [
+                                _vm._v(
+                                  _vm._s(_vm.formatDate(props.item.fecha_fac))
+                                )
+                              ]),
+                              _vm._v(" "),
                               _c(
                                 "td",
                                 { staticClass: "justify-center layout px-0" },
@@ -52987,7 +53083,7 @@ var render = function() {
                       ],
                       null,
                       false,
-                      2105227989
+                      2568059776
                     )
                   })
                 ],
@@ -57080,6 +57176,66 @@ var render = function() {
                 ],
                 1
               )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/shared/Loading.vue?vue&type=template&id=4e45d37d&":
+/*!*****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/shared/Loading.vue?vue&type=template&id=4e45d37d& ***!
+  \*****************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-dialog",
+    {
+      attrs: { persistent: "", "max-width": "290" },
+      model: {
+        value: _vm.show_loading,
+        callback: function($$v) {
+          _vm.show_loading = $$v
+        },
+        expression: "show_loading"
+      }
+    },
+    [
+      _c(
+        "v-card",
+        { attrs: { color: "primary", dark: "" } },
+        [
+          _c(
+            "v-card-text",
+            [
+              _vm.process_titulo != ""
+                ? _c("div", [_vm._v(" " + _vm._s(_vm.process_titulo))])
+                : _c("div", [_vm._v("Procesando, espere...")]),
+              _vm._v(" "),
+              _c("v-progress-linear", {
+                staticClass: "mb-0",
+                attrs: { indeterminate: "", color: "white" }
+              })
             ],
             1
           )
@@ -101954,9 +102110,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _AlbaranEdit_vue_vue_type_template_id_27c68498_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AlbaranEdit.vue?vue&type=template&id=27c68498&scoped=true& */ "./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=template&id=27c68498&scoped=true&");
+/* harmony import */ var _AlbaranEdit_vue_vue_type_template_id_27c68498___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AlbaranEdit.vue?vue&type=template&id=27c68498& */ "./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=template&id=27c68498&");
 /* harmony import */ var _AlbaranEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AlbaranEdit.vue?vue&type=script&lang=js& */ "./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _AlbaranEdit_vue_vue_type_style_index_0_id_27c68498_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AlbaranEdit.vue?vue&type=style&index=0&id=27c68498&scoped=true&lang=css& */ "./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=style&index=0&id=27c68498&scoped=true&lang=css&");
+/* empty/unused harmony star reexport *//* harmony import */ var _AlbaranEdit_vue_vue_type_style_index_0_scope_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AlbaranEdit.vue?vue&type=style&index=0&scope=true&lang=css& */ "./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=style&index=0&scope=true&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -101968,11 +102124,11 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _AlbaranEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _AlbaranEdit_vue_vue_type_template_id_27c68498_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _AlbaranEdit_vue_vue_type_template_id_27c68498_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _AlbaranEdit_vue_vue_type_template_id_27c68498___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AlbaranEdit_vue_vue_type_template_id_27c68498___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
-  "27c68498",
+  null,
   null
   
 )
@@ -101998,35 +102154,35 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=style&index=0&id=27c68498&scoped=true&lang=css&":
-/*!********************************************************************************************************************!*\
-  !*** ./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=style&index=0&id=27c68498&scoped=true&lang=css& ***!
-  \********************************************************************************************************************/
+/***/ "./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=style&index=0&scope=true&lang=css&":
+/*!*******************************************************************************************************!*\
+  !*** ./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=style&index=0&scope=true&lang=css& ***!
+  \*******************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranEdit_vue_vue_type_style_index_0_id_27c68498_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./AlbaranEdit.vue?vue&type=style&index=0&id=27c68498&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=style&index=0&id=27c68498&scoped=true&lang=css&");
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranEdit_vue_vue_type_style_index_0_id_27c68498_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranEdit_vue_vue_type_style_index_0_id_27c68498_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranEdit_vue_vue_type_style_index_0_id_27c68498_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranEdit_vue_vue_type_style_index_0_id_27c68498_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
- /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranEdit_vue_vue_type_style_index_0_id_27c68498_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranEdit_vue_vue_type_style_index_0_scope_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./AlbaranEdit.vue?vue&type=style&index=0&scope=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=style&index=0&scope=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranEdit_vue_vue_type_style_index_0_scope_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranEdit_vue_vue_type_style_index_0_scope_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranEdit_vue_vue_type_style_index_0_scope_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranEdit_vue_vue_type_style_index_0_scope_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranEdit_vue_vue_type_style_index_0_scope_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
-/***/ "./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=template&id=27c68498&scoped=true&":
-/*!******************************************************************************************************!*\
-  !*** ./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=template&id=27c68498&scoped=true& ***!
-  \******************************************************************************************************/
+/***/ "./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=template&id=27c68498&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=template&id=27c68498& ***!
+  \******************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranEdit_vue_vue_type_template_id_27c68498_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./AlbaranEdit.vue?vue&type=template&id=27c68498&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=template&id=27c68498&scoped=true&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranEdit_vue_vue_type_template_id_27c68498_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranEdit_vue_vue_type_template_id_27c68498___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./AlbaranEdit.vue?vue&type=template&id=27c68498& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbaranEdit.vue?vue&type=template&id=27c68498&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranEdit_vue_vue_type_template_id_27c68498___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranEdit_vue_vue_type_template_id_27c68498_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbaranEdit_vue_vue_type_template_id_27c68498___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -102806,6 +102962,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_404_vue_vue_type_template_id_65c7fbce___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_404_vue_vue_type_template_id_65c7fbce___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/shared/Loading.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/components/shared/Loading.vue ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Loading_vue_vue_type_template_id_4e45d37d___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Loading.vue?vue&type=template&id=4e45d37d& */ "./resources/js/components/shared/Loading.vue?vue&type=template&id=4e45d37d&");
+/* harmony import */ var _Loading_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Loading.vue?vue&type=script&lang=js& */ "./resources/js/components/shared/Loading.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Loading_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Loading_vue_vue_type_template_id_4e45d37d___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Loading_vue_vue_type_template_id_4e45d37d___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/shared/Loading.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/shared/Loading.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/shared/Loading.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Loading_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Loading.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/shared/Loading.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Loading_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/shared/Loading.vue?vue&type=template&id=4e45d37d&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/shared/Loading.vue?vue&type=template&id=4e45d37d& ***!
+  \***********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Loading_vue_vue_type_template_id_4e45d37d___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Loading.vue?vue&type=template&id=4e45d37d& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/shared/Loading.vue?vue&type=template&id=4e45d37d&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Loading_vue_vue_type_template_id_4e45d37d___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Loading_vue_vue_type_template_id_4e45d37d___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

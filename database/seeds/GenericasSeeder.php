@@ -28,6 +28,7 @@ class GenericasSeeder extends Seeder
         Carpeta::truncate();
         Empresa::truncate();
         Fpago::truncate();
+        Vencimiento::truncate();
 
         Contador::truncate();
 
@@ -68,8 +69,15 @@ class GenericasSeeder extends Seeder
         );
 
         $fp = new Fpago;
+        $fp->nombre = "Transferencia";
+        $fp->save();
+        $fp = new Fpago;
         $fp->nombre = "Recibo Domiciliado";
         $fp->save();
+        $fp = new Fpago;
+        $fp->nombre = "Contado";
+        $fp->save();
+
 
         $con = new Contador;
         $con->ejercicio = date('Y');

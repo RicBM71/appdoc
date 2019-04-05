@@ -1,6 +1,7 @@
 <template>
 	<div v-show="show">
-		<v-dialog
+        <loading :show_loading="show_loading" :process_titulo="process_titulo"></loading>
+		<!-- <v-dialog
 		v-model="show_loading"
 		hide-overlay
 		persistent
@@ -19,7 +20,7 @@
 				></v-progress-linear>
 			</v-card-text>
 			</v-card>
-		</v-dialog>
+		</v-dialog> -->
         <mod-menu :showMenuCli="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
         <h2>{{titulo}}</h2>
         <v-form>
@@ -45,6 +46,7 @@
                             data-vv-as="serie"
                             required
                             readonly
+                            :disabled="computedFactura"
                         >
                         </v-text-field>
                     </v-flex>
@@ -57,6 +59,7 @@
                             data-vv-as="albarán"
                             required
                             readonly
+                            :disabled="computedFactura"
                         >
                         </v-text-field>
                     </v-flex>
@@ -79,6 +82,7 @@
                                     append-icon="event"
                                     readonly
                                     data-vv-as="Fecha Albarán"
+                                    :disabled="computedFactura"
                                     ></v-text-field>
                                 <v-date-picker
                                     v-model="albaran.fecha_alb"
@@ -98,12 +102,14 @@
                             label="Factura"
                             data-vv-name="factura"
                             data-vv-as="factura"
-                            :readonly="!isRoot"
+                            :readonly="computedFactura"
+                            :disabled="computedFactura"
                         >
                             <v-tooltip slot="append" bottom color="black">
-                                <v-icon v-if="!albaran.factura" slot="activator" @click="facturar(albaran.id)">lock</v-icon>
-                                <v-icon v-else slot="activator" @click="desfacturar(albaran.id)">lock_open</v-icon>
-                                <span>Generar factura automática</span>
+                                <v-icon v-if="albaran.ejefac==0" slot="activator" @click="facturar(albaran.id)">lock</v-icon>
+                                <v-icon v-else if="isAdmin" slot="activator" @click="desFacturar(albaran.id)">lock_open</v-icon>
+                                <span v-if="albaran.ejefac==0">Generar factura automática</span>
+                                <span v-else>Desfacturar</span>
                             </v-tooltip>
                         </v-text-field>
                     </v-flex>
@@ -117,7 +123,7 @@
                                 offset-y
                                 full-width
                                 min-width="290px"
-                                :disabled="albaran.factura==''"
+                                :disabled="computedFactura"
                             >
 
                                 <v-text-field
@@ -127,6 +133,7 @@
                                     append-icon="event"
                                     readonly
                                     data-vv-as="Fecha Factura"
+                                    :disabled="computedFactura"
                                     ></v-text-field>
                                 <v-date-picker
                                     v-model="albaran.fecha_fac"
@@ -134,7 +141,7 @@
                                     locale="es"
                                     first-day-of-week=1
                                     @input="menu3 = false"
-                                    :disabled="albaran.factura==''"
+                                    :disabled="computedFactura"
                                 ></v-date-picker>
                             </v-menu>
                     </v-flex>
@@ -143,8 +150,9 @@
                             v-model="albaran.notificado"
                             data-vv-name="notificado"
                             data-vv-as="Notificado"
-                            label="Notificado"
+                            :label="albaran.notificado == '0' ? 'Notificar' : 'Notificado'"
                             color="primary"
+                            :disabled="computedFactura"
                         ></v-switch>
                     </v-flex>
                 </v-layout>
@@ -164,23 +172,40 @@
                             flat
                             label="Cliente"
                             required
-                            ></v-autocomplete>
+                            :disabled="computedFactura"
+                        >
+                        </v-autocomplete>
                     </v-flex>
                     <v-flex sm3 d-flex>
-                        <v-select
+                        <v-autocomplete
                             v-model="albaran.fpago_id"
-                            :error-messages="errors.collect('fpago_id')"
                             v-validate="'required'"
                             data-vv-name="fpago_id"
-                            data-vv-as="Forma de pago"
-                            item-text="name"
-                            item-value="id"
+                            data-vv-as="F. Pago"
+                            :error-messages="errors.collect('fpago_id')"
                             :items="fpagos"
-                            label="Forma de Pago"
-                        ></v-select>
+                            flat
+                            label="F. Pago"
+                            required
+                            :disabled="computedFactura"
+                        >
+                        </v-autocomplete>
                     </v-flex>
                     <v-flex sm3 d-flex>
-                        <v-select
+                        <v-autocomplete
+                            v-model="albaran.vencimiento_id"
+                            v-validate="'required'"
+                            data-vv-name="vencimiento_id"
+                            data-vv-as="Vencimiento"
+                            :error-messages="errors.collect('vencimiento_id')"
+                            :items="vencimientos"
+                            flat
+                            label="Vencimiento"
+                            required
+                            :disabled="computedFactura"
+                        >
+                        </v-autocomplete>
+                        <!-- <v-select
                             v-model="albaran.vencimiento_id"
                             :error-messages="errors.collect('vencimiento_id')"
                             v-validate="'required'"
@@ -190,7 +215,8 @@
                             item-value="id"
                             :items="vencimientos"
                             label="Vencimiento"
-                        ></v-select>
+
+                        ></v-select> -->
                     </v-flex>
                     <v-flex sm2>
                         <v-text-field
@@ -198,6 +224,7 @@
                             label="Usuario"
                             readonly
                             v-on:keyup.enter="submit"
+                            :disabled="computedFactura"
                         >
                         </v-text-field>
                     </v-flex>
@@ -207,6 +234,7 @@
                         <v-text-field
                                 v-model="albaran.notas"
                                 label="Observaciones"
+                                :disabled="computedFactura"
                             >
                         </v-text-field>
                     </v-flex>
@@ -216,6 +244,7 @@
                             v-model="computedFModFormat"
                             label="Modificado"
                             readonly
+                            :disabled="computedFactura"
                         >
                         </v-text-field>
                     </v-flex>
@@ -224,13 +253,19 @@
                             v-model="computedFCreFormat"
                             label="Creado"
                             readonly
+                            :disabled="computedFactura"
                         >
                         </v-text-field>
                     </v-flex>
                     <v-flex sm2>
                         <div class="text-xs-center">
-                                    <v-btn @click="submit"  :loading="enviando" block  color="primary">
-                            Guardar
+                            <v-btn @click="submit"
+                                :loading="show_loading"
+                                block
+                                color="primary"
+                                :disabled="computedFactura"
+                            >
+                                Guardar
                             </v-btn>
                         </div>
                     </v-flex>
@@ -242,6 +277,7 @@
 <script>
 import moment from 'moment'
 import ModMenu from '@/components/shared/ModMenu'
+import Loading from '@/components/shared/Loading'
 import {mapGetters} from 'vuex';
 
 	export default {
@@ -249,7 +285,8 @@ import {mapGetters} from 'vuex';
       		validator: 'new'
         },
         components: {
-            'mod-menu': ModMenu
+            'mod-menu': ModMenu,
+            'loading': Loading
 		},
     	data () {
       		return {
@@ -284,12 +321,12 @@ import {mapGetters} from 'vuex';
                 loading: false,
                 search: null,
 
-
+                search_fp: null,
 
                 albaran_id: "",
 
         		status: false,
-                enviando: false,
+
                 show: true,
 
                 menu2:false,
@@ -297,6 +334,7 @@ import {mapGetters} from 'vuex';
                 menu3:false,
 
                 show_loading: false,
+                process_titulo:"",
 
                 showMenuCli: false,
                 x: 0,
@@ -317,7 +355,7 @@ import {mapGetters} from 'vuex';
             if (id > 0)
                 axios.get('/ventas/albacabs/'+id+'/edit')
                     .then(res => {
-
+                        console.log(res.data);
                         res.data.ivas.map((e) =>
                             {
                                 this.ivas.push({id: e.id, name: e.nombre});
@@ -326,8 +364,8 @@ import {mapGetters} from 'vuex';
                             {
                                 this.retenciones.push({id: e.id, name: e.nombre});
                             })
-                        this.clientes = res.data.clientes;
 
+                        this.clientes = res.data.clientes;
                         this.fpagos = res.data.fpagos;
                         this.vencimientos = res.data.vencimientos;
 
@@ -363,6 +401,15 @@ import {mapGetters} from 'vuex';
             computedFCreFormat() {
                 moment.locale('es');
                 return this.albaran.created_at ? moment(this.albaran.created_at).format('DD/MM/YYYY H:mm:ss') : '';
+            },
+            computedFactura(){
+
+                if (this.albaran.ejefac != 0)
+                    return true;
+                else if(this.isAdmin)
+                    return false;
+
+                return true;
             }
 
         },
@@ -381,7 +428,7 @@ import {mapGetters} from 'vuex';
             },
             submit() {
 
-                this.enviando = true;
+                this.show_loading = true;
 
                 var url = "/ventas/albacabs/"+this.albaran.id;
 
@@ -393,7 +440,7 @@ import {mapGetters} from 'vuex';
 
                                 this.$toast.success(response.data.message);
                                 this.albaran = response.data.albaran;
-                                this.enviando = false;
+                                this.show_loading = false;
                             })
                             .catch(err => {
                                 //console.log(err.response.data.errors);
@@ -410,59 +457,62 @@ import {mapGetters} from 'vuex';
                                 }else{
                                     this.$toast.error(err.response.data.message);
                                 }
-                                this.enviando = false;
+                                this.show_loading = false;
                             });
                         }
                     else{
-                        this.enviando = false;
+                        this.show_loading = false;
                     }
                 });
 
             },
             facturar(id){
 
-				console.log(id);
-
+                this.process_titulo = "Facturando albarán, espere";
                 this.show_loading = true;
 
-                setTimeout(() => (this.show_loading = false), 4000)
-
-				return;
-
-                axios.put('ventas/albacabs/'+id, this.albaran.fecha_fac)
+                axios.put('/ventas/albacabs/'+id+'/facturar', this.albaran)
                 .then(response => {
                     this.$toast.success(response.data.message);
                     this.albaran = response.data.albaran;
                     this.show_loading = false;
                 })
                 .catch(err => {
-                    //console.log(err.response.data.errors);
-                    if (err.request.status == 422){ // fallo de validated.
-                        const msg_valid = err.response.data.errors;
-                        for (const prop in msg_valid) {
-                            // this.$toast.error(`${msg_valid[prop]}`);
-                            //console.log(prop);
-                            this.errors.add({
-                                field: prop,
-                                msg: `${msg_valid[prop]}`
-                            })
-                        }
-                    }else{
-                        this.$toast.error(err.response.data.message);
-                    }
+                    this.$toast.error(err.response.data.message);
+                    this.show_loading = false;
+                });
+            },
+            desFacturar(id){
+
+                this.process_titulo = "Desfacturando albarán, espere";
+                this.show_loading = true;
+
+                axios.put('/ventas/albacabs/'+id+'/desfacturar', this.albaran)
+                .then(response => {
+                    this.$toast.success(response.data.message);
+                    this.albaran = response.data.albaran;
+                    this.show_loading = false;
+                })
+                .catch(err => {
+                    this.$toast.error(err.response.data.message);
                     this.show_loading = false;
                 });
 
             }
+
     }
   }
 </script>
 
-<style scoped>
+<style scope>
 .v-text-field {
     padding-top: 2px;
     margin-top: 4px;
 }
+.theme--light.v-input--is-disabled,  .theme--light.v-input--is-disabled input, .theme--light.v-input--is-disabled textarea {
+    color: #263238;
+}
+
 .v-form>.container>.layout>.flex{
     padding: 0px 8px;
 }

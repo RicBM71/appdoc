@@ -36,8 +36,8 @@ class ProductosController extends Controller
     {
         if (request()->wantsJson())
             return [
-                'ivas'=> Iva::all(),
-                'retenciones'=> Retencion::all(),
+                'ivas'=> Iva::selIvas(),
+                'retenciones'=> Retencion::selRetenciones(),
             ];
     }
 
@@ -63,6 +63,21 @@ class ProductosController extends Controller
             return ['producto'=>$reg, 'message' => 'EL registro ha sido creado'];
     }
 
+ /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+
+         if (request()->wantsJson())
+             return [
+                 'producto' => Producto::with(['retencion','iva'])->find($id)
+             ];
+    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -77,8 +92,8 @@ class ProductosController extends Controller
         if (request()->wantsJson())
             return [
                 'producto' =>$producto,
-                'ivas'=> Iva::all(),
-                'retenciones'=> Retencion::all(),
+                'ivas'=> Iva::selIvas(),
+                'retenciones'=> Retencion::selRetenciones(),
             ];
 
     }

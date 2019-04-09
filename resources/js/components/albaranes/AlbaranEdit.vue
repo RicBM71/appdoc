@@ -22,251 +22,261 @@
 			</v-card>
 		</v-dialog> -->
         <mod-menu :showMenuCli="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
-        <h2>{{titulo}}</h2>
-        <v-form>
-            <v-container @contextmenu="showMenu">
-                <v-btn
-                    @click="showMenu"
-                    fixed
-                    dark
-                    fab
-                    bottom
-                    right
-                    color="teal accent-4"
-                    >
-                    <v-icon>add</v-icon>
-                </v-btn>
-                <v-layout row wrap>
-                    <v-flex sm1>
-                        <v-text-field
-                            v-model="albaran.serie"
-                            :error-messages="errors.collect('serie')"
-                            label="Serie"
-                            data-vv-name="serie"
-                            data-vv-as="serie"
-                            required
-                            readonly
-                            :disabled="computedFactura"
+
+        <v-card>
+            <v-card-title>
+                <div>
+                    <h2 class="headline mb-0">{{titulo}}</h2>
+                </div>
+            </v-card-title>
+            <v-form>
+                <v-container @contextmenu="showMenu">
+                    <v-btn
+                        @click="showMenu"
+                        fixed
+                        dark
+                        fab
+                        bottom
+                        right
+                        color="teal accent-4"
                         >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="albaran.albaran"
-                             :error-messages="errors.collect('albaran')"
-                            label="Albarán"
-                            data-vv-name="albaran"
-                            data-vv-as="albarán"
-                            required
-                            readonly
-                            :disabled="computedFactura"
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-menu
-                                v-model="menu2"
-                                :close-on-content-click="false"
-                                :nudge-right="40"
-                                lazy
-                                transition="scale-transition"
-                                offset-y
-                                full-width
-                                min-width="290px"
+                        <v-icon>add</v-icon>
+                    </v-btn>
+                    <v-layout row wrap>
+                        <v-flex sm1>
+                            <v-text-field
+                                v-model="albaran.serie"
+                                :error-messages="errors.collect('serie')"
+                                label="Serie"
+                                data-vv-name="serie"
+                                data-vv-as="serie"
+                                required
+                                readonly
                                 :disabled="computedFactura"
                             >
-
-                                <v-text-field
-                                    slot="activator"
-                                    :value="computedFechaAlb"
-                                    label="Fecha Albarán"
-                                    append-icon="event"
-                                    readonly
-                                    data-vv-as="Fecha Albarán"
-                                    :disabled="computedFactura"
-                                    ></v-text-field>
-                                <v-date-picker
-                                    v-model="albaran.fecha_alb"
-                                    no-title
-                                    locale="es"
-                                    first-day-of-week=1
-                                    @input="menu2 = false"
-                                    :disabled="computedFactura"
-                                ></v-date-picker>
-                            </v-menu>
-                    </v-flex>
-
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="albaran.factura"
-                            :error-messages="errors.collect('factura')"
-                            label="Factura"
-                            data-vv-name="factura"
-                            data-vv-as="factura"
-                            :readonly="computedFactura"
-                            :disabled="computedFactura"
-                        >
-                            <v-tooltip slot="append" bottom color="black">
-                                <v-icon v-if="albaran.ejefac==0" slot="activator" @click="facturar(albaran.id)">lock</v-icon>
-                                <v-icon v-else if="isAdmin" slot="activator" @click="desFacturar(albaran.id)">lock_open</v-icon>
-                                <span v-if="albaran.ejefac==0">Generar factura automática</span>
-                                <span v-else>Desfacturar</span>
-                            </v-tooltip>
-                        </v-text-field>
-                    </v-flex>
-                     <v-flex sm2>
-                        <v-menu
-                                v-model="menu3"
-                                :close-on-content-click="false"
-                                :nudge-right="40"
-                                lazy
-                                transition="scale-transition"
-                                offset-y
-                                full-width
-                                min-width="290px"
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="albaran.albaran"
+                                :error-messages="errors.collect('albaran')"
+                                label="Albarán"
+                                data-vv-name="albaran"
+                                data-vv-as="albarán"
+                                required
+                                readonly
                                 :disabled="computedFactura"
                             >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-menu
+                                    v-model="menu2"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                    :disabled="computedFactura"
+                                >
 
-                                <v-text-field
-                                    slot="activator"
-                                    :value="computedFechaFac"
-                                    label="Fecha Factura"
-                                    append-icon="event"
-                                    readonly
-                                    data-vv-as="Fecha Factura"
-                                    :disabled="computedFactura"
-                                    ></v-text-field>
-                                <v-date-picker
-                                    v-model="albaran.fecha_fac"
-                                    no-title
-                                    locale="es"
-                                    first-day-of-week=1
-                                    @input="menu3 = false"
-                                    :disabled="computedFactura"
-                                ></v-date-picker>
-                            </v-menu>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-switch
-                            v-model="albaran.notificado"
-                            data-vv-name="notificado"
-                            data-vv-as="Notificado"
-                            :label="albaran.notificado == '0' ? 'Notificar' : 'Notificado'"
-                            color="primary"
-                            :disabled="computedFactura"
-                        ></v-switch>
-                    </v-flex>
-                </v-layout>
-                <v-layout row wrap>
-                    <v-flex sm4>
-                        <v-autocomplete
-                            v-model="albaran.cliente_id"
-                            v-validate="'required'"
-                            data-vv-name="cliente_id"
-                            data-vv-as="Cliente"
-                            item-text="name"
-                            item-value="id"
-                            :error-messages="errors.collect('cliente_id')"
-                            :loading="loading"
-                            :items="clientes"
-                            :search-input.sync="search"
-                            flat
-                            label="Cliente"
-                            required
-                            :disabled="computedFactura"
-                        >
-                        </v-autocomplete>
-                    </v-flex>
-                    <v-flex sm3 d-flex>
-                        <v-autocomplete
-                            v-model="albaran.fpago_id"
-                            v-validate="'required'"
-                            data-vv-name="fpago_id"
-                            data-vv-as="F. Pago"
-                            :error-messages="errors.collect('fpago_id')"
-                            :items="fpagos"
-                            flat
-                            label="F. Pago"
-                            required
-                            :disabled="computedFactura"
-                        >
-                        </v-autocomplete>
-                    </v-flex>
-                    <v-flex sm3 d-flex>
-                        <v-autocomplete
-                            v-model="albaran.vencimiento_id"
-                            v-validate="'required'"
-                            data-vv-name="vencimiento_id"
-                            data-vv-as="Vencimiento"
-                            :error-messages="errors.collect('vencimiento_id')"
-                            :items="vencimientos"
-                            flat
-                            label="Vencimiento"
-                            required
-                            :disabled="computedFactura"
-                        >
-                        </v-autocomplete>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="albaran.username"
-                            label="Usuario"
-                            readonly
-                            v-on:keyup.enter="submit"
-                            :disabled="computedFactura"
-                        >
-                        </v-text-field>
-                    </v-flex>
-                </v-layout>
-                <v-layout row wrap>
-                    <v-flex sm6 d-flex>
-                        <v-text-field
-                                v-model="albaran.notas"
-                                label="Observaciones"
+                                    <v-text-field
+                                        slot="activator"
+                                        :value="computedFechaAlb"
+                                        label="Fecha Albarán"
+                                        append-icon="event"
+                                        readonly
+                                        data-vv-as="Fecha Albarán"
+                                        :disabled="computedFactura"
+                                        ></v-text-field>
+                                    <v-date-picker
+                                        v-model="albaran.fecha_alb"
+                                        no-title
+                                        locale="es"
+                                        first-day-of-week=1
+                                        @input="menu2 = false"
+                                        :disabled="computedFactura"
+                                    ></v-date-picker>
+                                </v-menu>
+                        </v-flex>
+
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="albaran.factura"
+                                :error-messages="errors.collect('factura')"
+                                label="Factura"
+                                data-vv-name="factura"
+                                data-vv-as="factura"
+                                :readonly="computedFactura"
                                 :disabled="computedFactura"
                             >
-                        </v-text-field>
-                    </v-flex>
+                                <v-tooltip slot="append" bottom color="black">
+                                    <v-icon v-if="albaran.ejefac==0" slot="activator" @click="facturar(albaran.id)">lock</v-icon>
+                                    <v-icon v-else if="isAdmin" slot="activator" @click="desFacturar(albaran.id)">lock_open</v-icon>
+                                    <span v-if="albaran.ejefac==0">Generar factura automática</span>
+                                    <span v-else>Desfacturar</span>
+                                </v-tooltip>
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-menu
+                                    v-model="menu3"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                    :disabled="computedFactura"
+                                >
 
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="computedFModFormat"
-                            label="Modificado"
-                            readonly
-                            :disabled="computedFactura"
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="computedFCreFormat"
-                            label="Creado"
-                            readonly
-                            :disabled="computedFactura"
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <div class="text-xs-center">
-                            <v-btn @click="submit"
-                                :loading="show_loading"
-                                block
+                                    <v-text-field
+                                        slot="activator"
+                                        :value="computedFechaFac"
+                                        label="Fecha Factura"
+                                        append-icon="event"
+                                        readonly
+                                        data-vv-as="Fecha Factura"
+                                        :disabled="computedFactura"
+                                        ></v-text-field>
+                                    <v-date-picker
+                                        v-model="albaran.fecha_fac"
+                                        no-title
+                                        locale="es"
+                                        first-day-of-week=1
+                                        @input="menu3 = false"
+                                        :disabled="computedFactura"
+                                    ></v-date-picker>
+                                </v-menu>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-switch
+                                v-model="albaran.notificado"
+                                data-vv-name="notificado"
+                                data-vv-as="Notificado"
+                                :label="albaran.notificado == '0' ? 'Notificar' : 'Notificado'"
                                 color="primary"
                                 :disabled="computedFactura"
+                            ></v-switch>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row wrap>
+                        <v-flex sm4>
+                            <v-autocomplete
+                                v-model="albaran.cliente_id"
+                                v-validate="'required'"
+                                data-vv-name="cliente_id"
+                                data-vv-as="Cliente"
+                                item-text="name"
+                                item-value="id"
+                                :error-messages="errors.collect('cliente_id')"
+                                :loading="loading"
+                                :items="clientes"
+                                :search-input.sync="search"
+                                flat
+                                label="Cliente"
+                                required
+                                :disabled="computedFactura"
                             >
-                                Guardar
-                            </v-btn>
-                        </div>
-                    </v-flex>
-                </v-layout>
-            </v-container>
-        </v-form>
+                            </v-autocomplete>
+                        </v-flex>
+                        <v-flex sm3 d-flex>
+                            <v-autocomplete
+                                v-model="albaran.fpago_id"
+                                v-validate="'required'"
+                                data-vv-name="fpago_id"
+                                data-vv-as="F. Pago"
+                                :error-messages="errors.collect('fpago_id')"
+                                :items="fpagos"
+                                flat
+                                label="F. Pago"
+                                required
+                                :disabled="computedFactura"
+                            >
+                            </v-autocomplete>
+                        </v-flex>
+                        <v-flex sm3 d-flex>
+                            <v-autocomplete
+                                v-model="albaran.vencimiento_id"
+                                v-validate="'required'"
+                                data-vv-name="vencimiento_id"
+                                data-vv-as="Vencimiento"
+                                :error-messages="errors.collect('vencimiento_id')"
+                                :items="vencimientos"
+                                flat
+                                label="Vencimiento"
+                                required
+                                :disabled="computedFactura"
+                            >
+                            </v-autocomplete>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="albaran.username"
+                                label="Usuario"
+                                readonly
+                                v-on:keyup.enter="submit"
+                                :disabled="computedFactura"
+                            >
+                            </v-text-field>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row wrap>
+                        <v-flex sm6 d-flex>
+                            <v-text-field
+                                    v-model="albaran.notas"
+                                    label="Observaciones"
+                                    :disabled="computedFactura"
+                                >
+                            </v-text-field>
+                        </v-flex>
+
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="computedFModFormat"
+                                label="Modificado"
+                                readonly
+                                :disabled="computedFactura"
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="computedFCreFormat"
+                                label="Creado"
+                                readonly
+                                :disabled="computedFactura"
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <div class="text-xs-center">
+                                <v-btn @click="submit"
+                                    :loading="show_loading"
+                                    block
+                                    color="primary"
+                                    :disabled="computedFactura"
+                                >
+                                    Guardar
+                                </v-btn>
+                            </div>
+                        </v-flex>
+                    </v-layout>
+                </v-container>
+            </v-form>
+        </v-card>
+        <br/>
+        <albalin v-if="albaran.id > 0" :albaran_id="albaran.id" :ejefac="albaran.ejefac"></albalin>
 	</div>
 </template>
 <script>
 import moment from 'moment'
 import ModMenu from '@/components/shared/ModMenu'
 import Loading from '@/components/shared/Loading'
+import Albalin from './Albalin'
 import {mapGetters} from 'vuex';
 
 	export default {
@@ -275,7 +285,8 @@ import {mapGetters} from 'vuex';
         },
         components: {
             'mod-menu': ModMenu,
-            'loading': Loading
+            'loading': Loading,
+            'albalin': Albalin
 		},
     	data () {
       		return {
@@ -343,15 +354,6 @@ import {mapGetters} from 'vuex';
             if (id > 0)
                 axios.get('/ventas/albacabs/'+id+'/edit')
                     .then(res => {
-                        console.log(res.data);
-                        res.data.ivas.map((e) =>
-                            {
-                                this.ivas.push({id: e.id, name: e.nombre});
-                            })
-                        res.data.retenciones.map((e) =>
-                            {
-                                this.retenciones.push({id: e.id, name: e.nombre});
-                            })
 
                         this.clientes = res.data.clientes;
                         this.fpagos = res.data.fpagos;

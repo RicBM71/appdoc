@@ -46,8 +46,6 @@ class AlbacabsController extends Controller
                 'clientes'=>  Cliente::selClientesFacturables(),
                 'fpagos'  =>  Fpago::selFPagos(),
                 'vencimientos'  =>  Vencimiento::selVencimientos(),
-                'ivas'=> Iva::all(),
-                'retenciones'=> Retencion::all(),
         ];
     }
 
@@ -108,8 +106,6 @@ class AlbacabsController extends Controller
                 'clientes'=>  Cliente::selClientesFacturables(),
                 'fpagos'  =>  Fpago::selFPagos(),
                 'vencimientos'  =>  Vencimiento::selVencimientos(),
-                'ivas'=> Iva::all(),
-                'retenciones'=> Retencion::all(),
         ];
     }
 

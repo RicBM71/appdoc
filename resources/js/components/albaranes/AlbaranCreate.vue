@@ -127,10 +127,9 @@
                             v-validate="'required'"
                             data-vv-name="fpago_id"
                             data-vv-as="Forma de pago"
-                            item-text="name"
-                            item-value="id"
                             :items="fpagos"
                             label="Forma de Pago"
+                            required
                         ></v-select>
                     </v-flex>
                     <v-flex sm3 d-flex>
@@ -140,8 +139,6 @@
                             v-validate="'required'"
                             data-vv-name="vencimiento_id"
                             data-vv-as="Vencimiento"
-                            item-text="name"
-                            item-value="id"
                             :items="vencimientos"
                             label="Vencimiento"
                         ></v-select>
@@ -263,18 +260,9 @@ import ModMenu from '@/components/shared/ModMenu'
         mounted(){
             axios.get('/ventas/albacabs/create')
                 .then(res => {
-                    //console.log(res);
+                    console.log(res);
 
-                    res.data.ivas.map((e) =>
-                        {
-                            this.ivas.push({id: e.id, name: e.nombre});
-                        })
-                    res.data.retenciones.map((e) =>
-                        {
-                            this.retenciones.push({id: e.id, name: e.nombre});
-                        })
                     this.clientes = res.data.clientes;
-
                     this.fpagos = res.data.fpagos;
                     this.vencimientos = res.data.vencimientos;
 
@@ -322,7 +310,7 @@ import ModMenu from '@/components/shared/ModMenu'
                 this.enviando = true;
 
                 var url = "/ventas/albacabs";
-                
+
                 this.$validator.validateAll().then((result) => {
                     if (result){
                         axios.post(url, this.albaran)

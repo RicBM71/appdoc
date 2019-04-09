@@ -20,8 +20,8 @@ class CreateAlbalinsTable extends Migration
             $table->String('nombre', 50)->nullable();
             $table->Integer('unidades')->default(0);
             $table->decimal('impuni', 10, 2)->default(0);
-            $table->decimal('iva', 5, 2)->default(0);
-            $table->decimal('irpf', 5, 2)->default(0);
+            $table->decimal('poriva', 5, 2)->default(0);
+            $table->decimal('porirpf', 5, 2)->default(0);
             $table->decimal('dto', 5, 2)->default(0);
             $table->decimal('importe', 10, 2)->default(0);
             $table->String('username', 20)->nullable();

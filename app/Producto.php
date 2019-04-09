@@ -35,4 +35,13 @@ class Producto extends Model
     {
     	return $this->belongsTo(Iva::class);
     }
+
+    public static function selProductos(){
+
+        return Producto::select('id AS value', 'nombre AS text')
+            ->orderBy('nombre', 'asc')
+            ->get();
+
+    }
+
 }

@@ -13,6 +13,7 @@
                     data-vv-as="usuario"
                     :value="old_usr"
                     v-validate="'required'"
+                    :disabled="loading"
                 >
                 </v-text-field>
                 <div v-if="err_usr" class="v-messages theme--light error--text text-xs-center">
@@ -29,6 +30,7 @@
                     id="password"
                     v-validate="'required'"
                     type="password"
+                    :disabled="loading"
                 ></v-text-field>
                 <div v-if="err_pas" class="v-messages theme--light error--text  text-xs-center">
                     <strong>{{ err_pas }}</strong>
@@ -70,9 +72,9 @@ export default {
     },
     methods:{
         submit() {
-            this.loading = true;
             this.$validator.validateAll().then((result) => {
                 if (result){
+                    this.loading = true;
                     document.getElementById('login-form').submit()
                 }
                 else{

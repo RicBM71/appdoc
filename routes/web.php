@@ -54,7 +54,7 @@ Route::group([
     'middleware' => 'auth'],
     function (){
         Route::resource('clientes', 'ClientesController', ['except'=>'show','as' => 'mto']);
-        Route::resource('productos', 'ProductosController', ['except'=>'show','as' => 'mto']);
+        Route::resource('productos', 'ProductosController', ['as' => 'mto']);
         Route::resource('vencimientos', 'VencimientosController', ['except'=>'show','as' => 'mto']);
     }
 );
@@ -68,6 +68,7 @@ Route::group([
         Route::resource('albacabs', 'AlbacabsController', ['except'=>'show','as' => 'ventas']);
         Route::put('albacabs/{albacab}/facturar', 'AlbacabsController@facturar');
         Route::put('albacabs/{albacab}/desfacturar', 'AlbacabsController@desfacturar');
+        Route::resource('albalins', 'AlbalinsController', ['except'=>'index','as' => 'ventas']);
     }
 );
 

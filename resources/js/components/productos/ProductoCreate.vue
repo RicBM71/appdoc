@@ -53,8 +53,6 @@
                         v-validate="'required'"
                         data-vv-name="retencion_id"
                         data-vv-as="retención"
-                        item-text="name"
-                        item-value="id"
                         :items="retenciones"
                         label="IRPF"
                         ></v-select>
@@ -66,8 +64,6 @@
                         v-validate="'required'"
                         data-vv-name="iva_id"
                         data-vv-as="iva"
-                        item-text="name"
-                        item-value="id"
                         :items="ivas"
                         label="IVA"
                         ></v-select>
@@ -167,14 +163,8 @@ import ModMenu from '@/components/shared/ModMenu'
 
                 axios.get('/mto/productos/create')
                     .then(res => {
-                        res.data.ivas.map((e) =>
-                            {
-                                this.ivas.push({id: e.id, name: e.nombre});
-                            })
-                        res.data.retenciones.map((e) =>
-                            {
-                                this.retenciones.push({id: e.id, name: e.nombre});
-                            })
+                        this.ivas = res.data.ivas;
+                        this.retenciones = res.data.retenciones;
                         this.show=true;
                     })
                     .catch(err => {

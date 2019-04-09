@@ -21,19 +21,24 @@ class Albacab extends Model
         'fpago_id', 'vencimiento_id', 'notificado', 'notas','username',
     ];
 
-    public function getFechaAlbAttribute($value)
-    {
-
-        return Carbon::parse($this->attributes['fecha_alb'])->format('Y-m-d');
-
-    }
-
-
     protected static function boot()
     {
         parent::boot();
 
         static::addGlobalScope(new EmpresaScope);
+
+        static::deleting(function($albacab){
+
+            $albacab->albalins->each->delete();
+            //$post->delete();
+        });
+    }
+
+    public function getFechaAlbAttribute($value)
+    {
+
+        return Carbon::parse($this->attributes['fecha_alb'])->format('Y-m-d');
+
     }
 
     public function cliente()

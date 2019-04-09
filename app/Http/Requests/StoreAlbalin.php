@@ -29,8 +29,8 @@ class StoreAlbalin extends FormRequest
             'nombre'    =>'nullable|string',
             'unidades'  =>'numeric',
             'impuni'    =>'numeric',
-            'impiva'    =>'numeric',
-            'impirpf'   =>'numeric',
+            'poriva'    =>'numeric',
+            'porirpf'   =>'numeric',
             'dto'       =>'numeric',
             'importe'   =>'numeric'
         ];

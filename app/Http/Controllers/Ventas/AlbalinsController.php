@@ -55,7 +55,6 @@ class AlbalinsController extends Controller
 
         if (request()->wantsJson())
             return [
-                'reg'=> $reg,
                 'lineas' => Albalin::Albacab($reg->albacab_id)->get(),
                 'totales' => Albalin::totalAlbaran($reg->albacab_id)
             ];
@@ -83,9 +82,19 @@ class AlbalinsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Albalin $albalin)
     {
-        //
+
+        if (request()->wantsJson())
+           return [
+            'albalin'   => $albalin,
+            'productos'=>  Producto::selProductos(),
+            'iva'  =>  Iva::selIvas(),
+            'irpf'  =>  Retencion::selRetenciones(),
+
+        ];
+
+
     }
 
     /**
@@ -95,9 +104,21 @@ class AlbalinsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreAlbalin $request, Albalin $albalin)
     {
-        //
+        $data = $request->validated();
+
+        $data['username'] = $request->user()->username;
+
+
+        $albalin->update($data);
+
+        if (request()->wantsJson())
+            return [
+                'lineas' => Albalin::Albacab($albalin->albacab_id)->get(),
+                'totales' => Albalin::totalAlbaran($albalin->albacab_id)
+            ];
+
     }
 
     /**

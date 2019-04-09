@@ -1,10 +1,9 @@
 <template>
-  <v-layout row justify-center>
-    <v-dialog v-model="dialog_lin" persistent max-width="800px">
-
+  <v-layout v-if="albalin_id > 0" row justify-center>
+    <v-dialog v-model="dialog_edt" persistent max-width="800px">
       <v-card>
         <v-card-title>
-          <span class="headline">Líneas</span>
+          <span class="headline">Editar línea</span>
         </v-card-title>
         <v-card-text>
             <v-form>
@@ -129,30 +128,30 @@
 <script>
   export default {
     props:{
-        albaran_id: Number,
-        dialog_lin: Boolean
-
+        albalin_id: Number,
+        dialog_edt: Boolean,
+        albalin: Object
     },
     data: () => ({
         loading: false,
         productos:[],
         iva:[],
         irpf:[],
-        albalin: {
-            id:"",
-            albacab_id:"",
-            producto_id: "",
-            nombre:"",
-            unidades:"",
-            impuni:0,
-            poriva:0,
-            porirpf:0,
-            dto:0,
-            importe:0,
-            username: "",
-            updated_at:"",
-            created_at:"",
-        },
+        // albalin: {
+        //     id:"",
+        //     albacab_id:"",
+        //     producto_id: "",
+        //     nombre:"",
+        //     unidades:"",
+        //     impuni:0,
+        //     poriva:0,
+        //     porirpf:0,
+        //     dto:0,
+        //     importe:0,
+        //     username: "",
+        //     updated_at:"",
+        //     created_at:"",
+        // },
     }),
     mounted(){
         axios.get('/ventas/albalins/create')
@@ -175,7 +174,7 @@
     },
     methods:{
         closeDialog (){
-            this.$emit('update:dialog_lin', false)
+            this.$emit('update:dialog_edt', false)
         },
         selPro(producto_id){
             axios.get('/mto/productos/'+producto_id)
@@ -194,17 +193,15 @@
         submit() {
             this.loading = true;
 
-            this.albalin.albacab_id = this.albaran_id;
+            var url = "/ventas/albalins/"+this.albalin_id;
 
-            var url = "/ventas/albalins";
-            console.log(this.albalin);
             this.$validator.validateAll().then((result) => {
                 if (result){
 
-                    axios.post(url, this.albalin)
+                    axios.put(url, this.albalin)
                         .then(res => {
-                            this.$emit('update:dialog_lin', false)
-                            //this.$router.push({ name: 'albaran.edit', params: { id: this.albaran_id } })
+
+                            this.$emit('update:dialog_edt', false)
                             this.loading = false;
 
                             this.$emit('reLoadLineas', res.data.lineas, res.data.totales)

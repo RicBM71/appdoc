@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Albalin extends Model
 {
     protected $fillable = [
-        'albacab_id','producto_id','nombre', 'unidades', 'impuni', 'impiva', 'impirpf', 'dto',
+        'albacab_id','producto_id','nombre', 'unidades', 'impuni', 'poriva', 'porirpf', 'dto',
         'importe', 'username',
     ];
 
@@ -37,6 +37,7 @@ class Albalin extends Model
     public static function totalAlbaran($id){
         return DB::table('albalins')
                 ->select(DB::raw('SUM(unidades) AS unidades, ROUND(SUM(importe*(poriva/100)), 2) AS impiva, ROUND(SUM(importe*(porirpf/100)), 2) AS impirpf, SUM(importe) AS importe'))
+                ->where('albacab_id', $id)
                 ->first();
     }
 }

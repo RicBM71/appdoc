@@ -1,7 +1,7 @@
 <template>
     <div v-if="registros">
         <v-layout row wrap>
-			<my-dialog :dialog.sync="dialog" registro="registro" @destroyReg="destroyReg"></my-dialog>
+			    
             <v-flex xs10>
                 <h2>{{titulo}}</h2>
             </v-flex>
@@ -150,8 +150,8 @@ import MyDialog from '@/components/shared/MyDialog'
             lineas.map((lin) =>
             {
                 var imp = parseFloat(lin.importe);
-                var iva = parseFloat(lin.iva)
-                var irpf= parseFloat(lin.irpf)
+                var iva = parseFloat(lin.poriva)
+                var irpf= parseFloat(lin.porirpf)
                 total += (imp + (imp * iva / 100) - (imp * irpf / 100));
 
             })

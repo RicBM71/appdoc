@@ -27,7 +27,7 @@
                                 </v-icon>
 
 
-                                <v-icon  v-if="ejefac==0" 
+                                <v-icon  v-if="ejefac==0"
                                 small
                                 @click="openDialog(props.item.id)"
                                 >
@@ -61,11 +61,13 @@
             </v-layout>
         </v-card>
         <albalin-create :albaran_id="albaran_id" :dialog_lin.sync="dialog_lin" @reLoadLineas="reLoadLineas"></albalin-create>
+        <albalin-edit :albalin_id="albalin_id" :dialog_edt.sync="dialog_edt" :albalin="albalin" @reLoadLineas="reLoadLineas"></albalin-edit>
     </div>
 </template>
 <script>
 import MyDialog from '@/components/shared/MyDialog'
 import AlbalinCreate from './AlbalinCreate'
+import AlbalinEdit from './AlbalinEdit'
 export default {
     props:{
         albaran_id: Number,
@@ -73,14 +75,18 @@ export default {
     },
     components: {
         'my-dialog': MyDialog,
-        'albalin-create': AlbalinCreate
+        'albalin-create': AlbalinCreate,
+        'albalin-edit': AlbalinEdit
 	},
     data () {
         return {
             dialog: false,
             lineas: [],
             totales:"",
+            albalin: {},
+            albalin_id:0,
             dialog_lin: false,
+            dialog_edt: false,
            headers: [
           {
             text: 'Producto',
@@ -163,6 +169,15 @@ export default {
         },
         create(){
             this.dialog_lin = true;
+        },
+        editItem(id){
+            axios.get('/ventas/albalins/'+id+"/edit")
+                .then(res => {
+                this.albalin = res.data.albalin;
+            });
+
+            this.albalin_id = id;
+            this.dialog_edt = true;
         },
         openDialog (id){
             this.dialog = true;

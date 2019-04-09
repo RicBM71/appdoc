@@ -8316,6 +8316,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_shared_MyDialog__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/components/shared/MyDialog */ "./resources/js/components/shared/MyDialog.vue");
 /* harmony import */ var _AlbalinCreate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AlbalinCreate */ "./resources/js/components/albaranes/AlbalinCreate.vue");
+/* harmony import */ var _AlbalinEdit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AlbalinEdit */ "./resources/js/components/albaranes/AlbalinEdit.vue");
 //
 //
 //
@@ -8381,6 +8382,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -8390,14 +8393,18 @@ __webpack_require__.r(__webpack_exports__);
   },
   components: {
     'my-dialog': _components_shared_MyDialog__WEBPACK_IMPORTED_MODULE_0__["default"],
-    'albalin-create': _AlbalinCreate__WEBPACK_IMPORTED_MODULE_1__["default"]
+    'albalin-create': _AlbalinCreate__WEBPACK_IMPORTED_MODULE_1__["default"],
+    'albalin-edit': _AlbalinEdit__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
       dialog: false,
       lineas: [],
       totales: "",
+      albalin: {},
+      albalin_id: 0,
       dialog_lin: false,
+      dialog_edt: false,
       headers: [{
         text: 'Producto',
         align: 'left',
@@ -8468,25 +8475,34 @@ __webpack_require__.r(__webpack_exports__);
     create: function create() {
       this.dialog_lin = true;
     },
+    editItem: function editItem(id) {
+      var _this2 = this;
+
+      axios.get('/ventas/albalins/' + id + "/edit").then(function (res) {
+        _this2.albalin = res.data.albalin;
+      });
+      this.albalin_id = id;
+      this.dialog_edt = true;
+    },
     openDialog: function openDialog(id) {
       this.dialog = true;
       this.albalin_id = id;
     },
     destroyReg: function destroyReg() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.dialog = false;
       axios.post('/ventas/albalins/' + this.albalin_id, {
         _method: 'delete'
       }).then(function (res) {
-        _this2.lineas = res.data.lineas;
-        _this2.totales = res.data.totales;
+        _this3.lineas = res.data.lineas;
+        _this3.totales = res.data.totales;
       }).catch(function (err) {
-        _this2.status = true; // console.log(err.response.data.message);
+        _this3.status = true; // console.log(err.response.data.message);
 
         var msg = err.response.data.message;
 
-        _this2.$toast.error(msg);
+        _this3.$toast.error(msg);
       });
     }
   }
@@ -8701,11 +8717,256 @@ __webpack_require__.r(__webpack_exports__);
       this.loading = true;
       this.albalin.albacab_id = this.albaran_id;
       var url = "/ventas/albalins";
+      console.log(this.albalin);
       this.$validator.validateAll().then(function (result) {
         if (result) {
           axios.post(url, _this3.albalin).then(function (res) {
             _this3.$emit('update:dialog_lin', false); //this.$router.push({ name: 'albaran.edit', params: { id: this.albaran_id } })
 
+
+            _this3.loading = false;
+
+            _this3.$emit('reLoadLineas', res.data.lineas, res.data.totales);
+          }).catch(function (err) {
+            //console.log(err.response.data.errors);
+            if (err.request.status == 422) {
+              // fallo de validated.
+              var msg_valid = err.response.data.errors;
+
+              for (var prop in msg_valid) {
+                // this.$toast.error(`${msg_valid[prop]}`);
+                //console.log(prop);
+                _this3.errors.add({
+                  field: prop,
+                  msg: "".concat(msg_valid[prop])
+                });
+              }
+            } else {
+              _this3.$toast.error(err.response.data.message);
+            }
+
+            _this3.loading = false;
+          });
+        } else {
+          _this3.loading = false;
+        }
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    albalin_id: Number,
+    dialog_edt: Boolean,
+    albalin: Object
+  },
+  data: function data() {
+    return {
+      loading: false,
+      productos: [],
+      iva: [],
+      irpf: [] // albalin: {
+      //     id:"",
+      //     albacab_id:"",
+      //     producto_id: "",
+      //     nombre:"",
+      //     unidades:"",
+      //     impuni:0,
+      //     poriva:0,
+      //     porirpf:0,
+      //     dto:0,
+      //     importe:0,
+      //     username: "",
+      //     updated_at:"",
+      //     created_at:"",
+      // },
+
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get('/ventas/albalins/create').then(function (res) {
+      _this.productos = res.data.productos;
+      _this.iva = res.data.iva;
+      _this.irpf = res.data.irpf;
+    }).catch(function (err) {
+      _this.$toast.error(err.response.data.message);
+    });
+  },
+  computed: {
+    computedImporte: function computedImporte() {
+      if (this.albalin.unidades != "") {
+        this.albalin.importe = parseFloat(this.albalin.unidades) * parseFloat(this.albalin.impuni);
+        return this.albalin.importe;
+      }
+    }
+  },
+  methods: {
+    closeDialog: function closeDialog() {
+      this.$emit('update:dialog_edt', false);
+    },
+    selPro: function selPro(producto_id) {
+      var _this2 = this;
+
+      axios.get('/mto/productos/' + producto_id).then(function (response) {
+        _this2.albalin.poriva = response.data.producto.iva.importe;
+        _this2.albalin.porirpf = response.data.producto.retencion.importe;
+        _this2.albalin.impuni = response.data.producto.importe;
+
+        _this2.$refs.unidades.focus();
+      }).catch(function (err) {
+        console.log(err);
+      });
+    },
+    submit: function submit() {
+      var _this3 = this;
+
+      this.loading = true;
+      var url = "/ventas/albalins/" + this.albalin_id;
+      this.$validator.validateAll().then(function (result) {
+        if (result) {
+          axios.put(url, _this3.albalin).then(function (res) {
+            _this3.$emit('update:dialog_edt', false);
 
             _this3.loading = false;
 
@@ -9747,8 +10008,8 @@ __webpack_require__.r(__webpack_exports__);
       var total = 0;
       lineas.map(function (lin) {
         var imp = parseFloat(lin.importe);
-        var iva = parseFloat(lin.iva);
-        var irpf = parseFloat(lin.irpf);
+        var iva = parseFloat(lin.poriva);
+        var irpf = parseFloat(lin.porirpf);
         total += imp + imp * iva / 100 - imp * irpf / 100;
       });
       return total.toFixed(2);
@@ -12249,6 +12510,25 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 // module
 exports.push([module.i, "\n.inputPrice[data-v-13a68cfc] input {\n  text-align: center;\n  -moz-appearance:textfield;\n}\ninput[type=number][data-v-13a68cfc]::-webkit-inner-spin-button,\ninput[type=number][data-v-13a68cfc]::-webkit-outer-spin-button {\n    -webkit-appearance: none;\n    -moz-appearance: none;\n    appearance: none;\n    margin: 0;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=style&index=0&id=4cb5dd0a&scoped=true&lang=css&":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=style&index=0&id=4cb5dd0a&scoped=true&lang=css& ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.inputPrice[data-v-4cb5dd0a] input {\n  text-align: center;\n  -moz-appearance:textfield;\n}\ninput[type=number][data-v-4cb5dd0a]::-webkit-inner-spin-button,\ninput[type=number][data-v-4cb5dd0a]::-webkit-outer-spin-button {\n    -webkit-appearance: none;\n    -moz-appearance: none;\n    appearance: none;\n    margin: 0;\n}\n", ""]);
 
 // exports
 
@@ -31344,6 +31624,36 @@ if(false) {}
 
 
 var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./AlbalinCreate.vue?vue&type=style&index=0&id=13a68cfc&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbalinCreate.vue?vue&type=style&index=0&id=13a68cfc&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=style&index=0&id=4cb5dd0a&scoped=true&lang=css&":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=style&index=0&id=4cb5dd0a&scoped=true&lang=css& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./AlbalinEdit.vue?vue&type=style&index=0&id=4cb5dd0a&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=style&index=0&id=4cb5dd0a&scoped=true&lang=css&");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -52488,6 +52798,20 @@ var render = function() {
           },
           reLoadLineas: _vm.reLoadLineas
         }
+      }),
+      _vm._v(" "),
+      _c("albalin-edit", {
+        attrs: {
+          albalin_id: _vm.albalin_id,
+          dialog_edt: _vm.dialog_edt,
+          albalin: _vm.albalin
+        },
+        on: {
+          "update:dialog_edt": function($event) {
+            _vm.dialog_edt = $event
+          },
+          reLoadLineas: _vm.reLoadLineas
+        }
       })
     ],
     1
@@ -52880,7 +53204,7 @@ var render = function() {
                       attrs: { color: "blue darken-1", flat: "" },
                       on: { click: _vm.closeDialog }
                     },
-                    [_vm._v("Close")]
+                    [_vm._v("Cerrar")]
                   ),
                   _vm._v(" "),
                   _c(
@@ -52893,7 +53217,7 @@ var render = function() {
                       },
                       on: { click: _vm.submit }
                     },
-                    [_vm._v("Save")]
+                    [_vm._v("Guardar")]
                   )
                 ],
                 1
@@ -52907,6 +53231,433 @@ var render = function() {
     ],
     1
   )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=template&id=4cb5dd0a&scoped=true&":
+/*!************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=template&id=4cb5dd0a&scoped=true& ***!
+  \************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.albalin_id > 0
+    ? _c(
+        "v-layout",
+        { attrs: { row: "", "justify-center": "" } },
+        [
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", "max-width": "800px" },
+              model: {
+                value: _vm.dialog_edt,
+                callback: function($$v) {
+                  _vm.dialog_edt = $$v
+                },
+                expression: "dialog_edt"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", [
+                    _c("span", { staticClass: "headline" }, [
+                      _vm._v("Editar línea")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    [
+                      _c(
+                        "v-form",
+                        [
+                          _c(
+                            "v-container",
+                            { attrs: { "grid-list-md": "" } },
+                            [
+                              _c(
+                                "v-layout",
+                                { attrs: { wrap: "" } },
+                                [
+                                  _c(
+                                    "v-flex",
+                                    { attrs: { sm4: "" } },
+                                    [
+                                      _c("v-autocomplete", {
+                                        directives: [
+                                          {
+                                            name: "validate",
+                                            rawName: "v-validate",
+                                            value: "required",
+                                            expression: "'required'"
+                                          }
+                                        ],
+                                        attrs: {
+                                          "data-vv-name": "producto_id",
+                                          "data-vv-as": "Producto",
+                                          "error-messages": _vm.errors.collect(
+                                            "producto_id"
+                                          ),
+                                          items: _vm.productos,
+                                          flat: "",
+                                          label: "Producto",
+                                          required: ""
+                                        },
+                                        on: {
+                                          change: function($event) {
+                                            return _vm.selPro(
+                                              _vm.albalin.producto_id
+                                            )
+                                          }
+                                        },
+                                        model: {
+                                          value: _vm.albalin.producto_id,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.albalin,
+                                              "producto_id",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "albalin.producto_id"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-flex",
+                                    { attrs: { sm4: "" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          "error-messages": _vm.errors.collect(
+                                            "nombre"
+                                          ),
+                                          label: "Nombre",
+                                          "data-vv-name": "nombre",
+                                          "data-vv-as": "nombre",
+                                          required: ""
+                                        },
+                                        on: {
+                                          keyup: function($event) {
+                                            if (
+                                              !$event.type.indexOf("key") &&
+                                              _vm._k(
+                                                $event.keyCode,
+                                                "enter",
+                                                13,
+                                                $event.key,
+                                                "Enter"
+                                              )
+                                            ) {
+                                              return null
+                                            }
+                                            return _vm.submit($event)
+                                          }
+                                        },
+                                        model: {
+                                          value: _vm.albalin.nombre,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.albalin, "nombre", $$v)
+                                          },
+                                          expression: "albalin.nombre"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-flex",
+                                    { attrs: { sm2: "" } },
+                                    [
+                                      _c("v-text-field", {
+                                        directives: [
+                                          {
+                                            name: "validate",
+                                            rawName: "v-validate",
+                                            value: "required|decimal:2",
+                                            expression: "'required|decimal:2'"
+                                          }
+                                        ],
+                                        staticClass: "inputPrice",
+                                        attrs: {
+                                          "error-messages": _vm.errors.collect(
+                                            "porirpf"
+                                          ),
+                                          label: "IRPF ",
+                                          "data-vv-name": "porirpf",
+                                          "data-vv-as": "IRPF",
+                                          required: "",
+                                          type: "number",
+                                          readonly: ""
+                                        },
+                                        model: {
+                                          value: _vm.albalin.porirpf,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.albalin,
+                                              "porirpf",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "albalin.porirpf"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-flex",
+                                    { attrs: { sm2: "" } },
+                                    [
+                                      _c("v-text-field", {
+                                        directives: [
+                                          {
+                                            name: "validate",
+                                            rawName: "v-validate",
+                                            value: "required|decimal:2",
+                                            expression: "'required|decimal:2'"
+                                          }
+                                        ],
+                                        staticClass: "inputPrice",
+                                        attrs: {
+                                          "error-messages": _vm.errors.collect(
+                                            "poriva"
+                                          ),
+                                          label: "IVA",
+                                          "data-vv-name": "poriva",
+                                          "data-vv-as": "IVA",
+                                          required: "",
+                                          type: "number",
+                                          readonly: ""
+                                        },
+                                        model: {
+                                          value: _vm.albalin.poriva,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.albalin, "poriva", $$v)
+                                          },
+                                          expression: "albalin.poriva"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-layout",
+                                { attrs: { wrap: "" } },
+                                [
+                                  _c("v-flex", { attrs: { sm6: "" } }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-flex",
+                                    { attrs: { sm2: "" } },
+                                    [
+                                      _c("v-text-field", {
+                                        directives: [
+                                          {
+                                            name: "validate",
+                                            rawName: "v-validate",
+                                            value: "required|decimal:0",
+                                            expression: "'required|decimal:0'"
+                                          }
+                                        ],
+                                        ref: "unidades",
+                                        staticClass: "inputPrice",
+                                        attrs: {
+                                          "error-messages": _vm.errors.collect(
+                                            "unidades"
+                                          ),
+                                          label: "Unidades",
+                                          "data-vv-name": "unidades",
+                                          "data-vv-as": "unidades",
+                                          required: "",
+                                          type: "number"
+                                        },
+                                        on: {
+                                          keyup: function($event) {
+                                            if (
+                                              !$event.type.indexOf("key") &&
+                                              _vm._k(
+                                                $event.keyCode,
+                                                "enter",
+                                                13,
+                                                $event.key,
+                                                "Enter"
+                                              )
+                                            ) {
+                                              return null
+                                            }
+                                            return _vm.submit($event)
+                                          }
+                                        },
+                                        model: {
+                                          value: _vm.albalin.unidades,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.albalin,
+                                              "unidades",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "albalin.unidades"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-flex",
+                                    { attrs: { sm2: "" } },
+                                    [
+                                      _c("v-text-field", {
+                                        directives: [
+                                          {
+                                            name: "validate",
+                                            rawName: "v-validate",
+                                            value: "required|decimal:2",
+                                            expression: "'required|decimal:2'"
+                                          }
+                                        ],
+                                        staticClass: "inputPrice",
+                                        attrs: {
+                                          "error-messages": _vm.errors.collect(
+                                            "impuni"
+                                          ),
+                                          label: "Importe Ud.",
+                                          "data-vv-name": "impuni",
+                                          "data-vv-as": "Importe Ud.",
+                                          required: "",
+                                          type: "number"
+                                        },
+                                        on: {
+                                          keyup: function($event) {
+                                            if (
+                                              !$event.type.indexOf("key") &&
+                                              _vm._k(
+                                                $event.keyCode,
+                                                "enter",
+                                                13,
+                                                $event.key,
+                                                "Enter"
+                                              )
+                                            ) {
+                                              return null
+                                            }
+                                            return _vm.submit($event)
+                                          }
+                                        },
+                                        model: {
+                                          value: _vm.albalin.impuni,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.albalin, "impuni", $$v)
+                                          },
+                                          expression: "albalin.impuni"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-flex",
+                                    { attrs: { sm2: "" } },
+                                    [
+                                      _c("v-text-field", {
+                                        staticClass: "inputPrice",
+                                        attrs: {
+                                          label: "Importe",
+                                          required: "",
+                                          type: "number",
+                                          readonly: ""
+                                        },
+                                        model: {
+                                          value: _vm.computedImporte,
+                                          callback: function($$v) {
+                                            _vm.computedImporte = $$v
+                                          },
+                                          expression: "computedImporte"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "blue darken-1", flat: "" },
+                          on: { click: _vm.closeDialog }
+                        },
+                        [_vm._v("Cerrar")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: {
+                            color: "blue darken-1",
+                            flat: "",
+                            loading: _vm.loading
+                          },
+                          on: { click: _vm.submit }
+                        },
+                        [_vm._v("Guardar")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -54110,16 +54861,6 @@ var render = function() {
             "v-layout",
             { attrs: { row: "", wrap: "" } },
             [
-              _c("my-dialog", {
-                attrs: { dialog: _vm.dialog, registro: "registro" },
-                on: {
-                  "update:dialog": function($event) {
-                    _vm.dialog = $event
-                  },
-                  destroyReg: _vm.destroyReg
-                }
-              }),
-              _vm._v(" "),
               _c("v-flex", { attrs: { xs10: "" } }, [
                 _c("h2", [_vm._v(_vm._s(_vm.titulo))])
               ]),
@@ -103377,6 +104118,93 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbalinCreate_vue_vue_type_template_id_13a68cfc_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbalinCreate_vue_vue_type_template_id_13a68cfc_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/albaranes/AlbalinEdit.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/albaranes/AlbalinEdit.vue ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AlbalinEdit_vue_vue_type_template_id_4cb5dd0a_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AlbalinEdit.vue?vue&type=template&id=4cb5dd0a&scoped=true& */ "./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=template&id=4cb5dd0a&scoped=true&");
+/* harmony import */ var _AlbalinEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AlbalinEdit.vue?vue&type=script&lang=js& */ "./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _AlbalinEdit_vue_vue_type_style_index_0_id_4cb5dd0a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AlbalinEdit.vue?vue&type=style&index=0&id=4cb5dd0a&scoped=true&lang=css& */ "./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=style&index=0&id=4cb5dd0a&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _AlbalinEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AlbalinEdit_vue_vue_type_template_id_4cb5dd0a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AlbalinEdit_vue_vue_type_template_id_4cb5dd0a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "4cb5dd0a",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/albaranes/AlbalinEdit.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=script&lang=js&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbalinEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./AlbalinEdit.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbalinEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=style&index=0&id=4cb5dd0a&scoped=true&lang=css&":
+/*!********************************************************************************************************************!*\
+  !*** ./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=style&index=0&id=4cb5dd0a&scoped=true&lang=css& ***!
+  \********************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbalinEdit_vue_vue_type_style_index_0_id_4cb5dd0a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./AlbalinEdit.vue?vue&type=style&index=0&id=4cb5dd0a&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=style&index=0&id=4cb5dd0a&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbalinEdit_vue_vue_type_style_index_0_id_4cb5dd0a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbalinEdit_vue_vue_type_style_index_0_id_4cb5dd0a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbalinEdit_vue_vue_type_style_index_0_id_4cb5dd0a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbalinEdit_vue_vue_type_style_index_0_id_4cb5dd0a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbalinEdit_vue_vue_type_style_index_0_id_4cb5dd0a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=template&id=4cb5dd0a&scoped=true&":
+/*!******************************************************************************************************!*\
+  !*** ./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=template&id=4cb5dd0a&scoped=true& ***!
+  \******************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbalinEdit_vue_vue_type_template_id_4cb5dd0a_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./AlbalinEdit.vue?vue&type=template&id=4cb5dd0a&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/albaranes/AlbalinEdit.vue?vue&type=template&id=4cb5dd0a&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbalinEdit_vue_vue_type_template_id_4cb5dd0a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AlbalinEdit_vue_vue_type_template_id_4cb5dd0a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

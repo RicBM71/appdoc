@@ -398,9 +398,7 @@ import {mapGetters} from 'vuex';
                 this.y = e.clientY
 
                 this.$nextTick(() => {
-                    console.log("pasa");
                     this.showMenuCli = true
-                    //this.$emit('showMenuCli', true);
                 })
             },
             submit() {

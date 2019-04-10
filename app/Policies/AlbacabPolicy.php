@@ -6,7 +6,7 @@ use App\User;
 use App\Albacab;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class AlbaranesPolicy
+class AlbacabPolicy
 {
     use HandlesAuthorization;
 

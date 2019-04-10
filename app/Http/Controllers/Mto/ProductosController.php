@@ -34,6 +34,8 @@ class ProductosController extends Controller
      */
     public function create()
     {
+        $this->authorize('update', new Producto);
+
         if (request()->wantsJson())
             return [
                 'ivas'=> Iva::selIvas(),
@@ -49,6 +51,8 @@ class ProductosController extends Controller
      */
     public function store(StoreProductos $request)
     {
+        $this->authorize('update', new Producto);
+        
         $data = $request->validated();
 
       // \Log::info('enviando mensaje...'.session()->get('empresa'));
@@ -87,7 +91,7 @@ class ProductosController extends Controller
      */
     public function edit(Producto $producto)
     {
-        //$this->authorize('update', $producto);
+        $this->authorize('update', $producto);
 
         if (request()->wantsJson())
             return [

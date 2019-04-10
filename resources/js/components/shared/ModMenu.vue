@@ -31,6 +31,14 @@
             irRuta(name){
                 this.$router.push({ name: name})
             }
+        },
+        computed:{
+
+            showMenuCli: {
+                get() { return this.$store.getters.getshowMenuCli; },
+                set(newValue) { this.$store.dispatch('setshowMenuCli', newValue); }
+            }
+                //this.$emit('showMenuCli', this.showMenuCli);
         }
     }
 </script>

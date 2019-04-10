@@ -1,7 +1,7 @@
 <template>
 	<div v-show="show">
         <loading :show_loading="show_loading"></loading>
-        <mod-menu :showMenuCli="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
+        <mod-menu :showMenuCli.sync="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
 
         <v-card>
             <v-card-title>
@@ -392,12 +392,15 @@ import {mapGetters} from 'vuex';
 
                 e.preventDefault()
 
+
                 this.showMenuCli = false
                 this.x = e.clientX
                 this.y = e.clientY
 
                 this.$nextTick(() => {
+                    console.log("pasa");
                     this.showMenuCli = true
+                    //this.$emit('showMenuCli', true);
                 })
             },
             submit() {

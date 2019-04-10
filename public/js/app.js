@@ -9821,7 +9821,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.x = e.clientX;
       this.y = e.clientY;
       this.$nextTick(function () {
-        _this2.showMenuCli = true;
+        console.log("pasa");
+        _this2.showMenuCli = true; //this.$emit('showMenuCli', true);
       });
     },
     submit: function submit() {
@@ -12417,6 +12418,17 @@ __webpack_require__.r(__webpack_exports__);
         name: name
       });
     }
+  },
+  computed: {
+    showMenuCli: {
+      get: function get() {
+        return this.$store.getters.getshowMenuCli;
+      },
+      set: function set(newValue) {
+        this.$store.dispatch('setshowMenuCli', newValue);
+      }
+    } //this.$emit('showMenuCli', this.showMenuCli);
+
   }
 });
 
@@ -54485,6 +54497,14 @@ var render = function() {
           x: _vm.x,
           y: _vm.y,
           items: _vm.items
+        },
+        on: {
+          "update:showMenuCli": function($event) {
+            _vm.showMenuCli = $event
+          },
+          "update:show-menu-cli": function($event) {
+            _vm.showMenuCli = $event
+          }
         }
       }),
       _vm._v(" "),

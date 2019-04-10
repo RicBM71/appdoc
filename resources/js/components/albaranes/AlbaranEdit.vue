@@ -1,7 +1,7 @@
 <template>
 	<div v-show="show">
         <loading :show_loading="show_loading"></loading>
-        <mod-menu :showMenuCli.sync="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
+        <mod-menu :showMenuCli="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
 
         <v-card>
             <v-card-title>
@@ -391,7 +391,6 @@ import {mapGetters} from 'vuex';
             showMenu (e) {
 
                 e.preventDefault()
-
 
                 this.showMenuCli = false
                 this.x = e.clientX

@@ -54485,14 +54485,6 @@ var render = function() {
           x: _vm.x,
           y: _vm.y,
           items: _vm.items
-        },
-        on: {
-          "update:showMenuCli": function($event) {
-            _vm.showMenuCli = $event
-          },
-          "update:show-menu-cli": function($event) {
-            _vm.showMenuCli = $event
-          }
         }
       }),
       _vm._v(" "),

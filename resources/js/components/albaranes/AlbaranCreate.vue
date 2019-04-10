@@ -1,193 +1,201 @@
 <template>
 	<div v-show="show">
         <mod-menu :showMenuCli="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
-        <h2>{{titulo}}</h2>
-        <v-form>
-            <v-container @contextmenu="showMenu">
-                <v-btn
-                    @click="showMenu"
-                    fixed
-                    dark
-                    fab
-                    bottom
-                    right
-                    color="teal accent-4"
-                    >
-                    <v-icon>add</v-icon>
-                </v-btn>
-                <v-layout row wrap>
-                    <v-flex sm1>
-                        <v-text-field
-                            v-model="albaran.serie"
-                            :error-messages="errors.collect('serie')"
-                            label="Serie"
-                            data-vv-name="serie"
-                            data-vv-as="serie"
-                            required
-                            readonly
+        <v-card>
+            <v-card-title>
+                <div>
+                    <h2>{{titulo}}</h2>
+                </div>
+            </v-card-title>
+        </v-card>
+        <v-card>
+            <v-form>
+                <v-container>
+                    <v-btn
+                        @click="showMenu"
+                        fixed
+                        dark
+                        fab
+                        bottom
+                        right
+                        color="teal accent-4"
                         >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="albaran.albaran"
-                            :error-messages="errors.collect('albaran')"
-                            label="Albarán"
-                            data-vv-name="albaran"
-                            data-vv-as="albarán"
-                            required
-                            readonly
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-menu
-                                v-model="menu2"
-                                :close-on-content-click="false"
-                                :nudge-right="40"
-                                lazy
-                                transition="scale-transition"
-                                offset-y
-                                full-width
-                                min-width="290px"
+                        <v-icon>add</v-icon>
+                    </v-btn>
+                    <v-layout row wrap>
+                        <v-flex sm1>
+                            <v-text-field
+                                v-model="albaran.serie"
+                                :error-messages="errors.collect('serie')"
+                                label="Serie"
+                                data-vv-name="serie"
+                                data-vv-as="serie"
+                                required
+                                readonly
                             >
-
-                                <v-text-field
-                                    slot="activator"
-                                    :value="computedFechaAlb"
-                                    label="Fecha Albarán"
-                                    append-icon="event"
-                                    readonly
-                                    data-vv-as="Fecha Albarán"
-                                    ></v-text-field>
-                                <v-date-picker
-                                    v-model="albaran.fecha_alb"
-                                    no-title
-                                    locale="es"
-                                    first-day-of-week=1
-                                    @input="menu2 = false"
-
-                                ></v-date-picker>
-                            </v-menu>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="albaran.factura"
-                            :error-messages="errors.collect('factura')"
-                            label="Factura"
-                            data-vv-name="factura"
-                            data-vv-as="factura"
-                            readonly
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="computedFechaFac"
-                            :error-messages="errors.collect('fecha_fac')"
-                            label="F. Factura"
-                            data-vv-name="fecha_fac"
-                            data-vv-as="F. factura"
-                            readonly
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-switch
-                            v-model="albaran.notificado"
-                            data-vv-name="notificado"
-                            data-vv-as="Notificado"
-                            label="Notificado"
-                            color="primary"
-                        ></v-switch>
-                    </v-flex>
-                </v-layout>
-                <v-layout row wrap>
-                    <v-flex sm4>
-                        <v-autocomplete
-                            v-model="albaran.cliente_id"
-                            v-validate="'required'"
-                            data-vv-name="cliente_id"
-                            data-vv-as="Cliente"
-                            item-text="name"
-                            item-value="id"
-                            :error-messages="errors.collect('cliente_id')"
-                            :loading="loading"
-                            :items="clientes"
-                            :search-input.sync="search"
-                            flat
-                            label="Cliente"
-                            required
-                            ></v-autocomplete>
-                    </v-flex>
-                    <v-flex sm3 d-flex>
-                        <v-select
-                            v-model="albaran.fpago_id"
-                            :error-messages="errors.collect('fpago_id')"
-                            v-validate="'required'"
-                            data-vv-name="fpago_id"
-                            data-vv-as="Forma de pago"
-                            :items="fpagos"
-                            label="Forma de Pago"
-                            required
-                        ></v-select>
-                    </v-flex>
-                    <v-flex sm3 d-flex>
-                        <v-select
-                            v-model="albaran.vencimiento_id"
-                            :error-messages="errors.collect('vencimiento_id')"
-                            v-validate="'required'"
-                            data-vv-name="vencimiento_id"
-                            data-vv-as="Vencimiento"
-                            :items="vencimientos"
-                            label="Vencimiento"
-                        ></v-select>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="albaran.username"
-                            label="Usuario"
-                            readonly
-                            v-on:keyup.enter="submit"
-                        >
-                        </v-text-field>
-                    </v-flex>
-                </v-layout>
-                <v-layout row wrap>
-                    <v-flex sm6 d-flex>
-                        <v-text-field
-                                v-model="albaran.notas"
-                                label="Observaciones"
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="albaran.albaran"
+                                :error-messages="errors.collect('albaran')"
+                                label="Albarán"
+                                data-vv-name="albaran"
+                                data-vv-as="albarán"
+                                required
+                                readonly
                             >
-                        </v-text-field>
-                    </v-flex>
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-menu
+                                    v-model="menu2"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                >
 
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="computedFModFormat"
-                            label="Modificado"
-                            readonly
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="computedFCreFormat"
-                            label="Creado"
-                            readonly
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <div class="text-xs-center">
-                                    <v-btn @click="submit"  :loading="enviando" block  color="primary">
-                            Guardar
-                            </v-btn>
-                        </div>
-                    </v-flex>
-                </v-layout>
-            </v-container>
-        </v-form>
+                                    <v-text-field
+                                        slot="activator"
+                                        :value="computedFechaAlb"
+                                        label="Fecha Albarán"
+                                        append-icon="event"
+                                        readonly
+                                        data-vv-as="Fecha Albarán"
+                                        ></v-text-field>
+                                    <v-date-picker
+                                        v-model="albaran.fecha_alb"
+                                        no-title
+                                        locale="es"
+                                        first-day-of-week=1
+                                        @input="menu2 = false"
+
+                                    ></v-date-picker>
+                                </v-menu>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="albaran.factura"
+                                :error-messages="errors.collect('factura')"
+                                label="Factura"
+                                data-vv-name="factura"
+                                data-vv-as="factura"
+                                readonly
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="computedFechaFac"
+                                :error-messages="errors.collect('fecha_fac')"
+                                label="F. Factura"
+                                data-vv-name="fecha_fac"
+                                data-vv-as="F. factura"
+                                readonly
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-switch
+                                v-model="albaran.notificado"
+                                data-vv-name="notificado"
+                                data-vv-as="Notificado"
+                                label="Notificado"
+                                color="primary"
+                            ></v-switch>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row wrap>
+                        <v-flex sm4>
+                            <v-autocomplete
+                                v-model="albaran.cliente_id"
+                                v-validate="'required'"
+                                data-vv-name="cliente_id"
+                                data-vv-as="Cliente"
+                                item-text="name"
+                                item-value="id"
+                                :error-messages="errors.collect('cliente_id')"
+                                :loading="loading"
+                                :items="clientes"
+                                :search-input.sync="search"
+                                flat
+                                label="Cliente"
+                                required
+                                ></v-autocomplete>
+                        </v-flex>
+                        <v-flex sm3 d-flex>
+                            <v-select
+                                v-model="albaran.fpago_id"
+                                :error-messages="errors.collect('fpago_id')"
+                                v-validate="'required'"
+                                data-vv-name="fpago_id"
+                                data-vv-as="Forma de pago"
+                                :items="fpagos"
+                                label="Forma de Pago"
+                                required
+                            ></v-select>
+                        </v-flex>
+                        <v-flex sm3 d-flex>
+                            <v-select
+                                v-model="albaran.vencimiento_id"
+                                :error-messages="errors.collect('vencimiento_id')"
+                                v-validate="'required'"
+                                data-vv-name="vencimiento_id"
+                                data-vv-as="Vencimiento"
+                                :items="vencimientos"
+                                label="Vencimiento"
+                            ></v-select>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="albaran.username"
+                                label="Usuario"
+                                readonly
+                                v-on:keyup.enter="submit"
+                            >
+                            </v-text-field>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row wrap>
+                        <v-flex sm6 d-flex>
+                            <v-text-field
+                                    v-model="albaran.notas"
+                                    label="Observaciones"
+                                >
+                            </v-text-field>
+                        </v-flex>
+
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="computedFModFormat"
+                                label="Modificado"
+                                readonly
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="computedFCreFormat"
+                                label="Creado"
+                                readonly
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <div class="text-xs-center">
+                                        <v-btn @click="submit"  :loading="enviando" block  color="primary">
+                                Guardar
+                                </v-btn>
+                            </div>
+                        </v-flex>
+                    </v-layout>
+                </v-container>
+            </v-form>
+        </v-card>
 	</div>
 </template>
 <script>
@@ -260,8 +268,6 @@ import ModMenu from '@/components/shared/ModMenu'
         mounted(){
             axios.get('/ventas/albacabs/create')
                 .then(res => {
-                    console.log(res);
-
                     this.clientes = res.data.clientes;
                     this.fpagos = res.data.fpagos;
                     this.vencimientos = res.data.vencimientos;

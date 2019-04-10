@@ -13,7 +13,7 @@ class AlbaranesPolicy
     public function before($authUser)
     {
             // con esto ya no pasa por ningún otro método, lo dejo por si lo necesito para más adelante.
-        if($authUser->hasRole('Root')){
+        if($authUser->hasRole('Admin')){
             return true;
         }
     }
@@ -27,7 +27,7 @@ class AlbaranesPolicy
      */
     public function create(User $authUser)
     {
-        return $authUser->hasRole('Facturación') ?: $this->deny("Acceso denegado. Role de facturación requerido");
+        return $authUser->hasRole('Usuario') ?: $this->deny("Acceso denegado. Role de Usuario requerido");
     }
 
     /**
@@ -42,12 +42,12 @@ class AlbaranesPolicy
 
         if ($authUser->hasRole('Admin') && $albacab->ejefac == 0)
             return true;
-        else if ($authUser->hasRole('Facturación') &&
+        else if ($authUser->hasRole('Usuario') &&
                 $albacab->username === $authUser->username &&
                 $albacab->ejefact > 0 &&
                 $albacab->fecha_fac == date('Y-m-d'))
                 return true;
-        else if ($authUser->hasRole('Facturación') &&
+        else if ($authUser->hasRole('Usuario') &&
                 $albacab->ejefact == 0 )
                 return true;
        else
@@ -73,7 +73,7 @@ class AlbaranesPolicy
 
         if ($authUser->hasRole('Admin') && is_null($albacab->ejefac))
             return true;
-        else if ($authUser->hasRole('Facturación') &&
+        else if ($authUser->hasRole('Usuario') &&
                 $albacab->username === $authUser->username &&
                 $albacab->ejefact == 0 &&
                 $albacab->fecha_alb == date('Y-m-d'))

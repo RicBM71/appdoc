@@ -1,182 +1,201 @@
 <template>
 	<div>
-
         <mod-menu :showMenuCli="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
         <my-dialog :dialog.sync="dialog" registro="avatar" @destroyReg="destroyReg"></my-dialog>
+        <v-card>
+            <v-card-title color="indigo">
+                <h2 color="indigo">{{titulo}}</h2>
+            </v-card-title>
+        </v-card>
+        <v-card>
+            <v-btn
+                @click="showMenu"
+                fixed
+                dark
+                fab
+                bottom
+                right
+                color="teal accent-4"
+                >
+                <v-icon>add</v-icon>
+            </v-btn>
 
-        <v-flex sm10>
-            <h2>Usuarios</h2>
-        </v-flex>
-        <v-form>
-            <v-container @contextmenu="showMenu">
-                <v-btn
-                    @click="showMenu"
-                    fixed
-                    dark
-                    fab
-                    bottom
-                    right
-                    color="teal accent-4"
-                    >
-                    <v-icon>add</v-icon>
-                </v-btn>
+            <v-tabs fixed-tabs>
+                <v-tab>
+                        Datos generales
+                </v-tab>
+                <v-tab>
+                        Roles y Permisos
+                </v-tab>
+                <v-tab-item>
 
-                <v-layout row wrap>
-                    <v-flex sm3>
-                        <v-text-field
-                            v-model="user.name"
-                            v-validate="'required'"
-                            :error-messages="errors.collect('name')"
-                            label="Nombre"
-                            data-vv-name="name"
-                            data-vv-as="nombre"
-                            required
-                        >
-                        </v-text-field>
-                        <v-text-field
-                            v-model="user.username"
-                            v-validate="'required|min:6'"
-                            :counter="20"
-                            :error-messages="errors.collect('username')"
-                            label="Usuario"
-                            data-vv-name="username"
-                            data-vv-as="usuario"
-                            required
-                        >
-                        </v-text-field>
-                        <v-text-field
-                            v-model="user.email"
-                            v-validate="'required|email'"
-                            :error-messages="errors.collect('email')"
-                            label="email"
-                            data-vv-name="email"
-                            required
-                        >
-                        </v-text-field>
-                        <v-text-field
-                            v-model="user.password"
-                            ref="password"
-                            :append-icon="show ? 'visibility_off' : 'visibility'"
-                            :type="show ? 'text' : 'password'"
-                            :error-messages="errors.collect('password')"
-                            v-validate="'min:6'"
-                            label="password"
-                            hint="Indicar password solo si va a modificarla"
-                            data-vv-name="password"
-                            @click:append="show = !show"
-                            >
-                        </v-text-field>
-                        <v-text-field
-                            v-model="user.password_confirmation"
-                            v-validate="'min:6|confirmed:password'"
-                            :append-icon="show ? 'visibility_off' : 'visibility'"
-                            :type="show ? 'text' : 'password'"
-                            :error-messages="errors.collect('password_confirmation')"
-                            label="confirmar password"
-                            hint="Confirmar password solo si va a modificarla"
-                            data-vv-name="password_confirmation"
-                            data-vv-as="password"
-                            @click:append="show = !show"
-                            >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm3>
-                        <v-text-field
-                            v-model="user.lastname"
-                            :error-messages="errors.collect('lastname')"
-                            label="Apellidos"
-                            data-vv-name="lastname"
-                            data-vv-as="apellidos"
-                        >
-                        </v-text-field>
-                        <v-switch
-                            v-model="user.blocked"
-                            :disabled="computedId"
-                            color="primary"
-                            label="Bloqueado"
-                        ></v-switch>
-                        <v-menu v-if="user.blocked"
-                            v-model="menu2"
-                            :close-on-content-click="false"
-                            :nudge-right="40"
-                            lazy
-                            transition="scale-transition"
-                            offset-y
-                            full-width
-                            min-width="290px"
-                        >
+                    <v-form>
+                        <v-container>
+                            <v-layout row wrap>
+                                <v-flex sm4>
+                                    <v-text-field
+                                        v-model="user.name"
+                                        v-validate="'required'"
+                                        :error-messages="errors.collect('name')"
+                                        label="Nombre"
+                                        data-vv-name="name"
+                                        data-vv-as="nombre"
+                                        required
+                                    >
+                                    </v-text-field>
+                                    <v-text-field
+                                        v-model="user.username"
+                                        v-validate="'required|min:6'"
+                                        :counter="20"
+                                        :error-messages="errors.collect('username')"
+                                        label="Usuario"
+                                        data-vv-name="username"
+                                        data-vv-as="usuario"
+                                        required
+                                    >
+                                    </v-text-field>
+                                    <v-text-field
+                                        v-model="user.email"
+                                        v-validate="'required|email'"
+                                        :error-messages="errors.collect('email')"
+                                        label="email"
+                                        data-vv-name="email"
+                                        required
+                                    >
+                                    </v-text-field>
+                                    <v-text-field
+                                        v-model="user.password"
+                                        ref="password"
+                                        :append-icon="show ? 'visibility_off' : 'visibility'"
+                                        :type="show ? 'text' : 'password'"
+                                        :error-messages="errors.collect('password')"
+                                        v-validate="'min:6'"
+                                        label="password"
+                                        hint="Indicar password solo si va a modificarla"
+                                        data-vv-name="password"
+                                        @click:append="show = !show"
+                                        >
+                                    </v-text-field>
+                                    <v-text-field
+                                        v-model="user.password_confirmation"
+                                        v-validate="'min:6|confirmed:password'"
+                                        :append-icon="show ? 'visibility_off' : 'visibility'"
+                                        :type="show ? 'text' : 'password'"
+                                        :error-messages="errors.collect('password_confirmation')"
+                                        label="confirmar password"
+                                        hint="Confirmar password solo si va a modificarla"
+                                        data-vv-name="password_confirmation"
+                                        data-vv-as="password"
+                                        @click:append="show = !show"
+                                        >
+                                    </v-text-field>
+                                </v-flex>
+                                <v-flex sm4>
+                                    <v-text-field
+                                        v-model="user.lastname"
+                                        :error-messages="errors.collect('lastname')"
+                                        label="Apellidos"
+                                        data-vv-name="lastname"
+                                        data-vv-as="apellidos"
+                                    >
+                                    </v-text-field>
+                                    <v-switch
+                                        v-model="user.blocked"
+                                        :disabled="computedId"
+                                        color="primary"
+                                        label="Bloqueado"
+                                    ></v-switch>
+                                    <v-menu v-if="user.blocked"
+                                        v-model="menu2"
+                                        :close-on-content-click="false"
+                                        :nudge-right="40"
+                                        lazy
+                                        transition="scale-transition"
+                                        offset-y
+                                        full-width
+                                        min-width="290px"
+                                    >
 
-                            <v-text-field
-                                slot="activator"
-                                :value="computedDateFormat"
-                                clearable
-                                label="Fecha Bloqueo"
-                                prepend-icon="event"
-                                readonly
-                                data-vv-as="F. bloqueo"
-                                @click:clear="clearDate"
-                                ></v-text-field>
-                            <v-date-picker
-                                v-model="user.blocked_at"
-                                no-title
-                                locale="es"
-                                first-day-of-week=1
-                                @input="menu2 = false"
+                                        <v-text-field
+                                            slot="activator"
+                                            :value="computedDateFormat"
+                                            clearable
+                                            label="Fecha Bloqueo"
+                                            prepend-icon="event"
+                                            readonly
+                                            data-vv-as="F. bloqueo"
+                                            @click:clear="clearDate"
+                                            ></v-text-field>
+                                        <v-date-picker
+                                            v-model="user.blocked_at"
+                                            no-title
+                                            locale="es"
+                                            first-day-of-week=1
+                                            @input="menu2 = false"
 
-                            ></v-date-picker>
-                        </v-menu>
-                        <v-text-field
-                            v-model="computedFModFormat"
-                            label="Modificado"
-                            readonly
-                        >
-                        </v-text-field>
-                        <v-text-field
-                            v-model="computedFCreFormat"
-                            label="Creado"
-                            readonly
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm6>
-                        <div v-if="showPer">
-                            <user-emp :user_id="this.user.id" :emp_user="this.emp_user"></user-emp>
-                            <user-role :user_id="this.user.id" :role_user="this.role_user"></user-role>
-                            <user-permiso :user_id="this.user.id" :permisos="this.permisos" :permisos_selected="permisos_selected"></user-permiso>
-                        </div>
-                    </v-flex>
-                    <v-flex sm6>
-                        <div class="text-xs-center">
-                            <v-btn @click="submit"  :loading="enviando" block  color="primary">
-                                Guardar Usuario
-                            </v-btn>
-                        </div>
-                    </v-flex>
-                </v-layout>
-                <v-layout>
-                    <v-flex sm4></v-flex>
-                    <v-flex sm4 v-if="showPer">
-                        <div v-if="user.avatar == '#'">
-                            <vue-dropzone
-                                ref="myVueDropzone"
-                                id="dropzone"
-                                :options="dropzoneOptions"
-                                v-on:vdropzone-success="upload"
-                            ></vue-dropzone>
-                        </div>
-                        <div v-else>
-                            <v-avatar>
-                                <img class="img-fluid" :src="user.avatar" alt="avatar">
-                            </v-avatar>
-                            <v-btn @click="openDialog" flat icon color="red darken-4">
-                                <v-icon>delete</v-icon>
-                            </v-btn>
-                        </div>
-                    </v-flex>
-                </v-layout>
-            </v-container>
-        </v-form>
+                                        ></v-date-picker>
+                                    </v-menu>
+                                    <v-text-field
+                                        v-model="computedFModFormat"
+                                        label="Modificado"
+                                        readonly
+                                    >
+                                    </v-text-field>
+                                    <v-text-field
+                                        v-model="computedFCreFormat"
+                                        label="Creado"
+                                        readonly
+                                    >
+                                    </v-text-field>
+                                </v-flex>
+                                <v-flex sm1></v-flex>
+                                <v-flex sm2 v-if="showPer">
+                                    <div v-if="user.avatar == '#'">
+                                        <vue-dropzone
+                                            ref="myVueDropzone"
+                                            id="dropzone"
+                                            :options="dropzoneOptions"
+                                            v-on:vdropzone-success="upload"
+                                        ></vue-dropzone>
+                                    </div>
+                                    <div v-else>
+                                        <v-avatar>
+                                            <img class="img-fluid" :src="user.avatar" alt="avatar">
+                                        </v-avatar>
+                                        <v-btn @click="openDialog" flat icon color="red darken-4">
+                                            <v-icon>delete</v-icon>
+                                        </v-btn>
+                                    </div>
+                                </v-flex>
 
+                            </v-layout>
+                            <v-layout>
+                                <v-flex sm4></v-flex>
+                                <v-flex sm4>
+                                    <div class="text-xs-center">
+                                        <v-btn @click="submit"  :loading="enviando" block  color="primary">
+                                            Guardar Usuario
+                                        </v-btn>
+                                    </div>
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
+                    </v-form>
+
+                </v-tab-item>
+                <v-tab-item>
+                    <v-container>
+                        <v-flex sm12>
+                                    <div v-if="showPer">
+                                        <user-emp :user_id="this.user.id" :emp_user="this.emp_user"></user-emp>
+                                        <user-role :user_id="this.user.id" :role_user="this.role_user"></user-role>
+                                        <user-permiso :user_id="this.user.id" :permisos="this.permisos" :permisos_selected="permisos_selected"></user-permiso>
+                                    </div>
+                        </v-flex>
+                    </v-container>
+                </v-tab-item>
+            </v-tabs>
+            </v-card>
 	</div>
 </template>
 <script>

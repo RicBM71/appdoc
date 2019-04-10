@@ -197,7 +197,7 @@
             this.albalin.albacab_id = this.albaran_id;
 
             var url = "/ventas/albalins";
-            console.log(this.albalin);
+            
             this.$validator.validateAll().then((result) => {
                 if (result){
 

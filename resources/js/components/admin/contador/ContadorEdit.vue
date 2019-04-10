@@ -1,156 +1,161 @@
 <template>
 	<div v-show="show">
         <mod-menu :showMenuCli="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
-        <h2>{{titulo}}</h2>
-        <v-form>
-            <v-container @contextmenu="showMenu">
-                <v-btn
-                    @click="showMenu"
-                    fixed
-                    dark
-                    fab
-                    bottom
-                    right
-                    color="teal accent-4"
-                    >
-                    <v-icon>add</v-icon>
-                </v-btn>
-                <v-layout row wrap>
-                    <v-flex sm3>
-                        <v-text-field
-                            v-model="contador.ejercicio"
-                            v-validate="'required|integer|max_value:2050'"
-                            :error-messages="errors.collect('ejercicio')"
-                            label="Ejercicio"
-                            data-vv-name="ejercicio"
-                            data-vv-as="ejercicio"
-                            required
-                            v-on:keyup.enter="submit"
+        <v-card>
+            <v-card-title>
+                <h2>{{titulo}}</h2>
+            </v-card-title>
+        </v-card>
+        <v-card>
+            <v-form>
+                <v-container>
+                    <v-btn
+                        @click="showMenu"
+                        fixed
+                        dark
+                        fab
+                        bottom
+                        right
+                        color="teal accent-4"
                         >
-                        </v-text-field>
-                    </v-flex>
-                </v-layout>
-                <v-layout row wrap>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="contador.seriealb"
-                            v-validate="'required|max:3'"
-                            :error-messages="errors.collect('seriealb')"
-                            label="Serie Albarán"
-                            data-vv-name="seriealb"
-                            data-vv-as="Serie"
-                            required
-                            v-on:keyup.enter="submit"                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="contador.albaran"
-                            v-validate="'required|numeric'"
-                            :error-messages="errors.collect('albaran')"
-                            label="Albarán"
-                            data-vv-name="albaran"
-                            data-vv-as="albarán"
-                            required
-                            type="number"
-                            v-on:keyup.enter="submit"
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="contador.seriefac"
-                            v-validate="'required|max:3'"
-                            :error-messages="errors.collect('seriefac')"
-                            label="Serie Factura"
-                            data-vv-name="seriefac"
-                            data-vv-as="Serie"
-                            required
-                            v-on:keyup.enter="submit"                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="contador.factura"
-                            v-validate="'required|numeric'"
-                            :error-messages="errors.collect('factura')"
-                            label="Factura"
-                            data-vv-name="factura"
-                            data-vv-as="factura"
-                            required
-                            type="number"
-                            v-on:keyup.enter="submit"
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="contador.serieabo"
-                            v-validate="'required|max:3'"
-                            :error-messages="errors.collect('serieabo')"
-                            label="Serie Abonos"
-                            data-vv-name="serieabo"
-                            data-vv-as="Serie"
-                            required
-                            v-on:keyup.enter="submit"                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="contador.abono"
-                            v-validate="'required|numeric'"
-                            :error-messages="errors.collect('abono')"
-                            label="Abono"
-                            data-vv-name="abono"
-                            data-vv-as="abono"
-                            required
-                            type="number"
-                            v-on:keyup.enter="submit"
-                        >
-                        </v-text-field>
-                    </v-flex>
-                </v-layout>
-                <v-layout row wrap>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="contador.username"
-                            :error-messages="errors.collect('username')"
-                            label="Usuario"
-                            data-vv-name="username"
-                            readonly
-                            v-on:keyup.enter="submit"
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="computedFModFormat"
-                            label="Modificado"
-                            readonly
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="computedFCreFormat"
-                            label="Creado"
-                            readonly
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm3>
-                    </v-flex>
-                    <v-flex sm2>
-                        <div class="text-xs-center">
-                                    <v-btn @click="submit"  :loading="enviando" block  color="primary">
-                            Guardar
-                            </v-btn>
-                        </div>
-                    </v-flex>
-                </v-layout>
-            </v-container>
-        </v-form>
-
+                        <v-icon>add</v-icon>
+                    </v-btn>
+                    <v-layout row wrap>
+                        <v-flex sm3>
+                            <v-text-field
+                                v-model="contador.ejercicio"
+                                v-validate="'required|integer|max_value:2050'"
+                                :error-messages="errors.collect('ejercicio')"
+                                label="Ejercicio"
+                                data-vv-name="ejercicio"
+                                data-vv-as="ejercicio"
+                                required
+                                v-on:keyup.enter="submit"
+                            >
+                            </v-text-field>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row wrap>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="contador.seriealb"
+                                v-validate="'required|max:3'"
+                                :error-messages="errors.collect('seriealb')"
+                                label="Serie Albarán"
+                                data-vv-name="seriealb"
+                                data-vv-as="Serie"
+                                required
+                                v-on:keyup.enter="submit"                        >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="contador.albaran"
+                                v-validate="'required|numeric'"
+                                :error-messages="errors.collect('albaran')"
+                                label="Albarán"
+                                data-vv-name="albaran"
+                                data-vv-as="albarán"
+                                required
+                                type="number"
+                                v-on:keyup.enter="submit"
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="contador.seriefac"
+                                v-validate="'required|max:3'"
+                                :error-messages="errors.collect('seriefac')"
+                                label="Serie Factura"
+                                data-vv-name="seriefac"
+                                data-vv-as="Serie"
+                                required
+                                v-on:keyup.enter="submit"                        >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="contador.factura"
+                                v-validate="'required|numeric'"
+                                :error-messages="errors.collect('factura')"
+                                label="Factura"
+                                data-vv-name="factura"
+                                data-vv-as="factura"
+                                required
+                                type="number"
+                                v-on:keyup.enter="submit"
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="contador.serieabo"
+                                v-validate="'required|max:3'"
+                                :error-messages="errors.collect('serieabo')"
+                                label="Serie Abonos"
+                                data-vv-name="serieabo"
+                                data-vv-as="Serie"
+                                required
+                                v-on:keyup.enter="submit"                        >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="contador.abono"
+                                v-validate="'required|numeric'"
+                                :error-messages="errors.collect('abono')"
+                                label="Abono"
+                                data-vv-name="abono"
+                                data-vv-as="abono"
+                                required
+                                type="number"
+                                v-on:keyup.enter="submit"
+                            >
+                            </v-text-field>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row wrap>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="contador.username"
+                                :error-messages="errors.collect('username')"
+                                label="Usuario"
+                                data-vv-name="username"
+                                readonly
+                                v-on:keyup.enter="submit"
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="computedFModFormat"
+                                label="Modificado"
+                                readonly
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="computedFCreFormat"
+                                label="Creado"
+                                readonly
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm3>
+                        </v-flex>
+                        <v-flex sm2>
+                            <div class="text-xs-center">
+                                        <v-btn @click="submit"  :loading="enviando" block  color="primary">
+                                Guardar
+                                </v-btn>
+                            </div>
+                        </v-flex>
+                    </v-layout>
+                </v-container>
+            </v-form>
+        </v-card>
 	</div>
 </template>
 <script>

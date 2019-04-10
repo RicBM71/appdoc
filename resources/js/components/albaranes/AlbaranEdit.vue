@@ -1,36 +1,18 @@
 <template>
 	<div v-show="show">
         <loading :show_loading="show_loading"></loading>
-		<!-- <v-dialog
-		v-model="show_loading"
-		hide-overlay
-		persistent
-		width="300"
-		>
-			<v-card
-			color="primary"
-			dark
-			>
-			<v-card-text>
-				Please stand by
-				<v-progress-linear
-                    indeterminate
-                    color="white"
-                    class="mb-0"
-				></v-progress-linear>
-			</v-card-text>
-			</v-card>
-		</v-dialog> -->
         <mod-menu :showMenuCli="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
 
         <v-card>
             <v-card-title>
                 <div>
-                    <h2 class="headline mb-0">{{titulo}}</h2>
+                    <h2>{{titulo}}</h2>
                 </div>
             </v-card-title>
+        </v-card>
+        <v-card>
             <v-form>
-                <v-container @contextmenu="showMenu">
+                <v-container>
                     <v-btn
                         @click="showMenu"
                         fixed

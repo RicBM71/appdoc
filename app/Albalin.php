@@ -3,10 +3,14 @@
 namespace App;
 
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Model;
 
 class Albalin extends Model
 {
+
+    use HasRoles;
+
     protected $fillable = [
         'albacab_id','producto_id','nombre', 'unidades', 'impuni', 'poriva', 'porirpf', 'dto',
         'importe', 'username',

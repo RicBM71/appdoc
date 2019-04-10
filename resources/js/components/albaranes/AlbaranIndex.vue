@@ -1,7 +1,7 @@
 <template>
     <div v-if="registros">
+        <my-dialog :dialog.sync="dialog" registro="registro" @destroyReg="destroyReg"></my-dialog>
         <v-layout row wrap>
-			    
             <v-flex xs10>
                 <h2>{{titulo}}</h2>
             </v-flex>
@@ -51,7 +51,7 @@
 
 
 							<v-icon
-                            v-if="props.item.factura==null"
+                            v-if="props.item.ejefac==0"
 							small
 							@click="openDialog(props.item.id)"
 							>

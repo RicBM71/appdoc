@@ -194,8 +194,7 @@ export default {
             })
             .catch(err => {
                 this.status = true;
-               // console.log(err.response.data.message);
-                var msg = err.response.data.message;
+                var msg = err.response.data;
                 this.$toast.error(msg);
 
             });

@@ -1,64 +1,69 @@
 <template>
 	<div v-show="show">
         <mod-menu :showMenuCli="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
-        <h2>{{titulo}}</h2>
-        <v-form>
-            <v-container @contextmenu="showMenu">
-                <v-btn
-                    @click="showMenu"
-                    fixed
-                    dark
-                    fab
-                    bottom
-                    right
-                    color="teal accent-4"
-                    >
-                    <v-icon>add</v-icon>
-                </v-btn>
-                <v-layout row wrap>
-                    <v-flex sm1></v-flex>
-                    <v-flex sm4>
-                        <v-text-field
-                            v-model="fpago.nombre"
-                            v-validate="'required'"
-                            :error-messages="errors.collect('nombre')"
-                            label="Nombre"
-                            data-vv-name="nombre"
-                            data-vv-as="nombre"
-                            required
-                            v-on:keyup.enter="submit"
+        <v-card>
+            <v-card-title>
+                <h2>{{titulo}}</h2>
+            </v-card-title>
+        </v-card>
+        <v-card>
+            <v-form>
+                <v-container>
+                    <v-btn
+                        @click="showMenu"
+                        fixed
+                        dark
+                        fab
+                        bottom
+                        right
+                        color="teal accent-4"
                         >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm3>
-                        <v-text-field
-                            v-model="computedFModFormat"
-                            label="Modificado"
-                            readonly
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm3>
-                        <v-text-field
-                            v-model="computedFCreFormat"
-                            label="Creado"
-                            readonly
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm5>
-                    </v-flex>
-                    <v-flex sm2>
-                        <div class="text-xs-center">
-                                    <v-btn @click="submit"  :loading="enviando" block  color="primary">
-                            Guardar
-                            </v-btn>
-                        </div>
-                    </v-flex>
-                </v-layout>
-            </v-container>
-        </v-form>
-
+                        <v-icon>add</v-icon>
+                    </v-btn>
+                    <v-layout row wrap>
+                        <v-flex sm1></v-flex>
+                        <v-flex sm4>
+                            <v-text-field
+                                v-model="fpago.nombre"
+                                v-validate="'required'"
+                                :error-messages="errors.collect('nombre')"
+                                label="Nombre"
+                                data-vv-name="nombre"
+                                data-vv-as="nombre"
+                                required
+                                v-on:keyup.enter="submit"
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm3>
+                            <v-text-field
+                                v-model="computedFModFormat"
+                                label="Modificado"
+                                readonly
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm3>
+                            <v-text-field
+                                v-model="computedFCreFormat"
+                                label="Creado"
+                                readonly
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm5>
+                        </v-flex>
+                        <v-flex sm2>
+                            <div class="text-xs-center">
+                                        <v-btn @click="submit"  :loading="enviando" block  color="primary">
+                                Guardar
+                                </v-btn>
+                            </div>
+                        </v-flex>
+                    </v-layout>
+                </v-container>
+            </v-form>
+        </v-card>
 	</div>
 </template>
 <script>

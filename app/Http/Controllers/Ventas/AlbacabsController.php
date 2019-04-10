@@ -24,6 +24,7 @@ class AlbacabsController extends Controller
      */
     public function index()
     {
+        $this->authorize('create', new Albacab);
 
         $data =  Albacab::with(['cliente','albalins'])->get();
        // dd($data);
@@ -70,6 +71,7 @@ class AlbacabsController extends Controller
 
         $data['serie']= $contador->seriealb;
         $data['albaran']= $contador->albaran;
+        $data['ejefac']=0;
 
         //return $data;
         $reg = Albacab::create($data);
@@ -173,9 +175,9 @@ class AlbacabsController extends Controller
 
         if (is_null($data['fecha_fac'])){
             $data['fecha_fac'] = date('Y-m-d');
-            $data['ejefac'] = date('Y');
+            $data['ejefac'] = (int) date('Y');
         }else{
-            $data['ejefac'] = date('Y',strtotime($data['fecha_fac']));
+            $data['ejefac'] = (int) date('Y',strtotime($data['fecha_fac']));
         }
 
         if (is_null($data['factura'])){

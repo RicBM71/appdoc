@@ -1,7 +1,7 @@
 <template>
     <div v-if="registros">
+        <my-dialog :dialog.sync="dialog" registro="registro" @destroyReg="destroyReg"></my-dialog>
         <v-layout row wrap>
-			<my-dialog :dialog.sync="dialog" registro="registro" @destroyReg="destroyReg"></my-dialog>
             <v-flex xs10>
                 <h2>{{titulo}}</h2>
             </v-flex>

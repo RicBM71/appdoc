@@ -29,6 +29,8 @@ class AlbalinsController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', new Albalin);
+
         if (request()->wantsJson())
         return [
             'productos'=>  Producto::selProductos(),
@@ -45,6 +47,9 @@ class AlbalinsController extends Controller
      */
     public function store(StoreAlbalin $request)
     {
+
+        $this->authorize('create', new Albalin);
+        //$this->authorize('create', new Albacab);
 
         $data = $request->validated();
 
@@ -68,6 +73,7 @@ class AlbalinsController extends Controller
      */
     public function show($id)
     {
+        $this->authorize('create', new Albalin);
 
          if (request()->wantsJson())
              return [
@@ -84,6 +90,7 @@ class AlbalinsController extends Controller
      */
     public function edit(Albalin $albalin)
     {
+        $this->authorize('create', new Albalin);
 
         if (request()->wantsJson())
            return [
@@ -106,6 +113,8 @@ class AlbalinsController extends Controller
      */
     public function update(StoreAlbalin $request, Albalin $albalin)
     {
+        $this->authorize('create', new Albalin);
+
         $data = $request->validated();
 
         $data['username'] = $request->user()->username;
@@ -127,8 +136,15 @@ class AlbalinsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Albalin $albalin)
+    public function destroy(Request $request, Albalin $albalin)
     {
+
+        $this->authorize('create', new Albalin);
+
+        if (!$request->user()->hasRole('Root')){
+            return response("No autorizado", 403);
+        }
+
         $id = $albalin->albacab_id;
 
         $albalin->delete();

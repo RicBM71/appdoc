@@ -9697,6 +9697,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -9892,6 +9898,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         _this5.show_loading = false;
       });
+    },
+    printPDF: function printPDF() {
+      var id = 1;
+      var url = '/ventas/albacabs/' + id + '/print';
+      window.open(url, '_blank'); //window.location = url;
+
+      return;
+      axios.get('/ventas/albacabs/' + id + '/print').then(function (res) {
+        console.log(res);
+      }).catch(function (err) {
+        console.log(err.response);
+      });
+      console.log("print");
     }
   }
 });
@@ -54491,9 +54510,25 @@ var render = function() {
       _c(
         "v-card",
         [
-          _c("v-card-title", [
-            _c("div", [_c("h2", [_vm._v(_vm._s(_vm.titulo))])])
-          ])
+          _c(
+            "v-card-title",
+            [
+              _c("h2", [_vm._v(_vm._s(_vm.titulo))]),
+              _vm._v(" "),
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: { color: "white", icon: "" },
+                  on: { click: _vm.printPDF }
+                },
+                [_c("v-icon", [_vm._v("print")])],
+                1
+              )
+            ],
+            1
+          )
         ],
         1
       ),

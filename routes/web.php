@@ -68,6 +68,7 @@ Route::group([
         Route::resource('albacabs', 'AlbacabsController', ['except'=>'show','as' => 'ventas']);
         Route::put('albacabs/{albacab}/facturar', 'AlbacabsController@facturar');
         Route::put('albacabs/{albacab}/desfacturar', 'AlbacabsController@desfacturar');
+        Route::get('albacabs/{albacab}/print', 'AlbacabsController@print');
         Route::resource('albalins', 'AlbalinsController', ['except'=>'index','as' => 'ventas']);
     }
 );

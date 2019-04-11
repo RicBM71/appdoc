@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ventas;
 
+use PDF;
 use App\Iva;
 use App\Fpago;
 use App\Albacab;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAlbaranes;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Permission;
 
 class AlbacabsController extends Controller
@@ -220,5 +222,107 @@ class AlbacabsController extends Controller
         if (request()->wantsJson())
             return ['albaran'=>$albacab, 'message' => 'EL albarán ha sido desfacturado '.$msg];
     }
+
+    public function print(Albacab $albacab)
+    {
+
+        PDF::setHeaderCallback(function($pdf) {
+            $file = '@'.(Storage::disk('public')->get('logos/logo.jpg'));
+            $pdf->Image($file, 0, 10, 40, 14, 'JPG', null, 'M', true, 300, 'L', false, false, 0, false, false, false);
+        });
+
+
+        $this->setPrepararAlb();
+
+        $this->setCabeceraAlb();
+
+        $clave_firma = 'file://'.realpath('../storage/app/public/sntfirma.crt');
+        $clave_privada = $clave_firma;
+        $info = array('Name' => 'CIF B83667402',
+                'Location' =>'Madrid',
+                'Reason' => 'Sanaval',
+                'ContactInfo' => 'info@sanaval.com');
+
+
+         PDF::setSignature($clave_firma,$clave_privada,'delta00',"",1,$info);
+         PDF::setSignatureAppearance(10,10,10,10,-1);
+
+        PDF::Write(0, 'Hello Worldd');
+
+        PDF::Output('hello_world.pdf');
+
+    }
+
+    private function setPrepararAlb(){
+
+                // set document information
+        PDF::SetCreator(PDF_CREATOR);
+        PDF::SetAuthor('Sanaval');
+        PDF::SetTitle('Albarán');
+        PDF::SetSubject('1001');
+
+        // set default header data
+        //PDF::SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
+
+        // set header and footer fonts
+        PDF::setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        PDF::setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+        // set default monospaced font
+        PDF::SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+        // set margins
+        PDF::SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        PDF::SetHeaderMargin(PDF_MARGIN_HEADER);
+        PDF::SetFooterMargin(PDF_MARGIN_FOOTER);
+
+        // set auto page breaks
+        PDF::SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+        // set image scale factor
+        PDF::setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+        // set some language-dependent strings (optional)
+        if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+            require_once(dirname(__FILE__).'/lang/eng.php');
+            PDF::setLanguageArray($l);
+        }
+
+        // ---------------------------------------------------------
+
+        // set font
+        //PDF::SetFont('times', 'BI', 12);
+        PDF::SetFont('helvetica', '', 9, '', false);
+
+        // add a page
+        PDF::AddPage();
+
+    }
+
+    private function setCabeceraAlb(){
+
+        $y = PDF::getY();
+
+        $txt = "cliente";
+
+		PDF::SetX(115);
+		PDF::Write($h=0, $txt, $link='', $fill=0, $align='L', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0, $w=0, array(100,100,10));
+
+		$txt = "direccion";
+		PDF::SetX(115);
+		PDF::Write($h=0, $txt, $link='', $fill=0, $align='L', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0, $w=0, array(100,100,10));
+
+		$txt = "postal pobla";
+		PDF::SetX(115);
+		PDF::Write($h=0, $txt, $link='', $fill=0, $align='L', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0, $w=0, array(100,100,10));
+
+        if (false){
+		    $txt = "provincia";
+		    PDF::SetX(115);
+		    PDF::Write($h=0, $txt, $link='', $fill=0, $align='L', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0, $w=0, array(100,100,10));
+        }
+
+    }
+
 
 }

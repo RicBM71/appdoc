@@ -5,9 +5,15 @@
 
         <v-card>
             <v-card-title>
-                <div>
-                    <h2>{{titulo}}</h2>
-                </div>
+                <h2>{{titulo}}</h2>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="white"
+                    icon
+                    @click="printPDF"
+                >
+                    <v-icon>print</v-icon>
+                </v-btn>
             </v-card-title>
         </v-card>
         <v-card>
@@ -477,6 +483,23 @@ import {mapGetters} from 'vuex';
                     this.show_loading = false;
                 });
 
+            },
+            printPDF(){
+                var id = 1;
+                var url = '/ventas/albacabs/'+id+'/print';
+
+                window.open(url, '_blank');
+                //window.location = url;
+                return;
+
+                axios.get('/ventas/albacabs/'+id+'/print')
+                    .then(res => {
+                        console.log(res);
+                    })
+                    .catch(err => {
+                        console.log(err.response);
+                    })
+                console.log("print");
             }
 
     }

@@ -7,6 +7,7 @@ use App\Iva;
 use App\Fpago;
 use App\Albacab;
 use App\Cliente;
+use App\Empresa;
 use App\Contador;
 use App\Retencion;
 use App\Vencimiento;
@@ -66,7 +67,7 @@ class AlbacabsController extends Controller
         $data = $request->validated();
 
         $data['ejercicio']   = date('Y',strtotime($data['fecha_alb']));
-        $data['empresa_id'] =  session()->get('empresa');
+        $data['empresa_id'] =  session()->get('empresa')->id;
         $data['username'] = $request->user()->username;
 
         $contador = Contador::incrementaContador($data['ejercicio']);
@@ -226,26 +227,39 @@ class AlbacabsController extends Controller
     public function print(Albacab $albacab)
     {
 
+        $empresa  = session()->get('empresa');
+
         PDF::setHeaderCallback(function($pdf) {
-            $file = '@'.(Storage::disk('public')->get('logos/logo.jpg'));
+            $file = '@'.(Storage::disk('public')->get('logos/'. session()->get('empresa')->logo));
             $pdf->Image($file, 0, 10, 40, 14, 'JPG', null, 'M', true, 300, 'L', false, false, 0, false, false, false);
+
+            // PDF::SetFont('helvetica', 'R', 7);
+
+            // $txt = session()->get('empresa')->razon."\n".
+			//        session()->get('empresa')->direccion."\n".
+			//        session()->get('empresa')->cpostal." ".session()->get('empresa')->poblacion."\n".
+            //        'CIF.: '.session()->get('empresa')->cif;
+            // $pdf->Write(0, $txt);
+
+        });
+
+        PDF::setFooterCallback(function($pdf) {
+
+            PDF::SetFont('helvetica', 'R', 7);
+
+            PDF::Write(0, session()->get('empresa')->txtpie1, $link='', $fill=0, $align='C', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
+            PDF::Write(0, session()->get('empresa')->txtpie2, $link='', $fill=0, $align='C', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
         });
 
 
-        $this->setPrepararAlb();
+
+
+
+        $this->setPrepararAlb($empresa);
 
         $this->setCabeceraAlb();
 
-        $clave_firma = 'file://'.realpath('../storage/app/public/sntfirma.crt');
-        $clave_privada = $clave_firma;
-        $info = array('Name' => 'CIF B83667402',
-                'Location' =>'Madrid',
-                'Reason' => 'Sanaval',
-                'ContactInfo' => 'info@sanaval.com');
 
-
-         PDF::setSignature($clave_firma,$clave_privada,'delta00',"",1,$info);
-         PDF::setSignatureAppearance(10,10,10,10,-1);
 
         PDF::Write(0, 'Hello Worldd');
 
@@ -253,11 +267,11 @@ class AlbacabsController extends Controller
 
     }
 
-    private function setPrepararAlb(){
+    private function setPrepararAlb($empresa){
 
                 // set document information
         PDF::SetCreator(PDF_CREATOR);
-        PDF::SetAuthor('Sanaval');
+        PDF::SetAuthor($empresa->nombre);
         PDF::SetTitle('Albarán');
         PDF::SetSubject('1001');
 
@@ -296,6 +310,17 @@ class AlbacabsController extends Controller
 
         // add a page
         PDF::AddPage();
+
+        $clave_firma = 'file://'.realpath('../storage/crt/'.$empresa->certificado);
+        $clave_privada = $clave_firma;
+        $info = array('Name' => 'CIF '.$empresa->cif,
+                'Location' => $empresa->poblacion,
+                'Reason' =>  $empresa->razon,
+                'ContactInfo' => $empresa->email);
+
+
+         PDF::setSignature($clave_firma,$clave_privada,'delta00',"",1,$info);
+         PDF::setSignatureAppearance(10,10,10,10,-1);
 
     }
 

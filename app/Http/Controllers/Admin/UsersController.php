@@ -233,9 +233,11 @@ class UsersController extends Controller
 
     public function updateEmpresa(Request $request, User $user){
 
-        if ($request->empresa > 0){
-            $user->update(['empresa_id' => $request->empresa]);
-            session(['empresa' => $request->empresa]);
+        if ($request->empresa_id > 0){
+            $user->update(['empresa_id' => $request->empresa_id]);
+
+            session(['empresa' => Empresa::find($request->empresa_id)]);
+
         }
         else
             $user->update(['empresa_id' => 0]);

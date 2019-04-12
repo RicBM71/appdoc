@@ -231,10 +231,10 @@ export default {
 
         axios.get('/dash')
             .then(res => {
-                //console.log(res.data.user);
+
                 this.setAuthUser(res.data.user);
 
-                this.empresa_id = this.user.empresa;
+                this.empresa_id = this.user.empresa_id;
                 //this.show = true;
                 if (this.isRoot)
                     this.items.push(this.root);
@@ -286,7 +286,7 @@ export default {
             axios({
                     method: 'put',
                     url: '/admin/users/'+this.user.id+'/empresa',
-                    data:{ empresa: this.empresa_id }
+                    data:{ empresa_id: this.empresa_id }
                 })
                 .then(res => {
                     //this.$toast.success("Cambiando de empresa...");

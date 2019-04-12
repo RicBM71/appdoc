@@ -42,7 +42,7 @@ class ContadorsController extends Controller
         $data = $request->validated();
 
         $data['username'] = $request->user()->username;
-        $data['empresa_id'] =  session()->get('empresa');
+        $data['empresa_id'] =  session()->get('empresa')->id;
 
         $reg = Contador::create($data);
 
@@ -80,7 +80,7 @@ class ContadorsController extends Controller
         $data = $request->validated();
 
         $data['username'] = $request->user()->username;
-        $data['empresa_id'] =  session()->get('empresa');
+        $data['empresa_id'] =  session()->get('empresa')->id;
 
         $contador->update($data);
 

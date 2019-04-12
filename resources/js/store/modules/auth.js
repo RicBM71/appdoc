@@ -16,7 +16,7 @@ const initialState = {
 	name: null,
     username: null,
     avatar: null,
-    empresa: null,
+    empresa_id: null,
     roles: [],
     permisos: []
 };
@@ -32,7 +32,7 @@ const mutations = {
 		state.name = payload.user.name;
         state.username = payload.user.username;
         state.avatar = payload.user.avatar;
-        state.empresa = payload.user.empresa;
+        state.empresa_id = payload.user.empresa_id;
         state.roles = payload.user.roles;
         state.permisos = payload.user.permisos;
 	},
@@ -41,7 +41,7 @@ const mutations = {
 		state.name = null;
         state.username = null;
         state.avatar = null;
-        state.empresa=null;
+        state.empresa_id=null;
         state.roles = [];
         state.permisos = [];
 	}

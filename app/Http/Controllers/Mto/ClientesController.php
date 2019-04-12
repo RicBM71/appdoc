@@ -56,7 +56,7 @@ class ClientesController extends Controller
         $data = $request->validated();
 
         //\Log::info('enviando mensaje...'.session()->get('empresa'));
-        $data['empresa_id'] =  session()->get('empresa');
+        $data['empresa_id'] =  session()->get('empresa')->id;
 
         $data['username'] = $request->user()->username;
 
@@ -87,7 +87,7 @@ class ClientesController extends Controller
     public function edit(Cliente $cliente)
     {
         $this->authorize('update', $cliente);
-            
+
         if (request()->wantsJson())
             return [
                 'cliente' =>$cliente,

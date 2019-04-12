@@ -52,11 +52,11 @@ class ProductosController extends Controller
     public function store(StoreProductos $request)
     {
         $this->authorize('update', new Producto);
-        
+
         $data = $request->validated();
 
       // \Log::info('enviando mensaje...'.session()->get('empresa'));
-        $data['empresa_id'] =  session()->get('empresa');
+        $data['empresa_id'] =  session()->get('empresa')->id;
 
         $data['username'] = $request->user()->username;
 

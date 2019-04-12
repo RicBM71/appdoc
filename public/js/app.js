@@ -2035,10 +2035,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var _this = this;
 
     axios.get('/dash').then(function (res) {
-      //console.log(res.data.user);
       _this.setAuthUser(res.data.user);
 
-      _this.empresa_id = _this.user.empresa; //this.show = true;
+      _this.empresa_id = _this.user.empresa_id; //this.show = true;
 
       if (_this.isRoot) _this.items.push(_this.root);else if (_this.isAdmin) _this.items.push(_this.admin);
       res.data.user.empresas.map(function (e) {
@@ -2089,7 +2088,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         method: 'put',
         url: '/admin/users/' + this.user.id + '/empresa',
         data: {
-          empresa: this.empresa_id
+          empresa_id: this.empresa_id
         }
       }).then(function (res) {
         //this.$toast.success("Cambiando de empresa...");
@@ -106202,7 +106201,7 @@ var initialState = {
   name: null,
   username: null,
   avatar: null,
-  empresa: null,
+  empresa_id: null,
   roles: [],
   permisos: []
 };
@@ -106217,7 +106216,7 @@ var mutations = (_mutations = {}, _defineProperty(_mutations, SET_USER, function
   state.name = payload.user.name;
   state.username = payload.user.username;
   state.avatar = payload.user.avatar;
-  state.empresa = payload.user.empresa;
+  state.empresa_id = payload.user.empresa_id;
   state.roles = payload.user.roles;
   state.permisos = payload.user.permisos;
 }), _defineProperty(_mutations, UNSET_USER, function (state, payload) {
@@ -106225,7 +106224,7 @@ var mutations = (_mutations = {}, _defineProperty(_mutations, SET_USER, function
   state.name = null;
   state.username = null;
   state.avatar = null;
-  state.empresa = null;
+  state.empresa_id = null;
   state.roles = [];
   state.permisos = [];
 }), _mutations);

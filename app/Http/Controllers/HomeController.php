@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Empresa;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -52,7 +53,7 @@ class HomeController extends Controller
             'name' => $authUser->name,
             'username' => $authUser->username,
             'avatar'=> $authUser->avatar,
-            'empresa'=> $authUser->empresa_id,
+            'empresa_id'=> $authUser->empresa_id,
             'roles' => $role_user,
             'permisos'=> $permisos_user,
             'empresas'=>$authUser->empresas
@@ -60,7 +61,8 @@ class HomeController extends Controller
 
 
         session([
-            'empresa' => $authUser->empresa_id,
+            'empresa_id' => $authUser->empresa_id,
+            'empresa' => Empresa::find($authUser->empresa_id),
             'username'=> $authUser->username
             ]);
 

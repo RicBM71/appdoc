@@ -33,7 +33,7 @@ class CreateEmpresasTable extends Migration
             $table->string('sigla', 10)->nullable()->default(null);
             $table->string('carpeta')->nullable()->default(null);
             $table->string('titulo', 20);
-            $table->string('logo')->nullable()->default(null);
+            $table->string('logo',20)->nullable()->default(null);
             $table->string('certificado',20)->nullable()->default(null);
             $table->string('passwd_cer')->nullable()->default(null);
             $table->unsignedInteger('carpeta_id')->nullable()->default(null);

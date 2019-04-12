@@ -49,6 +49,8 @@ class GenericasSeeder extends Seeder
         $emp->nombre = "Sanaval";
         $emp->razon = "Sanaval";
         $emp->titulo = "Sanaval";
+        $emp->logo = "logo.jpg";
+        $emp->certificado = "sntfirma.crt";
         $emp->save();
 
         $json = File::get("database/data/carpetas.json");

@@ -226,8 +226,29 @@ class AlbacabsController extends Controller
 
     public function print(Albacab $albacab)
     {
-
         $empresa  = session()->get('empresa');
+
+        // echo 'file://'.base_path('storage/crt/');
+        // echo 'file:///home/sanaval-tec/myapp/storage/crt/sntfirma.crt';
+        // return;
+
+        // echo file_exists('file://'.realpath('../storage/crt/'.$empresa->certificado));
+        // // echo 'file://'.realpath('../storage/crt/'.$empresa->certificado);
+        // // echo '\n';
+        // // echo base_path('storage/crt/sntfirma.crt');
+        // // echo '\n';
+        // return;
+
+        //echo Storage::disk('public')->get();
+
+
+        //$empresa  = session()->get('empresa');
+        // echo realpath('/');
+        // echo 'file://'.realpath('../storage/crt/');
+        // //echo 'file://'.base_name('../storage/crt/');
+        // return;
+
+
 
         PDF::setHeaderCallback(function($pdf) {
             $file = '@'.(Storage::disk('public')->get('logos/'. session()->get('empresa')->logo));
@@ -312,6 +333,9 @@ class AlbacabsController extends Controller
         PDF::AddPage();
 
         $clave_firma = 'file://'.realpath('../storage/crt/'.$empresa->certificado);
+        $clave_firma = 'file://'.base_path('storage/crt/'.$empresa->certificado);
+
+        //$clave_firma = 'file:///home/sanaval-tec/myapp/storage/crt/sntfirma.crt';
         $clave_privada = $clave_firma;
         $info = array('Name' => 'CIF '.$empresa->cif,
                 'Location' => $empresa->poblacion,

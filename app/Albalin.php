@@ -44,4 +44,24 @@ class Albalin extends Model
                 ->where('albacab_id', $id)
                 ->first();
     }
+
+    public static function totalLineasByAlb($id){
+
+        $q = DB::table('albalins')
+		    ->select(DB::raw('poriva, porirpf, SUM((importe * poriva / 100)) AS iva, SUM((importe * porirpf /100)) AS irpf, SUM(importe) AS base, SUM(importe + (importe * poriva /100) - (importe * porirpf /100)) AS importe'))
+		    ->where('albacab_id',$id)
+            ->groupby('poriva','porirpf')
+            ->first();
+
+        return $q;
+		return array('importe'=> $q->importe,
+				'iva'=> $q->iva,
+				'irpf'=> $q->irpf,
+				'poriva'=> $q->poriva,
+				'porirpf'=> $q->porirpf,
+				'base'=> $q->base);
+
+	}
+
+
 }

@@ -1,25 +1,14 @@
 <template>
 	<div>
-        <mod-menu :showMenuCli="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
         <my-dialog :dialog.sync="dialog" registro="avatar" @destroyReg="destroyReg"></my-dialog>
         <v-card>
             <v-card-title color="indigo">
                 <h2 color="indigo">{{titulo}}</h2>
+                <v-spacer></v-spacer>
+                <menu-ope :id="user.id"></menu-ope>
             </v-card-title>
         </v-card>
         <v-card>
-            <v-btn
-                @click="showMenu"
-                fixed
-                dark
-                fab
-                bottom
-                right
-                color="teal accent-4"
-                >
-                <v-icon>add</v-icon>
-            </v-btn>
-
             <v-tabs fixed-tabs>
                 <v-tab>
                         Datos generales
@@ -200,13 +189,13 @@
 </template>
 <script>
     import moment from 'moment'
+    import MenuOpe from './MenuOpe'
+    import UserEmp from './UserEmp'
+    import {mapGetters} from 'vuex';
     import UserRole from './UserRole'
     import UserPermiso from './UserPermiso'
-    import UserEmp from './UserEmp'
-    import ModMenu from '@/components/shared/ModMenu'
-    import {mapGetters} from 'vuex';
-    import MyDialog from '@/components/shared/MyDialog'
     import vue2Dropzone from 'vue2-dropzone'
+    import MyDialog from '@/components/shared/MyDialog'
     import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 
 	export default {
@@ -217,9 +206,9 @@
             'user-emp': UserEmp,
             'user-role': UserRole,
             'user-permiso': UserPermiso,
-            'mod-menu': ModMenu,
             'my-dialog': MyDialog,
-            'vueDropzone': vue2Dropzone
+            'vueDropzone': vue2Dropzone,
+            'menu-ope': MenuOpe,
 
 		},
     	data () {
@@ -257,18 +246,7 @@
                 menu2: false,
 
                 showPer: false,
-                showMenuCli: false,
                 dialog: false,
-
-                x: 0,
-                y: 0,
-                items: [
-                    { title: 'Usuarios', name: 'users', icon: 'people' },
-                    { title: 'Crear', name: 'users_create', icon: 'person_add' },
-                    { title: 'Roles', name: 'roles', icon: 'share' },
-                    { title: 'Home', name: 'dash', icon: 'home' },
-
-                ],
 
                 showDrop: false,
                 dropzoneOptions: {
@@ -343,18 +321,6 @@
 
         },
     	methods:{
-            showMenu (e) {
-
-                e.preventDefault()
-
-                this.showMenuCli = false
-                this.x = e.clientX
-                this.y = e.clientY
-
-                this.$nextTick(() => {
-                    this.showMenuCli = true
-                })
-            },
             submit() {
 
                 //console.log("Edit user (submit):"+this.user.id);

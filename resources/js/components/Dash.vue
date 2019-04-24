@@ -187,7 +187,7 @@ export default {
             text: 'Administrador',
             model: false,
             children: [
-                { text: 'Usuarios', name: 'users' },
+                { text: 'Usuarios', name: 'users.index' },
                 { text: 'Roles', name: 'roles' },
                 { text: 'Empresas', name: 'empresa.index' },
                 { text: 'Retenciones (IRPF)', name: 'ret.index' },

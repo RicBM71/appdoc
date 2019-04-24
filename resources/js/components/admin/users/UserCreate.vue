@@ -1,38 +1,15 @@
 <template>
 	<div>
-
-        <mod-menu :showMenuCli="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
-
         <v-card>
-            <v-btn
-                @click="showMenu"
-                fixed
-                dark
-                fab
-                bottom
-                right
-                color="teal accent-4"
-                >
-                <v-icon>add</v-icon>
-            </v-btn>
-        <v-card-title color="indigo">
-            <h2 color="indigo">{{titulo}}</h2>
-        </v-card-title>
-
+            <v-card-title color="indigo">
+                <h2 color="indigo">{{titulo}}</h2>
+                <v-spacer></v-spacer>
+                <menu-ope :id="user.id"></menu-ope>
+            </v-card-title>
+        </v-card>
+        <v-card>
             <v-form>
-                <v-container @contextmenu="showMenu">
-                    <v-btn
-                        @click="showMenu"
-                        fixed
-                        dark
-                        fab
-                        bottom
-                        right
-                        color="teal accent-4"
-                        >
-                        <v-icon>add</v-icon>
-                    </v-btn>
-
+                <v-container>
                     <v-layout row wrap>
                         <v-flex sm3>
                             <v-text-field
@@ -159,7 +136,6 @@
                             </div>
                         </v-flex>
                     </v-layout>
-
                 </v-container>
             </v-form>
         </v-card>
@@ -169,8 +145,8 @@
     import moment from 'moment'
     import UserRole from './UserRole'
     import UserPermiso from './UserPermiso'
-    import ModMenu from '@/components/shared/ModMenu'
     import {mapGetters} from 'vuex';
+    import MenuOpe from './MenuOpe'
 
 	export default {
 		$_veeValidate: {
@@ -179,7 +155,7 @@
         components: {
             'user-role': UserRole,
             'user-permiso': UserPermiso,
-            'mod-menu': ModMenu
+            'menu-ope': MenuOpe
 
 		},
     	data () {
@@ -212,16 +188,6 @@
                 menu2: false,
 
                 showPer: false,
-                showMenuCli: false,
-                x: 0,
-                y: 0,
-                items: [
-                    { title: 'Usuarios', name: 'users', icon: 'people' },
-                    { title: 'Crear', name: 'users_create', icon: 'person_add' },
-                    { title: 'Roles', name: 'roles', icon: 'share' },
-                    { title: 'Home', name: 'dash', icon: 'home' },
-
-                ]
       		}
         },
         mounted(){
@@ -261,18 +227,6 @@
 
         },
     	methods:{
-            showMenu (e) {
-
-                e.preventDefault()
-
-                this.showMenuCli = false
-                this.x = e.clientX
-                this.y = e.clientY
-
-                this.$nextTick(() => {
-                    this.showMenuCli = true
-                })
-            },
             submit() {
 
                 this.enviando = true;
@@ -284,7 +238,7 @@
                         axios.post(url, this.user)
                             .then(response => {
 
-                                this.$router.push({ name: 'users_edit', params: { id: response.data.user.id } })
+                                this.$router.push({ name: 'users.edit', params: { id: response.data.user.id } })
                                 this.enviando = false;
                             })
                             .catch(err => {

@@ -1,92 +1,87 @@
 <template>
 	<div v-show="show">
-        <mod-menu :showMenuCli="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
-        <h2>Retenciones</h2>
-        <v-form>
-            <v-container @contextmenu="showMenu">
-                <v-btn
-                    @click="showMenu"
-                    fixed
-                    dark
-                    fab
-                    bottom
-                    right
-                    color="teal accent-4"
-                    >
-                    <v-icon>add</v-icon>
-                </v-btn>
-                <v-layout row wrap>
-                    <v-flex sm1></v-flex>
-                    <v-flex sm3>
-                        <v-text-field
-                            v-model="retencion.nombre"
-                            v-validate="'required'"
-                            :error-messages="errors.collect('nombre')"
-                            label="Nombre"
-                            data-vv-name="nombre"
-                            data-vv-as="nombre"
-                            required
-                            v-on:keyup.enter="submit"
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="retencion.importe"
-                            v-validate="'required|decimal:2'"
-                            :error-messages="errors.collect('importe')"
-                            label="Valor"
-                            data-vv-name="importe"
-                            data-vv-as="Valor"
-                            required
-                            class="inputPrice"
-                            type="number"
-                            v-on:keyup.enter="submit"
+        <v-card>
+            <v-card-title color="indigo">
+                <h2 color="indigo">{{titulo}}</h2>
+                <v-spacer></v-spacer>
+                <menu-ope :id="retencion.id"></menu-ope>
+            </v-card-title>
+        </v-card>
+        <v-card>
+            <v-form>
+                <v-container>
+                    <v-layout row wrap>
+                        <v-flex sm1></v-flex>
+                        <v-flex sm3>
+                            <v-text-field
+                                v-model="retencion.nombre"
+                                v-validate="'required'"
+                                :error-messages="errors.collect('nombre')"
+                                label="Nombre"
+                                data-vv-name="nombre"
+                                data-vv-as="nombre"
+                                required
+                                v-on:keyup.enter="submit"
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="retencion.importe"
+                                v-validate="'required|decimal:2'"
+                                :error-messages="errors.collect('importe')"
+                                label="Valor"
+                                data-vv-name="importe"
+                                data-vv-as="Valor"
+                                required
+                                class="inputPrice"
+                                type="number"
+                                v-on:keyup.enter="submit"
 
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="computedFModFormat"
-                            label="Modificado"
-                            readonly
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm2>
-                        <v-text-field
-                            v-model="computedFCreFormat"
-                            label="Creado"
-                            readonly
-                        >
-                        </v-text-field>
-                    </v-flex>
-                    <v-flex sm5>
-                    </v-flex>
-                    <v-flex sm2>
-                        <div class="text-xs-center">
-                                    <v-btn @click="submit"  :loading="enviando" block  color="primary">
-                            Guardar
-                            </v-btn>
-                        </div>
-                    </v-flex>
-                </v-layout>
-            </v-container>
-        </v-form>
-
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="computedFModFormat"
+                                label="Modificado"
+                                readonly
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="computedFCreFormat"
+                                label="Creado"
+                                readonly
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm5>
+                        </v-flex>
+                        <v-flex sm2>
+                            <div class="text-xs-center">
+                                        <v-btn @click="submit"  :loading="enviando" block  color="primary">
+                                Guardar
+                                </v-btn>
+                            </div>
+                        </v-flex>
+                    </v-layout>
+                </v-container>
+            </v-form>
+        </v-card>
 	</div>
 </template>
 <script>
 import moment from 'moment'
-import ModMenu from '@/components/shared/ModMenu'
+import MenuOpe from './MenuOpe'
 
 	export default {
 		$_veeValidate: {
       		validator: 'new'
         },
         components: {
-            'mod-menu': ModMenu
+            'menu-ope': MenuOpe
 		},
     	data () {
       		return {
@@ -105,18 +100,6 @@ import ModMenu from '@/components/shared/ModMenu'
                 enviando: false,
 
                 show: false,
-                showMenuCli: false,
-
-                x: 0,
-                y: 0,
-                items: [
-                    { title: 'Retenciones', name: 'ret.index', icon: 'list' },
-                    { title: 'Crear', name: 'ret.create', icon: 'add' },
-                    { title: 'Tipos Iva', name: 'iva.index', icon: 'functions' },
-                    { title: 'Home', name: 'dash', icon: 'home' },
-
-                ]
-
 
       		}
         },
@@ -143,18 +126,6 @@ import ModMenu from '@/components/shared/ModMenu'
 
         },
     	methods:{
-            showMenu (e) {
-
-                e.preventDefault()
-
-                this.showMenuCli = false
-                this.x = e.clientX
-                this.y = e.clientY
-
-                this.$nextTick(() => {
-                    this.showMenuCli = true
-                })
-            },
             submit() {
 
                 //console.log("Edit user (submit):"+this.retencion.id);

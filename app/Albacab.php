@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Vencimiento;
 use App\Scopes\EmpresaScope;
 use Illuminate\Support\Carbon;
 use Spatie\Permission\Traits\HasRoles;
@@ -46,10 +47,16 @@ class Albacab extends Model
     	return ($this->belongsTo(Cliente::class));
     }
 
-    public function fpagos()
+    public function fpago()
     {
     	return $this->belongsTo(Fpago::class);
     }
+
+    public function vencimiento()
+    {
+    	return $this->belongsTo(Vencimiento::class);
+    }
+
 
     public function albalins()
     {

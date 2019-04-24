@@ -1,64 +1,66 @@
 <template>
     <div v-if="registros">
-        <v-layout row wrap>
-			<my-dialog :dialog.sync="dialog" registro="registro" @destroyReg="destroyReg"></my-dialog>
-            <v-flex xs10>
-                <h2>Usuarios</h2>
-            </v-flex>
-			<v-flex xs2>
-				<v-btn v-on:click="create" small >
-					<v-icon small>add</v-icon> Crear Usuario
-				</v-btn>
-			</v-flex>
-        </v-layout>
-        <v-layout row wrap>
-			<v-flex xs12>
-				<v-data-table
-				:headers="headers"
-				:items="usuarios"
-                rows-per-page-text="Registros por página"
-				>
-					<template slot="items" slot-scope="props">
-						<td>{{ props.item.id }}</td>
-						<td  v-if="props.item.blocked == false"  class="text-xs-left">{{ props.item.name }}</td>
-                        <td v-else class="text-xs-left"><span class="red--text">BLOQUEADO -></span></td>
-						<td class="text-xs-left">{{ props.item.username }}</td>
-						<td class="text-xs-left">{{ props.item.email }}</td>
-						<td class="text-xs-left">{{ extrae(props.item.roles) }}</td>
-						<td class="justify-center layout px-0">
-							<v-icon
-								small
-								class="mr-2"
-								@click="editItem(props.item.id)"
-							>
-								edit
-							</v-icon>
+		<my-dialog :dialog.sync="dialog" registro="registro" @destroyReg="destroyReg"></my-dialog>
+        <v-card>
+            <v-card-title>
+                <h2>{{titulo}}</h2>
+                <v-spacer></v-spacer>
+                <menu-ope></menu-ope>
+            </v-card-title>
+        </v-card>
+        <v-card>
+            <v-layout row wrap>
+                <v-flex xs12>
+                    <v-data-table
+                    :headers="headers"
+                    :items="usuarios"
+                    rows-per-page-text="Registros por página"
+                    >
+                        <template slot="items" slot-scope="props">
+                            <td>{{ props.item.id }}</td>
+                            <td  v-if="props.item.blocked == false"  class="text-xs-left">{{ props.item.name }}</td>
+                            <td v-else class="text-xs-left"><span class="red--text">BLOQUEADO -></span></td>
+                            <td class="text-xs-left">{{ props.item.username }}</td>
+                            <td class="text-xs-left">{{ props.item.email }}</td>
+                            <td class="text-xs-left">{{ extrae(props.item.roles) }}</td>
+                            <td class="justify-center layout px-0">
+                                <v-icon
+                                    small
+                                    class="mr-2"
+                                    @click="editItem(props.item.id)"
+                                >
+                                    edit
+                                </v-icon>
 
 
-							<v-icon
-							small
-							@click="openDialog(props.item.id)"
-							>
-							delete
-							</v-icon>
-						</td>
-					</template>
-					<template slot="pageText" slot-scope="props">
-						Registros {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
-					</template>
-				</v-data-table>
-			</v-flex>
-		</v-layout>
+                                <v-icon
+                                small
+                                @click="openDialog(props.item.id)"
+                                >
+                                delete
+                                </v-icon>
+                            </td>
+                        </template>
+                        <template slot="pageText" slot-scope="props">
+                            Registros {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                        </template>
+                    </v-data-table>
+                </v-flex>
+            </v-layout>
+        </v-card>
     </div>
 </template>
 <script>
 import MyDialog from '@/components/shared/MyDialog'
+import MenuOpe from './MenuOpe'
   export default {
     components: {
-        'my-dialog': MyDialog
+        'my-dialog': MyDialog,
+        'menu-ope': MenuOpe,
     },
     data () {
       return {
+        titulo: "Usuarios",
         headers: [
           {
             text: 'ID',
@@ -115,7 +117,7 @@ import MyDialog from '@/components/shared/MyDialog'
             return roles;
         },
         editItem (id) {
-            this.$router.push({ name: 'users_edit', params: { id: id } })
+            this.$router.push({ name: 'users.edit', params: { id: id } })
         },
         openDialog (id){
             this.dialog = true;

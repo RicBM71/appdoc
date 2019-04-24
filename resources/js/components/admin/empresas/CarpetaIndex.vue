@@ -1,5 +1,5 @@
 <template>
-    <div v-if="registros">
+    <v-container v-if="registros">
         <my-dialog :dialog.sync="dialog" registro="registro" @destroyReg="destroyReg"></my-dialog>
         <v-card>
             <v-card-title>
@@ -13,15 +13,14 @@
                 <v-flex xs12>
                     <v-data-table
                     :headers="headers"
-                    :items="this.contadores"
+                    :items="this.carpetas"
                     rows-per-page-text="Registros por página"
                     >
                         <template slot="items" slot-scope="props">
                             <td>{{ props.item.id }}</td>
-                            <td>{{ props.item.ejercicio }}</td>
-                            <td class="text-xs-center">{{ props.item.seriealb+"-"+props.item.albaran}}</td>
-                            <td class="text-xs-center">{{ props.item.seriefac+"-"+props.item.factura}}</td>
-                            <td class="text-xs-center">{{ props.item.serieabo+"-"+props.item.abono}}</td>
+                            <td>{{ props.item.nombre }}</td>
+                            <td>{{ props.item.empresa }}</td>
+                            <td :class="props.item.color"><span class="white--text">{{ props.item.color }}</span></td>
                             <td class="justify-center layout px-0">
                                 <v-icon
                                     small
@@ -47,7 +46,7 @@
                 </v-flex>
             </v-layout>
         </v-card>
-    </div>
+    </v-container>
 </template>
 <script>
 import MyDialog from '@/components/shared/MyDialog'
@@ -59,7 +58,7 @@ import MenuOpe from './MenuOpe'
     },
     data () {
       return {
-        titulo:"Contadores",
+        titulo: "Carpetas",
         headers: [
           {
             text: 'ID',
@@ -67,24 +66,19 @@ import MenuOpe from './MenuOpe'
             value: 'id'
           },
           {
-            text: 'Ejercicio',
+            text: 'Nombre',
             align: 'left',
-            value: 'ejercicio'
+            value: 'nombre'
           },
           {
-            text: 'Serie Albarán',
-            align: 'center',
-            value: 'serie'
+            text: 'Empresa',
+            align: 'left',
+            value: 'empresa'
           },
           {
-            text: 'Serie Facturas',
-            align: 'center',
-            value: 'serie'
-          },
-          {
-            text: 'Serie Abonos',
-            align: 'center',
-            value: 'serie'
+            text: 'Color',
+            align: 'Left',
+            value: 'color'
           },
           {
             text: 'Acciones',
@@ -92,21 +86,21 @@ import MenuOpe from './MenuOpe'
             value: ''
           }
         ],
-        contadores:[],
+        carpetas:[],
         status: false,
 		registros: false,
         dialog: false,
-        contador_id: 0,
-        titulo:"Contadores"
+        carpeta_id: 0,
+        titulo:"Carpetas"
       }
     },
     mounted()
     {
 
-        axios.get('/admin/contadors')
+        axios.get('/admin/carpetas')
             .then(res => {
 
-                this.contadores = res.data;
+                this.carpetas = res.data;
                 this.registros = true;
             })
             .catch(err =>{
@@ -117,24 +111,24 @@ import MenuOpe from './MenuOpe'
     },
     methods:{
         create(){
-            this.$router.push({ name: 'contador.create'})
+            this.$router.push({ name: 'carpeta.create'})
         },
         editItem (id) {
-            this.$router.push({ name: 'contador.edit', params: { id: id } })
+            this.$router.push({ name: 'carpeta.edit', params: { id: id } })
         },
         openDialog (id){
             this.dialog = true;
-            this.iva_id = id;
+            this.carpeta_id = id;
         },
         destroyReg () {
             this.dialog = false;
 
-            axios.post('/admin/contadores/'+this.iva_id,{_method: 'delete'})
+            axios.post('/admin/carpetas/'+this.carpeta_id,{_method: 'delete'})
                 .then(response => {
 
                 if (response.status == 200){
-                    this.$toast.success('Contador eliminado!');
-                    this.contadores = response.data;
+                    this.$toast.success('Carpeta eliminada!');
+                    this.carpetas = response.data;
                 }
                 })
             .catch(err => {

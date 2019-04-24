@@ -1,63 +1,65 @@
 <template>
     <div v-if="registros">
-        <v-layout row wrap>
-			<my-dialog :dialog.sync="dialog" registro="registro" @destroyReg="destroyReg"></my-dialog>
-            <v-flex xs10>
+		<my-dialog :dialog.sync="dialog" registro="registro" @destroyReg="destroyReg"></my-dialog>
+       <v-card>
+            <v-card-title>
                 <h2>{{titulo}}</h2>
-            </v-flex>
-			<v-flex xs2>
-				<v-btn v-on:click="create" small >
-					<v-icon small>add</v-icon> Crear Empresa
-				</v-btn>
-			</v-flex>
-        </v-layout>
-        <v-layout row wrap>
-			<v-flex xs12>
-				<v-data-table
-				:headers="headers"
-				:items="empresas"
-                rows-per-page-text="Registros por página"
-				>
-					<template slot="items" slot-scope="props">
-						<td>{{ props.item.id }}</td>
-                        <td>{{ props.item.nombre }}</td>
-						<td>{{ props.item.cif }}</td>
-                        <td>{{ props.item.contacto }}</td>
-                        <td>{{ props.item.telefono1 }}</td>
-						<td class="justify-center layout px-0">
-							<v-icon
-								small
-								class="mr-2"
-								@click="editItem(props.item.id)"
-							>
-								edit
-							</v-icon>
+                <v-spacer></v-spacer>
+                <menu-ope></menu-ope>
+            </v-card-title>
+        </v-card>
+        <v-card>
+            <v-layout row wrap>
+                <v-flex xs12>
+                    <v-data-table
+                    :headers="headers"
+                    :items="empresas"
+                    rows-per-page-text="Registros por página"
+                    >
+                        <template slot="items" slot-scope="props">
+                            <td>{{ props.item.id }}</td>
+                            <td>{{ props.item.nombre }}</td>
+                            <td>{{ props.item.cif }}</td>
+                            <td>{{ props.item.contacto }}</td>
+                            <td>{{ props.item.telefono1 }}</td>
+                            <td class="justify-center layout px-0">
+                                <v-icon
+                                    small
+                                    class="mr-2"
+                                    @click="editItem(props.item.id)"
+                                >
+                                    edit
+                                </v-icon>
 
 
-							<v-icon
-							small
-							@click="openDialog(props.item.id)"
-							>
-							delete
-							</v-icon>
-						</td>
-					</template>
-					<template slot="pageText" slot-scope="props">
-						Registros {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
-					</template>
-				</v-data-table>
-			</v-flex>
-		</v-layout>
+                                <v-icon
+                                small
+                                @click="openDialog(props.item.id)"
+                                >
+                                delete
+                                </v-icon>
+                            </td>
+                        </template>
+                        <template slot="pageText" slot-scope="props">
+                            Registros {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                        </template>
+                    </v-data-table>
+                </v-flex>
+            </v-layout>
+        </v-card>
     </div>
 </template>
 <script>
 import MyDialog from '@/components/shared/MyDialog'
+import MenuOpe from './MenuOpe'
   export default {
     components: {
-        'my-dialog': MyDialog
+        'my-dialog': MyDialog,
+        'menu-ope': MenuOpe,
     },
     data () {
       return {
+        titulo: "Empresas",
         headers: [
           {
             text: 'ID',
@@ -127,12 +129,10 @@ import MyDialog from '@/components/shared/MyDialog'
         destroyReg () {
             this.dialog = false;
 
-            axios.post('/admin/empresas/'+this.empresa_id,{_method: 'delete'})
+            axios.post('/admin/empresa/'+this.id,{_method: 'delete'})
                 .then(response => {
-
                 this.empresas = response.data;
                 this.$toast.success('Empresa eliminada!');
-                    console.log(this.empresas);
 
             })
             .catch(err => {

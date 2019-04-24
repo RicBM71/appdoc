@@ -1,25 +1,16 @@
 <template>
-	<div>
-        <mod-menu :showMenuCli="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
+	<div v-show="show">
+
         <v-card>
-            <v-card-title>
-                <h2>{{titulo}}</h2>
+            <v-card-title color="indigo">
+                <h2 color="indigo">{{titulo}}</h2>
+                <v-spacer></v-spacer>
+                <menu-ope :id="carpeta.id"></menu-ope>
             </v-card-title>
         </v-card>
         <v-card>
             <v-form>
                 <v-container>
-                    <v-btn
-                        @click="showMenu"
-                        fixed
-                        dark
-                        fab
-                        bottom
-                        right
-                        color="teal accent-4"
-                        >
-                        <v-icon>add</v-icon>
-                    </v-btn>
                     <v-layout row wrap>
                         <v-flex sm1></v-flex>
                         <v-flex sm3>
@@ -82,14 +73,14 @@
 </template>
 <script>
 import moment from 'moment'
-import ModMenu from '@/components/shared/ModMenu'
+import MenuOpe from './MenuOpe'
 
 	export default {
 		$_veeValidate: {
       		validator: 'new'
         },
         components: {
-            'mod-menu': ModMenu
+            'menu-ope': MenuOpe
 		},
     	data () {
       		return {
@@ -108,18 +99,6 @@ import ModMenu from '@/components/shared/ModMenu'
                 enviando: false,
 
                 show: false,
-                showMenuCli: false,
-
-                x: 0,
-                y: 0,
-               items: [
-                    { title: 'Carpetas', name: 'carpeta.index', icon: 'list' },
-                    { title: 'Nueva Carpeta', name: 'carpeta.create', icon: 'add' },
-                    { title: 'Home', name: 'dash', icon: 'home' },
-
-                ]
-
-
       		}
         },
         mounted(){
@@ -129,7 +108,7 @@ import ModMenu from '@/components/shared/ModMenu'
                 })
                 .catch(err => {
                     this.$toast.error(err.response.data.message);
-                    this.$router.push({ name: 'iva.index'})
+                    this.$router.push({ name: 'carpeta.index'})
                 })
         },
 
@@ -145,18 +124,6 @@ import ModMenu from '@/components/shared/ModMenu'
 
         },
     	methods:{
-            showMenu (e) {
-
-                e.preventDefault()
-
-                this.showMenuCli = false
-                this.x = e.clientX
-                this.y = e.clientY
-
-                this.$nextTick(() => {
-                    this.showMenuCli = true
-                })
-            },
             submit() {
 
                 //console.log("Edit user (submit):"+this.carpeta.id);

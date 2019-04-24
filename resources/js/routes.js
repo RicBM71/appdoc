@@ -69,17 +69,17 @@ export default [
             },
             {
                 path: '/users',
-                name: 'users',
+                name: 'users.index',
                 component: UserIndex,
             },
             {
                 path: '/users/create',
-                name: 'users_create',
+                name: 'users.create',
                 component: UserCreate,
             },
             {
                 path: '/users/:id/edit',
-                name: 'users_edit',
+                name: 'users.edit',
                 component: UserEdit,
             },
             {

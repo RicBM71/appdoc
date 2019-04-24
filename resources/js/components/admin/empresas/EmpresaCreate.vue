@@ -1,25 +1,15 @@
 <template>
 	<div v-show="show">
-        <mod-menu :showMenuCli="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
         <v-card>
-            <v-card-title>
-                <h2>{{titulo}}</h2>
+            <v-card-title color="indigo">
+                <h2 color="indigo">{{titulo}}</h2>
+                <v-spacer></v-spacer>
+                <menu-ope :id="empresa.id"></menu-ope>
             </v-card-title>
         </v-card>
         <v-card>
             <v-form>
                 <v-container>
-                    <v-btn
-                        @click="showMenu"
-                        fixed
-                        dark
-                        fab
-                        bottom
-                        right
-                        color="teal accent-4"
-                        >
-                        <v-icon>add</v-icon>
-                    </v-btn>
                     <v-layout row wrap>
                         <v-flex sm3>
                             <v-text-field
@@ -293,14 +283,14 @@
 </template>
 <script>
 import moment from 'moment'
-import ModMenu from '@/components/shared/ModMenu'
+import MenuOpe from './MenuOpe'
 
 	export default {
 		$_veeValidate: {
       		validator: 'new'
         },
         components: {
-            'mod-menu': ModMenu
+            'menu-ope': MenuOpe
 		},
     	data () {
       		return {

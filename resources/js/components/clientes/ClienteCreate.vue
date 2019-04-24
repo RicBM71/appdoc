@@ -1,25 +1,15 @@
 <template>
 	<div v-show="show">
-        <mod-menu :showMenuCli="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
         <v-card>
             <v-card-title>
                 <h2>{{titulo}}</h2>
+                <v-spacer></v-spacer>
+                <menu-ope :id="cliente.id"></menu-ope>
             </v-card-title>
         </v-card>
         <v-card>
             <v-form>
-                <v-container @contextmenu="showMenu">
-                    <v-btn
-                        @click="showMenu"
-                        fixed
-                        dark
-                        fab
-                        bottom
-                        right
-                        color="teal accent-4"
-                        >
-                        <v-icon>add</v-icon>
-                    </v-btn>
+                <v-container>
                     <v-layout row wrap>
                         <v-flex sm3>
                             <v-text-field
@@ -359,20 +349,20 @@
 </template>
 <script>
 import moment from 'moment'
-import ModMenu from '@/components/shared/ModMenu'
+import MenuOpe from './MenuOpe'
 
 	export default {
 		$_veeValidate: {
       		validator: 'new'
         },
         components: {
-            'mod-menu': ModMenu
+            'menu-ope': MenuOpe,
 		},
     	data () {
       		return {
                 titulo:"Clientes",
                 cliente: {
-                    id:"",
+                    id:0,
                     empresa_id:"",
                     razon:"",
                     nombre:"",
@@ -419,17 +409,6 @@ import ModMenu from '@/components/shared/ModMenu'
                 calfbaja:false,
                 show: false,
 
-                showMenuCli: false,
-                x: 0,
-                y: 0,
-                items: [
-                    { title: 'clientes', name: 'cliente.index', icon: 'list' },
-                    { title: 'Nuevo cliente', name: 'cliente.create', icon: 'add' },
-                    { title: 'Home', name: 'dash', icon: 'home' },
-
-                ]
-
-
       		}
         },
         mounted(){
@@ -467,18 +446,6 @@ import ModMenu from '@/components/shared/ModMenu'
 
         },
     	methods:{
-            showMenu (e) {
-
-                e.preventDefault()
-
-                this.showMenuCli = false
-                this.x = e.clientX
-                this.y = e.clientY
-
-                this.$nextTick(() => {
-                    this.showMenuCli = true
-                })
-            },
             submit() {
 
                 this.enviando = true;

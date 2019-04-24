@@ -1,27 +1,15 @@
 <template>
 	<div v-show="show">
-        <mod-menu :showMenuCli="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
         <v-card>
             <v-card-title>
-                <div>
-                    <h2>{{titulo}}</h2>
-                </div>
+                <h2>{{titulo}}</h2>
+                <v-spacer></v-spacer>
+                <menu-ope :id="albaran.albaran_id" :cliente_id="albaran.cliente_id"></menu-ope>
             </v-card-title>
         </v-card>
         <v-card>
             <v-form>
                 <v-container>
-                    <v-btn
-                        @click="showMenu"
-                        fixed
-                        dark
-                        fab
-                        bottom
-                        right
-                        color="teal accent-4"
-                        >
-                        <v-icon>add</v-icon>
-                    </v-btn>
                     <v-layout row wrap>
                         <v-flex sm1>
                             <v-text-field
@@ -200,26 +188,26 @@
 </template>
 <script>
 import moment from 'moment'
-import ModMenu from '@/components/shared/ModMenu'
+import MenuOpe from './MenuOpe'
 
 	export default {
 		$_veeValidate: {
       		validator: 'new'
         },
         components: {
-            'mod-menu': ModMenu
+            'menu-ope': MenuOpe
 		},
     	data () {
       		return {
                 titulo:"Albaranes",
                 albaran: {
-                    id:"",
+                    id:0,
                     empresa_id:"",
                     ejercicio:0,
                     albaran:"",
                     serie:"",
                     fecha_alb: new Date().toISOString().substr(0, 10),
-                    cliente_id:"",
+                    cliente_id:0,
                     ejefac:"",
                     factura:"",
                     fecha_fac:null,
@@ -232,7 +220,6 @@ import ModMenu from '@/components/shared/ModMenu'
                     created_at:"",
                 },
 
-                kk:1,
                 ivas:[],
                 retenciones:[],
                 productos:[],
@@ -251,17 +238,6 @@ import ModMenu from '@/components/shared/ModMenu'
                 show: true,
 
                 menu2:false,
-
-                showMenuCli: false,
-                x: 0,
-                y: 0,
-                items: [
-                    { title: 'Albaranes', name: 'albaran.index', icon: 'list' },
-                    { title: 'Nuevo albarán', name: 'albaran.create', icon: 'add' },
-                    { title: 'Home', name: 'dash', icon: 'home' },
-
-                ]
-
 
       		}
         },
@@ -299,18 +275,6 @@ import ModMenu from '@/components/shared/ModMenu'
 
         },
     	methods:{
-            showMenu (e) {
-
-                e.preventDefault()
-
-                this.showMenuCli = false
-                this.x = e.clientX
-                this.y = e.clientY
-
-                this.$nextTick(() => {
-                    this.showMenuCli = true
-                })
-            },
             submit() {
 
                 this.enviando = true;

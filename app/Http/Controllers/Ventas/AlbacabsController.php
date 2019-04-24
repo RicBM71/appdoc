@@ -269,6 +269,22 @@ class AlbacabsController extends Controller
 
             PDF::SetFont('helvetica', 'R', 7);
 
+            $texto = 'Sus datos de carácter personal han sido recogidos de acuerdo con lo dispuesto en el Reglamento (UE) 2016/679 del '.
+                    'Parlamento Europeo y del Consejo, de 27 de abril de 2016, relativo a la protección de las personas físicas en lo que '.
+                    'respecta al tratamiento de datos personales y a la libre circulación de los mismos. '.
+                    'Le ponemos en conocimiento que estos datos se encuentran almacenados en un fichero propiedad de %e. '.
+                    'De acuerdo con la Ley anterior, tiene derecho a ejercer los derechos de acceso, rectificación, cancelación, limitación, '.
+                    'oposición y portabilidad de manera gratuita mediante correo electrónico a: %m o bien en la '.
+                    'siguiente dirección: '.session()->get('empresa')->direccion.' '. session()->get('empresa')->cpostal.' '. session()->get('empresa')->polbacion.".\n";
+
+            $texto = str_replace('%e',  session()->get('empresa')->razon, $texto);
+            $texto = str_replace('%m',  session()->get('empresa')->email, $texto);
+
+            PDF::Write(0, $texto, $link='', $fill=0, $align='J', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
+            PDF::Ln();
+
+            PDF::SetFont('helvetica', 'R', 8);
+
             PDF::Write(0, session()->get('empresa')->txtpie1, $link='', $fill=0, $align='C', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
             PDF::Write(0, session()->get('empresa')->txtpie2, $link='', $fill=0, $align='C', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
         });
@@ -279,7 +295,7 @@ class AlbacabsController extends Controller
 
         $this->setPrepararAlb($empresa);
 
-        $data =  Albacab::with(['cliente','albalins'])->find($id);
+        $data =  Albacab::with(['cliente','fpago','vencimiento','albalins'])->find($id);
 
         // cabecera cliente
         $this->setCabeceraCli($data->cliente);
@@ -298,10 +314,13 @@ class AlbacabsController extends Controller
 
         $this->setTotalesAlb($totales);
 
+        // forma de pago, vencimiento
+        $this->setPieAlb($data);
+
 
         //PDF::Write(0, 'Hello Worldd');
 
-        PDF::Output('hello_world.pdf');
+        PDF::Output($data->factura.'.pdf');
 
     }
 
@@ -331,7 +350,8 @@ class AlbacabsController extends Controller
         // set margins
         PDF::SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
         PDF::SetHeaderMargin(PDF_MARGIN_HEADER);
-        PDF::SetFooterMargin(PDF_MARGIN_FOOTER);
+        //PDF::SetFooterMargin(PDF_MARGIN_FOOTER);
+        PDF::SetFooterMargin(34);
 
         // set auto page breaks
         PDF::SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
@@ -474,9 +494,9 @@ class AlbacabsController extends Controller
 		}
 
 		$trazo='LR';
-		while ($linea < 16){
+		while ($linea < 18){
 			$linea++;
-			if ($linea==16)
+			if ($linea==18)
 				$trazo='LRB';
 			PDF::MultiCell(104,6,'', $trazo, 'L', 0, 0, '', '', true,0,false,true,6,'M',false);
 			PDF::MultiCell(12,6,'', $trazo, 'L', 0, 0, '', '', true,0,false,true,6,'M',false);
@@ -531,7 +551,26 @@ class AlbacabsController extends Controller
 			$texto="";
 
 		PDF::Ln();
-		PDF::MultiCell(114,6,$texto, '', '', 0, 0, '', '', true,0,false,true,6,'M',false);
+		PDF::MultiCell(114,6,$texto, '', '', 0, 1, '', '', true,0,false,true,6,'M',false);
 
     }
+
+      /**
+     *
+     * @param Model Albaran
+     *
+     */
+    private function setPieAlb($data){
+
+        PDF::MultiCell(30,8,'Forma de Pago', '1', 'C', 0, 0, '', '', true,0,false,true,8,'M',false);
+		PDF::MultiCell(60,8,$data->fpago->nombre, '1', 'L', 0, 0, '', '', true,0,false,true,8,'M',false);
+        PDF::MultiCell(26,8,'IBAN', '1', 'C', 0, 0, '', '', true,0,false,true,8,'M',false);
+        PDF::MultiCell(68,8,$data->cliente->iban, '1', 'C', 0, 1, '', '', true,0,false,true,8,'M',false);
+
+        PDF::Ln();
+        PDF::MultiCell(184,24,$data->notas, '1', 'L', 0, 0, '', '', true,0,false,true,24,'T',false);
+
+
+    }
+
 }

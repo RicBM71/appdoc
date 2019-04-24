@@ -1,35 +1,16 @@
 <template>
 	<div v-show="show">
         <loading :show_loading="show_loading"></loading>
-        <mod-menu :showMenuCli="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
-
         <v-card>
             <v-card-title>
                 <h2>{{titulo}}</h2>
                 <v-spacer></v-spacer>
-                <v-btn
-                    color="white"
-                    icon
-                    @click="printPDF"
-                >
-                    <v-icon>print</v-icon>
-                </v-btn>
+                <menu-ope :id="albaran.id" :cliente_id="albaran.cliente_id"></menu-ope>
             </v-card-title>
         </v-card>
         <v-card>
             <v-form>
                 <v-container>
-                    <v-btn
-                        @click="showMenu"
-                        fixed
-                        dark
-                        fab
-                        bottom
-                        right
-                        color="teal accent-4"
-                        >
-                        <v-icon>add</v-icon>
-                    </v-btn>
                     <v-layout row wrap>
                         <v-flex sm1>
                             <v-text-field
@@ -262,9 +243,9 @@
 </template>
 <script>
 import moment from 'moment'
-import ModMenu from '@/components/shared/ModMenu'
 import Loading from '@/components/shared/Loading'
 import Albalin from './Albalin'
+import MenuOpe from './MenuOpe'
 import {mapGetters} from 'vuex';
 
 	export default {
@@ -272,7 +253,7 @@ import {mapGetters} from 'vuex';
       		validator: 'new'
         },
         components: {
-            'mod-menu': ModMenu,
+            'menu-ope': MenuOpe,
             'loading': Loading,
             'albalin': Albalin
 		},
@@ -280,13 +261,13 @@ import {mapGetters} from 'vuex';
       		return {
                 titulo:"Albarán",
                 albaran: {
-                    id:"",
+                    id:0,
                     empresa_id:"",
                     ejercicio:"",
                     albaran:"",
                     serie:"",
                     fecha_alb:"",
-                    cliente_id:"",
+                    cliente_id:0,
                     ejefac:"",
                     factura:"",
                     fecha_fac:"",
@@ -321,19 +302,7 @@ import {mapGetters} from 'vuex';
                 facturado:true,
                 menu3:false,
 
-                show_loading: false,
-
-                showMenuCli: false,
-                x: 0,
-                y: 0,
-                items: [
-                    { title: 'Albaranes', name: 'albaran.index', icon: 'list' },
-                    { title: 'Nuevo albarán', name: 'albaran.create', icon: 'add' },
-                    { title: 'Home', name: 'dash', icon: 'home' },
-
-                ]
-
-
+                show_loading: true,
       		}
         },
         mounted(){
@@ -352,6 +321,7 @@ import {mapGetters} from 'vuex';
                         this.albaran.ejefac ==  0 ? this.titulo ="Albarán" : this.titulo = "Factura";
 
                         this.show=true;
+                        this.show_loading = false;
                     })
                     .catch(err => {
                         if (err.response.status == 404)
@@ -360,6 +330,7 @@ import {mapGetters} from 'vuex';
                             this.$toast.error(err.response.data.message);
                         this.$router.push({ name: 'albaran.index'})
                     })
+
         },
         computed: {
             ...mapGetters([
@@ -394,18 +365,6 @@ import {mapGetters} from 'vuex';
 
         },
     	methods:{
-            showMenu (e) {
-
-                e.preventDefault()
-
-                this.showMenuCli = false
-                this.x = e.clientX
-                this.y = e.clientY
-
-                this.$nextTick(() => {
-                    this.showMenuCli = true
-                })
-            },
             submit() {
 
                 this.show_loading = true;
@@ -485,24 +444,6 @@ import {mapGetters} from 'vuex';
                 });
 
             },
-            printPDF(){
-                var id = 1;
-                var url = '/ventas/albacabs/'+id+'/print';
-
-                window.open(url, '_blank');
-                //window.location = url;
-                return;
-
-                axios.get('/ventas/albacabs/'+id+'/print')
-                    .then(res => {
-                        console.log(res);
-                    })
-                    .catch(err => {
-                        console.log(err.response);
-                    })
-                console.log("print");
-            }
-
     }
   }
 </script>

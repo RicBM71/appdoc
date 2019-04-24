@@ -1,16 +1,14 @@
 <template>
     <div v-if="registros">
-        <v-layout row wrap>
-			<my-dialog :dialog.sync="dialog" registro="registro" @destroyReg="destroyReg"></my-dialog>
-            <v-flex xs10>
-                <h2>Retenciones</h2>
-            </v-flex>
-			<v-flex xs2>
-				<v-btn v-on:click="create" small >
-					<v-icon small>add</v-icon> Crear Retención
-				</v-btn>
-			</v-flex>
-        </v-layout>
+		<my-dialog :dialog.sync="dialog" registro="registro" @destroyReg="destroyReg"></my-dialog>
+        <v-card>
+            <v-card-title>
+                <h2>{{titulo}}</h2>
+                <v-spacer></v-spacer>
+                <menu-ope></menu-ope>
+            </v-card-title>
+        </v-card>
+        <v-card>
         <v-layout row wrap>
 			<v-flex xs12>
 				<v-data-table
@@ -46,16 +44,20 @@
 				</v-data-table>
 			</v-flex>
 		</v-layout>
+        </v-card>
     </div>
 </template>
 <script>
 import MyDialog from '@/components/shared/MyDialog'
+import MenuOpe from './MenuOpe'
   export default {
     components: {
-        'my-dialog': MyDialog
+        'my-dialog': MyDialog,
+         'menu-ope': MenuOpe,
     },
     data () {
       return {
+        titulo: "Retenciones",
         headers: [
           {
             text: 'ID',

@@ -30,6 +30,11 @@ import FpagoIndex from './components/admin/fpago/FpagoIndex.vue';
 import FpagoCreate from './components/admin/fpago/FpagoCreate.vue';
 import FpagoEdit from './components/admin/fpago/FpagoEdit.vue';
 
+import VencimientoIndex from './components/admin/vencimientos/VencimientoIndex.vue';
+import VencimientoCreate from './components/admin/vencimientos/VencimientoCreate.vue';
+import VencimientoEdit from './components/admin/vencimientos/VencimientoEdit.vue';
+
+
 import ContadorIndex from './components/admin/contador/ContadorIndex.vue';
 import ContadorCreate from './components/admin/contador/ContadorCreate.vue';
 import ContadorEdit from './components/admin/contador/ContadorEdit.vue';
@@ -191,6 +196,21 @@ export default [
                 path: '/fpagos/:id/edit',
                 name: 'fpago.edit',
                 component: FpagoEdit,
+            },
+            {
+                path: '/vencimientos',
+                name: 'vencimiento.index',
+                component: VencimientoIndex,
+            },
+            {
+                path: '/vencimientos/create',
+                name: 'vencimiento.create',
+                component: VencimientoCreate,
+            },
+            {
+                path: '/vencimientos/:id/edit',
+                name: 'vencimiento.edit',
+                component: VencimientoEdit,
             },
             {
                 path: '/productos',

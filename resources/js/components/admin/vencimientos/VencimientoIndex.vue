@@ -13,7 +13,7 @@
                 <v-flex xs12>
                     <v-data-table
                     :headers="headers"
-                    :items="this.fpagos"
+                    :items="this.vencimientos"
                     rows-per-page-text="Registros por página"
                     >
                         <template slot="items" slot-scope="props">
@@ -56,6 +56,7 @@ import MenuOpe from './MenuOpe'
     },
     data () {
       return {
+        titulo: "Vencimientos",
         headers: [
           {
             text: 'ID',
@@ -73,20 +74,19 @@ import MenuOpe from './MenuOpe'
             value: ''
           }
         ],
-        fpagos:[],
+        vencimientos:[],
         status: false,
 		registros: false,
         dialog: false,
         fpago_id: 0,
-        titulo:"Formas de Pago"
       }
     },
     mounted()
     {
 
-        axios.get('/admin/fpagos')
+        axios.get('/mto/vencimientos')
             .then(res => {
-                this.fpagos = res.data;
+                this.vencimientos = res.data;
                 this.registros = true;
             })
             .catch(err =>{
@@ -97,24 +97,24 @@ import MenuOpe from './MenuOpe'
     },
     methods:{
         create(){
-            this.$router.push({ name: 'fpago.create'})
+            this.$router.push({ name: 'vencimiento.create'})
         },
         editItem (id) {
-            this.$router.push({ name: 'fpago.edit', params: { id: id } })
+            this.$router.push({ name: 'vencimiento.edit', params: { id: id } })
         },
         openDialog (id){
             this.dialog = true;
-            this.iva_id = id;
+            this.vencimiento_id = id;
         },
         destroyReg () {
             this.dialog = false;
 
-            axios.post('/admin/fpagos/'+this.iva_id,{_method: 'delete'})
+            axios.post('/mto/vencimientos/'+this.vencimiento_id,{_method: 'delete'})
                 .then(response => {
 
                 if (response.status == 200){
-                    this.$toast.success('Forma de pago eliminada!');
-                    this.fpagos = response.data;
+                    this.$toast.success('Vencimiento eliminado!');
+                    this.vencimientos = response.data;
                 }
                 })
             .catch(err => {

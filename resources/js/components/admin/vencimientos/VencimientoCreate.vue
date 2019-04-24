@@ -4,7 +4,7 @@
             <v-card-title color="indigo">
                 <h2 color="indigo">{{titulo}}</h2>
                 <v-spacer></v-spacer>
-                <menu-ope :id="fpago.id"></menu-ope>
+                <menu-ope :id="vencimiento.id"></menu-ope>
             </v-card-title>
         </v-card>
         <v-card>
@@ -14,7 +14,7 @@
                         <v-flex sm1></v-flex>
                         <v-flex sm4>
                             <v-text-field
-                                v-model="fpago.nombre"
+                                v-model="vencimiento.nombre"
                                 v-validate="'required'"
                                 :error-messages="errors.collect('nombre')"
                                 label="Nombre"
@@ -69,14 +69,14 @@ import MenuOpe from './MenuOpe'
 		},
     	data () {
       		return {
-                titulo:"Formas de pago",
-                fpago: {
+                titulo:"Vencimientos",
+                vencimiento: {
                     id:       0,
                     nombre:  "",
                     updated_at:"",
                     created_at:"",
                 },
-                fpago_id: "",
+                vencimiento_id: "",
 
         		status: false,
                 enviando: false,
@@ -85,34 +85,34 @@ import MenuOpe from './MenuOpe'
       		}
         },
         mounted(){
-            axios.get('/admin/fpagos/create')
+            axios.get('/mto/vencimiento/create')
                 .then(res => {
                     this.show = true;
                 })
                 .catch(err => {
                     this.$toast.error(err.response.data.message);
-                    this.$router.push({ name: 'fpago.index'})
+                    this.$router.push({ name: 'vencimiento.index'})
                 })
         },
 
         computed: {
             computedFModFormat() {
                 moment.locale('es');
-                return this.fpago.updated_at ? moment(this.fpago.updated_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.vencimiento.updated_at ? moment(this.vencimiento.updated_at).format('D/MM/YYYY H:mm:ss') : '';
             },
             computedFCreFormat() {
                 moment.locale('es');
-                return this.fpago.created_at ? moment(this.fpago.created_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.vencimiento.created_at ? moment(this.vencimiento.created_at).format('D/MM/YYYY H:mm:ss') : '';
             }
 
         },
     	methods:{
             submit() {
 
-                //console.log("Edit user (submit):"+this.fpago.id);
+                //console.log("Edit user (submit):"+this.vencimiento.id);
                 this.enviando = true;
 
-                var url = "/admin/fpagos";
+                var url = "/mto/vencimientos";
                 var metodo = "post";
 
                 this.$validator.validateAll().then((result) => {
@@ -122,7 +122,7 @@ import MenuOpe from './MenuOpe'
                             url: url,
                             data:
                                 {
-                                    nombre: this.fpago.nombre,
+                                    nombre: this.vencimiento.nombre,
 
                                 }
                             })
@@ -131,7 +131,7 @@ import MenuOpe from './MenuOpe'
                                 this.$toast.success(response.data.message);
 
                                 this.enviando = false;
-                                this.$router.push({ name: 'fpago.edit', params: { id: response.data.fpago.id } })
+                                this.$router.push({ name: 'vencimiento.edit', params: { id: response.data.vencimiento.id } })
                             })
                             .catch(err => {
 

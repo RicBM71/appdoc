@@ -1,25 +1,15 @@
 <template>
 	<div>
-        <mod-menu :showMenuCli="showMenuCli" :x="x" :y="y" :items="items"></mod-menu>
         <v-card>
-            <v-card-title>
-                <h2>{{titulo}}</h2>
+            <v-card-title color="indigo">
+                <h2 color="indigo">{{titulo}}</h2>
+                <v-spacer></v-spacer>
+                <menu-ope :id="producto.id"></menu-ope>
             </v-card-title>
         </v-card>
         <v-card>
             <v-form>
-                <v-container @contextmenu="showMenu">
-                    <v-btn
-                        @click="showMenu"
-                        fixed
-                        dark
-                        fab
-                        bottom
-                        right
-                        color="teal accent-4"
-                        >
-                        <v-icon>add</v-icon>
-                    </v-btn>
+                <v-container>
                     <v-layout row wrap>
                         <v-flex sm4>
                             <v-text-field
@@ -57,7 +47,6 @@
                             :error-messages="errors.collect('retencion_id')"
                             v-validate="'required'"
                             data-vv-name="retencion_id"
-                            data-vv-as="retención"
                             :items="retenciones"
                             label="IRPF"
                             ></v-select>
@@ -68,7 +57,6 @@
                             :error-messages="errors.collect('iva_id')"
                             v-validate="'required'"
                             data-vv-name="iva_id"
-                            data-vv-as="iva"
                             :items="ivas"
                             label="IVA"
                             ></v-select>
@@ -118,20 +106,20 @@
 </template>
 <script>
 import moment from 'moment'
-import ModMenu from '@/components/shared/ModMenu'
+import MenuOpe from './MenuOpe'
 
 	export default {
 		$_veeValidate: {
       		validator: 'new'
         },
         components: {
-            'mod-menu': ModMenu
+            'menu-ope': MenuOpe,
 		},
     	data () {
       		return {
                 titulo:"Productos",
                 producto: {
-                    id:"",
+                    id:0    ,
                     empresa_id:"",
                     nombre:"",
                     iva_id:"",

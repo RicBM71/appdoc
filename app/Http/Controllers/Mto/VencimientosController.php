@@ -16,7 +16,7 @@ class VencimientosController extends Controller
     public function index()
     {
         if (request()->wantsJson())
-            Vencimiento::all();
+            return Vencimiento::all();
     }
 
     /**
@@ -37,18 +37,15 @@ class VencimientosController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $data = $request->validate([
+            'nombre' => ['required', 'string', 'max:255'],
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        $ret = Vencimiento::create($data);
+
+        if (request()->wantsJson())
+            return ['vencimiento'=>$ret, 'message' => 'EL registro ha sido creado'];
+
     }
 
     /**
@@ -57,9 +54,13 @@ class VencimientosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Vencimiento $vencimiento)
     {
-        //
+        if (request()->wantsJson())
+        return [
+            'vencimiento' =>$vencimiento
+        ];
+
     }
 
     /**
@@ -69,9 +70,16 @@ class VencimientosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Vencimiento $vencimiento)
     {
-        //
+        $data = $request->validate([
+            'nombre' => ['required', 'string', 'max:255'],
+        ]);
+
+        $vencimiento->update($data);
+
+        if (request()->wantsJson())
+            return ['vencimiento'=>$vencimiento, 'message' => 'EL registro ha sido modficado'];
     }
 
     /**
@@ -80,8 +88,13 @@ class VencimientosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Vencimiento $vencimiento)
     {
-        //
+        $vencimiento->delete();
+
+
+        if (request()->wantsJson()){
+            return response()->json(Vencimiento::all());
+        }
     }
 }

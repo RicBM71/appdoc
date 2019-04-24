@@ -193,6 +193,7 @@ export default {
                 { text: 'Retenciones (IRPF)', name: 'ret.index' },
                 { text: 'Tipos de IVA', name: 'iva.index' },
                 { text: 'Carpetas', name: 'carpeta.index' },
+                { text: 'Formas de Pago', name: 'fpago.index' },
                 { text: 'Contadores', name: 'contador.index' },
             ]
         },
@@ -215,7 +216,7 @@ export default {
 
         items: [
             { icon: 'people', text: 'Clientes', name:'cliente.index' },
-            { icon: 'list', text: 'Productos', name:'producto.index' },
+            { icon: 'local_offer', text: 'Productos', name:'producto.index' },
             {
             icon: 'keyboard_arrow_up',
             'icon-alt': 'keyboard_arrow_down',
@@ -223,6 +224,7 @@ export default {
             model: false,
             children: [
                 { text: 'Albaranes', name: 'albaran.index' },
+                { text: 'Vencimientos', name: 'vencimiento.index' },
             ]
         },
         ]

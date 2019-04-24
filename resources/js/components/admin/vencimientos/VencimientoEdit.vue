@@ -4,7 +4,7 @@
             <v-card-title color="indigo">
                 <h2 color="indigo">{{titulo}}</h2>
                 <v-spacer></v-spacer>
-                <menu-ope :id="fpago.id"></menu-ope>
+                <menu-ope :id="vencimiento.id"></menu-ope>
             </v-card-title>
         </v-card>
         <v-card>
@@ -14,7 +14,7 @@
                         <v-flex sm1></v-flex>
                         <v-flex sm4>
                             <v-text-field
-                                v-model="fpago.nombre"
+                                v-model="vencimiento.nombre"
                                 v-validate="'required'"
                                 :error-messages="errors.collect('nombre')"
                                 label="Nombre"
@@ -69,52 +69,55 @@ import MenuOpe from './MenuOpe'
 		},
     	data () {
       		return {
-                titulo:"Formas de pago",
-                fpago: {
+                titulo:"Vencimiento",
+                vencimiento: {
                     id:       0,
                     nombre:  "",
                     updated_at:"",
                     created_at:"",
                 },
-                fpago_id: "",
 
         		status: false,
                 enviando: false,
 
                 show: false,
+
       		}
         },
         mounted(){
-            axios.get('/admin/fpagos/create')
-                .then(res => {
-                    this.show = true;
-                })
-                .catch(err => {
-                    this.$toast.error(err.response.data.message);
-                    this.$router.push({ name: 'fpago.index'})
-                })
-        },
+            var id = this.$route.params.id;
+            //console.log(this.$route.params);
+            if (id > 0)
+                axios.get('/mto/vencimientos/'+id+'/edit')
+                    .then(res => {
 
+                        this.vencimiento = res.data.vencimiento;
+                        this.show = true;
+                    })
+                    .catch(err => {
+                        this.$toast.error(err.response.data.message);
+                        this.$router.push({ name: 'vencimiento.index'})
+                    })
+        },
         computed: {
             computedFModFormat() {
                 moment.locale('es');
-                return this.fpago.updated_at ? moment(this.fpago.updated_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.vencimiento.updated_at ? moment(this.vencimiento.updated_at).format('D/MM/YYYY H:mm:ss') : '';
             },
             computedFCreFormat() {
                 moment.locale('es');
-                return this.fpago.created_at ? moment(this.fpago.created_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.vencimiento.created_at ? moment(this.vencimiento.created_at).format('D/MM/YYYY H:mm:ss') : '';
             }
 
         },
     	methods:{
             submit() {
 
-                //console.log("Edit user (submit):"+this.fpago.id);
+                //console.log("Edit user (submit):"+this.vencimiento.id);
                 this.enviando = true;
 
-                var url = "/admin/fpagos";
-                var metodo = "post";
-
+                var url = "/mto/vencimientos/"+this.vencimiento.id;
+                var metodo = "put";
                 this.$validator.validateAll().then((result) => {
                     if (result){
                         axios({
@@ -122,16 +125,14 @@ import MenuOpe from './MenuOpe'
                             url: url,
                             data:
                                 {
-                                    nombre: this.fpago.nombre,
+                                    nombre: this.vencimiento.nombre,
 
                                 }
                             })
                             .then(response => {
-                                //console.log(response.data);
                                 this.$toast.success(response.data.message);
-
+                                this.vencimiento = response.data.vencimiento;
                                 this.enviando = false;
-                                this.$router.push({ name: 'fpago.edit', params: { id: response.data.fpago.id } })
                             })
                             .catch(err => {
 
@@ -159,17 +160,3 @@ import MenuOpe from './MenuOpe'
     }
   }
 </script>
-<style>
-.inputPrice >>> input {
-  text-align: center;
-  -moz-appearance:textfield;
-}
-
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin: 0;
-}
-</style>

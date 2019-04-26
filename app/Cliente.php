@@ -14,7 +14,7 @@ class Cliente extends Model
     protected $fillable = [
         'empresa_id','nombre', 'razon', 'cif', 'poblacion', 'direccion', 'cpostal','provincia', 'telefono1','telefono2','tfmovil',
         'fechaalta','fechabaja','web','carpeta_id','patron','notas1','efact','eusr','epass','contacto','email','patron',
-        'fpago_id','factura','iban','ref19','username'
+        'fpago_id','factura','iban','bic','ref19','username'
     ];
 
 
@@ -40,6 +40,18 @@ class Cliente extends Model
     public function setWebAttribute($web)
     {
         $this->attributes['web'] = strtolower($web);
+
+    }
+
+    public function setIbanAttribute($iban)
+    {
+        $this->attributes['iban'] = strtolower($iban);
+
+    }
+
+    public function setBicAttribute($bic)
+    {
+        $this->attributes['bic'] = strtolower($bic);
 
     }
 

@@ -40,6 +40,7 @@ class StoreClientes extends FormRequest
             'web'           => ['nullable','string', 'max:50'],
             'notas1'        => ['nullable','string'],
             'iban'          => ['nullable','iban', 'max:50'],
+            'bic'          => ['nullable','bic', 'max:11'],
             'patron'        => ['nullable','string', 'max:50'],
             'fechabaja'     => ['nullable','date'],
             'ref19'         => ['nullable','string', 'max:20'],

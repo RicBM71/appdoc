@@ -114,7 +114,8 @@ return [
     'uploaded'             => 'Subir :attribute ha fallado.',
     'url'                  => 'El formato :attribute es inválido.',
     'uuid'                 => 'El campo :attribute debe ser un UUID válido.',
-    'iban'                 => 'La cuenta proporcionada no es un IBAN válido',
+    'iban'                 => 'El IBAN no es válido',
+    'bic'                 => 'El BIC no es válido',
     'password'             => 'La contraseña debe contener al menos un dígito, una mayúscula y un símbolo.',
 
     /*

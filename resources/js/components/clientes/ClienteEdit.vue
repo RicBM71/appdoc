@@ -235,9 +235,21 @@
                                         v-model="cliente.iban"
                                         :error-messages="errors.collect('iban')"
                                         label="IBAN"
-                                        mask="AA## ####-####-####-####-####"
+                                        mask="AA## #### #### #### #### ####"
                                         counter=24
                                         data-vv-name="iban"
+                                        v-on:keyup.enter="submit"
+                                    >
+                                    </v-text-field>
+                                </v-flex>
+                                <v-flex sm3>
+                                    <v-text-field
+                                        v-model="cliente.bic"
+                                        :error-messages="errors.collect('bic')"
+                                        label="BIC"
+                                        mask="AAAAAAAAAAA"
+                                        counter=11
+                                        data-vv-name="bic"
                                         v-on:keyup.enter="submit"
                                     >
                                     </v-text-field>
@@ -401,6 +413,7 @@ import MenuOpe from './MenuOpe'
                     fpago_id:"",
                     factura:"",
                     iban:"",
+                    bic:"",
                     ref19:"",
                     username: "",
                     updated_at:"",

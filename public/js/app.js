@@ -11484,6 +11484,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -11523,6 +11548,7 @@ __webpack_require__.r(__webpack_exports__);
         fpago_id: "",
         factura: "",
         iban: "",
+        bic: "",
         ref19: "",
         username: "",
         updated_at: "",
@@ -12009,6 +12035,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -12048,6 +12086,7 @@ __webpack_require__.r(__webpack_exports__);
         fpago_id: "",
         factura: "",
         iban: "",
+        bic: "",
         ref19: "",
         username: "",
         updated_at: "",
@@ -58401,19 +58440,17 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    {
-      directives: [
-        { name: "show", rawName: "v-show", value: _vm.show, expression: "show" }
-      ]
-    },
     [
       _c(
         "v-card",
         [
           _c(
             "v-card-title",
+            { attrs: { color: "indigo" } },
             [
-              _c("h2", [_vm._v(_vm._s(_vm.titulo))]),
+              _c("h2", { attrs: { color: "indigo" } }, [
+                _vm._v(_vm._s(_vm.titulo))
+              ]),
               _vm._v(" "),
               _c("v-spacer"),
               _vm._v(" "),
@@ -58429,727 +58466,1246 @@ var render = function() {
         "v-card",
         [
           _c(
-            "v-form",
+            "v-tabs",
+            { attrs: { "fixed-tabs": "" } },
             [
+              _c("v-tab", [
+                _vm._v(
+                  "\n                        Datos generales\n                "
+                )
+              ]),
+              _vm._v(" "),
+              _c("v-tab", [
+                _vm._v("\n                        Documentos\n                ")
+              ]),
+              _vm._v(" "),
               _c(
-                "v-container",
+                "v-tab-item",
                 [
                   _c(
-                    "v-layout",
-                    { attrs: { row: "", wrap: "" } },
+                    "v-form",
                     [
                       _c(
-                        "v-flex",
-                        { attrs: { sm3: "" } },
-                        [
-                          _c("v-text-field", {
-                            directives: [
-                              {
-                                name: "validate",
-                                rawName: "v-validate",
-                                value: "required",
-                                expression: "'required'"
-                              }
-                            ],
-                            attrs: {
-                              "error-messages": _vm.errors.collect("nombre"),
-                              label: "Nombre",
-                              "data-vv-name": "nombre",
-                              "data-vv-as": "nombre",
-                              required: ""
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.nombre,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "nombre", $$v)
-                              },
-                              expression: "cliente.nombre"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { sm3: "" } },
-                        [
-                          _c("v-text-field", {
-                            directives: [
-                              {
-                                name: "validate",
-                                rawName: "v-validate",
-                                value: "required",
-                                expression: "'required'"
-                              }
-                            ],
-                            attrs: {
-                              "error-messages": _vm.errors.collect("razon"),
-                              label: "Razon",
-                              "data-vv-name": "razon",
-                              required: ""
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.razon,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "razon", $$v)
-                              },
-                              expression: "cliente.razon"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { sm2: "" } },
-                        [
-                          _c("v-text-field", {
-                            directives: [
-                              {
-                                name: "validate",
-                                rawName: "v-validate",
-                                value: "required|min:4",
-                                expression: "'required|min:4'"
-                              }
-                            ],
-                            attrs: {
-                              "error-messages": _vm.errors.collect("cif"),
-                              label: "CIF",
-                              required: "",
-                              "data-vv-name": "cif"
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.cif,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "cif", $$v)
-                              },
-                              expression: "cliente.cif"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { sm2: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              "error-messages": _vm.errors.collect("telefono1"),
-                              label: "Teléfono",
-                              "data-vv-name": "telefono1",
-                              "data-vv-as": "Teléfono",
-                              mask: "### ### ###"
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.telefono1,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "telefono1", $$v)
-                              },
-                              expression: "cliente.telefono1"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { sm2: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              "error-messages": _vm.errors.collect("telefono2"),
-                              label: "Teléfono",
-                              "data-vv-name": "telefono2",
-                              "data-vv-as": "Teléfono",
-                              mask: "### ### ###"
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.telefono2,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "telefono2", $$v)
-                              },
-                              expression: "cliente.telefono2"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-layout",
-                    { attrs: { row: "", wrap: "" } },
-                    [
-                      _c(
-                        "v-flex",
-                        { attrs: { sm3: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              "error-messages": _vm.errors.collect("direccion"),
-                              label: "Dirección",
-                              "data-vv-name": "direccion"
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.direccion,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "direccion", $$v)
-                              },
-                              expression: "cliente.direccion"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { sm1: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              "error-messages": _vm.errors.collect("cpostal"),
-                              label: "CP",
-                              "data-vv-name": "CP"
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.cpostal,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "cpostal", $$v)
-                              },
-                              expression: "cliente.cpostal"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { sm3: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              "error-messages": _vm.errors.collect("poblacion"),
-                              label: "Población",
-                              "data-vv-name": "poblacion"
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.poblacion,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "poblacion", $$v)
-                              },
-                              expression: "cliente.poblacion"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { sm3: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              "error-messages": _vm.errors.collect("provincia"),
-                              label: "Provincia",
-                              "data-vv-name": "provincia"
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.provincia,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "provincia", $$v)
-                              },
-                              expression: "cliente.provincia"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { sm2: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              "error-messages": _vm.errors.collect("tfmovil"),
-                              label: "Tf. Móvil",
-                              "data-vv-name": "tfmovil",
-                              mask: "### ### ###"
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.tfmovil,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "tfmovil", $$v)
-                              },
-                              expression: "cliente.tfmovil"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-layout",
-                    { attrs: { row: "", wrap: "" } },
-                    [
-                      _c(
-                        "v-flex",
-                        { attrs: { sm4: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              "error-messages": _vm.errors.collect("contacto"),
-                              label: "Contacto",
-                              "data-vv-name": "contacto"
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.contacto,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "contacto", $$v)
-                              },
-                              expression: "cliente.contacto"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { sm4: "" } },
-                        [
-                          _c("v-text-field", {
-                            directives: [
-                              {
-                                name: "validate",
-                                rawName: "v-validate",
-                                value: "email",
-                                expression: "'email'"
-                              }
-                            ],
-                            attrs: {
-                              "error-messages": _vm.errors.collect("email"),
-                              label: "email",
-                              "data-vv-name": "email"
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.email,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "email", $$v)
-                              },
-                              expression: "cliente.email"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { sm4: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              "error-messages": _vm.errors.collect("web"),
-                              label: "Web",
-                              "data-vv-name": "web"
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.web,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "web", $$v)
-                              },
-                              expression: "cliente.web"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-layout",
-                    { attrs: { row: "", wrap: "" } },
-                    [
-                      _c(
-                        "v-flex",
-                        { attrs: { sm4: "", "d-flex": "" } },
-                        [
-                          _c("v-select", {
-                            attrs: {
-                              "item-text": "name",
-                              "item-value": "id",
-                              items: _vm.carpetas,
-                              label: "Carpeta"
-                            },
-                            model: {
-                              value: _vm.cliente.carpeta_id,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "carpeta_id", $$v)
-                              },
-                              expression: "cliente.carpeta_id"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { sm3: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              "error-messages": _vm.errors.collect("patron"),
-                              label: "Patrón N.43",
-                              "data-vv-name": "patron"
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.patron,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "patron", $$v)
-                              },
-                              expression: "cliente.patron"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { sm3: "", "d-flex": "" } },
-                        [
-                          _c("v-select", {
-                            attrs: {
-                              "item-text": "name",
-                              "item-value": "id",
-                              items: _vm.fpagos,
-                              label: "Forma de Pago"
-                            },
-                            model: {
-                              value: _vm.cliente.fpago_id,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "fpago_id", $$v)
-                              },
-                              expression: "cliente.fpago_id"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { sm2: "" } },
+                        "v-container",
                         [
                           _c(
-                            "v-menu",
-                            {
-                              attrs: {
-                                "close-on-content-click": false,
-                                "nudge-right": 40,
-                                lazy: "",
-                                transition: "scale-transition",
-                                "offset-y": "",
-                                "full-width": "",
-                                "min-width": "290px"
-                              },
-                              model: {
-                                value: _vm.calfbaja,
-                                callback: function($$v) {
-                                  _vm.calfbaja = $$v
-                                },
-                                expression: "calfbaja"
-                              }
-                            },
+                            "v-layout",
+                            { attrs: { row: "", wrap: "" } },
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  slot: "activator",
-                                  value: _vm.computedFechaBaja,
-                                  clearable: "",
-                                  label: "Fecha Baja",
-                                  "prepend-icon": "event",
-                                  readonly: "",
-                                  "data-vv-as": "F. Baja"
-                                },
-                                on: { "click:clear": _vm.clearDate },
-                                slot: "activator"
-                              }),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm3: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    directives: [
+                                      {
+                                        name: "validate",
+                                        rawName: "v-validate",
+                                        value: "required",
+                                        expression: "'required'"
+                                      }
+                                    ],
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "nombre"
+                                      ),
+                                      label: "Nombre",
+                                      "data-vv-name": "nombre",
+                                      "data-vv-as": "nombre",
+                                      required: ""
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.nombre,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "nombre", $$v)
+                                      },
+                                      expression: "cliente.nombre"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
                               _vm._v(" "),
-                              _c("v-date-picker", {
-                                attrs: {
-                                  "no-title": "",
-                                  locale: "es",
-                                  "first-day-of-week": "1"
-                                },
-                                on: {
-                                  input: function($event) {
-                                    _vm.calfbaja = false
-                                  }
-                                },
-                                model: {
-                                  value: _vm.cliente.fechabaja,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.cliente, "fechabaja", $$v)
-                                  },
-                                  expression: "cliente.fechabaja"
-                                }
-                              })
+                              _c(
+                                "v-flex",
+                                { attrs: { sm3: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    directives: [
+                                      {
+                                        name: "validate",
+                                        rawName: "v-validate",
+                                        value: "required",
+                                        expression: "'required'"
+                                      }
+                                    ],
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "razon"
+                                      ),
+                                      label: "Razon",
+                                      "data-vv-name": "razon",
+                                      required: ""
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.razon,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "razon", $$v)
+                                      },
+                                      expression: "cliente.razon"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm2: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    directives: [
+                                      {
+                                        name: "validate",
+                                        rawName: "v-validate",
+                                        value: "required|min:4",
+                                        expression: "'required|min:4'"
+                                      }
+                                    ],
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "cif"
+                                      ),
+                                      label: "CIF",
+                                      required: "",
+                                      "data-vv-name": "cif"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.cif,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "cif", $$v)
+                                      },
+                                      expression: "cliente.cif"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm2: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "telefono1"
+                                      ),
+                                      label: "Teléfono",
+                                      "data-vv-name": "telefono1",
+                                      "data-vv-as": "Teléfono",
+                                      mask: "### ### ###"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.telefono1,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "telefono1", $$v)
+                                      },
+                                      expression: "cliente.telefono1"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm2: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "telefono2"
+                                      ),
+                                      label: "Teléfono",
+                                      "data-vv-name": "telefono2",
+                                      "data-vv-as": "Teléfono",
+                                      mask: "### ### ###"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.telefono2,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "telefono2", $$v)
+                                      },
+                                      expression: "cliente.telefono2"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-layout",
+                            { attrs: { row: "", wrap: "" } },
+                            [
+                              _c(
+                                "v-flex",
+                                { attrs: { sm3: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "direccion"
+                                      ),
+                                      label: "Dirección",
+                                      "data-vv-name": "direccion"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.direccion,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "direccion", $$v)
+                                      },
+                                      expression: "cliente.direccion"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm1: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "cpostal"
+                                      ),
+                                      label: "CP",
+                                      "data-vv-name": "CP"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.cpostal,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "cpostal", $$v)
+                                      },
+                                      expression: "cliente.cpostal"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm3: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "poblacion"
+                                      ),
+                                      label: "Población",
+                                      "data-vv-name": "poblacion"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.poblacion,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "poblacion", $$v)
+                                      },
+                                      expression: "cliente.poblacion"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm3: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "provincia"
+                                      ),
+                                      label: "Provincia",
+                                      "data-vv-name": "provincia"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.provincia,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "provincia", $$v)
+                                      },
+                                      expression: "cliente.provincia"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm2: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "tfmovil"
+                                      ),
+                                      label: "Tf. Móvil",
+                                      "data-vv-name": "tfmovil",
+                                      mask: "### ### ###"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.tfmovil,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "tfmovil", $$v)
+                                      },
+                                      expression: "cliente.tfmovil"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-layout",
+                            { attrs: { row: "", wrap: "" } },
+                            [
+                              _c(
+                                "v-flex",
+                                { attrs: { sm4: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "contacto"
+                                      ),
+                                      label: "Contacto",
+                                      "data-vv-name": "contacto"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.contacto,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "contacto", $$v)
+                                      },
+                                      expression: "cliente.contacto"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm4: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    directives: [
+                                      {
+                                        name: "validate",
+                                        rawName: "v-validate",
+                                        value: "email",
+                                        expression: "'email'"
+                                      }
+                                    ],
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "email"
+                                      ),
+                                      label: "email",
+                                      "data-vv-name": "email"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.email,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "email", $$v)
+                                      },
+                                      expression: "cliente.email"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm4: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "web"
+                                      ),
+                                      label: "Web",
+                                      "data-vv-name": "web"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.web,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "web", $$v)
+                                      },
+                                      expression: "cliente.web"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-layout",
+                            { attrs: { row: "", wrap: "" } },
+                            [
+                              _c(
+                                "v-flex",
+                                { attrs: { sm4: "", "d-flex": "" } },
+                                [
+                                  _c("v-select", {
+                                    attrs: {
+                                      "item-text": "name",
+                                      "item-value": "id",
+                                      items: _vm.carpetas,
+                                      label: "Carpeta"
+                                    },
+                                    model: {
+                                      value: _vm.cliente.carpeta_id,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "carpeta_id", $$v)
+                                      },
+                                      expression: "cliente.carpeta_id"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm3: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "patron"
+                                      ),
+                                      label: "Patrón N.43",
+                                      "data-vv-name": "patron"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.patron,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "patron", $$v)
+                                      },
+                                      expression: "cliente.patron"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm3: "", "d-flex": "" } },
+                                [
+                                  _c("v-select", {
+                                    attrs: {
+                                      "item-text": "name",
+                                      "item-value": "id",
+                                      items: _vm.fpagos,
+                                      label: "Forma de Pago"
+                                    },
+                                    model: {
+                                      value: _vm.cliente.fpago_id,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "fpago_id", $$v)
+                                      },
+                                      expression: "cliente.fpago_id"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm2: "" } },
+                                [
+                                  _c(
+                                    "v-menu",
+                                    {
+                                      attrs: {
+                                        "close-on-content-click": false,
+                                        "nudge-right": 40,
+                                        lazy: "",
+                                        transition: "scale-transition",
+                                        "offset-y": "",
+                                        "full-width": "",
+                                        "min-width": "290px"
+                                      },
+                                      model: {
+                                        value: _vm.calfbaja,
+                                        callback: function($$v) {
+                                          _vm.calfbaja = $$v
+                                        },
+                                        expression: "calfbaja"
+                                      }
+                                    },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          slot: "activator",
+                                          value: _vm.computedFechaBaja,
+                                          clearable: "",
+                                          label: "Fecha Baja",
+                                          "prepend-icon": "event",
+                                          readonly: "",
+                                          "data-vv-as": "F. Baja"
+                                        },
+                                        on: { "click:clear": _vm.clearDate },
+                                        slot: "activator"
+                                      }),
+                                      _vm._v(" "),
+                                      _c("v-date-picker", {
+                                        attrs: {
+                                          "no-title": "",
+                                          locale: "es",
+                                          "first-day-of-week": "1"
+                                        },
+                                        on: {
+                                          input: function($event) {
+                                            _vm.calfbaja = false
+                                          }
+                                        },
+                                        model: {
+                                          value: _vm.cliente.fechabaja,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.cliente,
+                                              "fechabaja",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "cliente.fechabaja"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-layout",
+                            { attrs: { row: "", wrap: "" } },
+                            [
+                              _c(
+                                "v-flex",
+                                { attrs: { sm4: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "iban"
+                                      ),
+                                      label: "IBAN",
+                                      mask: "AA## #### #### #### #### ####",
+                                      counter: "24",
+                                      "data-vv-name": "iban"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.iban,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "iban", $$v)
+                                      },
+                                      expression: "cliente.iban"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm3: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "bic"
+                                      ),
+                                      label: "BIC",
+                                      mask: "AAAAAAAAAAA",
+                                      counter: "11",
+                                      "data-vv-name": "bic"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.bic,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "bic", $$v)
+                                      },
+                                      expression: "cliente.bic"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm3: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "ref19"
+                                      ),
+                                      label: "Ref. Recibos N.19",
+                                      "data-vv-name": "ref19"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.ref19,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "ref19", $$v)
+                                      },
+                                      expression: "cliente.ref19"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm2: "" } },
+                                [
+                                  _c("v-select", {
+                                    directives: [
+                                      {
+                                        name: "validate",
+                                        rawName: "v-validate",
+                                        value: "required",
+                                        expression: "'required'"
+                                      }
+                                    ],
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "factura"
+                                      ),
+                                      "data-vv-name": "factura",
+                                      "data-vv-as": "Factura",
+                                      "item-text": "name",
+                                      "item-value": "id",
+                                      items: _vm.sino,
+                                      label: "Factura"
+                                    },
+                                    model: {
+                                      value: _vm.cliente.factura,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "factura", $$v)
+                                      },
+                                      expression: "cliente.factura"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-layout",
+                            { attrs: { row: "", wrap: "" } },
+                            [
+                              _c(
+                                "v-flex",
+                                { attrs: { sm4: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "efact"
+                                      ),
+                                      label: "Sitio",
+                                      "data-vv-name": "efact"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.efact,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "efact", $$v)
+                                      },
+                                      expression: "cliente.efact"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm4: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "eusr"
+                                      ),
+                                      label: "Usuario",
+                                      "data-vv-name": "eusr"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.eusr,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "eusr", $$v)
+                                      },
+                                      expression: "cliente.eusr"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm4: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "epass"
+                                      ),
+                                      label: "Password",
+                                      "data-vv-name": "epass"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.epass,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "epass", $$v)
+                                      },
+                                      expression: "cliente.epass"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-layout",
+                            { attrs: { row: "", wrap: "" } },
+                            [
+                              _c(
+                                "v-flex",
+                                { attrs: { sm12: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "notas1"
+                                      ),
+                                      label: "Notas",
+                                      "data-vv-name": "notas1"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.notas1,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "notas1", $$v)
+                                      },
+                                      expression: "cliente.notas1"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-layout",
+                            { attrs: { row: "", wrap: "" } },
+                            [
+                              _c(
+                                "v-flex",
+                                { attrs: { sm2: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "username"
+                                      ),
+                                      label: "Usuario",
+                                      "data-vv-name": "username",
+                                      readonly: ""
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.username,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "username", $$v)
+                                      },
+                                      expression: "cliente.username"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm2: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label: "Modificado",
+                                      readonly: ""
+                                    },
+                                    model: {
+                                      value: _vm.computedFModFormat,
+                                      callback: function($$v) {
+                                        _vm.computedFModFormat = $$v
+                                      },
+                                      expression: "computedFModFormat"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm2: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: { label: "Creado", readonly: "" },
+                                    model: {
+                                      value: _vm.computedFCreFormat,
+                                      callback: function($$v) {
+                                        _vm.computedFCreFormat = $$v
+                                      },
+                                      expression: "computedFCreFormat"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("v-flex", { attrs: { sm3: "" } }),
+                              _vm._v(" "),
+                              _c("v-flex", { attrs: { sm2: "" } }, [
+                                _c(
+                                  "div",
+                                  { staticClass: "text-xs-center" },
+                                  [
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: {
+                                          loading: _vm.enviando,
+                                          block: "",
+                                          color: "primary"
+                                        },
+                                        on: { click: _vm.submit }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                        Guardar\n                                        "
+                                        )
+                                      ]
+                                    )
+                                  ],
+                                  1
+                                )
+                              ])
                             ],
                             1
                           )
@@ -59158,412 +59714,12 @@ var render = function() {
                       )
                     ],
                     1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-layout",
-                    { attrs: { row: "", wrap: "" } },
-                    [
-                      _c(
-                        "v-flex",
-                        { attrs: { sm4: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              "error-messages": _vm.errors.collect("iban"),
-                              label: "IBAN",
-                              mask: "AA## ####-####-####-####-####",
-                              counter: "24",
-                              "data-vv-name": "iban"
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.iban,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "iban", $$v)
-                              },
-                              expression: "cliente.iban"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { sm3: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              "error-messages": _vm.errors.collect("ref19"),
-                              label: "Ref. Recibos N.19",
-                              "data-vv-name": "ref19"
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.ref19,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "ref19", $$v)
-                              },
-                              expression: "cliente.ref19"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { sm2: "" } },
-                        [
-                          _c("v-select", {
-                            directives: [
-                              {
-                                name: "validate",
-                                rawName: "v-validate",
-                                value: "required",
-                                expression: "'required'"
-                              }
-                            ],
-                            attrs: {
-                              "error-messages": _vm.errors.collect("factura"),
-                              "data-vv-name": "factura",
-                              "data-vv-as": "Factura",
-                              "item-text": "name",
-                              "item-value": "id",
-                              items: _vm.sino,
-                              label: "Factura"
-                            },
-                            model: {
-                              value: _vm.cliente.factura,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "factura", $$v)
-                              },
-                              expression: "cliente.factura"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-layout",
-                    { attrs: { row: "", wrap: "" } },
-                    [
-                      _c(
-                        "v-flex",
-                        { attrs: { sm4: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              "error-messages": _vm.errors.collect("efact"),
-                              label: "Sitio",
-                              "data-vv-name": "efact"
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.efact,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "efact", $$v)
-                              },
-                              expression: "cliente.efact"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { sm4: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              "error-messages": _vm.errors.collect("eusr"),
-                              label: "Usuario",
-                              "data-vv-name": "eusr"
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.eusr,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "eusr", $$v)
-                              },
-                              expression: "cliente.eusr"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { sm4: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              "error-messages": _vm.errors.collect("epass"),
-                              label: "Password",
-                              "data-vv-name": "epass"
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.epass,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "epass", $$v)
-                              },
-                              expression: "cliente.epass"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-layout",
-                    { attrs: { row: "", wrap: "" } },
-                    [
-                      _c(
-                        "v-flex",
-                        { attrs: { sm12: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              "error-messages": _vm.errors.collect("notas1"),
-                              label: "Notas",
-                              "data-vv-name": "notas1"
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.notas1,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "notas1", $$v)
-                              },
-                              expression: "cliente.notas1"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-layout",
-                    { attrs: { row: "", wrap: "" } },
-                    [
-                      _c(
-                        "v-flex",
-                        { attrs: { sm2: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              "error-messages": _vm.errors.collect("username"),
-                              label: "Usuario",
-                              "data-vv-name": "username",
-                              readonly: ""
-                            },
-                            on: {
-                              keyup: function($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.submit($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.cliente.username,
-                              callback: function($$v) {
-                                _vm.$set(_vm.cliente, "username", $$v)
-                              },
-                              expression: "cliente.username"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { sm2: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: { label: "Modificado", readonly: "" },
-                            model: {
-                              value: _vm.computedFModFormat,
-                              callback: function($$v) {
-                                _vm.computedFModFormat = $$v
-                              },
-                              expression: "computedFModFormat"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-flex",
-                        { attrs: { sm2: "" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: { label: "Creado", readonly: "" },
-                            model: {
-                              value: _vm.computedFCreFormat,
-                              callback: function($$v) {
-                                _vm.computedFCreFormat = $$v
-                              },
-                              expression: "computedFCreFormat"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-flex", { attrs: { sm3: "" } }),
-                      _vm._v(" "),
-                      _c("v-flex", { attrs: { sm2: "" } }, [
-                        _c(
-                          "div",
-                          { staticClass: "text-xs-center" },
-                          [
-                            _c(
-                              "v-btn",
-                              {
-                                attrs: {
-                                  loading: _vm.enviando,
-                                  block: "",
-                                  color: "primary"
-                                },
-                                on: { click: _vm.submit }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                Guardar\n                                "
-                                )
-                              ]
-                            )
-                          ],
-                          1
-                        )
-                      ])
-                    ],
-                    1
                   )
                 ],
                 1
-              )
+              ),
+              _vm._v(" "),
+              _c("v-tab-item")
             ],
             1
           )
@@ -60418,7 +60574,7 @@ var render = function() {
                                         "iban"
                                       ),
                                       label: "IBAN",
-                                      mask: "AA## ####-####-####-####-####",
+                                      mask: "AA## #### #### #### #### ####",
                                       counter: "24",
                                       "data-vv-name": "iban"
                                     },
@@ -60445,6 +60601,49 @@ var render = function() {
                                         _vm.$set(_vm.cliente, "iban", $$v)
                                       },
                                       expression: "cliente.iban"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-flex",
+                                { attrs: { sm3: "" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      "error-messages": _vm.errors.collect(
+                                        "bic"
+                                      ),
+                                      label: "BIC",
+                                      mask: "AAAAAAAAAAA",
+                                      counter: "11",
+                                      "data-vv-name": "bic"
+                                    },
+                                    on: {
+                                      keyup: function($event) {
+                                        if (
+                                          !$event.type.indexOf("key") &&
+                                          _vm._k(
+                                            $event.keyCode,
+                                            "enter",
+                                            13,
+                                            $event.key,
+                                            "Enter"
+                                          )
+                                        ) {
+                                          return null
+                                        }
+                                        return _vm.submit($event)
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.cliente.bic,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.cliente, "bic", $$v)
+                                      },
+                                      expression: "cliente.bic"
                                     }
                                   })
                                 ],

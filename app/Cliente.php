@@ -45,13 +45,13 @@ class Cliente extends Model
 
     public function setIbanAttribute($iban)
     {
-        $this->attributes['iban'] = strtolower($iban);
+        $this->attributes['iban'] = strtoupper($iban);
 
     }
 
     public function setBicAttribute($bic)
     {
-        $this->attributes['bic'] = strtolower($bic);
+        $this->attributes['bic'] = strtoupper($bic);
 
     }
 

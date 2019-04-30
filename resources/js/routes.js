@@ -39,6 +39,10 @@ import ContadorIndex from './components/admin/contador/ContadorIndex.vue';
 import ContadorCreate from './components/admin/contador/ContadorCreate.vue';
 import ContadorEdit from './components/admin/contador/ContadorEdit.vue';
 
+import CuentaIndex from './components/admin/cuentas/CuentaIndex.vue';
+import CuentaCreate from './components/admin/cuentas/CuentaCreate.vue';
+import CuentaEdit from './components/admin/cuentas/CuentaEdit.vue';
+
 
 import ClienteIndex from './components/clientes/ClienteIndex.vue';
 import ClienteCreate from './components/clientes/ClienteCreate.vue';
@@ -50,6 +54,10 @@ import ProductoEdit from './components/productos/ProductoEdit.vue';
 import AlbaranIndex from './components/albaranes/AlbaranIndex.vue';
 import AlbaranCreate from './components/albaranes/AlbaranCreate.vue';
 import AlbaranEdit from './components/albaranes/AlbaranEdit.vue';
+
+
+
+import SelRemesa from './components/remesas/SelRemesa.vue';
 
 import EditPassword from './components/profile/edit-password/EditPassword.vue';
 
@@ -257,7 +265,26 @@ export default [
                 name: 'albaran.edit',
                 component: AlbaranEdit,
             },
-
+            {
+                path: '/remesa',
+                name: 'remesa.seleccion',
+                component: SelRemesa,
+            },
+            {
+                path: '/cuentas',
+                name: 'cuenta.index',
+                component: CuentaIndex,
+            },
+            {
+                path: '/cuentas/create',
+                name: 'cuenta.create',
+                component: CuentaCreate,
+            },
+            {
+                path: '/cuentas/:id/edit',
+                name: 'cuenta.edit',
+                component: CuentaEdit,
+            },
             // {
             //     path: '*',
             //     redirect: {

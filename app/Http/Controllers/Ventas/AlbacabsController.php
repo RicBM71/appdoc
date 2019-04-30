@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ventas;
 use PDF;
 use App\Iva;
 use App\Fpago;
+use App\Cuenta;
 use App\Albacab;
 use App\Albalin;
 use App\Cliente;
@@ -13,11 +14,15 @@ use App\Contador;
 use App\Retencion;
 use App\Vencimiento;
 use Illuminate\Http\Request;
+use Digitick\Sepa\GroupHeader;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAlbaranes;
+use Digitick\Sepa\PaymentInformation;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Permission;
+use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
+
 
 class AlbacabsController extends Controller
 {
@@ -570,6 +575,78 @@ class AlbacabsController extends Controller
         PDF::Ln();
         PDF::MultiCell(184,24,$data->notas, '1', 'L', 0, 0, '', '', true,0,false,true,24,'T',false);
 
+
+    }
+
+    /**
+     * Selección previa remesa
+     */
+    public function remesa(){
+        if (request()->wantsJson())
+            return ['cuentas'=> Cuenta::selCuentas()];
+    }
+
+    public function remesar(Request $request){
+
+        $data = $request->validate([
+            'cuenta_id'=>'required|integer',
+            'fecha'=>'required|date'
+        ]);
+
+        $alb =  Albacab::remesarFacturas($data['fecha']);
+
+        return $this->generarRemesa($alb,$data['cuenta_id'],$data['fecha']);
+
+    }
+
+    /**
+     * Vamos a generar el fichero de remesa.
+     */
+    private function generarRemesa($data, $cuenta_id, $fecha){
+
+
+        $cuenta = Cuenta::find($cuenta_id);
+
+        $directDebit = TransferFileFacadeFactory::createDirectDebit('SampleUniqueMsgId', 'SampleInitiatingPartyName', 'pain.008.003.02');
+
+        // create a payment, it's possible to create multiple payments,
+        // "firstPayment" is the identifier for the transactions
+        // This creates a one time debit. If needed change use ::S_FIRST, ::S_RECURRING or ::S_FINAL respectively
+        $directDebit->addPaymentInfo('firstPayment', array(
+            'id'                    => 'firstPayment',
+            'dueDate'               => new \DateTime(), // optional. Otherwise default period is used
+            'creditorName'          => session()->get('empresa')->razon,
+            'creditorAccountIBAN'   => $cuenta->iban,
+            'creditorAgentBIC'      => $cuenta->bic,
+            'seqType'               => PaymentInformation::S_ONEOFF,
+            'creditorId'            => $cuenta->sepa,
+            'localInstrumentCode'   => 'CORE' // default. optional.
+        ));
+
+        foreach ($data as $row){
+
+            $total = Albalin::totalLineasByAlb($row->id);
+
+            $directDebit->addTransfer('firstPayment', array(
+                'amount'                => $total->importe,
+                'debtorIban'            => $row->cliente->iban,
+                'debtorBic'             => $row->cliente->bic,
+                'debtorName'            => $row->cliente->razon,
+                'debtorMandate'         => $row->cliente->ref19,
+                'debtorMandateSignDate' => $row->fecha_fac,
+                'remittanceInformation' => 'Factura',
+                'endToEndId'            => $row->factura
+            ));
+
+        }
+
+        $xml = $directDebit->asXML();
+
+        return $xml;
+
+        \Storage::disk('local')->put('remesa.xml',$xml);
+
+        \Storage::disk('local')->download('remesa.xml');
 
     }
 

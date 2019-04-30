@@ -191,6 +191,7 @@ export default {
                 { text: 'Roles', name: 'roles' },
                 { text: 'Empresas', name: 'empresa.index' },
                 { text: 'Retenciones (IRPF)', name: 'ret.index' },
+                { text: 'Cuentas', name: 'cuenta.index' },
                 { text: 'Tipos de IVA', name: 'iva.index' },
                 { text: 'Carpetas', name: 'carpeta.index' },
                 { text: 'Formas de Pago', name: 'fpago.index' },
@@ -207,6 +208,7 @@ export default {
                 { text: 'Usuarios', name: 'users' },
                 { text: 'Empresas', name: 'empresa.index' },
                 { text: 'Retenciones (IRPF)', name: 'ret.index' },
+                { text: 'Cuentas', name: 'cuenta.index' },
                 { text: 'Tipos de IVA', name: 'iva.index' },
                 { text: 'Carpetas', name: 'carpeta.index' },
                 { text: 'Formas de Pago', name: 'fpago.index' },
@@ -224,6 +226,7 @@ export default {
             model: false,
             children: [
                 { text: 'Albaranes', name: 'albaran.index' },
+                { text: 'Remesa SEPA', name: 'remesa.seleccion' },
                 { text: 'Vencimientos', name: 'vencimiento.index' },
             ]
         },

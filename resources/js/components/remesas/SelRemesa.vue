@@ -1,0 +1,175 @@
+<template>
+	<div>
+        <v-card>
+            <v-card-title color="indigo">
+                <h2 color="indigo">{{titulo}}</h2>
+                <v-spacer></v-spacer>
+                <!-- <menu-ope :id="user.id"></menu-ope> -->
+            </v-card-title>
+        </v-card>
+        <v-card>
+            <v-form>
+                <v-container>
+                    <v-layout row wrap>
+                        <v-flex sm4 d-flex>
+                            <v-select
+                                v-model="cuenta_id"
+                                :items="cuentas"
+                                required
+                                label="Cuenta"
+                            ></v-select>
+                        </v-flex>
+                        <v-flex sm3>
+                            <v-menu
+                                v-model="menu2"
+                                :close-on-content-click="false"
+                                :nudge-right="40"
+                                lazy
+                                transition="scale-transition"
+                                offset-y
+                                full-width
+                                min-width="290px"
+                            >
+
+                                <v-text-field
+                                    slot="activator"
+                                    :value="computedDateFormat"
+                                    clearable
+                                    label="Fecha Remesa"
+                                    prepend-icon="event"
+                                    readonly
+                                    data-vv-as="F. Remesa"
+                                    @click:clear="clearDate"
+                                    ></v-text-field>
+                                <v-date-picker
+                                    v-model="fecha"
+                                    no-title
+                                    locale="es"
+                                    first-day-of-week=1
+                                    @input="menu2 = false"
+
+                                ></v-date-picker>
+                            </v-menu>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout>
+                        <v-flex sm4></v-flex>
+                        <v-flex sm4>
+                            <div class="text-xs-center">
+                                <v-btn @click="submit" :disabled="disabled" :loading="enviando" block  color="primary">
+                                    Generar Remesa
+                                </v-btn>
+                            </div>
+                        </v-flex>
+                    </v-layout>
+                </v-container>
+            </v-form>
+        </v-card>
+	</div>
+</template>
+<script>
+    import moment from 'moment'
+    import {mapGetters} from 'vuex';
+    // import MenuOpe from '@/components/shared/MenuGen'
+
+	export default {
+		$_veeValidate: {
+      		validator: 'new'
+    	},
+        // components: {
+        //     'menu-ope': MenuOpe,
+		// },
+    	data () {
+      		return {
+                titulo:   "Remesa de facturación",
+                fecha: new Date().toISOString().substr(0, 10),
+                disabled: true,
+                menu2: false,
+                enviando: false,
+                cuenta_id: 0,
+                cuentas: []
+              }
+
+        },
+        mounted(){
+            axios.get('/ventas/albacabs/remesa')
+                .then(res => {
+
+                    this.cuentas = res.data.cuentas;
+                    this.cuenta_id = res.data.cuentas[0].value;
+                    this.disabled=false;
+                })
+                .catch(err => {
+                    this.$toast.error(err.response.data.message);
+                })
+        },
+        computed: {
+            ...mapGetters([
+	    		'isRoot'
+    		]),
+            computedDateFormat() {
+                moment.locale('es');
+                return this.fecha ? moment(this.fecha).format('L') : '';
+            }
+        },
+    	methods:{
+            submit() {
+
+                //console.log("Edit user (submit):"+this.user.id);
+                this.enviando = true;
+
+                var url = '/ventas/albacabs/remesar';
+
+                this.$validator.validateAll().then((result) => {
+                    if (result){
+                        axios.post(url,
+                            {
+                                fecha: this.fecha,
+                                cuenta_id: this.cuenta_id
+                            })
+                            .then(response => {
+
+                                console.log(response.data);
+
+                            let blob = new Blob([response.data], { type: 'application/xml' })
+                            let link = document.createElement('a')
+                            link.href = window.URL.createObjectURL(blob)
+                            link.download = 'remesa.xml'
+                            link.click()
+
+                                // let blob = new Blob([response.data], { type: 'application/xml' }),
+                                // url = window.URL.createObjectURL(blob)
+
+                                // window.open(url)
+
+                                this.$toast.success("Se ha generado correctamente la remesa");
+
+                                this.enviando = false;
+                            })
+                            .catch(err => {
+                                //console.log(err);
+                                //if (err.request.status == 422){ // fallo de validated.
+                                    const msg_valid = err.response.data.errors;
+                                    //console.log(`obj.${prop} = ${msg_valid[prop]}`);
+                                    for (const prop in msg_valid) {
+                                        this.errors.add({
+                                            field: prop,
+                                            msg: `${msg_valid[prop]}`
+                                        })
+                                    }
+                                //}
+                                this.enviando = false;
+                            });
+                        }
+                    else{
+                        this.enviando = false;
+                    }
+                });
+
+            },
+            clearDate(){
+                this.fecha = null;
+            }
+    }
+  }
+</script>

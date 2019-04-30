@@ -2,6 +2,7 @@
 
 use App\Iva;
 use App\Fpago;
+use App\Cuenta;
 use App\Carpeta;
 use App\Empresa;
 use App\Contador;
@@ -97,8 +98,14 @@ class GenericasSeeder extends Seeder
         $vto->nombre = "Fecha Factura";
         $vto->save();
 
+        $cuenta = new Cuenta;
+        $cuenta->empresa_id = 1;
+        $cuenta->nombre = "Santander";
+        $cuenta->iban="ES1500493102912114149064";
+        $cuenta->bic="BSCHESMMXXX";
+        $cuenta->sepa="DE21WVM1234567890";
 
-
+        $cuenta->save();
 
     }
 }

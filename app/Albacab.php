@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Albacab;
 use App\Vencimiento;
 use App\Scopes\EmpresaScope;
 use Illuminate\Support\Carbon;
@@ -69,5 +70,21 @@ class Albacab extends Model
         return $this->serie.'-'.str_pad($this->albaran, 4, "0", STR_PAD_LEFT);
 
     }
+
+
+    public function scopeRemesables($query, $fecha)
+    {
+
+        return $query->with(['cliente'])->where('fecha_fac', '=', $fecha)
+                     ->where('fpago_id', '=', 1);
+
+    }
+
+
+	public static function remesarFacturas($fecha){
+
+        return Albacab::Remesables($fecha)->get();
+
+	}
 
 }

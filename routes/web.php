@@ -40,6 +40,7 @@ Route::group([
             Route::resource('empresas', 'EmpresasController', ['except'=>'show','as' => 'admin']);
             Route::resource('fpagos', 'FpagosController', ['except'=>'show','as' => 'admin']);
             Route::resource('contadors', 'ContadorsController', ['except'=>'show','as' => 'admin']);
+            Route::resource('cuentas', 'CuentasController', ['except'=>'show','as' => 'admin']);
         });
 
 
@@ -70,6 +71,9 @@ Route::group([
         Route::put('albacabs/{albacab}/desfacturar', 'AlbacabsController@desfacturar');
         Route::get('albacabs/{albacab}/print', 'AlbacabsController@print');
         Route::resource('albalins', 'AlbalinsController', ['except'=>'index','as' => 'ventas']);
+
+        Route::get('albacabs/remesa', 'AlbacabsController@remesa');
+        Route::post('albacabs/remesar', 'AlbacabsController@remesar');
     }
 );
 

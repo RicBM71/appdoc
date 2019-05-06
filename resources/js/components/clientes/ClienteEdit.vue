@@ -247,7 +247,6 @@
                                         v-model="cliente.bic"
                                         :error-messages="errors.collect('bic')"
                                         label="BIC"
-                                        mask="AAAAAAAAAAA"
                                         counter=11
                                         data-vv-name="bic"
                                         v-on:keyup.enter="submit"

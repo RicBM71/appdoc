@@ -48,7 +48,8 @@ class GenericasSeeder extends Seeder
 
         $emp = new Empresa;
         $emp->nombre = "Sanaval";
-        $emp->razon = "Sanaval";
+        $emp->razon = "Sanaval Tecnología SL";
+        $emp->cif="B83667402";
         $emp->titulo = "Sanaval";
         $emp->logo = "logo.jpg";
         $emp->certificado = "sntfirma.crt";
@@ -103,7 +104,7 @@ class GenericasSeeder extends Seeder
         $cuenta->nombre = "Santander";
         $cuenta->iban="ES1500493102912114149064";
         $cuenta->bic="BSCHESMMXXX";
-        $cuenta->sepa="DE21WVM1234567890";
+        $cuenta->sepa="ES35001B83667402";
 
         $cuenta->save();
 

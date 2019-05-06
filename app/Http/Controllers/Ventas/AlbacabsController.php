@@ -14,15 +14,16 @@ use App\Contador;
 use App\Retencion;
 use App\Vencimiento;
 use Illuminate\Http\Request;
-use Digitick\Sepa\GroupHeader;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAlbaranes;
-use Digitick\Sepa\PaymentInformation;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Permission;
-use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
 
+
+use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
+use Digitick\Sepa\PaymentInformation;
+use Digitick\Sepa\GroupHeader;
 
 class AlbacabsController extends Controller
 {
@@ -595,7 +596,14 @@ class AlbacabsController extends Controller
 
         $alb =  Albacab::remesarFacturas($data['fecha']);
 
-        return $this->generarRemesa($alb,$data['cuenta_id'],$data['fecha']);
+        $remesa = $this->generarRemesa($alb,$data['cuenta_id'],$data['fecha']);
+
+        if (request()->wantsJson())
+            return [
+                'xml'       => $remesa['xml'],
+                'importe'   => $remesa['importe'],
+                'adeudos'   => $remesa['adeudos']
+            ];
 
     }
 
@@ -607,13 +615,20 @@ class AlbacabsController extends Controller
 
         $cuenta = Cuenta::find($cuenta_id);
 
-        $directDebit = TransferFileFacadeFactory::createDirectDebit('SampleUniqueMsgId', 'SampleInitiatingPartyName', 'pain.008.003.02');
+        // firstPayment,
+        $PmtInfId =  session()->get('empresa')->cif.'000'.date('Ymdhisv');
+
+        $header = new GroupHeader(date('Y-m-d-H-i-s'), session()->get('empresa')->razon);
+        $header->setInitiatingPartyId($cuenta->sepa);
+
+        $directDebit = TransferFileFacadeFactory::createDirectDebitWithGroupHeader($header, 'pain.008.001.02');
+        //$directDebit = TransferFileFacadeFactory::createDirectDebit(session()->get('empresa')->cif.'000', $cuenta->sepa, 'pain.008.001.02');
 
         // create a payment, it's possible to create multiple payments,
         // "firstPayment" is the identifier for the transactions
         // This creates a one time debit. If needed change use ::S_FIRST, ::S_RECURRING or ::S_FINAL respectively
-        $directDebit->addPaymentInfo('firstPayment', array(
-            'id'                    => 'firstPayment',
+        $directDebit->addPaymentInfo($PmtInfId, array(
+            'id'                    => $PmtInfId,
             'dueDate'               => new \DateTime(), // optional. Otherwise default period is used
             'creditorName'          => session()->get('empresa')->razon,
             'creditorAccountIBAN'   => $cuenta->iban,
@@ -623,11 +638,15 @@ class AlbacabsController extends Controller
             'localInstrumentCode'   => 'CORE' // default. optional.
         ));
 
+        $imp_total_remesa = $adeudos = 0;
         foreach ($data as $row){
 
             $total = Albalin::totalLineasByAlb($row->id);
 
-            $directDebit->addTransfer('firstPayment', array(
+            $imp_total_remesa += $total->importe;
+            $adeudos++;
+
+            $directDebit->addTransfer($PmtInfId, array(
                 'amount'                => $total->importe,
                 'debtorIban'            => $row->cliente->iban,
                 'debtorBic'             => $row->cliente->bic,
@@ -642,11 +661,15 @@ class AlbacabsController extends Controller
 
         $xml = $directDebit->asXML();
 
-        return $xml;
+        return [
+            'xml' => $xml,
+            'importe' => $imp_total_remesa,
+            'adeudos' => $adeudos
+        ];
 
-        \Storage::disk('local')->put('remesa.xml',$xml);
+        // \Storage::disk('local')->put('remesa.xml',$xml);
 
-        \Storage::disk('local')->download('remesa.xml');
+        // \Storage::disk('local')->download('remesa.xml');
 
     }
 

@@ -5,7 +5,7 @@
             <v-card-title>
                 <h2>{{titulo}}</h2>
                 <v-spacer></v-spacer>
-                <menu-ope :id="albaran.id" :cliente_id="albaran.cliente_id"></menu-ope>
+                <menu-ope :albaran="albaran"></menu-ope>
             </v-card-title>
         </v-card>
         <v-card>

@@ -36,7 +36,7 @@
                              <v-switch
                                 v-model="cuenta.remesa"
                                 color="primary"
-                                label="Remesa"
+                                label="Genera Remesas SEPA"
                             ></v-switch>
                         </v-flex>
                     </v-layout>
@@ -58,7 +58,6 @@
                                         v-model="cuenta.bic"
                                         :error-messages="errors.collect('bic')"
                                         label="BIC"
-                                        mask="AAAAAAAAAAA"
                                         counter=11
                                         data-vv-name="bic"
                                         v-on:keyup.enter="submit"
@@ -69,7 +68,7 @@
                                     <v-text-field
                                         v-model="cuenta.sepa"
                                         :error-messages="errors.collect('sepa')"
-                                        label="Id. SEPA"
+                                        label="Id. Presentador SEPA"
                                         data-vv-name="sepa"
                                         v-on:keyup.enter="submit"
                                     >

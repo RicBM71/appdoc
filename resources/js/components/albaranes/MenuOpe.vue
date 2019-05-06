@@ -17,10 +17,11 @@
          <v-tooltip bottom>
             <template v-slot:activator="{ on }">
                 <v-btn
-                    v-show="id > 0"
+                    v-show="albaran.id > 0"
                     v-on="on"
                     color="white"
                     icon
+                    disabled="!albaran.eje_fac == 0"
                     @click="openDialog"
                 >
                     <v-icon color="indigo darken-4">delete</v-icon>
@@ -31,7 +32,7 @@
         <v-tooltip bottom>
             <template v-slot:activator="{ on }">
                 <v-btn
-                    v-show="id > 0"
+                    v-show="albaran.id > 0"
                     v-on="on"
                     color="white"
                     icon
@@ -45,7 +46,7 @@
         <v-tooltip bottom>
             <template v-slot:activator="{ on }">
                 <v-btn
-                    v-show="id > 0"
+                    v-show="albaran.id > 0"
                     v-on="on"
                     color="white"
                     icon
@@ -59,7 +60,7 @@
         <v-tooltip bottom>
             <template v-slot:activator="{ on }">
                 <v-btn
-                    v-show="id > 0"
+                    v-show="albaran.id > 0"
                     v-on="on"
                     color="white"
                     icon
@@ -76,8 +77,7 @@
 import MyDialog from '@/components/shared/MyDialog'
 export default {
     props:{
-        id: Number,
-        cliente_id: Number
+        albaran: Object
     },
     components: {
         'my-dialog': MyDialog
@@ -95,11 +95,11 @@ export default {
             this.$router.push({ name: 'albaran.index' })
         },
         goCliente(){
-                this.$router.push({ name: 'cliente.edit', params: { id: this.cliente_id } })
+                this.$router.push({ name: 'cliente.edit', params: { id: this.albaran.cliente_id } })
         },
         printPDF(){
 
-            var url = '/ventas/albacabs/'+this.id+'/print';
+            var url = '/ventas/albacabs/'+this.albaran.id+'/print';
 
             window.open(url, '_blank');
         },
@@ -109,7 +109,7 @@ export default {
         destroyReg () {
             this.dialog = false;
 
-            axios.post('/ventas/albacabs/'+this.id,{_method: 'delete'})
+            axios.post('/ventas/albacabs/'+this.albaran.id,{_method: 'delete'})
                 .then(response => {
                 this.albaranes = response.data;
                 this.$router.push({ name: 'albaran.index' })

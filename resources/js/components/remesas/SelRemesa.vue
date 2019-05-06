@@ -51,6 +51,25 @@
                                 ></v-date-picker>
                             </v-menu>
                         </v-flex>
+                        <v-flex sm2 v-if="imp_remesa > 0">
+                            <v-text-field
+                                v-model="imp_remesa"
+                                label="Total Remesa"
+                                readonly
+                                type="number"
+                                class="inputPrice"
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm1 v-if="imp_remesa > 0">
+                            <v-text-field
+                                v-model="adeudos"
+                                label="Adeudos"
+                                readonly
+                                class="centered-input"
+                            >
+                            </v-text-field>
+                        </v-flex>
                     </v-layout>
                     <v-layout>
                         <v-flex sm4></v-flex>
@@ -87,6 +106,8 @@
                 menu2: false,
                 enviando: false,
                 cuenta_id: 0,
+                imp_remesa:0,
+                adeudos: 0,
                 cuentas: []
               }
 
@@ -129,22 +150,24 @@
                             })
                             .then(response => {
 
-                                console.log(response.data);
+                              //  console.log(response.data);
 
-                            let blob = new Blob([response.data], { type: 'application/xml' })
+                            let blob = new Blob([response.data.xml], { type: 'application/xml' })
                             let link = document.createElement('a')
                             link.href = window.URL.createObjectURL(blob)
-                            link.download = 'remesa.xml'
+                            link.download = 'REM'+new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'.XML';
                             link.click()
 
                                 // let blob = new Blob([response.data], { type: 'application/xml' }),
                                 // url = window.URL.createObjectURL(blob)
 
                                 // window.open(url)
+                            this.imp_remesa = response.data.importe;
+                            this.adeudos = response.data.adeudos;
 
-                                this.$toast.success("Se ha generado correctamente la remesa");
+                            this.$toast.success("Se ha generado correctamente la remesa");
 
-                                this.enviando = false;
+                            this.enviando = false;
                             })
                             .catch(err => {
                                 //console.log(err);
@@ -173,3 +196,22 @@
     }
   }
 </script>
+
+<style scoped>
+.centered-input >>> input {
+  text-align: center
+}
+
+.inputPrice >>> input {
+  text-align: center;
+  -moz-appearance:textfield;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+</style>

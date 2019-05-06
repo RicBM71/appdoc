@@ -4,7 +4,7 @@
             <v-card-title>
                 <h2>{{titulo}}</h2>
                 <v-spacer></v-spacer>
-                <menu-ope :id="albaran.albaran_id" :cliente_id="albaran.cliente_id"></menu-ope>
+                <menu-ope :albaran="albaran"></menu-ope>
             </v-card-title>
         </v-card>
         <v-card>
@@ -101,7 +101,7 @@
                         <v-flex sm4>
                             <v-autocomplete
                                 v-model="albaran.cliente_id"
-                                v-validate="'required'"
+                                v-validate="required"
                                 data-vv-name="cliente_id"
                                 data-vv-as="Cliente"
                                 item-text="name"

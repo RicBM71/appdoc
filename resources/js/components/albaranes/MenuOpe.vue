@@ -1,5 +1,6 @@
 <template>
     <div>
+        <loading :show_loading="show_loading"></loading>
         <my-dialog :dialog.sync="dialog" registro="registro" @destroyReg="destroyReg"></my-dialog>
         <v-tooltip bottom>
             <template v-slot:activator="{ on }">
@@ -21,7 +22,7 @@
                     v-on="on"
                     color="white"
                     icon
-                    disabled="!albaran.eje_fac == 0"
+                    :disabled="albaran.eje_fac > 0"
                     @click="openDialog"
                 >
                     <v-icon color="indigo darken-4">delete</v-icon>
@@ -42,6 +43,19 @@
                 </v-btn>
             </template>
             <span>Lista</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+                <v-btn
+                    v-show="albaran.id > 0"
+                    v-on="on"
+                    color="white"
+                    icon
+                    @click="goClonar"                >
+                    <v-icon color="indigo darken-4">repeat_one</v-icon>
+                </v-btn>
+            </template>
+            <span>Clonar</span>
         </v-tooltip>
         <v-tooltip bottom>
             <template v-slot:activator="{ on }">
@@ -75,16 +89,19 @@
 </template>
 <script>
 import MyDialog from '@/components/shared/MyDialog'
+import Loading from '@/components/shared/Loading'
 export default {
     props:{
         albaran: Object
     },
     components: {
-        'my-dialog': MyDialog
+        'my-dialog': MyDialog,
+        'loading': Loading,
     },
     data () {
       return {
           dialog: false,
+          show_loading: false
       }
     },
     methods:{
@@ -95,7 +112,25 @@ export default {
             this.$router.push({ name: 'albaran.index' })
         },
         goCliente(){
-                this.$router.push({ name: 'cliente.edit', params: { id: this.albaran.cliente_id } })
+            this.$router.push({ name: 'cliente.edit', params: { id: this.albaran.cliente_id } })
+        },
+        goClonar(){
+            this.show_loading = true;
+            axios.put('/ventas/albacabs/'+this.albaran.id+'/clonar')
+                .then(res => {
+                    this.show_loading = false;
+                    console.log(res);
+                    this.$router.push({ name: 'albaran.edit', params: { id: res.data.albaran.id } })
+
+                })
+                .catch(err => {
+                    if (err.response.status == 404)
+                        this.$toast.error("Albarán No encontrado!");
+                    else
+                        this.$toast.error(err.response.data.message);
+                    this.$router.push({ name: 'albaran.index'})
+                })
+
         },
         printPDF(){
 

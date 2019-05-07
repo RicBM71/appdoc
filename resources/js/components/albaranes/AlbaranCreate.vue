@@ -18,7 +18,7 @@
                                 label="Serie"
                                 data-vv-name="serie"
                                 data-vv-as="serie"
-                                required
+
                                 readonly
                             >
                             </v-text-field>
@@ -30,7 +30,7 @@
                                 label="Albarán"
                                 data-vv-name="albaran"
                                 data-vv-as="albarán"
-                                required
+
                                 readonly
                             >
                             </v-text-field>
@@ -101,7 +101,7 @@
                         <v-flex sm4>
                             <v-autocomplete
                                 v-model="albaran.cliente_id"
-                                v-validate="required"
+                                v-validate="'required'"
                                 data-vv-name="cliente_id"
                                 data-vv-as="Cliente"
                                 item-text="name"
@@ -207,7 +207,7 @@ import MenuOpe from './MenuOpe'
                     albaran:"",
                     serie:"",
                     fecha_alb: new Date().toISOString().substr(0, 10),
-                    cliente_id:0,
+                    cliente_id:"",
                     ejefac:"",
                     factura:"",
                     fecha_fac:null,
@@ -287,6 +287,7 @@ import MenuOpe from './MenuOpe'
                             .then(response => {
                                 this.$router.push({ name: 'albaran.edit', params: { id: response.data.albaran.id } })
                                 this.enviando = false;
+
                             })
                             .catch(err => {
 

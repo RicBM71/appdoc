@@ -673,4 +673,84 @@ class AlbacabsController extends Controller
 
     }
 
+    /**
+     * Clona el registro
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function clonar(Albacab $albacab)
+    {
+        $this->authorize('update', $albacab);
+
+        $alb = Albacab::with(['albalins'])->findOrFail($albacab->id);
+
+        $nuevoAlbaran = $this->crearCabecera($alb);
+        $this->crearLineas($nuevoAlbaran->id, $alb);
+
+        if (request()->wantsJson())
+            return [
+                'albaran' =>  $nuevoAlbaran,
+        ];
+    }
+
+    /**
+     * Prepara los datos del nuevo albarán a partir del que vamos a clonar
+     *
+     * @param object $alb
+     * @return array $data
+     *
+     */
+    private function crearCabecera($alb){
+
+        $data['ejercicio']=date('Y');
+        $contador = Contador::incrementaContador($data['ejercicio']);
+
+        $data['empresa_id'] = $alb->empresa_id;
+        $data['cliente_id'] = $alb->cliente_id;
+        $data['fpago_id'] = $alb->fpago_id;
+        $data['vencimiento_id'] = $alb->vencimiento_id;
+        $data['fecha_alb']=date('Y-m-d');
+        $data['serie']= $contador->seriealb;
+        $data['albaran']= $contador->albaran;
+        $data['ejercicio']   = date('Y',strtotime($data['fecha_alb']));
+
+        $data['username'] = session('username');
+
+        $data['id'] = null;
+        $data['factura'] = null;
+        $data['eje_fac'] = 0;
+
+        return Albacab::create($data);
+    }
+
+    /**
+     * Prepara los datos del nuevo albarán a partir del que vamos a clonar
+     *
+     * @param integer $id del nuevo albaran
+     * @param object $alb el albarán a clonar
+     * @return array $data
+     *
+     */
+    private function crearLineas($id, $alb){
+
+        foreach ($alb->albalins as $albalin) {
+
+            $data['id'] = 0;
+            $data['albacab_id'] = $id;
+            $data['producto_id'] = $albalin->producto_id;
+            $data['nombre'] = $albalin->nombre;
+            $data['unidades'] = $albalin->unidades;
+            $data['impuni'] = $albalin->impuni;
+            $data['poriva'] = $albalin->poriva;
+            $data['porirpf'] = $albalin->porirpf;
+            $data['dto'] = $albalin->dto;
+            $data['importe'] = $albalin->importe;
+            $data['username'] = session('username');;
+
+            Albalin::create($data);
+        }
+
+    }
+
 }

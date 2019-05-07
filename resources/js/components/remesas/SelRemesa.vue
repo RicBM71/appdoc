@@ -1,5 +1,6 @@
 <template>
 	<div>
+        <loading :show_loading="show_loading"></loading>
         <v-card>
             <v-card-title color="indigo">
                 <h2 color="indigo">{{titulo}}</h2>
@@ -75,7 +76,7 @@
                         <v-flex sm4></v-flex>
                         <v-flex sm4>
                             <div class="text-xs-center">
-                                <v-btn @click="submit" :disabled="disabled" :loading="enviando" block  color="primary">
+                                <v-btn @click="submit" :disabled="disabled" :loading="show_loading" block  color="primary">
                                     Generar Remesa
                                 </v-btn>
                             </div>
@@ -89,26 +90,27 @@
 <script>
     import moment from 'moment'
     import {mapGetters} from 'vuex';
+    import Loading from '@/components/shared/Loading'
     // import MenuOpe from '@/components/shared/MenuGen'
 
 	export default {
 		$_veeValidate: {
       		validator: 'new'
     	},
-        // components: {
-        //     'menu-ope': MenuOpe,
-		// },
+        components: {
+            'loading': Loading,
+		},
     	data () {
       		return {
                 titulo:   "Remesa de facturación",
                 fecha: new Date().toISOString().substr(0, 10),
                 disabled: true,
                 menu2: false,
-                enviando: false,
                 cuenta_id: 0,
                 imp_remesa:0,
                 adeudos: 0,
-                cuentas: []
+                cuentas: [],
+                show_loading: false
               }
 
         },
@@ -137,7 +139,7 @@
             submit() {
 
                 //console.log("Edit user (submit):"+this.user.id);
-                this.enviando = true;
+                this.show_loading = true;
 
                 var url = '/ventas/albacabs/remesar';
 
@@ -167,7 +169,7 @@
 
                             this.$toast.success("Se ha generado correctamente la remesa");
 
-                            this.enviando = false;
+                            this.show_loading = false;
                             })
                             .catch(err => {
                                 //console.log(err);
@@ -181,11 +183,11 @@
                                         })
                                     }
                                 //}
-                                this.enviando = false;
+                                this.show_loading = false;
                             });
                         }
                     else{
-                        this.enviando = false;
+                        this.show_loading = false;
                     }
                 });
 

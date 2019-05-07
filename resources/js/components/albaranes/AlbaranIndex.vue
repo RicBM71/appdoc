@@ -5,7 +5,7 @@
             <v-card-title>
                 <h2>{{titulo}}</h2>
                 <v-spacer></v-spacer>
-                <menu-ope></menu-ope>
+                <menu-ope :albaran="albaran"></menu-ope>
             </v-card-title>
         </v-card>
         <v-card>
@@ -77,6 +77,11 @@ import MenuOpe from './MenuOpe'
     },
     data () {
       return {
+        albaran:{
+            id: 0,
+            cliente_id: 0,
+            eje_fac: 0
+        },
         titulo:"Albaranes",
         search:"",
         headers: [

@@ -19,7 +19,7 @@ class Albacab extends Model
     protected $appends = ['alb_ser'];
 
     protected $fillable = [
-        'empresa_id','ejercicio','albaran', 'serie', 'fecha_alb', 'cliente_id', 'ejefac', 'factura', 'fecha_fac',
+        'empresa_id','ejercicio','albaran', 'serie', 'fecha_alb', 'cliente_id', 'eje_fac', 'factura', 'fecha_fac',
         'fpago_id', 'vencimiento_id', 'notificado', 'notas','username',
     ];
 

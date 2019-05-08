@@ -8,7 +8,7 @@
                     icon
                     @click="goCreate"
                 >
-                    <v-icon color="indigo darken-4">add</v-icon>
+                    <v-icon color="primary">add</v-icon>
                 </v-btn>
             </template>
                 <span>Nuevo</span>
@@ -22,7 +22,7 @@
                     icon
                     @click="openDialog"
                 >
-                    <v-icon color="indigo darken-4">delete</v-icon>
+                    <v-icon color="primary">delete</v-icon>
                 </v-btn>
             </template>
                 <span>Borrar Registro</span>
@@ -35,7 +35,7 @@
                     icon
                     @click="goIndex"
                 >
-                    <v-icon color="indigo darken-4">list</v-icon>
+                    <v-icon color="primary">list</v-icon>
                 </v-btn>
             </template>
             <span>Lista</span>

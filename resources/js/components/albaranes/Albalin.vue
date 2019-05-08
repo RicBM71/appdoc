@@ -18,7 +18,7 @@
                             <td class="text-xs-right">{{ props.item.porirpf| currency('%', 2, { decimalSeparator: ',', symbolOnLeft: false }) }}</td>
                             <td class="text-xs-right">{{ props.item.importe| currency('€', 2, { decimalSeparator: ',', symbolOnLeft: false }) }}</td>
                             <td class="justify-center layout px-0">
-                                <v-icon  v-if="ejefac==0"
+                                <v-icon  v-if="eje_fac==0"
                                     small
                                     class="mr-2"
                                     @click="editItem(props.item.id)"
@@ -27,7 +27,7 @@
                                 </v-icon>
 
 
-                                <v-icon  v-if="ejefac==0"
+                                <v-icon  v-if="eje_fac==0"
                                 small
                                 @click="openDialog(props.item.id)"
                                 >
@@ -52,9 +52,8 @@
                 </v-flex>
             </v-layout>
             <v-layout row wrap>
-                <v-spacer></v-spacer>
-                <v-flex xs2>
-                    <v-btn v-if="ejefac==0" color="primary" v-on:click="create" small >
+                <v-flex xs3>
+                    <v-btn flat v-if="eje_fac==0" color="primary" v-on:click="create" small >
                         <v-icon small>add</v-icon> Crear Línea
                     </v-btn>
                 </v-flex>
@@ -71,7 +70,7 @@ import AlbalinEdit from './AlbalinEdit'
 export default {
     props:{
         albaran_id: Number,
-        ejefac: Number
+        eje_fac: Number
     },
     components: {
         'my-dialog': MyDialog,

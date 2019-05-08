@@ -208,7 +208,7 @@ import MenuOpe from './MenuOpe'
                     serie:"",
                     fecha_alb: new Date().toISOString().substr(0, 10),
                     cliente_id:"",
-                    ejefac:"",
+                    eje_fac:"",
                     factura:"",
                     fecha_fac:null,
                     fpago_id: 1,

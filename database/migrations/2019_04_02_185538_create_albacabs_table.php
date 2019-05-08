@@ -21,7 +21,7 @@ class CreateAlbacabsTable extends Migration
             $table->String('serie', 3)->nullable();
             $table->date('fecha_alb')->nullable();
             $table->unsignedInteger('cliente_id');
-            $table->Integer('ejefac')->nullable()->default(0);
+            $table->Integer('eje_fac')->nullable()->default(0);
             $table->String('factura', 10)->nullable();
             $table->date('fecha_fac')->nullable();
             $table->unsignedInteger('fpago_id');
@@ -31,7 +31,7 @@ class CreateAlbacabsTable extends Migration
             $table->String('username', 20)->nullable();
             $table->timestamps();
             $table->unique(['empresa_id','ejercicio', 'albaran', 'serie']);
-            $table->unique(['empresa_id','ejefac', 'factura']);
+            $table->unique(['empresa_id','eje_fac', 'factura']);
         });
     }
 

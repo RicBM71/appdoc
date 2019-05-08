@@ -5,7 +5,7 @@
             <v-card-title>
                 <h2>{{titulo}}</h2>
                 <v-spacer></v-spacer>
-                <menu-ope :albaran="albaran"></menu-ope>
+                <menu-ope v-if="albaran.id > 0" :albaran="albaran"  @refresh-alb="refreshAlb"></menu-ope>
             </v-card-title>
         </v-card>
         <v-card>
@@ -82,9 +82,9 @@
                                 :disabled="computedFactura"
                             >
                                 <v-tooltip slot="append" bottom color="black">
-                                    <v-icon v-if="albaran.ejefac==0" slot="activator" @click="facturar(albaran.id)">lock</v-icon>
+                                    <v-icon v-if="albaran.eje_fac==0" slot="activator" @click="facturar(albaran.id)">lock</v-icon>
                                     <v-icon v-else if="isAdmin" slot="activator" @click="desFacturar(albaran.id)">lock_open</v-icon>
-                                    <span v-if="albaran.ejefac==0">Generar factura automática</span>
+                                    <span v-if="albaran.eje_fac==0">Generar factura automática</span>
                                     <span v-else>Desfacturar</span>
                                 </v-tooltip>
                             </v-text-field>
@@ -238,7 +238,7 @@
             </v-form>
         </v-card>
         <br/>
-        <albalin v-if="albaran.id > 0" :albaran_id="albaran.id" :ejefac="albaran.ejefac"></albalin>
+        <albalin v-if="albaran.id > 0" :albaran_id="albaran.id" :eje_fac="albaran.eje_fac"></albalin>
 	</div>
 </template>
 <script>
@@ -268,7 +268,7 @@ import {mapGetters} from 'vuex';
                     serie:"",
                     fecha_alb:"",
                     cliente_id:0,
-                    ejefac:"",
+                    eje_fac:"",
                     factura:"",
                     fecha_fac:"",
                     fpago_id: "",
@@ -318,7 +318,7 @@ import {mapGetters} from 'vuex';
 
                         this.albaran = res.data.albaran;
 
-                        this.albaran.ejefac ==  0 ? this.titulo ="Albarán" : this.titulo = "Factura";
+                        this.albaran.eje_fac ==  0 ? this.titulo ="Albarán" : this.titulo = "Factura";
 
                         this.show=true;
                         this.show_loading = false;
@@ -357,7 +357,7 @@ import {mapGetters} from 'vuex';
                 /*
                 * true: bloqueado, false: desbloqueado
                 */
-                if(this.albaran.ejefac != 0)
+                if(this.albaran.eje_fac != 0)
                     return true;
 
                 return false;
@@ -406,6 +406,9 @@ import {mapGetters} from 'vuex';
                 });
 
             },
+            refreshAlb(e){
+                this.albaran = e;
+            },
             facturar(id){
 
                 this.show_loading = true;
@@ -415,7 +418,7 @@ import {mapGetters} from 'vuex';
                     this.$toast.success(response.data.message);
 
                     this.albaran = response.data.albaran;
-                    this.albaran.ejefac ==  0 ? this.titulo ="Albarán" : this.titulo = "Factura";
+                    this.albaran.eje_fac ==  0 ? this.titulo ="Albarán" : this.titulo = "Factura";
 
                     this.show_loading = false;
                 })
@@ -434,7 +437,7 @@ import {mapGetters} from 'vuex';
                     this.$toast.success(response.data.message);
 
                     this.albaran = response.data.albaran;
-                    this.albaran.ejefac ==  0 ? this.titulo ="Albarán" : this.titulo = "Factura";
+                    this.albaran.eje_fac ==  0 ? this.titulo ="Albarán" : this.titulo = "Factura";
 
                     this.show_loading = false;
                 })

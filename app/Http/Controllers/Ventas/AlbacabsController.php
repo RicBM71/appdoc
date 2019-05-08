@@ -13,17 +13,18 @@ use App\Empresa;
 use App\Contador;
 use App\Retencion;
 use App\Vencimiento;
+use App\Jobs\SendFactura;
 use Illuminate\Http\Request;
+use Digitick\Sepa\GroupHeader;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+
+
 use App\Http\Requests\StoreAlbaranes;
+use Digitick\Sepa\PaymentInformation;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Permission;
-
-
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
-use Digitick\Sepa\PaymentInformation;
-use Digitick\Sepa\GroupHeader;
 
 class AlbacabsController extends Controller
 {
@@ -81,7 +82,7 @@ class AlbacabsController extends Controller
 
         $data['serie']= $contador->seriealb;
         $data['albaran']= $contador->albaran;
-        $data['ejefac']=0;
+        $data['eje_fac']=0;
 
         //return $data;
         $reg = Albacab::create($data);
@@ -185,13 +186,13 @@ class AlbacabsController extends Controller
 
         if (is_null($data['fecha_fac'])){
             $data['fecha_fac'] = date('Y-m-d');
-            $data['ejefac'] = (int) date('Y');
+            $data['eje_fac'] = (int) date('Y');
         }else{
-            $data['ejefac'] = (int) date('Y',strtotime($data['fecha_fac']));
+            $data['eje_fac'] = (int) date('Y',strtotime($data['fecha_fac']));
         }
 
         if (is_null($data['factura'])){
-            $data['factura'] = Contador::incrementaContadorFactura($data['ejefac']);
+            $data['factura'] = Contador::incrementaContadorFactura($data['eje_fac']);
         }
 
         $data['username'] = $request->user()->username;
@@ -208,6 +209,7 @@ class AlbacabsController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
+     * @param boolean $file
      * @return \Illuminate\Http\Response
      */
     public function desfacturar(Request $request, Albacab $albacab)
@@ -218,10 +220,10 @@ class AlbacabsController extends Controller
         $data = [
             'factura'   => null,
             'fecha_fac' => null,
-            'ejefac'   => 0
+            'eje_fac'   => 0
         ];
 
-        Contador::restaContadorFactura( $albacab->ejefac, $albacab->factura) ?
+        Contador::restaContadorFactura( $albacab->eje_fac, $albacab->factura) ?
             $msg = 'Contador sincronizado' :
             $msg = '¡Revisar contador!' ;
 
@@ -231,7 +233,7 @@ class AlbacabsController extends Controller
             return ['albaran'=>$albacab, 'message' => 'EL albarán ha sido desfacturado '.$msg];
     }
 
-    public function print($id)
+    public function print($id, $file=false)
     {
         $empresa  = session()->get('empresa');
 
@@ -326,7 +328,17 @@ class AlbacabsController extends Controller
 
         //PDF::Write(0, 'Hello Worldd');
 
-        PDF::Output($data->factura.'.pdf');
+        if ($file){
+            if (file_exists(storage_path('facturas'))==false)
+                mkdir(storage_path('facturas'), '0755');
+
+            PDF::Output(storage_path('facturas/'.$data->factura.'.pdf'), 'F');
+
+        }else{
+            PDF::Output($data->factura.'.pdf');
+        }
+
+        PDF::reset();
 
     }
 
@@ -438,7 +450,7 @@ class AlbacabsController extends Controller
     private function setCabeceraAlb($data){
 
 
-        if ($data->ejefac == 0){
+        if ($data->eje_fac == 0){
             $texto = "ALBARÁN";
             $numero = $data->albser;
             $fecha = getFecha($data->fecha_alb);
@@ -746,10 +758,46 @@ class AlbacabsController extends Controller
             $data['porirpf'] = $albalin->porirpf;
             $data['dto'] = $albalin->dto;
             $data['importe'] = $albalin->importe;
-            $data['username'] = session('username');;
+            $data['username'] = session('username');
 
             Albalin::create($data);
         }
+
+    }
+
+    /**
+     * Envía factura a través de job por email. De momento con sync
+     */
+    public function mail(Albacab $albacab){
+
+        $this->print($albacab->id, true);
+
+        $alb =  Albacab::with(['cliente'])->find($albacab->id);
+
+        if ($alb->cliente->email=="")
+            return response('El cliente no tiene email configurado', 403);
+
+        $data = [
+            'razon'=> session('empresa')->razon,
+            'msg' => 'Texto prueba',
+            'alb' => $alb
+        ];
+
+        //return new Factura($data);
+
+        dispatch(new SendFactura($data));
+
+        unlink (storage_path('facturas/'.$alb->factura.'.pdf'));
+
+        $data['notificado'] =  TRUE;
+        $data['username'] = session('username');;
+
+       // return $albacab;
+
+        $albacab->update($data);
+
+        if (request()->wantsJson())
+            return ['albaran'=>$albacab, 'message' => 'Factura enviada'];
 
     }
 

@@ -40,15 +40,15 @@ class AlbacabPolicy
     public function update(User $authUser, Albacab $albacab)
     {
 
-        if ($authUser->hasRole('Admin') && $albacab->ejefac == 0)
+        if ($authUser->hasRole('Admin') && $albacab->eje_fac == 0)
             return true;
         else if ($authUser->hasRole('Usuario') &&
                 $albacab->username === $authUser->username &&
-                $albacab->ejefact > 0 &&
+                $albacab->eje_fact > 0 &&
                 $albacab->fecha_fac == date('Y-m-d'))
                 return true;
         else if ($authUser->hasRole('Usuario') &&
-                $albacab->ejefact == 0 )
+                $albacab->eje_fact == 0 )
                 return true;
        else
             return $this->deny("Acceso denegado. No tiene permisos para editar el albarán.");
@@ -68,14 +68,14 @@ class AlbacabPolicy
 
         // \Log::info($albacab->username."-".$authUser->username);
         // \Log::info($albacab);
-        // \Log::info($albacab->ejefact);
+        // \Log::info($albacab->eje_fact);
         // \Log::info($albacab->fecha_alb."-".date('Y-m-d'));
 
-        if ($authUser->hasRole('Admin') && is_null($albacab->ejefac))
+        if ($authUser->hasRole('Admin') && is_null($albacab->eje_fac))
             return true;
         else if ($authUser->hasRole('Usuario') &&
                 $albacab->username === $authUser->username &&
-                $albacab->ejefact == 0 &&
+                $albacab->eje_fact == 0 &&
                 $albacab->fecha_alb == date('Y-m-d'))
                 return true;
        else

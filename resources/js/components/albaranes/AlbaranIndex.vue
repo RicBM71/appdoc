@@ -49,7 +49,7 @@
 
 
                                 <v-icon
-                                v-if="props.item.ejefac==0"
+                                v-if="props.item.eje_fac==0"
                                 small
                                 @click="openDialog(props.item.id)"
                                 >

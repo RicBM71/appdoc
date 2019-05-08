@@ -29,7 +29,7 @@ class StoreAlbaranes extends FormRequest
             // 'serie'          => ['required', 'String', 'max:3'],
             'fecha_alb'      => ['required', 'Date',],
             'cliente_id'     => ['required', 'integer'],
-            'ejefac'         => ['integer','nullable '],
+            'eje_fac'         => ['integer','nullable '],
             'factura'        => ['String', 'nullable','max:20'],
             'fecha_fac'      => ['Date','nullable'],
             'fpago_id'       => ['required', 'integer'],

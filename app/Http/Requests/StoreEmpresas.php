@@ -50,7 +50,7 @@ class StoreEmpresas extends FormRequest
         ];
 
         if ($this->filled('id'))
-            $data['cif'] = ['nullable','string', 'max:20', Rule::unique('empresas')->ignore($this->route('empresa')->id)];
+            $data['cif'] = ['nullable','string', 'max:20', Rule::unique('empresas')->ignore($this->id)];
 
         return $data;
     }

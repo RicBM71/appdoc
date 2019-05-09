@@ -16,7 +16,6 @@ export default {
 
     }),
     mounted(){
-
         axios.get('/dash')
             .then(res => {
                 this.setAuthUser(res.data.user);

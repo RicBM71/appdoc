@@ -48,6 +48,7 @@ class HomeController extends Controller
             $permisos_user[]=$permiso->name;
         }
 
+
         $user = [
             'id'   => $authUser->id,
             'name' => $authUser->name,
@@ -59,6 +60,8 @@ class HomeController extends Controller
             'empresas'=>$authUser->empresas
         ];
 
+        $empresa = Empresa::find($authUser->empresa_id);
+        \Log::info($empresa->titulo);
 
         session([
             'empresa_id' => $authUser->empresa_id,

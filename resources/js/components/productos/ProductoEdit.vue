@@ -150,6 +150,7 @@ import MenuOpe from './MenuOpe'
                         this.producto = res.data.producto;
                         this.ivas = res.data.ivas;
                         this.retenciones = res.data.retenciones;
+
                         this.show=true;
                     })
                     .catch(err => {

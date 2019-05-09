@@ -273,6 +273,26 @@ export default {
             this.$router.push({name: name});
         },
         home(){
+            axios.get('/dash')
+                .then(res => {
+
+                    this.setAuthUser(res.data.user);
+
+                    this.empresa_id = this.user.empresa_id;
+
+                    res.data.user.empresas.map((e) =>{
+                        if (e.id == this.empresa_id)
+                            this.empresaTxt = e.titulo;
+                        this.empresas.push({id: e.id, name: e.titulo});
+                    })
+                })
+                .catch(err => {
+                    this.show = false;
+                    if (err.request.status == 401){ // fallo de validated.
+                        window.location = '/login';
+                    }
+                })
+
             this.$router.push({name: 'dash'});
         },
         passwd(){

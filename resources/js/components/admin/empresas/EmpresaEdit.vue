@@ -373,7 +373,7 @@ import MenuOpe from './MenuOpe'
     	methods:{
             submit() {
 
-                console.log(this.empresa);
+               // console.log(this.empresa);
                 this.enviando = true;
 
                 var url = "/admin/empresas/"+this.empresa.id;

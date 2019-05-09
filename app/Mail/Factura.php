@@ -37,7 +37,7 @@ class Factura extends Mailable
         return $this->markdown('emails.factura')
                     ->with('data', $this->data)
                     ->subject("Factura ".$this->data['alb']->factura)
-                    ->from('noreply@sanaval-tec.com')
+                    ->from($this->data['from'],$this->data['razon'])
                     ->attach(storage_path('facturas/'.$file), [
                         'as' => $file,
                         'mime' => 'application/pdf'

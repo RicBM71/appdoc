@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Mto;
 
 use App\Fpago;
+use App\Albacab;
 use App\Carpeta;
 use App\Cliente;
+use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClientes;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
 class ClientesController extends Controller
@@ -68,14 +69,23 @@ class ClientesController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Muestra albaranes del cliente
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function albaranes($id)
     {
-        //
+
+       // $o = new Albacab;
+
+        //return $o->AlbaranesCliente($id)->get();
+        //return Albacab::AlbaranesCliente($id)->get();
+
+        if (request()->wantsJson())
+            return [
+                'albaranes'=> Albacab::AlbaranesCliente($id)->get()
+            ];
     }
 
     /**

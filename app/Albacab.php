@@ -48,6 +48,11 @@ class Albacab extends Model
     	return ($this->belongsTo(Cliente::class));
     }
 
+    public function empresa()
+    {
+    	return ($this->belongsTo(Empresa::class));
+    }
+
     public function fpago()
     {
     	return $this->belongsTo(Fpago::class);
@@ -77,6 +82,17 @@ class Albacab extends Model
 
         return $query->with(['cliente'])->where('fecha_fac', '=', $fecha)
                      ->where('fpago_id', '=', 1);
+
+    }
+
+    public function scopeAlbaranesCliente($query, $cliente_id)
+    {
+
+        return $query->with(['cliente','albalins'])
+                     ->where('cliente_id', '=', $cliente_id)
+                     ->orderBy('fecha_alb', 'desc');
+
+
 
     }
 

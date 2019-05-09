@@ -13,6 +13,9 @@
                         Datos generales
                 </v-tab>
                 <v-tab>
+                        Albaranes
+                </v-tab>
+                <v-tab>
                         Documentos
                 </v-tab>
                 <v-tab-item>
@@ -365,7 +368,9 @@
                     </v-form>
                 </v-tab-item>
                 <v-tab-item>
-
+                    <alb-cliente v-if="cliente.id > 0" :cliente_id="cliente.id"></alb-cliente>
+                </v-tab-item>
+                <v-tab-item>
                 </v-tab-item>
             </v-tabs>
         </v-card>
@@ -374,6 +379,7 @@
 <script>
 import moment from 'moment'
 import MenuOpe from './MenuOpe'
+import AlbCliente from './ClienteAlbaran'
 
 	export default {
 		$_veeValidate: {
@@ -381,6 +387,7 @@ import MenuOpe from './MenuOpe'
         },
         components: {
             'menu-ope': MenuOpe,
+            'alb-cliente': AlbCliente,
 		},
     	data () {
       		return {

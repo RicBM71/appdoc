@@ -157,8 +157,10 @@ import MenuOpe from './MenuOpe'
 
                 axios.get('/mto/productos/create')
                     .then(res => {
+                        console.log(res.data.retenciones);
                         this.ivas = res.data.ivas;
                         this.retenciones = res.data.retenciones;
+
                         this.show=true;
                     })
                     .catch(err => {

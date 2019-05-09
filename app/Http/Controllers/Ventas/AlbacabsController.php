@@ -778,27 +778,29 @@ class AlbacabsController extends Controller
 
         $alb =  Albacab::with(['cliente'])->find($albacab->id);
 
-        if ($alb->cliente->email=="")
+        if ($alb->cliente->email=='')
             return response('El cliente no tiene email configurado', 403);
+        elseif (session('empresa')->email=='')
+            return response('Configurar email empresa', 403);
 
         $data = [
             'razon'=> session('empresa')->razon,
-            'msg' => 'Texto prueba jueves',
+            'from'=> session('empresa')->email,
+            'msg' => null,
             'alb' => $alb
         ];
 
+        // con esto previsualizamos el mail
         //return new Factura($data);
 
         dispatch(new SendFactura($data));
 
-       // unlink (storage_path('facturas/'.$alb->factura.'.pdf'));
+        // unlink (storage_path('facturas/'.$alb->factura.'.pdf'));
 
         $data['notificado'] =  TRUE;
         $data['username'] = session('username');;
 
-       // return $albacab;
-
-      //  $albacab->update($data);
+        $albacab->update($data);
 
         if (request()->wantsJson())
             return ['albaran'=>$albacab, 'message' => 'Factura enviada'];

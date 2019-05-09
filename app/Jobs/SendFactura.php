@@ -35,6 +35,8 @@ class SendFactura implements ShouldQueue
     {
         Mail::to('info@sanaval.com')->send(new Factura($this->data));
 
+     // unlink (storage_path('facturas/'.$this->data['alb']->factura.'.pdf'));
+
         \Log::info('enviado ok');
     }
 }

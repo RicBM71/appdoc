@@ -783,7 +783,7 @@ class AlbacabsController extends Controller
 
         $data = [
             'razon'=> session('empresa')->razon,
-            'msg' => 'Texto prueba',
+            'msg' => 'Texto prueba jueves',
             'alb' => $alb
         ];
 
@@ -791,14 +791,14 @@ class AlbacabsController extends Controller
 
         dispatch(new SendFactura($data));
 
-        unlink (storage_path('facturas/'.$alb->factura.'.pdf'));
+       // unlink (storage_path('facturas/'.$alb->factura.'.pdf'));
 
         $data['notificado'] =  TRUE;
         $data['username'] = session('username');;
 
        // return $albacab;
 
-        $albacab->update($data);
+      //  $albacab->update($data);
 
         if (request()->wantsJson())
             return ['albaran'=>$albacab, 'message' => 'Factura enviada'];

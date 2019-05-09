@@ -394,8 +394,12 @@ class AlbacabsController extends Controller
             ? $clave_firma = 'file://'.base_path('storage/crt/'.$empresa->certificado)
             : $clave_firma = 'file://'.realpath('../storage/crt/'.$empresa->certificado);
 
+        //dd('file://'.base_path('storage/crt/'.$empresa->certificado));
+        //dd(config('app.env'));
+           // \Log::info($clave_firma);
+           // \Log::info(base_path());
 
-        //$clave_firma = 'file:///home/sanaval-tec/myapp/storage/crt/sntfirma.crt';
+       // $clave_firma = 'file:///home/sanaval-tec/myapp/storage/crt/sntfirma.crt';
         $clave_privada = $clave_firma;
         $info = array('Name' => 'CIF '.$empresa->cif,
                 'Location' => $empresa->poblacion,

@@ -142,7 +142,7 @@
                     </v-flex>
                     <v-flex sm6>
                         <div class="text-xs-center">
-                            <v-btn @click="submit"  :loading="enviando" block  color="primary">
+                            <v-btn @click="submit"  round  :loading="enviando" block  color="primary">
                                 Guardar Usuario
                             </v-btn>
                         </div>

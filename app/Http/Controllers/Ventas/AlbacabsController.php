@@ -154,15 +154,19 @@ class AlbacabsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Albacab $albacab)
+    public function destroy(Request $request, Albacab $albacab)
     {
+        $cliente_id =  $request->input('cliente_id', 0);
 
         $this->authorize('delete', $albacab);
 
         $albacab->delete();
 
         if (request()->wantsJson()){
-            return response()->json(Albacab::with(['cliente','albalins'])->get());
+            if ($cliente_id == 0)
+                return response()->json(Albacab::with(['cliente','albalins'])->get());
+            else
+                return response()->json(Albacab::AlbaranesCliente($cliente_id)->get());
         }
 
     }

@@ -76,7 +76,7 @@
                         <v-flex sm4></v-flex>
                         <v-flex sm4>
                             <div class="text-xs-center">
-                                <v-btn @click="submit" :disabled="disabled" :loading="show_loading" block  color="primary">
+                                <v-btn @click="submit"  round :disabled="disabled" :loading="show_loading" block  color="primary">
                                     Generar Remesa
                                 </v-btn>
                             </div>

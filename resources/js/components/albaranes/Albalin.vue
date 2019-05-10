@@ -53,7 +53,7 @@
             </v-layout>
             <v-layout row wrap>
                 <v-flex xs3>
-                    <v-btn flat v-if="eje_fac==0" color="primary" v-on:click="create" small >
+                    <v-btn round flat v-if="eje_fac==0" color="primary" v-on:click="create" small >
                         <v-icon small>add</v-icon> Crear Línea
                     </v-btn>
                 </v-flex>

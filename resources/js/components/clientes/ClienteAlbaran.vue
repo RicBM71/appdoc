@@ -127,10 +127,10 @@ import MyDialog from '@/components/shared/MyDialog'
     mounted()
     {
 
-        console.log(this.cliente_id);
+        
         axios.get('/mto/clientes/'+this.cliente_id+'/albaranes')
             .then(res => {
-                console.log(res);
+
                 this.albaranes = res.data.albaranes;
                 this.registros = true;
             })
@@ -171,8 +171,9 @@ import MyDialog from '@/components/shared/MyDialog'
         destroyReg () {
             this.dialog = false;
 
-            axios.post('/ventas/albacabs/'+this.albaran_id,{_method: 'delete'})
+            axios.post('/ventas/albacabs/'+this.albaran_id,{_method: 'delete', cliente_id: this.cliente_id})
                 .then(response => {
+
                 this.albaranes = response.data;
                 this.$toast.success('Albarán eliminado!');
 

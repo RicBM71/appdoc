@@ -175,7 +175,7 @@
                         </v-flex>
                         <v-flex sm2>
                             <div class="text-xs-center">
-                                        <v-btn @click="submit"  :loading="enviando" block  color="primary">
+                                        <v-btn @click="submit"  round  :loading="enviando" block  color="primary">
                                 Guardar
                                 </v-btn>
                             </div>

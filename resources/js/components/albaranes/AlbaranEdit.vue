@@ -223,7 +223,7 @@
                         </v-flex>
                         <v-flex sm2>
                             <div class="text-xs-center">
-                                <v-btn @click="submit"
+                                <v-btn @click="submit"  round
                                     :loading="show_loading"
                                     block
                                     color="primary"

@@ -35,7 +35,7 @@
                         >
                     </v-text-field>
 
-                    <v-btn @click="submit"  :loading="loading" block  color="primary">
+                    <v-btn @click="submit"  round  :loading="loading" block  color="primary">
                         <span v-show="loading">Actualizando Password</span>
                         <span v-show="!loading">Actualizar Password</span>
                     </v-btn>

@@ -9,41 +9,43 @@
             </v-card-title>
         </v-card>
         <v-card>
-            <v-layout row wrap>
-                <v-flex xs12>
-                    <v-data-table
-                    :headers="headers"
-                    :items="this.cuentas"
-                    rows-per-page-text="Registros por página"
-                    >
-                        <template slot="items" slot-scope="props">
-                            <td>{{ props.item.id }}</td>
-                            <td>{{ props.item.nombre }}</td>
-                            <td>{{ formatIBAN(props.item.iban) }}</td>
-                            <td class="justify-center layout px-0">
-                                <v-icon
+            <v-container>
+                <v-layout row wrap>
+                    <v-flex xs12>
+                        <v-data-table
+                        :headers="headers"
+                        :items="this.cuentas"
+                        rows-per-page-text="Registros por página"
+                        >
+                            <template slot="items" slot-scope="props">
+                                <td>{{ props.item.id }}</td>
+                                <td>{{ props.item.nombre }}</td>
+                                <td>{{ formatIBAN(props.item.iban) }}</td>
+                                <td class="justify-center layout px-0">
+                                    <v-icon
+                                        small
+                                        class="mr-2"
+                                        @click="editItem(props.item.id)"
+                                    >
+                                        edit
+                                    </v-icon>
+
+
+                                    <v-icon
                                     small
-                                    class="mr-2"
-                                    @click="editItem(props.item.id)"
-                                >
-                                    edit
-                                </v-icon>
-
-
-                                <v-icon
-                                small
-                                @click="openDialog(props.item.id)"
-                                >
-                                delete
-                                </v-icon>
-                            </td>
-                        </template>
-                        <template slot="pageText" slot-scope="props">
-                            Registros {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
-                        </template>
-                    </v-data-table>
-                </v-flex>
-            </v-layout>
+                                    @click="openDialog(props.item.id)"
+                                    >
+                                    delete
+                                    </v-icon>
+                                </td>
+                            </template>
+                            <template slot="pageText" slot-scope="props">
+                                Registros {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+                            </template>
+                        </v-data-table>
+                    </v-flex>
+                </v-layout>
+            </v-container>
         </v-card>
     </div>
 </template>

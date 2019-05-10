@@ -37,6 +37,7 @@ Route::group([
             Route::resource('retenciones', 'RetencionesController', ['except'=>'show','as' => 'admin']);
             Route::resource('ivas', 'IvasController', ['except'=>'show','as' => 'admin']);
             Route::resource('carpetas', 'CarpetasController', ['except'=>'show','as' => 'admin']);
+            Route::resource('subcarpetas', 'SubcarpetasController', ['except'=>'show','as' => 'admin']);
             Route::resource('empresas', 'EmpresasController', ['except'=>'show','as' => 'admin']);
             Route::resource('fpagos', 'FpagosController', ['except'=>'show','as' => 'admin']);
             Route::resource('contadors', 'ContadorsController', ['except'=>'show','as' => 'admin']);
@@ -58,6 +59,8 @@ Route::group([
         Route::get('clientes/{cliente}/albaranes', 'ClientesController@albaranes');
         Route::resource('productos', 'ProductosController', ['as' => 'mto']);
         Route::resource('vencimientos', 'VencimientosController', ['except'=>'show','as' => 'mto']);
+        Route::resource('extractos', 'ExtractosController', ['only'=>['index','show'],'as' => 'mto']);
+        Route::post('extractos/filtrar', 'ExtractosController@filtrar');
     }
 );
 

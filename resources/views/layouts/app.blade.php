@@ -7,7 +7,7 @@
         <meta name="description" content="Laravel Vue SPA">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name') }} </title>
+        <title>{{ config('app.name') }} |:</title>
 
         <!-- Fonts -->
         <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
@@ -17,9 +17,9 @@
 
         <script>
             window.Laravel = {!! json_encode([
-                'csrfToken' => csrf_token(),
+               // 'csrfToken' => csrf_token(),
                 'siteName'  => config('app.name'),
-                'apiDomain' => '/api'
+               'apiDomain' => '/api'
                 //'apiDomain' => config('app.url').'/api'
             ]) !!}
         </script>

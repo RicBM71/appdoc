@@ -22,6 +22,10 @@ import CarpetaIndex from './components/admin/carpetas/CarpetaIndex.vue';
 import CarpetaCreate from './components/admin/carpetas/CarpetaCreate.vue';
 import CarpetaEdit from './components/admin/carpetas/CarpetaEdit.vue';
 
+import SubcarpetaIndex from './components/admin/subcarpetas/SubcarpetaIndex.vue';
+import SubcarpetaCreate from './components/admin/subcarpetas/SubcarpetaCreate.vue';
+import SubcarpetaEdit from './components/admin/subcarpetas/SubcarpetaEdit.vue';
+
 import EmpresaIndex from './components/admin/empresas/EmpresaIndex.vue';
 import EmpresaCreate from './components/admin/empresas/EmpresaCreate.vue';
 import EmpresaEdit from './components/admin/empresas/EmpresaEdit.vue';
@@ -55,7 +59,7 @@ import AlbaranIndex from './components/albaranes/AlbaranIndex.vue';
 import AlbaranCreate from './components/albaranes/AlbaranCreate.vue';
 import AlbaranEdit from './components/albaranes/AlbaranEdit.vue';
 
-
+import ExtractoIndex from './components/extractos/ExtractoIndex.vue';
 
 import SelRemesa from './components/remesas/SelRemesa.vue';
 
@@ -159,6 +163,21 @@ export default [
                 path: '/carpetas/:id/edit',
                 name: 'carpeta.edit',
                 component: CarpetaEdit,
+            },
+            {
+                path: '/subcarpetas',
+                name: 'subcarpeta.index',
+                component: SubcarpetaIndex,
+            },
+            {
+                path: '/subcarpetas/create',
+                name: 'subcarpeta.create',
+                component: SubcarpetaCreate,
+            },
+            {
+                path: '/subcarpetas/:id/edit',
+                name: 'subcarpeta.edit',
+                component: SubcarpetaEdit,
             },
             {
                 path: '/empresas',
@@ -284,6 +303,11 @@ export default [
                 path: '/cuentas/:id/edit',
                 name: 'cuenta.edit',
                 component: CuentaEdit,
+            },
+            {
+                path: '/extractos',
+                name: 'extracto.index',
+                component: ExtractoIndex,
             },
             // {
             //     path: '*',

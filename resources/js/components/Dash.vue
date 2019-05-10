@@ -194,6 +194,7 @@ export default {
                 { text: 'Cuentas', name: 'cuenta.index' },
                 { text: 'Tipos de IVA', name: 'iva.index' },
                 { text: 'Carpetas', name: 'carpeta.index' },
+                { text: 'Subcarpetas', name: 'subcarpeta.index' },
                 { text: 'Formas de Pago', name: 'fpago.index' },
                 { text: 'Contadores', name: 'contador.index' },
             ]
@@ -211,6 +212,7 @@ export default {
                 { text: 'Cuentas', name: 'cuenta.index' },
                 { text: 'Tipos de IVA', name: 'iva.index' },
                 { text: 'Carpetas', name: 'carpeta.index' },
+                { text: 'Subcarpetas', name: 'subcarpeta.index' },
                 { text: 'Formas de Pago', name: 'fpago.index' },
                 { text: 'Contadores', name: 'contador.index' },
             ]
@@ -219,6 +221,7 @@ export default {
         items: [
             { icon: 'people', text: 'Clientes', name:'cliente.index' },
             { icon: 'local_offer', text: 'Productos', name:'producto.index' },
+            { icon: 'account_balance', text: 'Extracto Banco', name:'extracto.index' },
             {
             icon: 'keyboard_arrow_up',
             'icon-alt': 'keyboard_arrow_down',

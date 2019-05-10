@@ -53,6 +53,7 @@ class GenericasSeeder extends Seeder
         $emp->titulo = "Sanaval";
         $emp->logo = "logo.jpg";
         $emp->certificado = "sntfirma.crt";
+        $emp->passwd_cer="delta00";
         $emp->save();
 
         $json = File::get("database/data/carpetas.json");
@@ -60,7 +61,6 @@ class GenericasSeeder extends Seeder
         foreach ($data as $obj) {
             Carpeta::create(array(
              'id' => $obj->id,
-             'empresa_id' => $obj->empresa,
              'nombre' => $obj->nombre,
              'color' => $obj->color,
              'created_at'=> $obj->created_at,

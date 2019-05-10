@@ -12,11 +12,11 @@
                         <template slot="items" slot-scope="props">
                             <td>{{ props.item.producto.nombre }}</td>
                             <td>{{ props.item.nombre }}</td>
-                            <td class="text-xs-right">{{ props.item.unidades | currency('', 0, { decimalSeparator: ',', symbolOnLeft: false }) }}</td>
-                            <td class="text-xs-right">{{ props.item.impuni | currency('€', 2, { decimalSeparator: ',', symbolOnLeft: false }) }}</td>
-                            <td class="text-xs-right">{{ props.item.poriva | currency('%', 2, { decimalSeparator: ',', symbolOnLeft: false }) }}</td>
-                            <td class="text-xs-right">{{ props.item.porirpf| currency('%', 2, { decimalSeparator: ',', symbolOnLeft: false }) }}</td>
-                            <td class="text-xs-right">{{ props.item.importe| currency('€', 2, { decimalSeparator: ',', symbolOnLeft: false }) }}</td>
+                            <td class="text-xs-right">{{ props.item.unidades | currency('', 0, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false }) }}</td>
+                            <td class="text-xs-right">{{ props.item.impuni | currency('€', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false }) }}</td>
+                            <td class="text-xs-right">{{ props.item.poriva | currency('%', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false }) }}</td>
+                            <td class="text-xs-right">{{ props.item.porirpf| currency('%', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false }) }}</td>
+                            <td class="text-xs-right">{{ props.item.importe| currency('€', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false }) }}</td>
                             <td class="justify-center layout px-0">
                                 <v-icon  v-if="eje_fac==0"
                                     small
@@ -37,11 +37,11 @@
                         </template>
                         <template slot="footer">
                         <td class="text-xs-right font-weight-bold" colspan="2">TOTAL</td>
-                        <td class="text-xs-right font-weight-bold">{{ totales.unidades| currency(' ', 0, { decimalSeparator: ',', symbolOnLeft: false }) }}</td>
+                        <td class="text-xs-right font-weight-bold">{{ totales.unidades| currency(' ', 0, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false }) }}</td>
                         <td class="text-xs-right font-weight-bold"></td>
-                        <td class="text-xs-right font-weight-bold">{{ totales.impiva| currency('€', 2, { decimalSeparator: ',', symbolOnLeft: false }) }}</td>
-                        <td class="text-xs-right font-weight-bold">{{ totales.impirpf| currency('€', 2, { decimalSeparator: ',', symbolOnLeft: false }) }}</td>
-                        <td class="text-xs-right font-weight-bold">{{ computedTotAlb | currency('€', 2, { decimalSeparator: ',', symbolOnLeft: false }) }}</td>
+                        <td class="text-xs-right font-weight-bold">{{ totales.impiva| currency('€', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false }) }}</td>
+                        <td class="text-xs-right font-weight-bold">{{ totales.impirpf| currency('€', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false }) }}</td>
+                        <td class="text-xs-right font-weight-bold">{{ computedTotAlb | currency('€', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false }) }}</td>
                         <td class="">
                         </td>
                         </template>

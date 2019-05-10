@@ -2,17 +2,28 @@
     <div>
         <v-layout row wrap>
             <v-flex xs3>
-            </v-flex>
-            <v-flex xs2>
-                 <v-btn block large color="blue-grey" class="white--text" @click="goAlbaranes()">Albaranes</v-btn>
-            </v-flex>
-            <v-flex xs1></v-flex>
-            <v-flex xs2>
-                <v-btn block large color="blue-grey" class="white--text" @click="goClientes()">Clientes</v-btn>
+                 <v-btn round block large color="grey" class="blue-grey lighten-3" @click="goAlbaranes()">
+                     Albaranes
+                     <v-icon right dark>keyboard</v-icon>
+                </v-btn>
             </v-flex>
             <v-flex xs1></v-flex>
-            <v-flex xs2>
-                <v-btn block large color="blue-grey" class="white--text" @click="goProductos()">Productos</v-btn>
+            <v-flex xs3>
+                <v-btn
+                    round block large color="grey" class="blue-grey lighten-3"
+                    @click="goClientes()">
+                        Clientes
+                    <v-icon right dark>group</v-icon>
+                </v-btn>
+            </v-flex>
+            <v-flex xs1></v-flex>
+            <v-flex xs3>
+                <v-btn
+                    round block large color="grey" class="blue-grey lighten-3"
+                    @click="goProductos()">
+                    Productos
+                    <v-icon right dark>local_offer</v-icon>
+                 </v-btn>
             </v-flex>
 
         </v-layout>

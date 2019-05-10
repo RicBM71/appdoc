@@ -43,7 +43,6 @@ class CarpetasController extends Controller
 
         $data = $request->validate([
             'nombre' => ['required', 'string', 'max:255'],
-            'empresa' => ['required', 'numeric'],
             'color' => ['required']
         ]);
 
@@ -81,7 +80,6 @@ class CarpetasController extends Controller
     {
         $data = $request->validate([
             'nombre' => ['required', 'string', 'max:255'],
-            'empresa' => ['required', 'numeric'],
             'color' => ['required']
         ]);
 

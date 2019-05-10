@@ -19,7 +19,7 @@
                         <template slot="items" slot-scope="props">
                             <td>{{ props.item.id }}</td>
                             <td>{{ props.item.nombre }}</td>
-                            <td>{{ props.item.importe | currency('%', 2, { decimalSeparator: ',', symbolOnLeft: false }) }}</td>
+                            <td>{{ props.item.importe | currency('%', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false }) }}</td>
                             <td class="justify-center layout px-0">
                                 <v-icon
                                     small

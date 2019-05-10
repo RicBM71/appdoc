@@ -87,7 +87,6 @@ import MenuOpe from './MenuOpe'
                 titulo:"Carpetas",
                 carpeta: {
                     id:       0,
-                    empresa: 0,
                     nombre:  "",
                     color: "",
                     updated_at:"",
@@ -142,7 +141,6 @@ import MenuOpe from './MenuOpe'
                             data:
                                 {
                                     nombre: this.carpeta.nombre,
-                                    empresa: this.carpeta.empresa,
                                     color: this.carpeta.color,
 
                                 }

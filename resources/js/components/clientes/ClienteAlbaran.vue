@@ -28,7 +28,7 @@
                             <td>{{ props.item.alb_ser }}</td>
                             <td>{{ formatDate(props.item.fecha_alb) }}</td>
                             <td>{{ props.item.notas }}</td>
-                            <td class="text-xs-right">{{ totalImpLinea(props.item.albalins) | currency('€', 2, { decimalSeparator: ',', symbolOnLeft: false })}}</td>
+                            <td class="text-xs-right">{{ totalImpLinea(props.item.albalins) | currency('€', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false })}}</td>
                             <td>{{ props.item.factura }}</td>
                             <td>{{ formatDate(props.item.fecha_fac) }}</td>
                             <td class="justify-center layout px-0">
@@ -127,7 +127,7 @@ import MyDialog from '@/components/shared/MyDialog'
     mounted()
     {
 
-        
+
         axios.get('/mto/clientes/'+this.cliente_id+'/albaranes')
             .then(res => {
 

@@ -16,7 +16,7 @@ class CreateDocumentosTable extends Migration
         Schema::create('documentos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('empresa_id');
-            $table->unsignedInteger('carpeta_id');
+            $table->unsignedInteger('archivo_id');
             $table->date('fecha');
             $table->String('concepto');
             $table->decimal('importe', 10, 2)->default(0);

@@ -36,8 +36,8 @@ Route::group([
         Route::middleware('role:Root|Admin')->group(function () {
             Route::resource('retenciones', 'RetencionesController', ['except'=>'show','as' => 'admin']);
             Route::resource('ivas', 'IvasController', ['except'=>'show','as' => 'admin']);
+            Route::resource('archivos', 'ArchivosController', ['except'=>'show','as' => 'admin']);
             Route::resource('carpetas', 'CarpetasController', ['except'=>'show','as' => 'admin']);
-            Route::resource('subcarpetas', 'SubcarpetasController', ['except'=>'show','as' => 'admin']);
             Route::resource('empresas', 'EmpresasController', ['except'=>'show','as' => 'admin']);
             Route::resource('fpagos', 'FpagosController', ['except'=>'show','as' => 'admin']);
             Route::resource('contadors', 'ContadorsController', ['except'=>'show','as' => 'admin']);
@@ -65,6 +65,7 @@ Route::group([
         Route::resource('documentos', 'DocumentosController', ['as' => 'mto']);
         Route::post('documentos/filtrar', 'DocumentosController@filtrar');
         Route::post('filedocs/{filedoc}', 'FiledocsController@store');
+        Route::delete('filedocs/{filedoc}', 'FiledocsController@destroy');
     }
 );
 

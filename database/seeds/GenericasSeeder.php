@@ -3,7 +3,7 @@
 use App\Iva;
 use App\Fpago;
 use App\Cuenta;
-use App\Carpeta;
+use App\Archivo;
 use App\Empresa;
 use App\Contador;
 use App\Retencion;
@@ -26,7 +26,7 @@ class GenericasSeeder extends Seeder
 
         Retencion::truncate();
         Iva::truncate();
-        Carpeta::truncate();
+        Archivo::truncate();
         Empresa::truncate();
         Fpago::truncate();
         Vencimiento::truncate();
@@ -59,7 +59,7 @@ class GenericasSeeder extends Seeder
         $json = File::get("database/data/carpetas.json");
         $data = json_decode($json);
         foreach ($data as $obj) {
-            Carpeta::create(array(
+            Archivo::create(array(
              'id' => $obj->id,
              'nombre' => $obj->nombre,
              'color' => $obj->color,

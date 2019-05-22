@@ -73,7 +73,7 @@ export default {
             axios.post('/admin/carpetas/'+this.id,{_method: 'delete'})
                 .then(response => {
                 this.$router.push({ name: 'carpeta.index' })
-                this.$toast.success('Carpeta eliminada!');
+                this.$toast.success('Archivo eliminada!');
 
             })
             .catch(err => {

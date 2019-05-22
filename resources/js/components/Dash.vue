@@ -193,8 +193,8 @@ export default {
                 { text: 'Retenciones (IRPF)', name: 'ret.index' },
                 { text: 'Cuentas', name: 'cuenta.index' },
                 { text: 'Tipos de IVA', name: 'iva.index' },
+                { text: 'Archivos', name: 'archivo.index' },
                 { text: 'Carpetas', name: 'carpeta.index' },
-                { text: 'Subcarpetas', name: 'subcarpeta.index' },
                 { text: 'Formas de Pago', name: 'fpago.index' },
                 { text: 'Contadores', name: 'contador.index' },
             ]
@@ -211,8 +211,8 @@ export default {
                 { text: 'Retenciones (IRPF)', name: 'ret.index' },
                 { text: 'Cuentas', name: 'cuenta.index' },
                 { text: 'Tipos de IVA', name: 'iva.index' },
+                { text: 'Archivos', name: 'archivo.index' },
                 { text: 'Carpetas', name: 'carpeta.index' },
-                { text: 'Subcarpetas', name: 'subcarpeta.index' },
                 { text: 'Formas de Pago', name: 'fpago.index' },
                 { text: 'Contadores', name: 'contador.index' },
             ]

@@ -169,9 +169,9 @@
                         <v-flex sm3>
                             <v-text-field
                                 v-model="empresa.carpeta"
-                                :error-messages="errors.collect('carpeta')"
-                                label="Carpeta"
-                                data-vv-name="carpeta"
+                                :error-messages="errors.collect('archivo')"
+                                label="Archivo"
+                                data-vv-name="archivo"
                                 v-on:keyup.enter="submit"
                             >
                             </v-text-field>
@@ -236,7 +236,7 @@
                     <v-layout row wrap>
                         <v-flex sm4 d-flex>
                             <v-select
-                            v-model="empresa.carpeta_id"
+                            v-model="empresa.archivo_id"
                             item-text="name"
                             item-value="id"
                             :items="empresas"
@@ -322,7 +322,7 @@ import MenuOpe from './MenuOpe'
                     logo:"",
                     certificado:"",
                     passwd_cer:"",
-                    carpeta_id:"",
+                    archivo_id:"",
                     username: "",
                     updated_at:"",
                     created_at:"",

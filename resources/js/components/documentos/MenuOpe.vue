@@ -34,6 +34,19 @@
                     v-on="on"
                     color="white"
                     icon
+                    @click="goCloud()"
+                >
+                    <v-icon color="primary">cloud_queue</v-icon>
+                </v-btn>
+            </template>
+            <span>Upload documentos</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+                <v-btn
+                    v-on="on"
+                    color="white"
+                    icon
                     @click="goIndex"
                 >
                     <v-icon color="primary">list</v-icon>
@@ -41,6 +54,7 @@
             </template>
             <span>Lista</span>
         </v-tooltip>
+
     </div>
 </template>
 <script>
@@ -54,7 +68,7 @@ export default {
     },
     data () {
       return {
-          dialog: false,
+          dialog: false
       }
     },
     methods:{
@@ -66,6 +80,9 @@ export default {
         },
         openDialog (){
             this.dialog = true;
+        },
+        goCloud(){
+            this.$emit('show-upload',  true);
         },
         destroyReg () {
             this.dialog = false;

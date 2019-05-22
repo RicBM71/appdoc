@@ -2,42 +2,35 @@
 
 namespace App;
 
-use App\Carpeta;
 use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Model;
 
 class Carpeta extends Model
 {
-    protected $fillable = [
-        'nombre', 'color',
-    ];
 
     protected static function boot()
     {
         parent::boot();
 
+        static::addGlobalScope(new EmpresaScope);
     }
 
-    public function subcarpetas()
+
+    protected $fillable = [
+        'empresa_id', 'archivo_id', 'nombre', 'color',
+    ];
+
+    // una carpeta tiene un archivo y solo uno
+    public function archivo()
     {
-        return $this->hasMany(Subcarpeta::class);
+        return $this->belongsTo(Archivo::class);
     }
 
-    public function documentos()
-    {
-        return $this->hasMany(Documento::class);
-    }
-     /**
-     *
-     * @return Array formateado para select Vuetify
-     *
-     */
-    public static function selCarpetas(){
+    // public function scopeArchivo($query, $archivo_id)
+    // {
 
-        return Carpeta::select('id AS value', 'nombre AS text')
-            ->orderBy('nombre', 'asc')
-            ->get();
+    //     return $query->where('archivo_id', '=', $archivo_id);
 
-    }
+    // }
 
 }

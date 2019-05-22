@@ -23,9 +23,9 @@
                         <v-layout row wrap>
                             <v-flex xs4 d-flex>
                                 <v-select
-                                    v-model="carpeta_id"
-                                    :items="carpetas"
-                                    label="Carpeta"
+                                    v-model="archivo_id"
+                                    :items="archivos"
+                                    label="Archivo"
                                 ></v-select>
                             </v-flex>
                             <v-flex sm2>
@@ -125,7 +125,7 @@
                             >
                                 <template slot="items" slot-scope="props">
                                     <td>{{ formatDate(props.item.fecha) }}</td>
-                                    <td>{{ props.item.carpeta.nombre }}</td>
+                                    <td>{{ props.item.archivo.nombre }}</td>
                                     <td>{{ props.item.concepto }}</td>
                                     <td class="text-xs-right">{{ props.item.importe | currency('€', 2, { thousandsSeparator:'.', thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false })}}</td>
                                     <td class="justify-center layout px-0">
@@ -182,9 +182,9 @@ import MenuOpe from './MenuOpe'
             value: 'fecha'
           },
           {
-            text: 'Carpeta',
+            text: 'Archivo',
             align: 'left',
-            value: 'carpeta.nombre'
+            value: 'archivo.nombre'
           },
           {
             text: 'Concepto',
@@ -203,12 +203,12 @@ import MenuOpe from './MenuOpe'
           }
         ],
         documentos:[],
-        carpetas:[],
-        carpeta_id:"",
+        archivos:[],
+        archivo_id:"",
         status: false,
 		registros: false,
         dialog: false,
-        carpeta_id: 0,
+        archivo_id: 0,
 
 
         show_loading: false,
@@ -229,7 +229,7 @@ import MenuOpe from './MenuOpe'
             .then(res => {
                 //console.log(res);
                 this.documentos = res.data.documentos;
-                this.carpetas = res.data.carpetas;
+                this.archivos = res.data.archivos;
                 this.registros = true;
 
                 this.show_loading = false;
@@ -266,7 +266,7 @@ import MenuOpe from './MenuOpe'
                     {
                         fecha_d: this.fecha_d,
                         fecha_h: this.fecha_h,
-                        carpeta_id: this.carpeta_id
+                        archivo_id: this.archivo_id
                     }
                 )
                 .then(res => {

@@ -18,13 +18,13 @@ import IvaIndex from './components/admin/iva/IvaIndex.vue';
 import IvaCreate from './components/admin/iva/IvaCreate.vue';
 import IvaEdit from './components/admin/iva/IvaEdit.vue';
 
+import ArchivoIndex from './components/admin/archivos/ArchivoIndex.vue';
+import ArchivoCreate from './components/admin/archivos/ArchivoCreate.vue';
+import ArchivoEdit from './components/admin/archivos/ArchivoEdit.vue';
+
 import CarpetaIndex from './components/admin/carpetas/CarpetaIndex.vue';
 import CarpetaCreate from './components/admin/carpetas/CarpetaCreate.vue';
 import CarpetaEdit from './components/admin/carpetas/CarpetaEdit.vue';
-
-import SubcarpetaIndex from './components/admin/subcarpetas/SubcarpetaIndex.vue';
-import SubcarpetaCreate from './components/admin/subcarpetas/SubcarpetaCreate.vue';
-import SubcarpetaEdit from './components/admin/subcarpetas/SubcarpetaEdit.vue';
 
 import EmpresaIndex from './components/admin/empresas/EmpresaIndex.vue';
 import EmpresaCreate from './components/admin/empresas/EmpresaCreate.vue';
@@ -156,6 +156,21 @@ export default [
                 component: IvaEdit,
             },
             {
+                path: '/archivos',
+                name: 'archivo.index',
+                component: ArchivoIndex,
+            },
+            {
+                path: '/archivos/create',
+                name: 'archivo.create',
+                component: ArchivoCreate,
+            },
+            {
+                path: '/archivos/:id/edit',
+                name: 'archivo.edit',
+                component: ArchivoEdit,
+            },
+            {
                 path: '/carpetas',
                 name: 'carpeta.index',
                 component: CarpetaIndex,
@@ -169,21 +184,6 @@ export default [
                 path: '/carpetas/:id/edit',
                 name: 'carpeta.edit',
                 component: CarpetaEdit,
-            },
-            {
-                path: '/subcarpetas',
-                name: 'subcarpeta.index',
-                component: SubcarpetaIndex,
-            },
-            {
-                path: '/subcarpetas/create',
-                name: 'subcarpeta.create',
-                component: SubcarpetaCreate,
-            },
-            {
-                path: '/subcarpetas/:id/edit',
-                name: 'subcarpeta.edit',
-                component: SubcarpetaEdit,
             },
             {
                 path: '/empresas',

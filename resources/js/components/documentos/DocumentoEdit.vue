@@ -4,7 +4,7 @@
             <v-card-title color="indigo">
                 <h2 color="indigo">{{titulo}}</h2>
                 <v-spacer></v-spacer>
-                <menu-ope :id="documento.id"></menu-ope>
+                <menu-ope :id="documento.id" @show-upload="showUpload"></menu-ope>
             </v-card-title>
         </v-card>
         <v-card>
@@ -13,9 +13,9 @@
                     <v-layout row wrap>
                         <v-flex sm4 d-flex>
                             <v-select
-                                v-model="documento.carpeta_id"
-                                :items="carpetas"
-                                label="Carpeta"
+                                v-model="documento.archivo_id"
+                                :items="archivos"
+                                label="Archivo"
                             ></v-select>
                         </v-flex>
                          <v-flex sm2>
@@ -117,26 +117,28 @@
                     </v-layout>
                 </v-container>
             </v-form>
-            <v-container v-show="!files.lenght > 0">
+            <v-container v-show="files.length > 0">
                 <v-layout row wrap>
                     <v-flex sm2
                         v-for="f in files"
                         :key="f.url">
-                        <v-icon @click="download(f.id)">cloud_download</v-icon> Doc.{{extensionFile(f.url)}}
+                        <v-icon @click="download(f.id)">cloud_download</v-icon> -
+                        <v-icon color="red" @click="destroyFile(f.id)">delete</v-icon>
+                        Doc.{{extensionFile(f.url)}}
                     </v-flex>
                 </v-layout>
             </v-container>
-            <v-container>
+            <v-container v-show="show_upload">
                 <v-layout row wrap>
-                        <v-flex sm12>
-                            <vue-dropzone
-                                ref="myVueDropzone"
-                                id="dropzone"
-                                :options="dropzoneOptions"
-                                @vdropzone-success="upload"
-                                @vdropzone-error="verror"
-                            ></vue-dropzone>
-                        </v-flex>
+                    <v-flex sm12>
+                        <vue-dropzone
+                            ref="myVueDropzone"
+                            id="dropzone"
+                            :options="dropzoneOptions"
+                            @vdropzone-success="upload"
+                            @vdropzone-error="verror"
+                        ></vue-dropzone>
+                    </v-flex>
                 </v-layout>
             </v-container>
         </v-card>
@@ -165,7 +167,7 @@ import MyDialog from '@/components/shared/MyDialog'
                 documento: {
                     id:0,
                     empresa_id:"",
-                    carpeta_id:"",
+                    archivo_id:"",
                     concepto:"",
                     fecha:"",
                     importe: 0,
@@ -174,7 +176,7 @@ import MyDialog from '@/components/shared/MyDialog'
                     created_at:"",
                 },
 
-                carpetas:[],
+                archivos:[],
                 files: [],
 
                 documento_id: "",
@@ -183,6 +185,7 @@ import MyDialog from '@/components/shared/MyDialog'
         		status: false,
                 enviando: false,
                 show: true,
+                show_upload: false,
 
                 dropzoneOptions: {
                     url: '/mto/filedocs/'+this.$route.params.id,
@@ -203,8 +206,10 @@ import MyDialog from '@/components/shared/MyDialog'
                 axios.get('/mto/documentos/'+id+'/edit')
                     .then(res => {
                         this.documento = res.data.documento;
-                        this.carpetas = res.data.carpetas;
+                        this.archivos = res.data.archivos;
                         this.files = res.data.files;
+                        if (this.files.length == 0)
+                            this.show_upload = true;
 
                         this.show=true;
                     })
@@ -240,6 +245,9 @@ import MyDialog from '@/components/shared/MyDialog'
             },
             download(file_id){
                 console.log(file_id);
+            },
+            showUpload(e){
+                this.show_upload = e;
             },
             submit() {
 
@@ -283,15 +291,174 @@ import MyDialog from '@/components/shared/MyDialog'
 
             },
             upload(file, response){
-
                 this.files = response.files;
-                console.log(this.files);
+
+                this.$toast.success("Ficheros subidos correctamente!");
+
+                this.show_upload = false;
 
             },
             verror(file, err) {
                 const m = err.errors.files[0];
                 this.$toast.error(m);
             },
+            destroyFile(id){
+
+            axios.post('/mto/filedocs/'+id,{_method: 'delete'})
+                .then(response => {
+                    console.log(response);
+                this.$toast.success('Adjunto eliminado!');
+                this.files = response.data.files;
+            })
+            .catch(err => {
+                this.status = true;
+                var msg = err.response.data.message;
+                this.$toast.error(msg);
+
+            });
+
+            }
     }
   }
 </script>
+<style>
+  .dropzone .dz-preview {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    margin: 16px;
+    min-height: 50px; }
+
+    .dropzone .dz-preview .dz-details {
+      z-index: 20;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      font-size: 13px;
+      min-width: 100%;
+      max-width: 100%;
+      padding: 2em 1em;
+      text-align: center;
+      color: rgba(0, 0, 0, 0.9);
+      line-height: 150%; }
+      .dropzone .dz-preview .dz-details .dz-size {
+        margin-bottom: 1em;
+        font-size: 16px; }
+      .dropzone .dz-preview .dz-details .dz-filename {
+        white-space: nowrap; }
+        .dropzone .dz-preview .dz-details .dz-filename:hover span {
+          border: 1px solid rgba(200, 200, 200, 0.8);
+          background-color: rgba(255, 255, 255, 0.8); }
+        .dropzone .dz-preview .dz-details .dz-filename:not(:hover) {
+          overflow: hidden;
+          text-overflow: ellipsis; }
+          .dropzone .dz-preview .dz-details .dz-filename:not(:hover) span {
+            border: 1px solid transparent; }
+      .dropzone .dz-preview .dz-details .dz-filename span, .dropzone .dz-preview .dz-details .dz-size span {
+        background-color: rgba(255, 255, 255, 0.4);
+        padding: 0 0.4em;
+        border-radius: 3px; }
+    .dropzone .dz-preview:hover .dz-image img {
+      -webkit-transform: scale(1.05, 1.05);
+      transform: scale(1.05, 1.05);
+      -webkit-filter: blur(8px);
+      filter: blur(8px); }
+    .dropzone .dz-preview .dz-image {
+      border-radius: 20px;
+      overflow: hidden;
+      width: 60px;
+      height: 60px;
+      position: relative;
+      display: block;
+      z-index: 10; }
+      .dropzone .dz-preview .dz-image img {
+        display: block; }
+    .dropzone .dz-preview.dz-success .dz-success-mark {
+      -webkit-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);
+      animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1); }
+    .dropzone .dz-preview.dz-error .dz-error-mark {
+      opacity: 1;
+      -webkit-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);
+      animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1); }
+    .dropzone .dz-preview .dz-success-mark, .dropzone .dz-preview .dz-error-mark {
+      pointer-events: none;
+      opacity: 0;
+      z-index: 500;
+      position: absolute;
+      display: block;
+      top: 50%;
+      left: 50%;
+      margin-left: -27px;
+      margin-top: -27px; }
+      .dropzone .dz-preview .dz-success-mark svg, .dropzone .dz-preview .dz-error-mark svg {
+        display: block;
+        width: 54px;
+        height: 54px; }
+    .dropzone .dz-preview.dz-processing .dz-progress {
+      opacity: 1;
+      transition: all 0.2s linear; }
+    .dropzone .dz-preview.dz-complete .dz-progress {
+      opacity: 0;
+      transition: opacity 0.4s ease-in; }
+    .dropzone .dz-preview:not(.dz-processing) .dz-progress {
+      -webkit-animation: pulse 6s ease infinite;
+      animation: pulse 6s ease infinite; }
+    .dropzone .dz-preview .dz-progress {
+      opacity: 1;
+      z-index: 1000;
+      pointer-events: none;
+      position: absolute;
+      height: 16px;
+      left: 50%;
+      top: 50%;
+      margin-top: -8px;
+      width: 80px;
+      margin-left: -40px;
+      background: rgba(255, 255, 255, 0.9);
+      -webkit-transform: scale(1);
+      border-radius: 8px;
+      overflow: hidden; }
+      .dropzone .dz-preview .dz-progress .dz-upload {
+        background: #333;
+        background: linear-gradient(to bottom, #666, #444);
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        transition: width 300ms ease-in-out; }
+    .dropzone .dz-preview.dz-error .dz-error-message {
+      display: block; }
+    .dropzone .dz-preview.dz-error:hover .dz-error-message {
+      opacity: 1;
+      pointer-events: auto; }
+    .dropzone .dz-preview .dz-error-message {
+      pointer-events: none;
+      z-index: 1000;
+      position: absolute;
+      display: block;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      border-radius: 8px;
+      font-size: 13px;
+      top: 130px;
+      left: -10px;
+      width: 140px;
+      background: #be2626;
+      background: linear-gradient(to bottom, #be2626, #a92222);
+      padding: 0.5em 1.2em;
+      color: white; }
+      .dropzone .dz-preview .dz-error-message:after {
+        content: '';
+        position: absolute;
+        top: -6px;
+        left: 64px;
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 6px solid #be2626; }
+.vue-dropzone{border:2px solid #e5e5e5;font-family:Arial,sans-serif;letter-spacing:.2px;color:#777;transition:.2s linear}.vue-dropzone:hover{background-color:#f6f6f6}.vue-dropzone>i{color:#ccc}.vue-dropzone>.dz-preview .dz-image{border-radius:0;width:100%;height:100%}.vue-dropzone>.dz-preview .dz-image img:not([src]){width:200px;height:200px}.vue-dropzone>.dz-preview .dz-image:hover img{-webkit-transform:none;transform:none;-webkit-filter:none}.vue-dropzone>.dz-preview .dz-details{bottom:0;top:0;color:#fff;background-color:rgba(33,150,243,.8);transition:opacity .2s linear;text-align:left}.vue-dropzone>.dz-preview .dz-details .dz-filename{overflow:hidden}.vue-dropzone>.dz-preview .dz-details .dz-filename span,.vue-dropzone>.dz-preview .dz-details .dz-size span{background-color:transparent}.vue-dropzone>.dz-preview .dz-details .dz-filename:not(:hover) span{border:none}.vue-dropzone>.dz-preview .dz-details .dz-filename:hover span{background-color:transparent;border:none}.vue-dropzone>.dz-preview .dz-progress .dz-upload{background:#ccc}.vue-dropzone>.dz-preview .dz-remove{position:absolute;z-index:30;color:#fff;margin-left:15px;padding:10px;top:inherit;bottom:15px;border:2px #fff solid;text-decoration:none;text-transform:uppercase;font-size:.8rem;font-weight:800;letter-spacing:1.1px;opacity:0}.vue-dropzone>.dz-preview:hover .dz-remove{opacity:1}.vue-dropzone>.dz-preview .dz-error-mark,.vue-dropzone>.dz-preview .dz-success-mark{margin-left:auto;margin-top:auto;width:100%;top:35%;left:0}.vue-dropzone>.dz-preview .dz-error-mark svg,.vue-dropzone>.dz-preview .dz-success-mark svg{margin-left:auto;margin-right:auto}.vue-dropzone>.dz-preview .dz-error-message{margin-left:auto;margin-right:auto;left:0;top:5%;width:100%;text-align:center}.vue-dropzone>.dz-preview .dz-error-message:after{display:none}
+</style>

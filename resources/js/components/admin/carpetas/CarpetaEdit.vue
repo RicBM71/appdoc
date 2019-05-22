@@ -12,7 +12,20 @@
             <v-form>
                 <v-container>
                     <v-layout row wrap>
-                        <v-flex sm1></v-flex>
+                        <v-flex sm3 d-flex>
+                            <v-autocomplete
+                                v-model="carpeta.archivo_id"
+                                v-validate="'required'"
+                                data-vv-name="archivo_id"
+                                data-vv-as="archivo"
+                                :error-messages="errors.collect('archivo_id')"
+                                :items="archivos"
+                                flat
+                                label="Archivo"
+                                required
+                            >
+                            </v-autocomplete>
+                        </v-flex>
                         <v-flex sm3>
                             <v-text-field
                                 v-model="carpeta.nombre"
@@ -26,7 +39,7 @@
                             >
                             </v-text-field>
                         </v-flex>
-                        <v-flex sm2>
+                        <v-flex sm3>
                             <v-text-field
                                 v-model="carpeta.color"
                                 v-validate="'required'"
@@ -40,7 +53,9 @@
                             >
                             </v-text-field>
                         </v-flex>
-                        <v-flex sm2>
+                    </v-layout>
+                    <v-layout row wrap>
+                        <v-flex sm3>
                             <v-text-field
                                 v-model="computedFModFormat"
                                 label="Modificado"
@@ -48,7 +63,7 @@
                             >
                             </v-text-field>
                         </v-flex>
-                        <v-flex sm2>
+                        <v-flex sm3>
                             <v-text-field
                                 v-model="computedFCreFormat"
                                 label="Creado"
@@ -84,15 +99,18 @@ import MenuOpe from './MenuOpe'
 		},
     	data () {
       		return {
-                titulo:"Carpetas",
+                titulo:"Carpeta",
                 carpeta: {
                     id:       0,
+                    empresa_id: 0,
+                    archivo_id: "",
                     nombre:  "",
                     color: "",
                     updated_at:"",
                     created_at:"",
                 },
 
+                archivos: [],
         		status: false,
                 enviando: false,
 
@@ -106,6 +124,7 @@ import MenuOpe from './MenuOpe'
                 axios.get('/admin/carpetas/'+id+'/edit')
                     .then(res => {
 
+                        this.archivos = res.data.archivos;
                         this.carpeta = res.data.carpeta;
                         this.show = true;
                     })
@@ -141,6 +160,7 @@ import MenuOpe from './MenuOpe'
                             data:
                                 {
                                     nombre: this.carpeta.nombre,
+                                    archivo_id: this.carpeta.archivo_id,
                                     color: this.carpeta.color,
 
                                 }

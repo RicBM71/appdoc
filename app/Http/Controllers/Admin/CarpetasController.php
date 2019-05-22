@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Carpeta;
+use App\Archivo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class CarpetasController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +16,8 @@ class CarpetasController extends Controller
      */
     public function index()
     {
-        $data = Carpeta::all();
+        $data = Carpeta::with('archivo')->get();
+        //$data = Carpeta::all();
 
         if (request()->wantsJson())
             return $data;
@@ -29,7 +30,10 @@ class CarpetasController extends Controller
      */
     public function create()
     {
-        //
+        if (request()->wantsJson())
+            return [
+                'archivos'  =>  Archivo::selArchivos(),
+            ];
     }
 
     /**
@@ -40,33 +44,44 @@ class CarpetasController extends Controller
      */
     public function store(Request $request)
     {
-
         $data = $request->validate([
-            'nombre' => ['required', 'string', 'max:255'],
+            'archivo_id' => ['required','integer'],
+            'nombre' => ['required', 'string', 'max:50'],
             'color' => ['required']
         ]);
+
+        $data['empresa_id'] =  session()->get('empresa')->id;
 
         $reg = Carpeta::create($data);
 
         if (request()->wantsJson())
             return ['carpeta'=>$reg, 'message' => 'EL registro ha sido creado'];
-
-
     }
 
-     /**
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Carpeta $carpeta )
+    public function edit(Carpeta $carpeta)
     {
         if (request()->wantsJson())
             return [
+                'archivos' => Archivo::selArchivos(),
                 'carpeta' =>$carpeta
             ];
-
     }
 
     /**
@@ -79,7 +94,8 @@ class CarpetasController extends Controller
     public function update(Request $request, Carpeta $carpeta)
     {
         $data = $request->validate([
-            'nombre' => ['required', 'string', 'max:255'],
+            'archivo_id' => ['required'],
+            'nombre' => ['required', 'string', 'max:50'],
             'color' => ['required']
         ]);
 
@@ -100,9 +116,8 @@ class CarpetasController extends Controller
     {
         $carpeta->delete();
 
-
         if (request()->wantsJson()){
-            return response()->json(Carpeta::all());
+            return response()->json(Carpeta::with('archivo')->get());
         }
     }
 }

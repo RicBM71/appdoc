@@ -1,3 +1,4 @@
+
 <template>
     <v-container v-if="registros">
         <my-dialog :dialog.sync="dialog" registro="registro" @destroyReg="destroyReg"></my-dialog>
@@ -20,6 +21,7 @@
                             <template slot="items" slot-scope="props">
                                 <td>{{ props.item.id }}</td>
                                 <td>{{ props.item.nombre }}</td>
+                                <td>{{ props.item.carpeta.nombre }}</td>
                                 <td :class="props.item.color"><span class="white--text">{{ props.item.color }}</span></td>
                                 <td class="justify-center layout px-0">
                                     <v-icon
@@ -72,6 +74,11 @@ import MenuOpe from './MenuOpe'
             value: 'nombre'
           },
           {
+            text: 'Archivo',
+            align: 'left',
+            value: 'nombre'
+          },
+          {
             text: 'Color',
             align: 'Left',
             value: 'color'
@@ -86,8 +93,8 @@ import MenuOpe from './MenuOpe'
         status: false,
 		registros: false,
         dialog: false,
-        carpeta_id: 0,
-        titulo:"Carpetas"
+        archivo_id: 0,
+
       }
     },
     mounted()
@@ -114,12 +121,12 @@ import MenuOpe from './MenuOpe'
         },
         openDialog (id){
             this.dialog = true;
-            this.carpeta_id = id;
+            this.archivo_id = id;
         },
         destroyReg () {
             this.dialog = false;
 
-            axios.post('/admin/carpetas/'+this.carpeta_id,{_method: 'delete'})
+            axios.post('/admin/carpetas/'+this.archivo_id,{_method: 'delete'})
                 .then(response => {
 
                 if (response.status == 200){

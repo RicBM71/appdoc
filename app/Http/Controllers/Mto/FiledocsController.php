@@ -35,4 +35,21 @@ class FiledocsController extends Controller
             'files' => Filedoc::FilesDocumento($documento_id)->get()
         ];
     }
+
+     /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Filedoc $filedoc)
+    {
+        $filedoc->delete();
+
+        if (request()->wantsJson()){
+            return [
+                'files' => Filedoc::FilesDocumento($filedoc->documento_id)->get()
+            ];
+        }
+    }
 }

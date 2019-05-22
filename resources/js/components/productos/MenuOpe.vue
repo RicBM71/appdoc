@@ -70,7 +70,7 @@ export default {
         destroyReg () {
             this.dialog = false;
 
-            axios.post('/admin/carpetas/'+this.id,{_method: 'delete'})
+            axios.post('/admin/productos/'+this.id,{_method: 'delete'})
                 .then(response => {
                 this.$router.push({ name: 'producto.index' })
                 this.$toast.success('Producto eliminado!');

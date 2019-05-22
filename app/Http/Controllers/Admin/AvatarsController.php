@@ -28,7 +28,7 @@ class AvatarsController extends Controller
     	//foto laravel lo convierte en un instancia de la clase uploadedfiles
     	// por lo que tenemos varios métodos, store
     	// guarda la imagen en storage/public
-    			//TODO: probar con subcarpeta
+    			//TODO: probar con carpeta
     	//$fotoUrl = $foto->store('public');
     	//return Storage::url($fotoUrl);
 

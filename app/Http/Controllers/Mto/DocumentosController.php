@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Mto;
 
-use App\Carpeta;
+use App\Archivo;
 use App\Filedoc;
 use App\Documento;
 use Illuminate\Http\Request;
@@ -21,10 +21,10 @@ class DocumentosController extends Controller
     {
         if (request()->wantsJson())
             return [
-                'documentos'=> Documento::with('carpeta')->whereYear('fecha',date('Y'))
+                'documentos'=> Documento::with('archivo')->whereYear('fecha',date('Y'))
                             ->orderBy('fecha','desc')
                             ->get(),
-                'carpetas'  =>  Carpeta::selCarpetas(),
+                'archivos'  =>  Archivo::selArchivos(),
             ];
 
     }
@@ -34,7 +34,7 @@ class DocumentosController extends Controller
 
         $fecha_d = $request->input('fecha_d');
         $fecha_h = $request->input('fecha_h');
-        $carpeta_id = $request->input('carpeta_id');
+        $archivo_id = $request->input('archivo_id');
 
         $data[] = [
             'fecha', '>=', $fecha_d,
@@ -42,13 +42,13 @@ class DocumentosController extends Controller
         $data[] = [
             'fecha', '<=', $fecha_h,
         ];
-        if ($carpeta_id <> '')
+        if ($archivo_id <> '')
             $data[] = [
-                'carpeta_id', '=', $carpeta_id,
+                'archivo_id', '=', $archivo_id,
             ];
 
         if (request()->wantsJson())
-            return Documento::with('carpeta')->where($data)
+            return Documento::with('archivo')->where($data)
                             ->orderBy('fecha','desc')
                             ->get();
 
@@ -100,7 +100,7 @@ class DocumentosController extends Controller
         if (request()->wantsJson())
             return [
                 'documento' => $documento,
-                'carpetas'=> Carpeta::selCarpetas(),
+                'archivos'=> Archivo::selArchivos(),
                 'files' => Filedoc::FilesDocumento($documento->id)->get()
             ];
     }

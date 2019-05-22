@@ -170,11 +170,11 @@
                             <v-layout row wrap>
                                 <v-flex sm4 d-flex>
                                     <v-select
-                                    v-model="cliente.carpeta_id"
+                                    v-model="cliente.archivo_id"
                                     item-text="name"
                                     item-value="id"
-                                    :items="carpetas"
-                                    label="Carpeta"
+                                    :items="archivos"
+                                    label="Archivo"
                                     ></v-select>
                                 </v-flex>
                                 <v-flex sm3>
@@ -403,7 +403,7 @@ import MenuOpe from './MenuOpe'
                     cif:"",
                     fechabaja:"",
                     web:"",
-                    carpeta_id:"",
+                    archivo_id:"",
                     patron:"",
                     notas1:"",
                     efact:"",
@@ -424,7 +424,7 @@ import MenuOpe from './MenuOpe'
                     {id: 0, name:"Si"}, {id: 1, name:"No"},
                 ],
                 clientes:[],
-                carpetas:[],
+                archivos:[],
                 fpagos:[],
 
                 cliente_id: "",
@@ -441,9 +441,9 @@ import MenuOpe from './MenuOpe'
             axios.get('/mto/clientes/create')
                 .then(res => {
 
-                    res.data.carpetas.map((e) =>
+                    res.data.archivos.map((e) =>
                         {
-                            this.carpetas.push({id: e.id, name: e.nombre});
+                            this.archivos.push({id: e.id, name: e.nombre});
                         })
                     res.data.fpagos.map((e) =>
                         {

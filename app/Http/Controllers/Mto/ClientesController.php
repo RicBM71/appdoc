@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Mto;
 
 use App\Fpago;
 use App\Albacab;
-use App\Carpeta;
+use App\Archivo;
 use App\Cliente;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
@@ -41,7 +41,7 @@ class ClientesController extends Controller
     {
         if (request()->wantsJson())
             return [
-                'carpetas'=> Carpeta::all(),
+                'archivos'=> Archivo::all(),
                 'fpagos'=> Fpago::all(),
             ];
     }
@@ -101,7 +101,7 @@ class ClientesController extends Controller
         if (request()->wantsJson())
             return [
                 'cliente' =>$cliente,
-                'carpetas'=> Carpeta::all(),
+                'archivos'=> Archivo::all(),
                 'fpagos'=> Fpago::all(),
             ];
 

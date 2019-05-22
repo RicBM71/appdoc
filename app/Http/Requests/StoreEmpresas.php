@@ -41,12 +41,12 @@ class StoreEmpresas extends FormRequest
             'txtpie2'       => ['nullable','string', 'max:150'],
             'flags'         => ['nullable','string', 'max:20'],
             'sigla'         => ['nullable','string', 'max:10'],
-            'carpeta'       => ['nullable','string'],
+            'archivo'       => ['nullable','string'],
             'titulo'        => ['nullable','string', 'max:20'],
             'logo'          => ['nullable','string'],
             'certificado'   => ['nullable','string', 'max:20'],
             'passwd_cer'    => ['nullable','string'],
-            'carpeta_id'    => ['nullable','integer'],
+            'archivo_id'    => ['nullable','integer'],
         ];
 
         if ($this->filled('id'))

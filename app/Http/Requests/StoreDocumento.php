@@ -29,7 +29,7 @@ class StoreDocumento extends FormRequest
             'concepto'        => ['required', 'string', 'max:50'],
             'fecha'         => ['date','required'],
             'importe'     => ['nullable','numeric'],
-            'carpeta_id'     => ['required','numeric'],
+            'archivo_id'     => ['required','numeric'],
         ];
 
         return $data;

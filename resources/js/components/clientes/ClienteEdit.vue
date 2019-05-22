@@ -173,11 +173,11 @@
                             <v-layout row wrap>
                                 <v-flex sm4 d-flex>
                                     <v-select
-                                    v-model="cliente.carpeta_id"
+                                    v-model="cliente.archivo_id"
                                     item-text="name"
                                     item-value="id"
-                                    :items="carpetas"
-                                    label="Carpeta"
+                                    :items="archivos"
+                                    label="Archivo"
                                     ></v-select>
                                 </v-flex>
                                 <v-flex sm3>
@@ -409,7 +409,7 @@ import AlbCliente from './ClienteAlbaran'
                     cif:"",
                     fechabaja:"",
                     web:"",
-                    carpeta_id:"",
+                    archivo_id:"",
                     patron:"",
                     notas1:"",
                     efact:"",
@@ -430,7 +430,7 @@ import AlbCliente from './ClienteAlbaran'
                     {id: 0, name:"Si"}, {id: 1, name:"No"},
                 ],
                 clientes:[],
-                carpetas:[],
+                archivos:[],
                 fpagos:[],
 
                 cliente_id: "",
@@ -451,9 +451,9 @@ import AlbCliente from './ClienteAlbaran'
                 axios.get('/mto/clientes/'+id+'/edit')
                     .then(res => {
                         this.cliente = res.data.cliente;
-                        res.data.carpetas.map((e) =>
+                        res.data.archivos.map((e) =>
                             {
-                                this.carpetas.push({id: e.id, name: e.nombre});
+                                this.archivos.push({id: e.id, name: e.nombre});
                             })
                         res.data.fpagos.map((e) =>
                             {

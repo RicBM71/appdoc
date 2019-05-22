@@ -18,7 +18,7 @@ class ExtractosController extends Controller
     {
 
         if (request()->wantsJson())
-            return Extracto::with('documentos','documentos.carpeta')->whereYear('fecha',date('Y'))
+            return Extracto::with('documentos','documentos.arhivo')->whereYear('fecha',date('Y'))
                             ->orderBy('fecha')
                             ->get();
 
@@ -84,7 +84,7 @@ class ExtractosController extends Controller
     	//foto laravel lo convierte en un instancia de la clase uploadedfiles
     	// por lo que tenemos varios métodos, store
     	// guarda la imagen en storage/public
-    			//TODO: probar con subcarpeta
+    			//TODO: probar con carpeta
     	//$fotoUrl = $foto->store('public');
     	//return Storage::url($fotoUrl);
 

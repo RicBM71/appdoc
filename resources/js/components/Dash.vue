@@ -222,6 +222,7 @@ export default {
             { icon: 'people', text: 'Clientes', name:'cliente.index' },
             { icon: 'local_offer', text: 'Productos', name:'producto.index' },
             { icon: 'account_balance', text: 'Extracto Banco', name:'extracto.index' },
+            { icon: 'account_balance', text: 'Documento', name:'documento.index' },
             {
             icon: 'keyboard_arrow_up',
             'icon-alt': 'keyboard_arrow_down',

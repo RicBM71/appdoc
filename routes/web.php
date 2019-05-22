@@ -61,6 +61,10 @@ Route::group([
         Route::resource('vencimientos', 'VencimientosController', ['except'=>'show','as' => 'mto']);
         Route::resource('extractos', 'ExtractosController', ['only'=>['index','show'],'as' => 'mto']);
         Route::post('extractos/filtrar', 'ExtractosController@filtrar');
+        Route::post('extractos/importar', 'ExtractosController@importar');
+        Route::resource('documentos', 'DocumentosController', ['as' => 'mto']);
+        Route::post('documentos/filtrar', 'DocumentosController@filtrar');
+        Route::post('filedocs/{filedoc}', 'FiledocsController@store');
     }
 );
 

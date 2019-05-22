@@ -14,4 +14,9 @@ class Extracto extends Model
         static::addGlobalScope(new EmpresaScope);
     }
 
+    public function documentos(){
+
+        return $this->belongsToMany(Documento::class);
+
+    }
 }

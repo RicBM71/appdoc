@@ -122,19 +122,29 @@
                             rows-per-page-text="Registros por página"
                             >
                                 <template slot="items" slot-scope="props">
+                                     <tr @click="props.expanded = !props.expanded">
                                     <td>{{ formatDate(props.item.fecha) }}</td>
                                     <td>{{ props.item.dh }}</td>
                                     <td>{{ props.item.concepto }}</td>
                                     <td class="text-xs-right">{{ props.item.importe | currency('€', 2, { thousandsSeparator:'.', thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false })}}</td>
                                     <td class="justify-center layout px-0">
-                                        <v-icon
+                                        <v-icon v-show="props.item.documentos.length > 0"
                                             small
                                             class="mr-2"
-                                            @click="editItem(props.item.id)"
+                                            @click="editItem(props.item.id, props.item.documentos)"
                                         >
                                             input
                                         </v-icon>
                                     </td>
+                                     </tr>
+                                </template>
+                                <template v-slot:expand="props">
+                                    <v-card flat>
+                                        <v-card-text :key="child.id" v-for="child in props.item.documentos">
+                                            <span :class="child.carpeta.color+'--text'">{{child.carpeta.nombre+": "+formatDate(child.fecha)+" "+child.concepto}}</span>
+                                        </v-card-text>
+                                    </v-card>
+
                                 </template>
                                 <template slot="pageText" slot-scope="props">
                                     Registros {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
@@ -211,11 +221,11 @@ import MenuOpe from './MenuOpe'
     },
     mounted()
     {
-        //console.log(;
+
         this.show_loading = true;
         axios.get('/mto/extractos')
             .then(res => {
-
+                console.log(res);
                 this.apuntes = res.data;
                 this.registros = true;
 
@@ -272,7 +282,8 @@ import MenuOpe from './MenuOpe'
                 });
 
         },
-        editItem (id) {
+        editItem (id, docs) {
+            console.log(docs);
            // this.$router.push({ name: 'cliente.edit', params: { id: id } })
         },
     }

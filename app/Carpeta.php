@@ -23,6 +23,10 @@ class Carpeta extends Model
         return $this->hasMany(Subcarpeta::class);
     }
 
+    public function documentos()
+    {
+        return $this->hasMany(Documento::class);
+    }
      /**
      *
      * @return Array formateado para select Vuetify

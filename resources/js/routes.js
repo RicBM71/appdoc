@@ -60,8 +60,14 @@ import AlbaranCreate from './components/albaranes/AlbaranCreate.vue';
 import AlbaranEdit from './components/albaranes/AlbaranEdit.vue';
 
 import ExtractoIndex from './components/extractos/ExtractoIndex.vue';
+import ExtractoImp from './components/extractos/Importar.vue';
 
 import SelRemesa from './components/remesas/SelRemesa.vue';
+
+import DocumentoIndex from './components/documentos/DocumentoIndex.vue';
+import DocumentoCreate from './components/documentos/DocumentoCreate.vue';
+import DocumentoEdit from './components/documentos/DocumentoEdit.vue';
+
 
 import EditPassword from './components/profile/edit-password/EditPassword.vue';
 
@@ -308,6 +314,26 @@ export default [
                 path: '/extractos',
                 name: 'extracto.index',
                 component: ExtractoIndex,
+            },
+            {
+                path: '/extractos/importar',
+                name: 'extracto.importar',
+                component: ExtractoImp,
+            },
+            {
+                path: '/documentos',
+                name: 'documento.index',
+                component: DocumentoIndex,
+            },
+            {
+                path: '/documentos/create',
+                name: 'documento.create',
+                component: DocumentoCreate,
+            },
+            {
+                path: '/documentos/:id/edit',
+                name: 'documento.edit',
+                component: DocumentoEdit,
             },
             // {
             //     path: '*',

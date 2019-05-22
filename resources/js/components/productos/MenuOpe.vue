@@ -72,7 +72,7 @@ export default {
 
             axios.post('/admin/carpetas/'+this.id,{_method: 'delete'})
                 .then(response => {
-                this.$router.push({ name: 'productoindex' })
+                this.$router.push({ name: 'producto.index' })
                 this.$toast.success('Producto eliminado!');
 
             })

@@ -27,6 +27,14 @@
             </v-flex>
 
         </v-layout>
+        <v-layout row wrap>
+            <v-flex xs3>
+                 <v-btn round block large color="grey" class="blue-grey lighten-3" @click="goImportar()">
+                     Importar N. 43
+                     <v-icon right dark>keyboard</v-icon>
+                </v-btn>
+            </v-flex>
+        </v-layout>
     </div>
 </template>
 <script>
@@ -65,6 +73,9 @@ export default {
         },
         goProductos(){
             this.$router.push({ name: 'producto.index' })
+        },
+        goImportar(){
+            this.$router.push({ name: 'extracto.importar' })
         }
     }
   }

@@ -8,13 +8,14 @@
                 <v-card-title>
                     <h2>{{titulo}}</h2>
                     <v-spacer></v-spacer>
+                    <menu-ope></menu-ope>
                     <v-btn
-                    color="white"
-                    icon
-                    @click="filtro = !filtro"
-                >
-                    <v-icon color="primary">list_alt</v-icon>
-                </v-btn>
+                        color="white"
+                        icon
+                        @click="filtro = !filtro"
+                    >
+                        <v-icon color="primary">list_alt</v-icon>
+                    </v-btn>
                 </v-card-title>
             </v-card>
             <v-card v-show="filtro">
@@ -126,6 +127,7 @@
                                 <template slot="items" slot-scope="props">
                                     <td>{{ formatDate(props.item.fecha) }}</td>
                                     <td>{{ props.item.archivo.nombre }}</td>
+                                    <td>{{ props.item.carpeta.nombre }}</td>
                                     <td>{{ props.item.concepto }}</td>
                                     <td class="text-xs-right">{{ props.item.importe | currency('€', 2, { thousandsSeparator:'.', thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false })}}</td>
                                     <td class="justify-center layout px-0">
@@ -187,6 +189,12 @@ import MenuOpe from './MenuOpe'
             value: 'archivo.nombre'
           },
           {
+            text: 'Carpeta',
+            align: 'left',
+            value: 'carpeta.nombre'
+          },
+
+          {
             text: 'Concepto',
             align: 'left',
             value: 'concepto'
@@ -227,7 +235,7 @@ import MenuOpe from './MenuOpe'
         this.show_loading = true;
         axios.get('/mto/documentos')
             .then(res => {
-                //console.log(res);
+                console.log(res);
                 this.documentos = res.data.documentos;
                 this.archivos = res.data.archivos;
                 this.registros = true;

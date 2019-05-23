@@ -52,4 +52,31 @@ class FiledocsController extends Controller
             ];
         }
     }
+
+    public function show(Filedoc $filedoc){
+
+        $ficheroPath = str_replace('/storage', '', $filedoc->url);
+
+        $ext = explode('.',$ficheroPath);
+        $ext = array_pop($ext);
+
+        $headers = [
+            "ResponseContentType", "application/pdf",
+        ];
+
+        // header('Content-type: application/pdf');
+        // header('Content-Disposition: attachment; filename="aa.pdf"');
+        // readfile(Storage::download($ficheroPath));
+
+        // return;
+
+        return Storage::download($ficheroPath,'file.'.$ext);
+
+        return [
+            'file' => Storage::download($ficheroPath),
+            'ext' => 'pdf'
+        ] ;
+
+        //\Storage::disk('local')->put('remesa.xml',$xml);
+    }
 }

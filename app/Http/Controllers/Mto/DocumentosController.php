@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Mto;
 
 use App\Archivo;
+use App\Carpeta;
 use App\Filedoc;
 use App\Documento;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class DocumentosController extends Controller
     {
         if (request()->wantsJson())
             return [
-                'documentos'=> Documento::with('archivo')->whereYear('fecha',date('Y'))
+                'documentos'=> Documento::with(['archivo','carpeta'])->whereYear('fecha',date('Y'))
                             ->orderBy('fecha','desc')
                             ->get(),
                 'archivos'  =>  Archivo::selArchivos(),
@@ -54,9 +55,6 @@ class DocumentosController extends Controller
 
     }
 
-
-
-
     /**
      * Show the form for creating a new resource.
      *
@@ -64,7 +62,12 @@ class DocumentosController extends Controller
      */
     public function create()
     {
-        //
+        if (request()->wantsJson())
+            return [
+                'archivos'=> Archivo::selArchivos(),
+                'carpetas'=> []
+            ];
+
     }
 
     /**
@@ -73,9 +76,20 @@ class DocumentosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreDocumento $request)
     {
-        //
+        $data = $request->validated();
+
+        //\Log::info('enviando mensaje...'.session()->get('empresa'));
+        $data['empresa_id'] =  session()->get('empresa')->id;
+
+        $data['username'] = $request->user()->username;
+
+
+        $reg = Documento::create($data);
+
+        if (request()->wantsJson())
+            return ['documento'=>$reg, 'message' => 'EL registro ha sido creado'];
     }
 
     /**
@@ -86,7 +100,9 @@ class DocumentosController extends Controller
      */
     public function show($id)
     {
-        //
+        //return Carpeta::(1)->get();
+
+        
     }
 
     /**
@@ -101,6 +117,7 @@ class DocumentosController extends Controller
             return [
                 'documento' => $documento,
                 'archivos'=> Archivo::selArchivos(),
+                'carpetas'=> Carpeta::selCarpetasArchivo($documento->archivo_id),
                 'files' => Filedoc::FilesDocumento($documento->id)->get()
             ];
     }

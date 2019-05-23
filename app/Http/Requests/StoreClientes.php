@@ -45,7 +45,7 @@ class StoreClientes extends FormRequest
             'fechabaja'     => ['nullable','date'],
             'ref19'         => ['nullable','string', 'max:20'],
             'fpago_id'      => ['nullable','integer'],
-            'archivo_id'    => ['nullable','integer'],
+            'carpeta_id'    => ['nullable','integer'],
             'efact'          => ['nullable','string', 'max:50'],
             'eusr'          => ['nullable','string', 'max:50'],
             'epass'         => ['nullable','string', 'max:50'],

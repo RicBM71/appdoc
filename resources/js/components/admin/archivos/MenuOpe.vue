@@ -34,6 +34,19 @@
                     v-on="on"
                     color="white"
                     icon
+                    @click="goCarpeta"
+                >
+                    <v-icon color="primary">folder</v-icon>
+                </v-btn>
+            </template>
+            <span>Ir a Capetas</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+                <v-btn
+                    v-on="on"
+                    color="white"
+                    icon
                     @click="goIndex"
                 >
                     <v-icon color="primary">list</v-icon>
@@ -63,6 +76,9 @@ export default {
         },
         goIndex(){
             this.$router.push({ name: 'archivo.index' })
+        },
+        goCarpeta(){
+            this.$router.push({ name: 'carpeta.index' })
         },
         openDialog (){
             this.dialog = true;

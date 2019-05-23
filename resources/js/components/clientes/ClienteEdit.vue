@@ -173,11 +173,9 @@
                             <v-layout row wrap>
                                 <v-flex sm4 d-flex>
                                     <v-select
-                                    v-model="cliente.archivo_id"
-                                    item-text="name"
-                                    item-value="id"
-                                    :items="archivos"
-                                    label="Archivo"
+                                    v-model="cliente.carpeta_id"
+                                    :items="carpetas"
+                                    label="Carpeta"
                                     ></v-select>
                                 </v-flex>
                                 <v-flex sm3>
@@ -193,8 +191,6 @@
                                 <v-flex sm3 d-flex>
                                     <v-select
                                     v-model="cliente.fpago_id"
-                                    item-text="name"
-                                    item-value="id"
                                     :items="fpagos"
                                     label="Forma de Pago"
                                     ></v-select>
@@ -409,7 +405,7 @@ import AlbCliente from './ClienteAlbaran'
                     cif:"",
                     fechabaja:"",
                     web:"",
-                    archivo_id:"",
+                    carpeta_id:"",
                     patron:"",
                     notas1:"",
                     efact:"",
@@ -430,7 +426,7 @@ import AlbCliente from './ClienteAlbaran'
                     {id: 0, name:"Si"}, {id: 1, name:"No"},
                 ],
                 clientes:[],
-                archivos:[],
+                carpetas:[],
                 fpagos:[],
 
                 cliente_id: "",
@@ -451,14 +447,9 @@ import AlbCliente from './ClienteAlbaran'
                 axios.get('/mto/clientes/'+id+'/edit')
                     .then(res => {
                         this.cliente = res.data.cliente;
-                        res.data.archivos.map((e) =>
-                            {
-                                this.archivos.push({id: e.id, name: e.nombre});
-                            })
-                        res.data.fpagos.map((e) =>
-                            {
-                                this.fpagos.push({id: e.id, name: e.nombre});
-                            })
+                        this.carpetas = res.data.carpetas;
+                        this.fpagos = res.data.fpagos;
+
                         this.show=true;
                     })
                     .catch(err => {

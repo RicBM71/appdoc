@@ -4,7 +4,12 @@
             <v-card-title color="indigo">
                 <h2 color="indigo">{{titulo}}</h2>
                 <v-spacer></v-spacer>
-                <menu-ope :id="documento.id" @show-upload="showUpload"></menu-ope>
+                <menu-ope
+                    :id="documento.id"
+                    :cerrado="documento.cerrado"
+                    @show-upload="showUpload"
+                    @set-bloqueo="setBloqueo">
+                </menu-ope>
             </v-card-title>
         </v-card>
         <v-card>
@@ -15,10 +20,26 @@
                             <v-select
                                 v-model="documento.archivo_id"
                                 :items="archivos"
+                                v-validate="'required'"
+                                data-vv-name="archivo_id"
+                                data-vv-as="Archivo"
+                                :error-messages="errors.collect('archivo_id')"
+                                @change="loadCarpeta(documento.archivo_id)"
                                 label="Archivo"
                             ></v-select>
                         </v-flex>
-                         <v-flex sm2>
+                        <v-flex sm4 d-flex>
+                            <v-select
+                                v-model="documento.carpeta_id"
+                                v-validate="'required'"
+                                :error-messages="errors.collect('carpeta_id')"
+                                data-vv-name="carpeta_id"
+                                data-vv-as="Carpeta"
+                                :items="carpetas"
+                                label="Carpeta"
+                            ></v-select>
+                        </v-flex>
+                         <v-flex sm3>
                             <v-menu
                                     v-model="menu2"
                                     :close-on-content-click="false"
@@ -36,6 +57,7 @@
                                         label="Fecha"
                                         append-icon="event"
                                         readonly
+                                        class="center"
                                         data-vv-as="Fecha"
                                         ></v-text-field>
                                     <v-date-picker
@@ -49,7 +71,7 @@
                         </v-flex>
                     </v-layout>
                     <v-layout row wrap>
-                        <v-flex sm10>
+                        <v-flex sm11>
                             <v-text-field
                                 v-model="documento.concepto"
                                 v-validate="'required'"
@@ -62,24 +84,9 @@
                             >
                             </v-text-field>
                         </v-flex>
-                        <v-flex sm2>
-                            <v-text-field
-                                v-model="documento.importe"
-                                v-validate="'decimal:2'"
-                                :error-messages="errors.collect('importe')"
-                                label="Importe"
-                                data-vv-name="importe"
-                                data-vv-as="Valor"
-                                required
-                                class="inputPrice"
-                                type="number"
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
                     </v-layout>
                     <v-layout row wrap>
-                        <v-flex sm2>
+                        <v-flex sm3>
                             <v-text-field
                                 v-model="documento.username"
                                 :error-messages="errors.collect('username')"
@@ -90,7 +97,7 @@
                             >
                             </v-text-field>
                         </v-flex>
-                        <v-flex sm2>
+                        <v-flex sm3>
                             <v-text-field
                                 v-model="computedFModFormat"
                                 label="Modificado"
@@ -98,7 +105,7 @@
                             >
                             </v-text-field>
                         </v-flex>
-                        <v-flex sm2>
+                        <v-flex sm3>
                             <v-text-field
                                 v-model="computedFCreFormat"
                                 label="Creado"
@@ -106,7 +113,7 @@
                             >
                             </v-text-field>
                         </v-flex>
-                        <v-flex sm3></v-flex>
+                        <v-flex sm1></v-flex>
                         <v-flex sm2>
                             <div class="text-xs-center">
                                         <v-btn @click="submit"  round  :loading="enviando" block  color="primary">
@@ -122,9 +129,13 @@
                     <v-flex sm2
                         v-for="f in files"
                         :key="f.url">
-                        <v-icon @click="download(f.id)">cloud_download</v-icon> -
-                        <v-icon color="red" @click="destroyFile(f.id)">delete</v-icon>
-                        Doc.{{extensionFile(f.url)}}
+                        <!-- <v-icon @click="download(f.id)">cloud_download</v-icon> - -->
+                        <!-- <v-btn flat @click="download(f.id)"> -->
+                        <v-btn icon @click="download(f.id)" >
+                            <!-- <img src="/assets/adobe2.png" alt="pdf" height="50px"> -->
+                            <div v-html="extensionFile(f.url)"></div>
+                        </v-btn>
+                        <v-icon v-if="!documento.cerrado" color="red accent-4" @click="destroyFile(f.id)">clear</v-icon>
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -151,7 +162,6 @@ import MenuOpe from './MenuOpe'
 import vue2Dropzone from 'vue2-dropzone'
 import MyDialog from '@/components/shared/MyDialog'
 
-
 	export default {
 		$_veeValidate: {
       		validator: 'new'
@@ -170,13 +180,14 @@ import MyDialog from '@/components/shared/MyDialog'
                     archivo_id:"",
                     concepto:"",
                     fecha:"",
-                    importe: 0,
+                    cerrado: 0,
                     username: "",
                     updated_at:"",
                     created_at:"",
                 },
 
                 archivos:[],
+                carpetas:[],
                 files: [],
 
                 documento_id: "",
@@ -207,6 +218,7 @@ import MyDialog from '@/components/shared/MyDialog'
                     .then(res => {
                         this.documento = res.data.documento;
                         this.archivos = res.data.archivos;
+                        this.carpetas = res.data.carpetas;
                         this.files = res.data.files;
                         if (this.files.length == 0)
                             this.show_upload = true;
@@ -241,13 +253,66 @@ import MyDialog from '@/components/shared/MyDialog'
 
                 const a = url.split('.');
 
-                return a[a.length - 1];
+                switch (a[a.length - 1]){
+                    case 'pdf':
+                        var icono = 'pdf.png';
+                        break;
+                    case 'jpg':
+                        var icono = 'img.png';
+                        break;
+                    case 'doc':
+                        var icono = 'word.png';
+                        break
+                    case 'docx':
+                        var icono = 'word.png';
+                        break
+                    case 'xls':
+                        var icono = 'excel.png';
+                        break
+                    case 'xlsx':
+                        var icono = 'excel.png';
+                        break
+                    default:
+                        var icono = 'document.png';
+                        break
+                }
+
+                return '<img src="/assets/'+icono+'" alt="pdf" height="50px">';
+
             },
             download(file_id){
                 console.log(file_id);
+
+                var url = '/mto/filedocs/'+file_id;
+                window.open(url, '_blank');
+                return;
+
+                axios.get('/mto/filedocs/'+file_id)
+                    .then(res => {
+                        let blob = new Blob([res.data], { type: 'application/pdf' })
+                        let link = document.createElement('a')
+                        link.href = window.URL.createObjectURL(blob)
+                        link.download = 'REM'+new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'.pdf';
+                        link.click()
+
+                        //console.log(res);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        this.$toast.error('Error al obtener documento!');
+                    })
+
+                //var url = '/mto/documentos/'+file_id+'/print';
+
+                //window.open(url, '_blank');
+
             },
             showUpload(e){
                 this.show_upload = e;
+            },
+            setBloqueo(e){
+                this.documento.cerrado = e;
+                this.submit();
             },
             submit() {
 
@@ -304,161 +369,33 @@ import MyDialog from '@/components/shared/MyDialog'
             },
             destroyFile(id){
 
-            axios.post('/mto/filedocs/'+id,{_method: 'delete'})
-                .then(response => {
-                    console.log(response);
-                this.$toast.success('Adjunto eliminado!');
-                this.files = response.data.files;
-            })
-            .catch(err => {
-                this.status = true;
-                var msg = err.response.data.message;
-                this.$toast.error(msg);
+                axios.post('/mto/filedocs/'+id,{_method: 'delete'})
+                    .then(response => {
+                    this.$toast.success('Adjunto eliminado!');
+                    this.files = response.data.files;
+                })
+                .catch(err => {
+                    this.status = true;
+                    var msg = err.response.data.message;
+                    this.$toast.error(msg);
 
-            });
+                });
 
+            },
+            loadCarpeta(archivo_id){
+
+                axios.get('/admin/carpetas/'+archivo_id)
+                    .then(res => {
+                        this.carpetas = res.data.carpetas;
+                        this.documento.carpeta_id = "";
+                    })
+                    .catch(err => {
+                        if (err.response.status == 404)
+                            this.$toast.error("Error al recargar carpetas!");
+                        else
+                            this.$toast.error(err.response.data.message);
+                    })
             }
     }
   }
 </script>
-<style>
-  .dropzone .dz-preview {
-    position: relative;
-    display: inline-block;
-    vertical-align: top;
-    margin: 16px;
-    min-height: 50px; }
-
-    .dropzone .dz-preview .dz-details {
-      z-index: 20;
-      position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0;
-      font-size: 13px;
-      min-width: 100%;
-      max-width: 100%;
-      padding: 2em 1em;
-      text-align: center;
-      color: rgba(0, 0, 0, 0.9);
-      line-height: 150%; }
-      .dropzone .dz-preview .dz-details .dz-size {
-        margin-bottom: 1em;
-        font-size: 16px; }
-      .dropzone .dz-preview .dz-details .dz-filename {
-        white-space: nowrap; }
-        .dropzone .dz-preview .dz-details .dz-filename:hover span {
-          border: 1px solid rgba(200, 200, 200, 0.8);
-          background-color: rgba(255, 255, 255, 0.8); }
-        .dropzone .dz-preview .dz-details .dz-filename:not(:hover) {
-          overflow: hidden;
-          text-overflow: ellipsis; }
-          .dropzone .dz-preview .dz-details .dz-filename:not(:hover) span {
-            border: 1px solid transparent; }
-      .dropzone .dz-preview .dz-details .dz-filename span, .dropzone .dz-preview .dz-details .dz-size span {
-        background-color: rgba(255, 255, 255, 0.4);
-        padding: 0 0.4em;
-        border-radius: 3px; }
-    .dropzone .dz-preview:hover .dz-image img {
-      -webkit-transform: scale(1.05, 1.05);
-      transform: scale(1.05, 1.05);
-      -webkit-filter: blur(8px);
-      filter: blur(8px); }
-    .dropzone .dz-preview .dz-image {
-      border-radius: 20px;
-      overflow: hidden;
-      width: 60px;
-      height: 60px;
-      position: relative;
-      display: block;
-      z-index: 10; }
-      .dropzone .dz-preview .dz-image img {
-        display: block; }
-    .dropzone .dz-preview.dz-success .dz-success-mark {
-      -webkit-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);
-      animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1); }
-    .dropzone .dz-preview.dz-error .dz-error-mark {
-      opacity: 1;
-      -webkit-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);
-      animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1); }
-    .dropzone .dz-preview .dz-success-mark, .dropzone .dz-preview .dz-error-mark {
-      pointer-events: none;
-      opacity: 0;
-      z-index: 500;
-      position: absolute;
-      display: block;
-      top: 50%;
-      left: 50%;
-      margin-left: -27px;
-      margin-top: -27px; }
-      .dropzone .dz-preview .dz-success-mark svg, .dropzone .dz-preview .dz-error-mark svg {
-        display: block;
-        width: 54px;
-        height: 54px; }
-    .dropzone .dz-preview.dz-processing .dz-progress {
-      opacity: 1;
-      transition: all 0.2s linear; }
-    .dropzone .dz-preview.dz-complete .dz-progress {
-      opacity: 0;
-      transition: opacity 0.4s ease-in; }
-    .dropzone .dz-preview:not(.dz-processing) .dz-progress {
-      -webkit-animation: pulse 6s ease infinite;
-      animation: pulse 6s ease infinite; }
-    .dropzone .dz-preview .dz-progress {
-      opacity: 1;
-      z-index: 1000;
-      pointer-events: none;
-      position: absolute;
-      height: 16px;
-      left: 50%;
-      top: 50%;
-      margin-top: -8px;
-      width: 80px;
-      margin-left: -40px;
-      background: rgba(255, 255, 255, 0.9);
-      -webkit-transform: scale(1);
-      border-radius: 8px;
-      overflow: hidden; }
-      .dropzone .dz-preview .dz-progress .dz-upload {
-        background: #333;
-        background: linear-gradient(to bottom, #666, #444);
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        width: 0;
-        transition: width 300ms ease-in-out; }
-    .dropzone .dz-preview.dz-error .dz-error-message {
-      display: block; }
-    .dropzone .dz-preview.dz-error:hover .dz-error-message {
-      opacity: 1;
-      pointer-events: auto; }
-    .dropzone .dz-preview .dz-error-message {
-      pointer-events: none;
-      z-index: 1000;
-      position: absolute;
-      display: block;
-      display: none;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      border-radius: 8px;
-      font-size: 13px;
-      top: 130px;
-      left: -10px;
-      width: 140px;
-      background: #be2626;
-      background: linear-gradient(to bottom, #be2626, #a92222);
-      padding: 0.5em 1.2em;
-      color: white; }
-      .dropzone .dz-preview .dz-error-message:after {
-        content: '';
-        position: absolute;
-        top: -6px;
-        left: 64px;
-        width: 0;
-        height: 0;
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-bottom: 6px solid #be2626; }
-.vue-dropzone{border:2px solid #e5e5e5;font-family:Arial,sans-serif;letter-spacing:.2px;color:#777;transition:.2s linear}.vue-dropzone:hover{background-color:#f6f6f6}.vue-dropzone>i{color:#ccc}.vue-dropzone>.dz-preview .dz-image{border-radius:0;width:100%;height:100%}.vue-dropzone>.dz-preview .dz-image img:not([src]){width:200px;height:200px}.vue-dropzone>.dz-preview .dz-image:hover img{-webkit-transform:none;transform:none;-webkit-filter:none}.vue-dropzone>.dz-preview .dz-details{bottom:0;top:0;color:#fff;background-color:rgba(33,150,243,.8);transition:opacity .2s linear;text-align:left}.vue-dropzone>.dz-preview .dz-details .dz-filename{overflow:hidden}.vue-dropzone>.dz-preview .dz-details .dz-filename span,.vue-dropzone>.dz-preview .dz-details .dz-size span{background-color:transparent}.vue-dropzone>.dz-preview .dz-details .dz-filename:not(:hover) span{border:none}.vue-dropzone>.dz-preview .dz-details .dz-filename:hover span{background-color:transparent;border:none}.vue-dropzone>.dz-preview .dz-progress .dz-upload{background:#ccc}.vue-dropzone>.dz-preview .dz-remove{position:absolute;z-index:30;color:#fff;margin-left:15px;padding:10px;top:inherit;bottom:15px;border:2px #fff solid;text-decoration:none;text-transform:uppercase;font-size:.8rem;font-weight:800;letter-spacing:1.1px;opacity:0}.vue-dropzone>.dz-preview:hover .dz-remove{opacity:1}.vue-dropzone>.dz-preview .dz-error-mark,.vue-dropzone>.dz-preview .dz-success-mark{margin-left:auto;margin-top:auto;width:100%;top:35%;left:0}.vue-dropzone>.dz-preview .dz-error-mark svg,.vue-dropzone>.dz-preview .dz-success-mark svg{margin-left:auto;margin-right:auto}.vue-dropzone>.dz-preview .dz-error-message{margin-left:auto;margin-right:auto;left:0;top:5%;width:100%;text-align:center}.vue-dropzone>.dz-preview .dz-error-message:after{display:none}
-</style>

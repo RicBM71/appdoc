@@ -34,6 +34,19 @@
                     v-on="on"
                     color="white"
                     icon
+                    @click="goArchivo"
+                >
+                    <v-icon color="primary">sd_storage</v-icon>
+                </v-btn>
+            </template>
+            <span>Ir a Archivo</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+                <v-btn
+                    v-on="on"
+                    color="white"
+                    icon
                     @click="goIndex"
                 >
                     <v-icon color="primary">list</v-icon>
@@ -63,6 +76,9 @@ export default {
         },
         goIndex(){
             this.$router.push({ name: 'carpeta.index' })
+        },
+        goArchivo(){
+            this.$router.push({ name: 'archivo.index' })
         },
         openDialog (){
             this.dialog = true;

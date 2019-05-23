@@ -26,11 +26,39 @@ class Carpeta extends Model
         return $this->belongsTo(Archivo::class);
     }
 
-    // public function scopeArchivo($query, $archivo_id)
-    // {
 
-    //     return $query->where('archivo_id', '=', $archivo_id);
+    public function documentos()
+    {
+        return $this->hasMany(Documento::class);
+    }
 
-    // }
+  /**
+     *
+     * @return Array formateado para select Vuetify
+     *
+     */
+    public static function selCarpetas(){
+
+        return Carpeta::select('id AS value', 'nombre AS text')
+            ->orderBy('nombre', 'asc')
+            ->get();
+
+    }
+
+    public static function selCarpetasArchivo($archivo_id){
+
+        return Carpeta::select('id AS value', 'nombre AS text')
+            ->conarchivo($archivo_id)
+            ->orderBy('nombre', 'asc')
+            ->get();
+
+    }
+
+
+    public function scopeConArchivo($query, $archivo_id){
+
+        return $query->where('archivo_id', '=', $archivo_id);
+
+    }
 
 }

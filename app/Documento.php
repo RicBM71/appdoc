@@ -13,7 +13,7 @@ class Documento extends Model
     protected $dates =['fecha'];
 
     protected $fillable = [
-        'empresa_id','archivo_id','fecha', 'concepto', 'importe','username',
+        'empresa_id','archivo_id','carpeta_id','fecha', 'concepto', 'cerrado','username',
     ];
 
     protected static function boot()
@@ -26,5 +26,10 @@ class Documento extends Model
     public function archivo()
     {
     	return $this->belongsTo(Archivo::class);
+    }
+
+    public function carpeta()
+    {
+    	return $this->belongsTo(Carpeta::class);
     }
 }

@@ -4,6 +4,7 @@ use App\Iva;
 use App\Fpago;
 use App\Cuenta;
 use App\Archivo;
+use App\Carpeta;
 use App\Empresa;
 use App\Contador;
 use App\Retencion;
@@ -27,6 +28,7 @@ class GenericasSeeder extends Seeder
         Retencion::truncate();
         Iva::truncate();
         Archivo::truncate();
+        Carpeta::truncate();
         Empresa::truncate();
         Fpago::truncate();
         Vencimiento::truncate();
@@ -71,6 +73,11 @@ class GenericasSeeder extends Seeder
         DB::table('empresa_user')->insert(
             ['empresa_id' => 1, 'user_id' => '1']
         );
+
+        $carpeta = new Carpeta;
+        $carpeta->archivo_id = 1;
+        $carpeta->nombre = "Carpeta 1";
+        $carpeta->save();
 
         $fp = new Fpago;
         $fp->nombre = "Transferencia";

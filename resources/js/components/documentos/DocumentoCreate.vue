@@ -4,68 +4,89 @@
             <v-card-title color="indigo">
                 <h2 color="indigo">{{titulo}}</h2>
                 <v-spacer></v-spacer>
-                <menu-ope :id="producto.id"></menu-ope>
+                <menu-ope
+                    :id="documento.id"
+                    :cerrado="documento.cerrado">
+                </menu-ope>
             </v-card-title>
         </v-card>
         <v-card>
             <v-form>
                 <v-container>
                     <v-layout row wrap>
-                        <v-flex sm4>
-                            <v-text-field
-                                v-model="producto.nombre"
+                        <v-flex sm4 d-flex>
+                            <v-select
+                                v-model="documento.archivo_id"
+                                :items="archivos"
                                 v-validate="'required'"
-                                :error-messages="errors.collect('nombre')"
-                                label="Nombre"
-                                data-vv-name="nombre"
-                                data-vv-as="nombre"
-                                required
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
+                                data-vv-name="archivo_id"
+                                data-vv-as="Archivo"
+                                :error-messages="errors.collect('archivo_id')"
+                                @change="loadCarpeta(documento.archivo_id)"
+                                label="Archivo"
+                            ></v-select>
                         </v-flex>
-                        <v-flex sm2>
+                        <v-flex sm4 d-flex>
+                            <v-select
+                                v-model="documento.carpeta_id"
+                                v-validate="'required'"
+                                :error-messages="errors.collect('carpeta_id')"
+                                data-vv-name="carpeta_id"
+                                data-vv-as="Carpeta"
+                                :items="carpetas"
+                                label="Carpeta"
+                            ></v-select>
+                        </v-flex>
+                         <v-flex sm3>
+                            <v-menu
+                                    v-model="menu2"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                >
+
+                                    <v-text-field
+                                        slot="activator"
+                                        :value="computedFecha"
+                                        label="Fecha"
+                                        append-icon="event"
+                                        readonly
+                                        class="center"
+                                        data-vv-as="Fecha"
+                                        ></v-text-field>
+                                    <v-date-picker
+                                        v-model="documento.fecha"
+                                        no-title
+                                        locale="es"
+                                        first-day-of-week=1
+                                        @input="menu2 = false"
+                                    ></v-date-picker>
+                                </v-menu>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row wrap>
+                        <v-flex sm11>
                             <v-text-field
-                                v-model="producto.importe"
-                                v-validate="'required|decimal:2'"
-                                :error-messages="errors.collect('importe')"
-                                label="Importe"
-                                data-vv-name="importe"
-                                data-vv-as="Valor"
+                                v-model="documento.concepto"
+                                v-validate="'required'"
+                                :error-messages="errors.collect('concepto')"
+                                label="Concepto"
+                                data-vv-name="concepto"
+                                data-vv-as="concepto"
                                 required
-                                class="inputPrice"
-                                type="number"
                                 v-on:keyup.enter="submit"
                             >
                             </v-text-field>
                         </v-flex>
                     </v-layout>
                     <v-layout row wrap>
-                        <v-flex sm4 d-flex>
-                            <v-select
-                            v-model="producto.retencion_id"
-                            :error-messages="errors.collect('retencion_id')"
-                            v-validate="'required'"
-                            data-vv-name="retencion_id"
-                            :items="retenciones"
-                            label="IRPF"
-                            ></v-select>
-                        </v-flex>
-                        <v-flex sm4 d-flex>
-                            <v-select
-                            v-model="producto.iva_id"
-                            :error-messages="errors.collect('iva_id')"
-                            v-validate="'required'"
-                            data-vv-name="iva_id"
-                            :items="ivas"
-                            label="IVA"
-                            ></v-select>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                        <v-flex sm2>
+                        <v-flex sm3>
                             <v-text-field
-                                v-model="producto.username"
+                                v-model="documento.username"
                                 :error-messages="errors.collect('username')"
                                 label="Usuario"
                                 data-vv-name="username"
@@ -74,7 +95,7 @@
                             >
                             </v-text-field>
                         </v-flex>
-                        <v-flex sm2>
+                        <v-flex sm3>
                             <v-text-field
                                 v-model="computedFModFormat"
                                 label="Modificado"
@@ -82,7 +103,7 @@
                             >
                             </v-text-field>
                         </v-flex>
-                        <v-flex sm2>
+                        <v-flex sm3>
                             <v-text-field
                                 v-model="computedFCreFormat"
                                 label="Creado"
@@ -90,7 +111,7 @@
                             >
                             </v-text-field>
                         </v-flex>
-                        <v-flex sm3></v-flex>
+                        <v-flex sm1></v-flex>
                         <v-flex sm2>
                             <div class="text-xs-center">
                                         <v-btn @click="submit"  round  :loading="enviando" block  color="primary">
@@ -117,98 +138,76 @@ import MenuOpe from './MenuOpe'
 		},
     	data () {
       		return {
-                titulo:"Productos",
-                producto: {
-                    id:0    ,
+                titulo:"Documentos",
+                documento: {
+                    id:0,
                     empresa_id:"",
-                    nombre:"",
-                    iva_id:"",
-                    retencion_id:"",
-                    importe: 0,
+                    archivo_id:"",
+                    concepto:"",
+                    fecha: new Date().toISOString().substr(0, 10),
+                    cerrado: 1,
                     username: "",
                     updated_at:"",
                     created_at:"",
                 },
 
-                ivas:[],
-                retenciones:[],
-                productos:[],
+                archivos:[],
+                carpetas:[],
 
-                producto_id: "",
+                documento_id: "",
 
+                menu2: false,
         		status: false,
                 enviando: false,
                 show: true,
-
-                showMenuCli: false,
-                x: 0,
-                y: 0,
-                items: [
-                    { title: 'Productos', name: 'producto.index', icon: 'list' },
-                    { title: 'Nuevo producto', name: 'producto.create', icon: 'add' },
-                    { title: 'Home', name: 'dash', icon: 'home' },
-
-                ]
-
-
       		}
         },
         mounted(){
+            axios.get('/mto/documentos/create')
+                .then(res => {
 
-                axios.get('/mto/productos/create')
-                    .then(res => {
-                        console.log(res.data.retenciones);
-                        this.ivas = res.data.ivas;
-                        this.retenciones = res.data.retenciones;
+                    this.archivos = res.data.archivos;
+                    this.carpetas = res.data.carpetas;
 
-                        this.show=true;
-                    })
-                    .catch(err => {
-                        this.$toast.error(err.response.data.message);
-                        this.$router.push({ name: 'producto.index'})
-                    })
+                    this.show=true;
+                })
+                .catch(err => {
+                    this.$toast.error(err.response.data.message);
+                    this.$router.push({ name: 'documento.index'})
+                })
         },
         computed: {
+            computedFecha() {
+                moment.locale('es');
+                return this.documento.fecha ? moment(this.documento.fecha).format('L') : '';
+            },
             computedFModFormat() {
                 moment.locale('es');
-                return this.producto.updated_at ? moment(this.producto.updated_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.documento.updated_at ? moment(this.documento.updated_at).format('D/MM/YYYY H:mm:ss') : '';
             },
             computedFCreFormat() {
                 moment.locale('es');
-                return this.producto.created_at ? moment(this.producto.created_at).format('D/MM/YYYY H:mm:ss') : '';
+                return this.documento.created_at ? moment(this.documento.created_at).format('D/MM/YYYY H:mm:ss') : '';
             }
 
         },
     	methods:{
-            showMenu (e) {
-
-                e.preventDefault()
-
-                this.showMenuCli = false
-                this.x = e.clientX
-                this.y = e.clientY
-
-                this.$nextTick(() => {
-                    this.showMenuCli = true
-                })
-            },
             submit() {
 
                 this.enviando = true;
 
-                var url = "/mto/productos";
-
+                var url = "/mto/documentos";
 
                 this.$validator.validateAll().then((result) => {
                     if (result){
-
-                        axios.post(url, this.producto)
+                        axios.post(url, this.documento)
                             .then(response => {
-                                this.$router.push({ name: 'producto.edit', params: { id: response.data.producto.id } })
+                                this.$router.push({ name: 'documento.edit', params: { id: response.data.documento.id } })
                                 this.enviando = false;
+
                             })
                             .catch(err => {
-                                //console.log(err.response.data.errors);
+
                                 if (err.request.status == 422){ // fallo de validated.
                                     const msg_valid = err.response.data.errors;
                                     for (const prop in msg_valid) {
@@ -230,24 +229,23 @@ import MenuOpe from './MenuOpe'
                     }
                 });
 
+            },
+            loadCarpeta(archivo_id){
+
+                axios.get('/admin/carpetas/'+archivo_id)
+                    .then(res => {
+                        this.carpetas = res.data.carpetas;
+                        this.documento.carpeta_id = "";
+                    })
+                    .catch(err => {
+                        if (err.response.status == 404)
+                            this.$toast.error("Error al recargar carpetas!");
+                        else
+                            this.$toast.error(err.response.data.message);
+                    })
             }
+
+
     }
   }
 </script>
-
-<style scoped>
-
-
-.inputPrice >>> input {
-  text-align: center;
-  -moz-appearance:textfield;
-}
-
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin: 0;
-}
-</style>

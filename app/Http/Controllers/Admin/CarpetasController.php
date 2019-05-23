@@ -61,12 +61,16 @@ class CarpetasController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $id (id del archivo)
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        
+        if (request()->wantsJson())
+            return [
+                'carpetas'=> Carpeta::selCarpetasArchivo($id),
+            ];
     }
 
     /**

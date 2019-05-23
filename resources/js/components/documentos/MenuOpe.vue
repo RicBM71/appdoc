@@ -28,9 +28,10 @@
             </template>
                 <span>Borrar Registro</span>
         </v-tooltip>
-        <v-tooltip bottom>
+        <v-tooltip bottom v-if="id > 0 && !cerrado">
             <template v-slot:activator="{ on }">
                 <v-btn
+                    v-show="id > 0"
                     v-on="on"
                     color="white"
                     icon
@@ -40,6 +41,32 @@
                 </v-btn>
             </template>
             <span>Upload documentos</span>
+        </v-tooltip>
+        <v-tooltip bottom v-if="id > 0 && !cerrado">
+            <template v-slot:activator="{ on }">
+                <v-btn
+                    v-on="on"
+                    color="white"
+                    icon
+                    @click="goBloqueo(1)"
+                >
+                    <v-icon color="primary">lock_open</v-icon>
+                </v-btn>
+            </template>
+            <span>Bloquear adjuntos</span>
+        </v-tooltip>
+        <v-tooltip bottom v-else>
+            <template v-slot:activator="{ on }">
+                <v-btn
+                    v-on="on"
+                    color="white"
+                    icon
+                    @click="goBloqueo(0)"
+                >
+                    <v-icon color="primary">lock</v-icon>
+                </v-btn>
+            </template>
+            <span>Desbloquear adjuntos</span>
         </v-tooltip>
         <v-tooltip bottom>
             <template v-slot:activator="{ on }">
@@ -61,7 +88,8 @@
 import MyDialog from '@/components/shared/MyDialog'
 export default {
     props:{
-        id: Number
+        id: Number,
+        cerrado: Number
     },
     components: {
         'my-dialog': MyDialog
@@ -73,16 +101,19 @@ export default {
     },
     methods:{
         goCreate(){
-            this.$router.push({ name: 'producto.create' })
+            this.$router.push({ name: 'documento.create' })
         },
         goIndex(){
-            this.$router.push({ name: 'producto.index' })
+            this.$router.push({ name: 'documento.index' })
         },
         openDialog (){
             this.dialog = true;
         },
         goCloud(){
             this.$emit('show-upload',  true);
+        },
+        goBloqueo(v){
+            this.$emit('set-bloqueo',  v);
         },
         destroyReg () {
             this.dialog = false;

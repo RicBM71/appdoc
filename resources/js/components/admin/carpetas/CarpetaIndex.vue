@@ -20,8 +20,8 @@
                         >
                             <template slot="items" slot-scope="props">
                                 <td>{{ props.item.id }}</td>
+                                <td :class="props.item.archivo.color">{{ props.item.archivo.nombre }}</td>
                                 <td>{{ props.item.nombre }}</td>
-                                <td>{{ props.item.carpeta.nombre }}</td>
                                 <td :class="props.item.color"><span class="white--text">{{ props.item.color }}</span></td>
                                 <td class="justify-center layout px-0">
                                     <v-icon
@@ -63,51 +63,50 @@ import MenuOpe from './MenuOpe'
       return {
         titulo: "Carpeta",
         headers: [
-          {
-            text: 'ID',
-            align: 'center',
-            value: 'id'
-          },
-          {
-            text: 'Nombre',
-            align: 'left',
-            value: 'nombre'
-          },
-          {
-            text: 'Archivo',
-            align: 'left',
-            value: 'nombre'
-          },
-          {
-            text: 'Color',
-            align: 'Left',
-            value: 'color'
-          },
-          {
-            text: 'Acciones',
-            align: 'Center',
-            value: ''
-          }
+            {
+                text: 'ID',
+                align: 'center',
+                value: 'id'
+            },
+            {
+                text: 'Archivo',
+                align: 'left',
+                value: 'nombre'
+            },
+            {
+                text: 'Nombre',
+                align: 'left',
+                value: 'nombre'
+            },
+            {
+                text: 'Color',
+                align: 'Left',
+                value: 'color'
+            },
+            {
+                text: 'Acciones',
+                align: 'Center',
+                value: ''
+            }
         ],
         carpetas:[],
         status: false,
 		registros: false,
         dialog: false,
-        archivo_id: 0,
+        carpeta_id: 0,
 
       }
     },
     mounted()
     {
-
         axios.get('/admin/carpetas')
             .then(res => {
-
+                console.log(res);
                 this.carpetas = res.data;
                 this.registros = true;
             })
             .catch(err =>{
-                //console.log(err.response);
+               // console.log(err);
                 this.$toast.error(err.response.data.message);
                 this.$router.push({ name: 'dash' })
             })
@@ -121,12 +120,12 @@ import MenuOpe from './MenuOpe'
         },
         openDialog (id){
             this.dialog = true;
-            this.archivo_id = id;
+            this.carpeta_id = id;
         },
         destroyReg () {
             this.dialog = false;
 
-            axios.post('/admin/carpetas/'+this.archivo_id,{_method: 'delete'})
+            axios.post('/admin/carpetas/'+this.carpeta_id,{_method: 'delete'})
                 .then(response => {
 
                 if (response.status == 200){

@@ -33,6 +33,7 @@ class Filedoc extends Model
             //\Log::info('pasa por deleting'.$fichero->url);
 
             $ficheroPath = str_replace('/storage', '', $fichero->url);
+
             //\Log::info('pasa por deleting'.$ficheroPath);
 
        		Storage::delete($ficheroPath);

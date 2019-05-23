@@ -31,7 +31,7 @@ class CreateClientesTable extends Migration
             $table->String('cif',20)->nullable()->default(null);
             $table->timestamp('fechabaja')->nullable()->default(null);
             $table->String('web',50)->nullable()->default(null);
-            $table->unsignedInteger('archivo_id')->nullable()->default(null);
+            $table->unsignedInteger('carpeta_id')->nullable()->default(null);
             $table->String('patron',50)->nullable()->default(null);
             $table->String('notas1')->nullable()->default(null);
             $table->String('efact',50)->nullable()->default(null);

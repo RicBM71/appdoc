@@ -40,4 +40,10 @@ class Archivo extends Model
 
     }
 
+    public function setNombreAttribute($s)
+    {
+        $this->attributes['nombre'] = strtoupper($s);
+
+    }
+
 }

@@ -17,9 +17,10 @@ class CreateDocumentosTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('empresa_id');
             $table->unsignedInteger('archivo_id');
+            $table->unsignedInteger('carpeta_id');
             $table->date('fecha');
             $table->String('concepto');
-            $table->decimal('importe', 10, 2)->default(0);
+            $table->boolean('cerrado')->default(true);
             $table->String('username',20)->nullable()->default(null);
             $table->timestamps();
         });

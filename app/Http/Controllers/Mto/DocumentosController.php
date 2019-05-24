@@ -78,6 +78,7 @@ class DocumentosController extends Controller
      */
     public function store(StoreDocumento $request)
     {
+
         $data = $request->validated();
 
         //\Log::info('enviando mensaje...'.session()->get('empresa'));
@@ -88,8 +89,22 @@ class DocumentosController extends Controller
 
         $reg = Documento::create($data);
 
+        $extracto_id = $request->get('extracto_id');
+        if ($extracto_id > 0)
+            $reg->extractos()->sync($extracto_id);
+
         if (request()->wantsJson())
             return ['documento'=>$reg, 'message' => 'EL registro ha sido creado'];
+    }
+
+    public function extracto(Request $request){
+
+        $data['fecha'] = $request->get('fecha');
+        $data['concepto'] = $request->get('concepto');
+
+        $data['empresa_id'] =  session()->get('empresa')->id;
+        $data['username'] = $request->user()->username;
+
     }
 
     /**
@@ -102,7 +117,7 @@ class DocumentosController extends Controller
     {
         //return Carpeta::(1)->get();
 
-        
+
     }
 
     /**
@@ -118,6 +133,7 @@ class DocumentosController extends Controller
                 'documento' => $documento,
                 'archivos'=> Archivo::selArchivos(),
                 'carpetas'=> Carpeta::selCarpetasArchivo($documento->archivo_id),
+                'extractos'=> $documento->extractos,
                 'files' => Filedoc::FilesDocumento($documento->id)->get()
             ];
     }
@@ -150,8 +166,21 @@ class DocumentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Documento $documento)
     {
-        //
+       // $this->authorize('delete', $cliente);
+
+        //$documento->extractos()->sync([]);
+
+        $documento->delete();
+
+        if (request()->wantsJson()){
+            return [
+                'documentos'=> Documento::with(['archivo','carpeta'])->whereYear('fecha',date('Y'))
+                            ->orderBy('fecha','desc')
+                            ->get(),
+                'archivos'  =>  Archivo::selArchivos(),
+            ];
+        }
     }
 }

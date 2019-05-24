@@ -235,7 +235,7 @@ import MenuOpe from './MenuOpe'
         this.show_loading = true;
         axios.get('/mto/documentos')
             .then(res => {
-                console.log(res);
+
                 this.documentos = res.data.documentos;
                 this.archivos = res.data.archivos;
                 this.registros = true;

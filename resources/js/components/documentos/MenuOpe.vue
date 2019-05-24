@@ -17,7 +17,7 @@
          <v-tooltip bottom>
             <template v-slot:activator="{ on }">
                 <v-btn
-                    v-show="id > 0"
+                    v-show="id > 0 && !cerrado"
                     v-on="on"
                     color="white"
                     icon
@@ -101,7 +101,7 @@ export default {
     },
     methods:{
         goCreate(){
-            this.$router.push({ name: 'documento.create' })
+            this.$router.push({ name: 'documento.create', params: { extracto: false }})
         },
         goIndex(){
             this.$router.push({ name: 'documento.index' })
@@ -120,8 +120,8 @@ export default {
 
             axios.post('/mto/documentos/'+this.id,{_method: 'delete'})
                 .then(response => {
-                this.$router.push({ name: 'documento.index' })
-                this.$toast.success('Documento eliminado!');
+                    this.$router.push({ name: 'documento.index' })
+                    this.$toast.success('Documento eliminado!');
 
             })
             .catch(err => {

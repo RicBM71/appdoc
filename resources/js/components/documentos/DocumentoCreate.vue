@@ -135,7 +135,7 @@ import MenuOpe from './MenuOpe'
         },
         components: {
             'menu-ope': MenuOpe,
-		},
+        },
     	data () {
       		return {
                 titulo:"Documentos",
@@ -149,12 +149,14 @@ import MenuOpe from './MenuOpe'
                     username: "",
                     updated_at:"",
                     created_at:"",
+                    extracto_id:""
                 },
 
                 archivos:[],
                 carpetas:[],
 
                 documento_id: "",
+                extracto: false,
 
                 menu2: false,
         		status: false,
@@ -163,11 +165,23 @@ import MenuOpe from './MenuOpe'
       		}
         },
         mounted(){
+
+
+
+            this.extracto = this.$route.params.extracto;
+
+            console.log(this.extracto);
+
             axios.get('/mto/documentos/create')
                 .then(res => {
 
                     this.archivos = res.data.archivos;
                     this.carpetas = res.data.carpetas;
+
+                    if (this.extracto != false){
+                        this.documento.fecha = this.extracto.fecha;
+                        this.documento.concepto = this.extracto.concepto;
+                    }
 
                     this.show=true;
                 })
@@ -198,10 +212,13 @@ import MenuOpe from './MenuOpe'
 
                 var url = "/mto/documentos";
 
+                this.documento.extracto_id = this.extracto.id;
+
                 this.$validator.validateAll().then((result) => {
                     if (result){
                         axios.post(url, this.documento)
                             .then(response => {
+                                console.log(response);
                                 this.$router.push({ name: 'documento.edit', params: { id: response.data.documento.id } })
                                 this.enviando = false;
 

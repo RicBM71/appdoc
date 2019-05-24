@@ -6,6 +6,7 @@ use App\Filedoc;
 use App\Documento;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class FiledocsController extends Controller
@@ -18,7 +19,9 @@ class FiledocsController extends Controller
 
         //return request()->file('files');
 
-        $files = request()->file('files')->store('documentum','local');
+        $path = 'documentum/'.session()->get('empresa')->path_archivo;
+
+        $files = request()->file('files')->store($path,'local');
 
 
     	$filesUrl = Storage::url($files);
@@ -60,23 +63,16 @@ class FiledocsController extends Controller
         $ext = explode('.',$ficheroPath);
         $ext = array_pop($ext);
 
-        $headers = [
-            "ResponseContentType", "application/pdf",
-        ];
+        $filename = 'docu'.date('Ymd').'.'.$ext;
 
-        // header('Content-type: application/pdf');
-        // header('Content-Disposition: attachment; filename="aa.pdf"');
-        // readfile(Storage::download($ficheroPath));
+        $img = ['pdf','jpg','jpeg','png','gif'];
 
-        // return;
+        if (in_array($ext, $img)) // este abre el fichero en el navegador
+            return response()->file(storage_path('/app/' . $ficheroPath));
+        else
+            return Storage::download($ficheroPath, $filename);
 
-        return Storage::download($ficheroPath,'file.'.$ext);
+        //return response()->download(storage_path('/app/' . $ficheroPath,$filename));
 
-        return [
-            'file' => Storage::download($ficheroPath),
-            'ext' => 'pdf'
-        ] ;
-
-        //\Storage::disk('local')->put('remesa.xml',$xml);
     }
 }

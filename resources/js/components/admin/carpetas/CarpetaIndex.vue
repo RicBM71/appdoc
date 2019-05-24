@@ -12,10 +12,25 @@
         <v-card>
             <v-container>
                 <v-layout row wrap>
+                    <v-flex xs6></v-flex>
+                    <v-flex xs6>
+                        <v-spacer></v-spacer>
+                        <v-text-field
+                            v-model="search"
+                            append-icon="search"
+                            label="Buscar"
+                            single-line
+                            hide-details
+                        ></v-text-field>
+                    </v-flex>
+                </v-layout>
+                <br/>
+                <v-layout row wrap>
                     <v-flex xs12>
                         <v-data-table
                         :headers="headers"
                         :items="this.carpetas"
+                        :search="search"
                         rows-per-page-text="Registros por página"
                         >
                             <template slot="items" slot-scope="props">
@@ -62,6 +77,7 @@ import MenuOpe from './MenuOpe'
     data () {
       return {
         titulo: "Carpeta",
+        search:"",
         headers: [
             {
                 text: 'ID',
@@ -71,7 +87,7 @@ import MenuOpe from './MenuOpe'
             {
                 text: 'Archivo',
                 align: 'left',
-                value: 'nombre'
+                value: 'archivo.nombre'
             },
             {
                 text: 'Nombre',

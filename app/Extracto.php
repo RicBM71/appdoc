@@ -19,4 +19,5 @@ class Extracto extends Model
         return $this->belongsToMany(Documento::class);
 
     }
+
 }

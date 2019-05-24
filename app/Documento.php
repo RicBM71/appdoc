@@ -21,6 +21,17 @@ class Documento extends Model
         parent::boot();
 
         static::addGlobalScope(new EmpresaScope);
+
+        static::deleting(function($documento){
+
+            // si borramos el documento, primero relación con extracto si la hay
+            $documento->extractos()->detach();
+
+            // y borramos relación en filedocs (adjuntos) y borra también lo ficheros físicos de storage.
+            // la caña, vaya!
+            $documento->filedocs->each->delete();
+
+        });
     }
 
     public function archivo()
@@ -31,5 +42,14 @@ class Documento extends Model
     public function carpeta()
     {
     	return $this->belongsTo(Carpeta::class);
+    }
+
+    public function extractos()
+    {
+    	return $this->belongsToMany(Extracto::class);
+    }
+
+    public function filedocs(){
+        return $this->hasMany(Filedoc::class);
     }
 }

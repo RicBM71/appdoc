@@ -61,7 +61,7 @@ class HomeController extends Controller
         ];
 
         $empresa = Empresa::find($authUser->empresa_id);
-        \Log::info($empresa->titulo);
+       // \Log::info($empresa->titulo);
 
         session([
             'empresa_id' => $authUser->empresa_id,

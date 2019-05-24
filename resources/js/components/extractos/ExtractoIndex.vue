@@ -122,7 +122,7 @@
                             rows-per-page-text="Registros por página"
                             >
                                 <template slot="items" slot-scope="props">
-                                     <tr @click="props.expanded = !props.expanded">
+                                    <tr>
                                     <td>{{ formatDate(props.item.fecha) }}</td>
                                     <td>{{ props.item.dh }}</td>
                                     <td>{{ props.item.concepto }}</td>
@@ -131,9 +131,16 @@
                                         <v-icon v-show="props.item.documentos.length > 0"
                                             small
                                             class="mr-2"
-                                            @click="editItem(props.item.id, props.item.documentos)"
+                                            @click="props.expanded = !props.expanded"
                                         >
-                                            input
+                                            expand_more
+                                        </v-icon>
+                                        <v-icon v-show="!props.item.documentos.length > 0"
+                                            small
+                                            class="mr-2"
+                                            @click="createDocu(props.item)"
+                                        >
+                                            sd_storage
                                         </v-icon>
                                     </td>
                                      </tr>
@@ -141,7 +148,12 @@
                                 <template v-slot:expand="props">
                                     <v-card flat>
                                         <v-card-text :key="child.id" v-for="child in props.item.documentos">
-                                            <span :class="child.carpeta.color+'--text'">{{child.carpeta.nombre+": "+formatDate(child.fecha)+" "+child.concepto}}</span>
+                                            <v-icon
+                                                @click="editDoc(child.id)"
+                                            >pageview
+                                            </v-icon>
+                                            <span :class="child.archivo.color+'--text'">{{child.archivo.nombre+": "+formatDate(child.fecha)+" "+child.concepto}}</span>
+
                                         </v-card-text>
                                     </v-card>
 
@@ -223,8 +235,10 @@ import MenuOpe from './MenuOpe'
     {
 
         this.show_loading = true;
+
         axios.get('/mto/extractos')
             .then(res => {
+
                 console.log(res);
                 this.apuntes = res.data;
                 this.registros = true;
@@ -282,10 +296,13 @@ import MenuOpe from './MenuOpe'
                 });
 
         },
-        editItem (id, docs) {
-            console.log(docs);
-           // this.$router.push({ name: 'cliente.edit', params: { id: id } })
+        editDoc (id) {
+            this.$router.push({ name: 'documento.edit', params: { id: id } })
         },
+        createDocu(extracto){
+
+            this.$router.push({ name: 'documento.create', params: { extracto: extracto } })
+        }
     }
   }
 </script>

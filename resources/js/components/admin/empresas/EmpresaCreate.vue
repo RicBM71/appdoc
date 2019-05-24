@@ -167,10 +167,11 @@
                     <v-layout row wrap>
                         <v-flex sm3>
                             <v-text-field
-                                v-model="empresa.carpeta"
-                                :error-messages="errors.collect('archivo')"
-                                label="Archivo"
-                                data-vv-name="archivo"
+                                v-model="empresa.path_archivo"
+                                :error-messages="errors.collect('path_archivo')"
+                                v-validate="'required'"
+                                label="Path Archivo"
+                                data-vv-name="path_archivo"
                                 v-on:keyup.enter="submit"
                             >
                             </v-text-field>
@@ -313,7 +314,7 @@ import MenuOpe from './MenuOpe'
                     txtpie2: "",
                     flags: "",
                     sigla: "",
-                    carpeta: "",
+                    path_archivo: "",
                     titulo: "",
                     logo:"",
                     certificado:"",
@@ -329,16 +330,6 @@ import MenuOpe from './MenuOpe'
                 enviando: false,
 
                 show: false,
-                showMenuCli: false,
-
-                x: 0,
-                y: 0,
-               items: [
-                    { title: 'Empresas', name: 'empresa.index', icon: 'list' },
-                    { title: 'Nueva Empresa', name: 'empresa.create', icon: 'add' },
-                    { title: 'Home', name: 'dash', icon: 'home' },
-
-                ]
       		}
         },
         mounted(){
@@ -364,18 +355,6 @@ import MenuOpe from './MenuOpe'
 
         },
     	methods:{
-            showMenu (e) {
-
-                e.preventDefault()
-
-                this.showMenuCli = false
-                this.x = e.clientX
-                this.y = e.clientY
-
-                this.$nextTick(() => {
-                    this.showMenuCli = true
-                })
-            },
             submit() {
 
                 //console.log("Edit user (submit):"+this.empresa.id);

@@ -18,7 +18,7 @@ class ExtractosController extends Controller
     {
 
         if (request()->wantsJson())
-            return Extracto::with('documentos','documentos.arhivo')->whereYear('fecha',date('Y'))
+            return Extracto::with('documentos','documentos.archivo')->whereYear('fecha',date('Y'))
                             ->orderBy('fecha')
                             ->get();
 

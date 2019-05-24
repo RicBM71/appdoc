@@ -56,6 +56,7 @@ class GenericasSeeder extends Seeder
         $emp->logo = "logo.jpg";
         $emp->certificado = "sntfirma.crt";
         $emp->passwd_cer="delta00";
+        $emp->path_archivo='sanaval';
         $emp->save();
 
         $json = File::get("database/data/carpetas.json");
@@ -75,6 +76,7 @@ class GenericasSeeder extends Seeder
         );
 
         $carpeta = new Carpeta;
+        $carpeta->empresa_id = 1;
         $carpeta->archivo_id = 1;
         $carpeta->nombre = "Carpeta 1";
         $carpeta->save();

@@ -168,10 +168,11 @@
                     <v-layout row wrap>
                         <v-flex sm3>
                             <v-text-field
-                                v-model="empresa.carpeta"
-                                :error-messages="errors.collect('archivo')"
-                                label="Archivo"
-                                data-vv-name="archivo"
+                                v-model="empresa.path_archivo"
+                                v-validate="'required'"
+                                :error-messages="errors.collect('path_archivo')"
+                                label="Path archivo"
+                                data-vv-name="path_archivo"
                                 v-on:keyup.enter="submit"
                             >
                             </v-text-field>
@@ -317,7 +318,7 @@ import MenuOpe from './MenuOpe'
                     txtpie2: "",
                     flags: "",
                     sigla: "",
-                    carpeta: "",
+                    path_archivo: "",
                     titulo: "",
                     logo:"",
                     certificado:"",
@@ -328,7 +329,6 @@ import MenuOpe from './MenuOpe'
                     created_at:"",
                 },
                 empresas:[],
-                kk:"",
                 empresa_id: "",
 
         		status: false,

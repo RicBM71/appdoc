@@ -31,7 +31,7 @@ class CreateEmpresasTable extends Migration
             $table->string('txtpie2', 150)->nullable()->default(null);
             $table->string('flags', 20)->nullable()->default(null);
             $table->string('sigla', 10)->nullable()->default(null);
-            $table->string('archivo')->nullable()->default(null);
+            $table->string('path_archivo')->nullable()->default(null);
             $table->string('titulo', 20);
             $table->string('logo',20)->nullable()->default(null);
             $table->string('certificado',20)->nullable()->default(null);

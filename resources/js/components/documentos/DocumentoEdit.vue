@@ -124,6 +124,15 @@
                     </v-layout>
                 </v-container>
             </v-form>
+            <v-container v-show="extractos.length > 0">
+                <v-layout row wrap>
+                    <v-flex v-for="e in extractos" sm12
+                        :key="e.id"
+                    >
+                        {{ formatDate(e.fecha)+" - "+e.concepto + " = " + e.importe }}
+                    </v-flex>
+                </v-layout>
+            </v-container>
             <v-container v-show="files.length > 0">
                 <v-layout row wrap>
                     <v-flex sm2
@@ -188,6 +197,7 @@ import MyDialog from '@/components/shared/MyDialog'
 
                 archivos:[],
                 carpetas:[],
+                extractos:[],
                 files: [],
 
                 documento_id: "",
@@ -216,10 +226,13 @@ import MyDialog from '@/components/shared/MyDialog'
             if (id > 0)
                 axios.get('/mto/documentos/'+id+'/edit')
                     .then(res => {
+
                         this.documento = res.data.documento;
+                        this.extractos = res.data.extractos;
                         this.archivos = res.data.archivos;
                         this.carpetas = res.data.carpetas;
                         this.files = res.data.files;
+
                         if (this.files.length == 0)
                             this.show_upload = true;
 
@@ -313,6 +326,11 @@ import MyDialog from '@/components/shared/MyDialog'
             setBloqueo(e){
                 this.documento.cerrado = e;
                 this.submit();
+            },
+            formatDate(f){
+                if (f == null) return null;
+                    moment.locale('es');
+                return moment(f).format('DD/MM/YYYY');
             },
             submit() {
 

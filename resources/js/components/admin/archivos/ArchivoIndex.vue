@@ -20,7 +20,7 @@
                             <template slot="items" slot-scope="props">
                                 <td>{{ props.item.id }}</td>
                                 <td>{{ props.item.nombre }}</td>
-                                <td :class="props.item.color"><span class="white--text">{{ props.item.color }}</span></td>
+                                <td :class="props.item.color">{{ props.item.color }}</td>
                                 <td class="justify-center layout px-0">
                                     <v-icon
                                         small

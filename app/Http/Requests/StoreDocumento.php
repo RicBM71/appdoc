@@ -26,7 +26,7 @@ class StoreDocumento extends FormRequest
     {
         $data = [
 
-            'concepto'        => ['required', 'string', 'max:50'],
+            'concepto'        => ['required', 'string'],
             'fecha'         => ['date','required'],
             'cerrado'     => ['nullable','boolean'],
             'archivo_id'     => ['required','numeric'],

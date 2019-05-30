@@ -70,7 +70,7 @@ export default {
         destroyReg () {
             this.dialog = false;
 
-            axios.post('/admin/carpetas/'+this.id,{_method: 'delete'})
+            axios.post('/mto/carpetas/'+this.id,{_method: 'delete'})
                 .then(response => {
                 this.$router.push({ name: 'carpeta.index' })
                 this.$toast.success('Archivo eliminada!');

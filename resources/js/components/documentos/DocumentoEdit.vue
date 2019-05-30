@@ -1,5 +1,6 @@
 <template>
 	<div>
+        <loading :show_loading="show_loading"></loading>
         <v-card>
             <v-card-title color="indigo">
                 <h2 color="indigo">{{titulo}}</h2>
@@ -170,12 +171,14 @@ import moment from 'moment'
 import MenuOpe from './MenuOpe'
 import vue2Dropzone from 'vue2-dropzone'
 import MyDialog from '@/components/shared/MyDialog'
+import Loading from '@/components/shared/Loading'
 
 	export default {
 		$_veeValidate: {
       		validator: 'new'
         },
         components: {
+            'loading': Loading,
             'my-dialog': MyDialog,
             'vueDropzone': vue2Dropzone,
             'menu-ope': MenuOpe,
@@ -207,6 +210,7 @@ import MyDialog from '@/components/shared/MyDialog'
                 enviando: false,
                 show: true,
                 show_upload: false,
+                show_loading: true,
 
                 dropzoneOptions: {
                     url: '/mto/filedocs/'+this.$route.params.id,
@@ -221,6 +225,7 @@ import MyDialog from '@/components/shared/MyDialog'
       		}
         },
         mounted(){
+
             var id = this.$route.params.id;
             //console.log(this.$route.params);
             if (id > 0)
@@ -237,6 +242,7 @@ import MyDialog from '@/components/shared/MyDialog'
                             this.show_upload = true;
 
                         this.show=true;
+                        this.show_loading = false;
                     })
                     .catch(err => {
                         if (err.response.status == 404)
@@ -294,7 +300,6 @@ import MyDialog from '@/components/shared/MyDialog'
 
             },
             download(file_id){
-                console.log(file_id);
 
                 var url = '/mto/filedocs/'+file_id;
                 window.open(url, '_blank');
@@ -311,7 +316,7 @@ import MyDialog from '@/components/shared/MyDialog'
                         //console.log(res);
                     })
                     .catch(err => {
-                        console.log(err);
+
                         this.$toast.error('Error al obtener documento!');
                     })
 
@@ -402,7 +407,7 @@ import MyDialog from '@/components/shared/MyDialog'
             },
             loadCarpeta(archivo_id){
 
-                axios.get('/admin/carpetas/'+archivo_id)
+                axios.get('/mto/carpetas/'+archivo_id)
                     .then(res => {
                         this.carpetas = res.data.carpetas;
                         this.documento.carpeta_id = "";

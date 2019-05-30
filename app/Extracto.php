@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Extracto extends Model
 {
+
+    protected $dates =['fecha'];
+
+    protected $fillable = [
+        'empresa_id','cuenta_id', 'concepto', 'dh', 'fecha','importe','username'
+    ];
+
     protected static function boot()
     {
         parent::boot();

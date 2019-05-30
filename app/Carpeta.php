@@ -17,7 +17,7 @@ class Carpeta extends Model
 
 
     protected $fillable = [
-        'empresa_id', 'archivo_id', 'nombre', 'color',
+        'empresa_id', 'archivo_id', 'nombre', 'color', 'activa'
     ];
 
     // una carpeta tiene un archivo y solo uno
@@ -40,6 +40,7 @@ class Carpeta extends Model
     public static function selCarpetas(){
 
         return Carpeta::select('id AS value', 'nombre AS text')
+            ->activas()
             ->orderBy('nombre', 'asc')
             ->get();
 
@@ -48,6 +49,7 @@ class Carpeta extends Model
     public static function selCarpetasArchivo($archivo_id){
 
         return Carpeta::select('id AS value', 'nombre AS text')
+            ->activas()
             ->conarchivo($archivo_id)
             ->orderBy('nombre', 'asc')
             ->get();
@@ -58,6 +60,12 @@ class Carpeta extends Model
     public function scopeConArchivo($query, $archivo_id){
 
         return $query->where('archivo_id', '=', $archivo_id);
+
+    }
+
+    public function scopeActivas($query){
+
+        return $query->where('activa', '=', true);
 
     }
 

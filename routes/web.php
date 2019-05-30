@@ -37,7 +37,6 @@ Route::group([
             Route::resource('retenciones', 'RetencionesController', ['except'=>'show','as' => 'admin']);
             Route::resource('ivas', 'IvasController', ['except'=>'show','as' => 'admin']);
             Route::resource('archivos', 'ArchivosController', ['except'=>'show','as' => 'admin']);
-            Route::resource('carpetas', 'CarpetasController', ['as' => 'admin']);
             Route::resource('empresas', 'EmpresasController', ['except'=>'show','as' => 'admin']);
             Route::resource('fpagos', 'FpagosController', ['except'=>'show','as' => 'admin']);
             Route::resource('contadors', 'ContadorsController', ['except'=>'show','as' => 'admin']);
@@ -61,14 +60,17 @@ Route::group([
         Route::resource('vencimientos', 'VencimientosController', ['except'=>'show','as' => 'mto']);
         Route::resource('extractos', 'ExtractosController', ['only'=>['index','show'],'as' => 'mto']);
         Route::post('extractos/filtrar', 'ExtractosController@filtrar');
-        Route::post('extractos/importar', 'ExtractosController@importar');
+        Route::get('extractos/{id}/importar', 'ExtractosController@importar');
+        Route::post('extractos/banco', 'ExtractosController@banco');
         Route::resource('documentos', 'DocumentosController', ['as' => 'mto']);
         Route::post('documentos/filtrar', 'DocumentosController@filtrar');
+        Route::post('documentos/{documento}/attach', 'DocumentosController@attach');
+        Route::post('documentos/{documento}/detach', 'DocumentosController@detach');
          //Route::resource('filedocs', 'FiledocsController', ['only'=>['store','show','destroy'],'as' => 'mto']);
         Route::post('filedocs/{filedoc}', 'FiledocsController@store');
         Route::delete('filedocs/{filedoc}', 'FiledocsController@destroy');
         Route::get('filedocs/{filedoc}', 'FiledocsController@show');
-
+        Route::resource('carpetas', 'CarpetasController', ['as' => 'mto']);
     }
 );
 

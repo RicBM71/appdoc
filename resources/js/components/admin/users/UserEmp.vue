@@ -59,25 +59,29 @@ export default {
                 method: 'put',
                 data:
                     {
-                        empresas: this.emp_selected
+                        empresas: this.emp_selected,
+                        seleccionadas: this.emp_selected.length
                     }
                 })
                 .then(res => {
-                    axios({
-                        method: 'put',
-                        url: '/admin/users/'+this.user_id+'/empresa',
-                        data:{ empresa: this.emp_selected[0] }
-                    })
-                    this.$toast.success(res.data);
+                    this.$toast.success("Empresa asignada correctamente");
+                    //this.setEmpresaDef();
                     })
                 .catch(err => {
-                    //console.log(err);
-                    const msg_valid = err.response.data.errors;
-                    for (const prop in msg_valid) {
-                        this.$toast.error(`${msg_valid[prop]}`);
-                    }
+
+                    this.$toast.error("Error al asignar empresa");
                 });
-        }
+        },
+        // setEmpresaDef(){
+        //     console.log(this.emp_selected[0]);
+        //     axios.put('/admin/users/'+this.user_id+'/empresa',{ empresa: this.emp_selected[0] })
+        //     .then(res => {
+        //             this.$toast.success("Empresa asignada correctamente");
+        //             })
+        //         .catch(err => {
+        //             this.$toast.error("Error al establecer empresa x defecto");
+        //         });
+        // }
     }
 }
 </script>

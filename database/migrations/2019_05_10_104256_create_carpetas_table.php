@@ -19,6 +19,7 @@ class CreateCarpetasTable extends Migration
             $table->unsignedInteger('archivo_id');
             $table->string('nombre',50);
             $table->string('color',30)->nullable();
+            $table->boolean('activa')->default(true);
             $table->timestamps();
         });
     }

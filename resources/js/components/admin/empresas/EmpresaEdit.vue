@@ -235,13 +235,18 @@
 
                     </v-layout>
                     <v-layout row wrap>
-                        <v-flex sm4 d-flex>
+                        <v-flex sm3 d-flex>
                             <v-select
-                            v-model="empresa.archivo_id"
-                            item-text="name"
-                            item-value="id"
-                            :items="empresas"
-                            label="Link Empresa"
+                            v-model="empresa.carext_id"
+                            :items="carpetas"
+                            label="Carpeta Ext. Banco"
+                            ></v-select>
+                        </v-flex>
+                        <v-flex sm3 d-flex>
+                            <v-select
+                            v-model="empresa.carn43_id"
+                            :items="carpetas"
+                            label="Carpeta Ext. N43"
                             ></v-select>
                         </v-flex>
                         <v-flex sm2>
@@ -323,12 +328,13 @@ import MenuOpe from './MenuOpe'
                     logo:"",
                     certificado:"",
                     passwd_cer:"",
-                    archivo_id:"",
+                    carext_id:"",
+                    carn43_id:"",
                     username: "",
                     updated_at:"",
                     created_at:"",
                 },
-                empresas:[],
+                carpetas:[],
                 empresa_id: "",
 
         		status: false,
@@ -345,18 +351,16 @@ import MenuOpe from './MenuOpe'
             if (id > 0)
                 axios.get('/admin/empresas/'+id+'/edit')
                     .then(res => {
+                        console.log(res);
                         this.empresa = res.data.empresa;
-                        res.data.empresas.map((e) =>
-                            {
-                                this.empresas.push({id: e.id, name: e.nombre});
-                            })
+                        this.carpetas = res.data.carpetas;
 
                         this.show = true;
 
                     })
                     .catch(err => {
                         this.$toast.error(err.response.data.message);
-                        this.$router.push({ name: 'empresas.index'})
+                        this.$router.push({ name: 'empresa.index'})
                     })
         },
         computed: {

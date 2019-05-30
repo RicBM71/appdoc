@@ -46,7 +46,8 @@ class StoreEmpresas extends FormRequest
             'logo'          => ['nullable','string'],
             'certificado'   => ['nullable','string', 'max:20'],
             'passwd_cer'    => ['nullable','string'],
-            'archivo_id'    => ['nullable','integer'],
+            'carext_id'    => ['nullable','integer'],
+            'carn43_id'    => ['nullable','integer'],
         ];
 
         if ($this->filled('id'))

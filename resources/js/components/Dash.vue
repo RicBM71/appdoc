@@ -194,7 +194,6 @@ export default {
                 { text: 'Cuentas', name: 'cuenta.index' },
                 { text: 'Tipos de IVA', name: 'iva.index' },
                 { text: 'Archivos', name: 'archivo.index' },
-                { text: 'Carpetas', name: 'carpeta.index' },
                 { text: 'Formas de Pago', name: 'fpago.index' },
                 { text: 'Contadores', name: 'contador.index' },
             ]
@@ -212,7 +211,6 @@ export default {
                 { text: 'Cuentas', name: 'cuenta.index' },
                 { text: 'Tipos de IVA', name: 'iva.index' },
                 { text: 'Archivos', name: 'archivo.index' },
-                { text: 'Carpetas', name: 'carpeta.index' },
                 { text: 'Formas de Pago', name: 'fpago.index' },
                 { text: 'Contadores', name: 'contador.index' },
             ]
@@ -222,7 +220,8 @@ export default {
             { icon: 'people', text: 'Clientes', name:'cliente.index' },
             { icon: 'local_offer', text: 'Productos', name:'producto.index' },
             { icon: 'account_balance', text: 'Extracto Banco', name:'extracto.index' },
-            { icon: 'account_balance', text: 'Documento', name:'documento.index' },
+            { icon: 'save_alt', text: 'Documentos', name:'documento.index' },
+            { icon: 'folder', text: 'Carpetas', name:'carpeta.index' },
             {
             icon: 'keyboard_arrow_up',
             'icon-alt': 'keyboard_arrow_down',
@@ -240,7 +239,7 @@ export default {
 
         axios.get('/dash')
             .then(res => {
-
+                //console.log(res.data);
                 this.setAuthUser(res.data.user);
 
                 this.empresa_id = this.user.empresa_id;

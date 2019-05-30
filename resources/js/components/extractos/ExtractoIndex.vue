@@ -8,13 +8,19 @@
                 <v-card-title>
                     <h2>{{titulo}}</h2>
                     <v-spacer></v-spacer>
-                    <v-btn
-                    color="white"
-                    icon
-                    @click="filtro = !filtro"
-                >
-                    <v-icon color="primary">list_alt</v-icon>
-                </v-btn>
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                            <v-btn
+                                v-on="on"
+                                color="white"
+                                icon
+                                @click="filtro = !filtro"
+                            >
+                                <v-icon color="primary">list_alt</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Filtros</span>
+                    </v-tooltip>
                 </v-card-title>
             </v-card>
             <v-card v-show="filtro">
@@ -116,6 +122,7 @@
                     <v-layout row wrap>
                         <v-flex xs12>
                             <v-data-table
+                            :expand="expand"
                             :headers="headers"
                             :items="apuntes"
                             :search="search"
@@ -148,10 +155,45 @@
                                 <template v-slot:expand="props">
                                     <v-card flat>
                                         <v-card-text :key="child.id" v-for="child in props.item.documentos">
-                                            <v-icon
-                                                @click="editDoc(child.id)"
-                                            >pageview
-                                            </v-icon>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-btn
+                                                        v-on="on"
+                                                        color="white"
+                                                        icon
+                                                        @click="editDoc(child.id)"
+                                                    >
+                                                        <v-icon :color="estaCerrado(child.cerrado)">pageview</v-icon>
+                                                    </v-btn>
+                                                </template>
+                                                <span>Ver documento</span>
+                                            </v-tooltip>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-btn
+                                                        v-on="on"
+                                                        color="white"
+                                                        icon
+                                                        @click="detachDoc(child)"
+                                                    >
+                                                        <v-icon>delete_outline</v-icon>
+                                                    </v-btn>
+                                                </template>
+                                                <span>Eliminar relación</span>
+                                            </v-tooltip>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-btn
+                                                        v-on="on"
+                                                        color="white"
+                                                        icon
+                                                        @click="agruparADoc(child.id)"
+                                                    >
+                                                        <v-icon>call_split</v-icon>
+                                                    </v-btn>
+                                                </template>
+                                                <span>Unir extractos a documento</span>
+                                            </v-tooltip>
                                             <span :class="child.archivo.color+'--text'">{{child.archivo.nombre+": "+formatDate(child.fecha)+" "+child.concepto}}</span>
 
                                         </v-card-text>
@@ -214,6 +256,8 @@ import MenuOpe from './MenuOpe'
 		registros: false,
         dialog: false,
         extracto_id: 0,
+        documento_id: 0,
+        expand: true,
 
         tipos: [
                 {text:'Debe','value':'D'},
@@ -226,7 +270,7 @@ import MenuOpe from './MenuOpe'
 
         menu_d: false,
         menu_h: false,
-        fecha_d: new Date().toISOString().substr(0, 8)+"01",
+        fecha_d: new Date().toISOString().substr(0, 5)+"01-01",
         fecha_h: new Date().toISOString().substr(0, 10),
         dh:"T"
       }
@@ -239,7 +283,6 @@ import MenuOpe from './MenuOpe'
         axios.get('/mto/extractos')
             .then(res => {
 
-                console.log(res);
                 this.apuntes = res.data;
                 this.registros = true;
 
@@ -270,6 +313,9 @@ import MenuOpe from './MenuOpe'
                 moment.locale('es');
             return moment(f).format('DD/MM/YYYY');
         },
+        estaCerrado(cerrado){
+            if (cerrado) return ''; else return 'warning';
+        },
         filtrar(){
 
             this.show_loading = true;
@@ -281,8 +327,9 @@ import MenuOpe from './MenuOpe'
                     }
                 )
                 .then(res => {
+
                     this.filtro = false;
-                   // console.log(res.data);
+
                     this.apuntes = res.data;
                     this.show_loading = false;
 
@@ -300,9 +347,76 @@ import MenuOpe from './MenuOpe'
             this.$router.push({ name: 'documento.edit', params: { id: id } })
         },
         createDocu(extracto){
+            if (this.documento_id == 0)
+                this.$router.push({ name: 'documento.create', params: { extracto: extracto } })
+            else{
+                this.attachDoc(extracto.id);
+            }
+        },
+        agruparADoc(documento_id){
+            this.documento_id = documento_id;
+            this.titulo = "Enlazando a documento, seleccionar otro apunte";
+            this.$toast.warning("Enlazando a documento, seleccionar otro apunte");
+           // console.log(documento_id);
+        },
+        attachDoc(id){
+            //console.log(id);
 
-            this.$router.push({ name: 'documento.create', params: { extracto: extracto } })
-        }
+            if (id == 0 || this.documento_id == 0){
+                this.$toast.error("No se ha podido realizar el enlace");
+                return;
+            }
+
+            this.show_loading = true;
+            axios.post('mto/documentos/'+this.documento_id+'/attach',
+                    {
+                        extracto_id: id
+                    }
+                )
+                .then(res => {
+                    this.filtro = false;
+
+                    this.titulo = "Extracto";
+                    this.$toast.success("Apunte enlazado correctamente!");
+
+                    this.filtrar();
+                    this.show_loading = false;
+
+                })
+                .catch(err => {
+
+                    this.show_loading = false;
+                    this.$toast.error(err.response.data.message);
+
+
+                });
+
+        },
+        detachDoc(child){
+
+            this.show_loading = true;
+            axios.post('mto/documentos/'+child.pivot.documento_id+'/detach',
+                    {
+                        extracto_id: child.pivot.extracto_id
+                    }
+                )
+                .then(res => {
+                    this.filtro = false;
+
+                    this.filtrar();
+                    this.show_loading = false;
+
+                })
+                .catch(err => {
+
+                    this.show_loading = false;
+                    this.$toast.error(err.response.data.message);
+
+
+                });
+
+        },
+
     }
   }
 </script>

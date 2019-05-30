@@ -73,6 +73,10 @@ class Cliente extends Model
 
     }
 
+    public function scopeConPatron($query){
+        return $query->where('patron', '>', '');
+    }
+
     /**
      *
      * Selecciona clientes facturables y prepara para JSON select

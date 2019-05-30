@@ -49,9 +49,11 @@ class DocumentosController extends Controller
             ];
 
         if (request()->wantsJson())
-            return Documento::with('archivo')->where($data)
+            return [
+                'documentos'=> Documento::with(['archivo','carpeta'])->where($data)
                             ->orderBy('fecha','desc')
-                            ->get();
+                            ->get()
+            ];
 
     }
 
@@ -96,6 +98,20 @@ class DocumentosController extends Controller
         if (request()->wantsJson())
             return ['documento'=>$reg, 'message' => 'EL registro ha sido creado'];
     }
+
+    public function attach(Request $request, Documento $documento){
+
+
+        $documento->extractos()->attach($request->get('extracto_id'));
+        return response('ok',200);
+    }
+
+    public function detach(Request $request, Documento $documento){
+
+        $documento->extractos()->detach($request->get('extracto_id'));
+        return response('ok',200);
+    }
+
 
     public function extracto(Request $request){
 

@@ -9,13 +9,19 @@
                     <h2>{{titulo}}</h2>
                     <v-spacer></v-spacer>
                     <menu-ope></menu-ope>
-                    <v-btn
-                        color="white"
-                        icon
-                        @click="filtro = !filtro"
-                    >
-                        <v-icon color="primary">list_alt</v-icon>
-                    </v-btn>
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                            <v-btn
+                                v-on="on"
+                                color="white"
+                                icon
+                                @click="filtro = !filtro"
+                            >
+                                <v-icon color="primary">list_alt</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Filtros</span>
+                    </v-tooltip>
                 </v-card-title>
             </v-card>
             <v-card v-show="filtro">
@@ -126,8 +132,8 @@
                             >
                                 <template slot="items" slot-scope="props">
                                     <td>{{ formatDate(props.item.fecha) }}</td>
-                                    <td>{{ props.item.archivo.nombre }}</td>
-                                    <td>{{ props.item.carpeta.nombre }}</td>
+                                    <td :class="props.item.archivo.color">{{ props.item.archivo.nombre }}</td>
+                                    <td :class="props.item.carpeta.color">{{ props.item.carpeta.nombre }}</td>
                                     <td>{{ props.item.concepto }}</td>
                                     <td class="text-xs-right">{{ props.item.importe | currency('€', 2, { thousandsSeparator:'.', thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false })}}</td>
                                     <td class="justify-center layout px-0">
@@ -280,7 +286,8 @@ import MenuOpe from './MenuOpe'
                 .then(res => {
                     this.filtro = false;
                     //console.log(res.data);
-                    this.documentos = res.data;
+
+                     this.documentos = res.data.documentos;
                     this.show_loading = false;
 
                 })
@@ -302,7 +309,7 @@ import MenuOpe from './MenuOpe'
             axios.post('/mto/documentos/'+this.documento_id,{_method: 'delete'})
                 .then(response => {
 
-                this.documentos = response.data;
+                this.documentos = response.data.documentos;
                 this.$toast.success('Documento eliminado!');
 
 

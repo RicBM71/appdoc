@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Carpeta;
 use App\Empresa;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -66,7 +67,7 @@ class EmpresasController extends Controller
         if (request()->wantsJson())
             return [
                 'empresa' =>$empresa,
-                'empresas'=>Empresa::all()
+                'carpetas'=>Carpeta::selCarpetas()
             ];
 
     }

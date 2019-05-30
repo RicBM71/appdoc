@@ -81,8 +81,8 @@ const getters = {
         return (state.roles.indexOf('Admin') >= 0) ? true : false;
 
     },
-    isUsuario: (state) =>{
-        return (state.roles.indexOf('Usuario') >= 0) ? true : false;
+    hasDocumenta: (state) =>{
+        return (state.roles.indexOf('Documenta') >= 0) ? true : false;
     },
 
 

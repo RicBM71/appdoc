@@ -27,7 +27,7 @@ class AlbacabPolicy
      */
     public function create(User $authUser)
     {
-        return $authUser->hasRole('Usuario') ?: $this->deny("Acceso denegado. Role de Usuario requerido");
+        return $authUser->hasRole('Factura') ?: $this->deny("Acceso denegado. Role de Facturación requerido");
     }
 
     /**
@@ -42,12 +42,12 @@ class AlbacabPolicy
 
         if ($authUser->hasRole('Admin') && $albacab->eje_fac == 0)
             return true;
-        else if ($authUser->hasRole('Usuario') &&
+        else if ($authUser->hasRole('Factura') &&
                 $albacab->username === $authUser->username &&
                 $albacab->eje_fact > 0 &&
                 $albacab->fecha_fac == date('Y-m-d'))
                 return true;
-        else if ($authUser->hasRole('Usuario') &&
+        else if ($authUser->hasRole('Factura') &&
                 $albacab->eje_fact == 0 )
                 return true;
        else
@@ -73,7 +73,7 @@ class AlbacabPolicy
 
         if ($authUser->hasRole('Admin') && is_null($albacab->eje_fac))
             return true;
-        else if ($authUser->hasRole('Usuario') &&
+        else if ($authUser->hasRole('Factura') &&
                 $albacab->username === $authUser->username &&
                 $albacab->eje_fact == 0 &&
                 $albacab->fecha_alb == date('Y-m-d'))

@@ -12,31 +12,14 @@
             <v-form>
                 <v-container>
                     <v-layout row wrap>
-                        <v-flex sm3>
-                            <vue-dropzone v-show="mostrar"
+                        <v-flex sm12>
+                            <vue-dropzone
                                 ref="myVueDropzone"
                                 id="dropzone"
                                 :options="dropzoneOptions"
-                                v-on:vdropzone-success="upload"
+                                @vdropzone-success="upload"
+                                @vdropzone-error="vderror"
                             ></vue-dropzone>
-                        </v-flex>
-                        <v-flex sm3 v-show="!mostrar">
-                            <v-text-field
-                                v-model="destino"
-                                label="Destino"
-                                required
-                            >
-                            </v-text-field>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout>
-                        <v-flex sm4></v-flex>
-                        <v-flex sm4>
-                            <div class="text-xs-center">
-                                <v-btn @click="submit"  round :disabled="computedDisabled" :loading="show_loading" block  color="primary">
-                                    Importar fichero
-                                </v-btn>
-                            </div>
                         </v-flex>
                     </v-layout>
                 </v-container>
@@ -60,14 +43,16 @@
 		},
     	data () {
       		return {
-                mostrar: true,
+
                 titulo:   "Importar Norma 43",
                 destino: "",
                 disabled: true,
                 show_loading: false,
+
+                dropzone:{},
                 dropzoneOptions: {
-                    url: '/mto/extractos/importar',
-                    paramName: 'extracto',
+                    url: '/mto/extractos/banco',
+                    paramName: 'files',
                     acceptedFiles: '.n43',
                     maxFiles: 1,
                     maxFilesize: 0.5,
@@ -81,66 +66,34 @@
 
         },
         mounted(){
-
-            if (!this.isAdmin){
-                this.$toast.error('No tiene permiso de administrador');
+            if (!this.hasDocumenta){
+                this.$toast.error('No tiene permiso para subir documentos');
+                this.$router.push({ name: 'dash'})
             }
         },
         computed: {
             ...mapGetters([
-	    		'isAdmin'
+	    		'hasDocumenta'
             ]),
             computedDisabled(){
                 if (this.destino != '')
                     return false;
-                return true;
+                return false;
             }
         },
     	methods:{
             upload(file, response){
-                this.mostrar = false;
-               // console.log(file);
-                console.log(response);
-            },
-            submit() {
 
-                //console.log("Edit user (submit):"+this.user.id);
                 this.show_loading = true;
+                this.mostrar = false;
+                this.$toast.success(response);
 
-                var url = '/ventas/albacabs/remesar';
+                this.$router.push({ name: 'extracto.index'})
 
-                this.$validator.validateAll().then((result) => {
-                    if (result){
-                        axios.post(url,
-                            {
-                                fecha: this.fecha,
-                                cuenta_id: this.cuenta_id
-                            })
-                            .then(response => {
-
-                                this.$toast.success("Se ha generado correctamente la remesa");
-                                this.show_loading = false;
-                            })
-                            .catch(err => {
-                                //console.log(err);
-                                //if (err.request.status == 422){ // fallo de validated.
-                                    const msg_valid = err.response.data.errors;
-                                    //console.log(`obj.${prop} = ${msg_valid[prop]}`);
-                                    for (const prop in msg_valid) {
-                                        this.errors.add({
-                                            field: prop,
-                                            msg: `${msg_valid[prop]}`
-                                        })
-                                    }
-                                //}
-                                this.show_loading = false;
-                            });
-                        }
-                    else{
-                        this.show_loading = false;
-                    }
-                });
-
+            },
+            vderror(file){
+                this.$toast.error('El fichero no es correcto o la cuenta no existe');
+                this.$router.push({ name: 'dash' })
             }
     }
   }

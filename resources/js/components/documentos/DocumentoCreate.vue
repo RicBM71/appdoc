@@ -170,8 +170,6 @@ import MenuOpe from './MenuOpe'
 
             this.extracto = this.$route.params.extracto;
 
-            console.log(this.extracto);
-
             axios.get('/mto/documentos/create')
                 .then(res => {
 
@@ -218,7 +216,6 @@ import MenuOpe from './MenuOpe'
                     if (result){
                         axios.post(url, this.documento)
                             .then(response => {
-                                console.log(response);
                                 this.$router.push({ name: 'documento.edit', params: { id: response.data.documento.id } })
                                 this.enviando = false;
 
@@ -249,8 +246,9 @@ import MenuOpe from './MenuOpe'
             },
             loadCarpeta(archivo_id){
 
-                axios.get('/admin/carpetas/'+archivo_id)
+                axios.get('/mto/carpetas/'+archivo_id)
                     .then(res => {
+
                         this.carpetas = res.data.carpetas;
                         this.documento.carpeta_id = "";
                     })

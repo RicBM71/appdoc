@@ -26,4 +26,9 @@ class Cuenta extends Model
             ->orderBy('nombre', 'asc')
             ->get();
     }
+
+    public function scopeIbanLike($query, $iban){
+
+        return $query->where('iban', 'like', '%'.$iban.'%');
+    }
 }

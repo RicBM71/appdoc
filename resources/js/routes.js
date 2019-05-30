@@ -22,9 +22,9 @@ import ArchivoIndex from './components/admin/archivos/ArchivoIndex.vue';
 import ArchivoCreate from './components/admin/archivos/ArchivoCreate.vue';
 import ArchivoEdit from './components/admin/archivos/ArchivoEdit.vue';
 
-import CarpetaIndex from './components/admin/carpetas/CarpetaIndex.vue';
-import CarpetaCreate from './components/admin/carpetas/CarpetaCreate.vue';
-import CarpetaEdit from './components/admin/carpetas/CarpetaEdit.vue';
+import CarpetaIndex from './components/carpetas/CarpetaIndex.vue';
+import CarpetaCreate from './components/carpetas/CarpetaCreate.vue';
+import CarpetaEdit from './components/carpetas/CarpetaEdit.vue';
 
 import EmpresaIndex from './components/admin/empresas/EmpresaIndex.vue';
 import EmpresaCreate from './components/admin/empresas/EmpresaCreate.vue';

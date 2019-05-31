@@ -19,6 +19,7 @@
                     <v-layout row wrap>
                         <v-flex sm4 d-flex>
                             <v-select
+                                :disabled="!hasDocumenta"
                                 v-model="documento.archivo_id"
                                 :items="archivos"
                                 v-validate="'required'"
@@ -31,6 +32,7 @@
                         </v-flex>
                         <v-flex sm4 d-flex>
                             <v-select
+                                :disabled="!hasDocumenta"
                                 v-model="documento.carpeta_id"
                                 v-validate="'required'"
                                 :error-messages="errors.collect('carpeta_id')"
@@ -42,6 +44,7 @@
                         </v-flex>
                          <v-flex sm3>
                             <v-menu
+                                    :disabled="!hasDocumenta"
                                     v-model="menu2"
                                     :close-on-content-click="false"
                                     :nudge-right="40"
@@ -53,6 +56,7 @@
                                 >
 
                                     <v-text-field
+                                        :disabled="!hasDocumenta"
                                         slot="activator"
                                         :value="computedFecha"
                                         label="Fecha"
@@ -62,6 +66,7 @@
                                         data-vv-as="Fecha"
                                         ></v-text-field>
                                     <v-date-picker
+                                        :disabled="!hasDocumenta"
                                         v-model="documento.fecha"
                                         no-title
                                         locale="es"
@@ -74,6 +79,7 @@
                     <v-layout row wrap>
                         <v-flex sm11>
                             <v-text-field
+                                :disabled="!hasDocumenta"
                                 v-model="documento.concepto"
                                 v-validate="'required'"
                                 :error-messages="errors.collect('concepto')"
@@ -89,6 +95,7 @@
                     <v-layout row wrap>
                         <v-flex sm3>
                             <v-text-field
+                                :disabled="!hasDocumenta"
                                 v-model="documento.username"
                                 :error-messages="errors.collect('username')"
                                 label="Usuario"
@@ -100,6 +107,7 @@
                         </v-flex>
                         <v-flex sm3>
                             <v-text-field
+                                :disabled="!hasDocumenta"
                                 v-model="computedFModFormat"
                                 label="Modificado"
                                 readonly
@@ -108,6 +116,7 @@
                         </v-flex>
                         <v-flex sm3>
                             <v-text-field
+                                :disabled="!hasDocumenta"
                                 v-model="computedFCreFormat"
                                 label="Creado"
                                 readonly
@@ -115,7 +124,7 @@
                             </v-text-field>
                         </v-flex>
                         <v-flex sm1></v-flex>
-                        <v-flex sm2>
+                        <v-flex sm2 v-show="hasDocumenta">
                             <div class="text-xs-center">
                                         <v-btn @click="submit"  round  :loading="enviando" block  color="primary">
                                 Guardar
@@ -172,6 +181,7 @@ import MenuOpe from './MenuOpe'
 import vue2Dropzone from 'vue2-dropzone'
 import MyDialog from '@/components/shared/MyDialog'
 import Loading from '@/components/shared/Loading'
+import {mapGetters} from 'vuex';
 
 	export default {
 		$_veeValidate: {
@@ -253,6 +263,10 @@ import Loading from '@/components/shared/Loading'
                     })
         },
         computed: {
+            ...mapGetters([
+                'hasDocumenta',
+                'isAdmin'
+		    ]),
             computedFecha() {
                 moment.locale('es');
                 return this.documento.fecha ? moment(this.documento.fecha).format('L') : '';
@@ -422,3 +436,29 @@ import Loading from '@/components/shared/Loading'
     }
   }
 </script>
+<style scope>
+.v-text-field {
+    padding-top: 2px;
+    margin-top: 4px;
+}
+.theme--light.v-input--is-disabled,  .theme--light.v-input--is-disabled input, .theme--light.v-input--is-disabled textarea {
+    color: #263238;
+}
+
+.v-form>.container>.layout>.flex{
+    padding: 0px 8px;
+}
+
+.inputPrice >>> input {
+  text-align: center;
+  -moz-appearance:textfield;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+</style>

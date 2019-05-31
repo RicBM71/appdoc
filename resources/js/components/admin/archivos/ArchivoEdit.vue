@@ -36,6 +36,19 @@
                                 data-vv-as="Color"
                                 required
                                 v-on:keyup.enter="submit"
+                            >
+                            </v-text-field>
+                        </v-flex>
+                         <v-flex sm2>
+                            <v-text-field
+                                v-model="archivo.path"
+                                v-validate="'required'"
+                                :error-messages="errors.collect('path')"
+                                label="Path"
+                                data-vv-name="path"
+                                data-vv-as="Path"
+                                required
+                                v-on:keyup.enter="submit"
 
                             >
                             </v-text-field>
@@ -88,6 +101,7 @@ import MenuOpe from './MenuOpe'
                 archivo: {
                     id:       0,
                     nombre:  "",
+                    path: "",
                     color: "",
                     updated_at:"",
                     created_at:"",
@@ -142,6 +156,7 @@ import MenuOpe from './MenuOpe'
                                 {
                                     nombre: this.archivo.nombre,
                                     color: this.archivo.color,
+                                    path: this.archivo.path
 
                                 }
                             })

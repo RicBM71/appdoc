@@ -4,6 +4,7 @@
         <v-tooltip bottom>
             <template v-slot:activator="{ on }">
                 <v-btn
+                v-show="hasDocumenta"
                     v-on="on"
                     color="white"
                     icon
@@ -17,7 +18,7 @@
          <v-tooltip bottom>
             <template v-slot:activator="{ on }">
                 <v-btn
-                    v-show="id > 0 && !cerrado"
+                    v-show="id > 0 && !cerrado && hasDocumenta"
                     v-on="on"
                     color="white"
                     icon
@@ -31,7 +32,7 @@
         <v-tooltip bottom v-if="id > 0 && !cerrado">
             <template v-slot:activator="{ on }">
                 <v-btn
-                    v-show="id > 0"
+                    v-show="id > 0 && hasDocumenta"
                     v-on="on"
                     color="white"
                     icon
@@ -45,6 +46,7 @@
         <v-tooltip bottom v-if="id > 0 && !cerrado">
             <template v-slot:activator="{ on }">
                 <v-btn
+                    v-show="hasDocumenta"
                     v-on="on"
                     color="white"
                     icon
@@ -59,6 +61,7 @@
             <template v-slot:activator="{ on }">
                 <v-btn
                     v-on="on"
+                    v-show="hasDocumenta"
                     color="white"
                     icon
                     @click="goBloqueo(0)"
@@ -86,6 +89,7 @@
 </template>
 <script>
 import MyDialog from '@/components/shared/MyDialog'
+import {mapGetters} from 'vuex';
 export default {
     props:{
         id: Number,
@@ -98,6 +102,12 @@ export default {
       return {
           dialog: false
       }
+    },
+    computed: {
+        ...mapGetters([
+            'hasDocumenta',
+            'isAdmin'
+        ])
     },
     methods:{
         goCreate(){

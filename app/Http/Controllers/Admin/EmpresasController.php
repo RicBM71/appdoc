@@ -40,15 +40,22 @@ class EmpresasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreEmpresas $request)
+    public function store(Request $request)
     {
 
-        $data = $request->validated();
+
+        $data = $request->validate([
+            'nombre' => ['required','string'],
+            'razon' => ['required', 'string'],
+            'titulo' => ['required','string'],
+        ]);
+
 
         $data['username'] = $request->user()->username;
 
-
         $reg = Empresa::create($data);
+
+        $request->user()->empresas()->attach($reg->id);
 
         if (request()->wantsJson())
             return ['empresa'=>$reg, 'message' => 'EL registro ha sido creado'];
@@ -67,7 +74,8 @@ class EmpresasController extends Controller
         if (request()->wantsJson())
             return [
                 'empresa' =>$empresa,
-                'carpetas'=>Carpeta::selCarpetas()
+                'carpetas'=>Carpeta::withoutGlobalScope(EmpresaScope::class)
+                    ->select('id AS value', 'nombre AS text')->where('empresa_id','=',$empresa->id)->get()
             ];
 
     }

@@ -43,7 +43,8 @@ class ArchivosController extends Controller
 
         $data = $request->validate([
             'nombre' => ['required', 'string', 'max:255'],
-            'color' => ['required']
+            'color' => ['string','required'],
+            'path' => ['string','required']
         ]);
 
         $reg = Archivo::create($data);
@@ -80,7 +81,8 @@ class ArchivosController extends Controller
     {
         $data = $request->validate([
             'nombre' => ['required', 'string', 'max:255'],
-            'color' => ['required']
+            'color' => ['string','required'],
+            'path' => ['string','required']
         ]);
 
 

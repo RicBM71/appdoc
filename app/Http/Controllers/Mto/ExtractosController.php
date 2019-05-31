@@ -100,9 +100,10 @@ class ExtractosController extends Controller
             'files' => 'required'
         ]);
 
-
+        $documento = Documento::with(['archivo','carpeta'])->find($doc->id);
         // almacenamos el fichero físico y creamos el link en filedocs
-        $path = 'documentum/'.session()->get('empresa')->path_archivo;
+
+        $path = 'documentum/'.session()->get('empresa')->path_archivo.'/'.$documento->archivo->path.'/'.$documento->carpeta->path;
 
         $files = request()->file('files')->store($path,'local');
 
@@ -261,7 +262,7 @@ class ExtractosController extends Controller
 
 	private function conceptos($linea){
 
-        $concepto = (trim(substr($linea, 4, 38)).' '.trim(substr($linea, 42, 38))).' ';
+        $concepto = (trim(substr($linea, 4, 38)).trim(substr($linea, 42, 38))).' ';
 
         $concepto = strtoupper(utf8_encode($concepto));
 

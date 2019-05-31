@@ -127,13 +127,15 @@
                             :items="apuntes"
                             :search="search"
                             rows-per-page-text="Registros por página"
+
+                            :pagination.sync="pagination"
                             >
                                 <template slot="items" slot-scope="props">
                                     <tr>
                                     <td>{{ formatDate(props.item.fecha) }}</td>
                                     <td>{{ props.item.dh }}</td>
                                     <td>{{ props.item.concepto }}</td>
-                                    <td class="text-xs-right">{{ props.item.importe | currency('€', 2, { thousandsSeparator:'.', thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false })}}</td>
+                                    <td :class=colorLin(props.item.dh)>{{ props.item.importe | currency('€', 2, { thousandsSeparator:'.', thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false })}}</td>
                                     <td class="justify-center layout px-0">
                                         <v-icon v-show="props.item.documentos.length > 0"
                                             small
@@ -142,7 +144,7 @@
                                         >
                                             expand_more
                                         </v-icon>
-                                        <v-icon v-show="!props.item.documentos.length > 0"
+                                        <v-icon v-show="!props.item.documentos.length > 0 && hasDocumenta"
                                             small
                                             class="mr-2"
                                             @click="createDocu(props.item)"
@@ -171,6 +173,7 @@
                                             <v-tooltip bottom>
                                                 <template v-slot:activator="{ on }">
                                                     <v-btn
+                                                        v-show="hasDocumenta"
                                                         v-on="on"
                                                         color="white"
                                                         icon
@@ -184,6 +187,7 @@
                                             <v-tooltip bottom>
                                                 <template v-slot:activator="{ on }">
                                                     <v-btn
+                                                        v-show="hasDocumenta"
                                                         v-on="on"
                                                         color="white"
                                                         icon
@@ -215,6 +219,7 @@
 import Loading from '@/components/shared/Loading'
 import moment from 'moment';
 import MenuOpe from './MenuOpe'
+import {mapGetters} from 'vuex';
   export default {
     components: {
         'menu-ope': MenuOpe,
@@ -223,6 +228,9 @@ import MenuOpe from './MenuOpe'
     data () {
       return {
         titulo:"Extracto",
+        pagination:{
+             rowsPerPage: 10
+        },
         search:"",
         headers: [
           {
@@ -298,6 +306,10 @@ import MenuOpe from './MenuOpe'
             })
     },
     computed:{
+        ...mapGetters([
+                'hasDocumenta',
+                'isAdmin'
+		]),
         computedFechaD() {
             moment.locale('es');
             return this.fecha_d ? moment(this.fecha_d).format('L') : '';
@@ -308,6 +320,12 @@ import MenuOpe from './MenuOpe'
         },
     },
     methods:{
+        colorLin(dh){
+            if (dh == 'D')
+                return "text-xs-right red--text";
+            else
+                return "text-xs-right blue--text";
+        },
         formatDate(f){
             if (f == null) return null;
                 moment.locale('es');

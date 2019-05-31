@@ -66,7 +66,7 @@ class HomeController extends Controller
         session([
             'empresa_id' => $authUser->empresa_id,
             'empresa' => Empresa::find($authUser->empresa_id),
-            'username'=> $authUser->username
+            'username'=> $authUser->username,
             ]);
 
         if (request()->wantsJson())

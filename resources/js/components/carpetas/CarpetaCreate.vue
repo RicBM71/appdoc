@@ -12,7 +12,7 @@
             <v-form>
                 <v-container>
                     <v-layout row wrap>
-                        <v-flex sm3 d-flex>
+                        <v-flex sm5 d-flex>
                             <v-autocomplete
                                 v-model="carpeta.archivo_id"
                                 v-validate="'required'"
@@ -26,7 +26,7 @@
                             >
                             </v-autocomplete>
                         </v-flex>
-                        <v-flex sm3>
+                        <v-flex sm5>
                             <v-text-field
                                 v-model="carpeta.nombre"
                                 v-validate="'required'"
@@ -41,13 +41,22 @@
                         </v-flex>
                         <v-flex sm3>
                             <v-text-field
+                                v-model="carpeta.path"
+                                :error-messages="errors.collect('path')"
+                                label="Path"
+                                data-vv-name="path"
+                                data-vv-as="path"
+                                v-on:keyup.enter="submit"
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm3>
+                            <v-text-field
                                 v-model="carpeta.color"
-                                v-validate="'required'"
                                 :error-messages="errors.collect('color')"
                                 label="Color"
                                 data-vv-name="color"
                                 data-vv-as="Color"
-                                required
                                 v-on:keyup.enter="submit"
 
                             >
@@ -107,6 +116,7 @@ import Loading from '@/components/shared/Loading'
                     empresa_id: 0,
                     archivo_id:"",
                     nombre:  "",
+                    path: "",
                     color: "",
                     updated_at:"",
                     created_at:"",
@@ -163,6 +173,7 @@ import Loading from '@/components/shared/Loading'
                                     nombre: this.carpeta.nombre,
                                     archivo_id: this.carpeta.archivo_id,
                                     color: this.carpeta.color,
+                                    path: this.carpeta.path
 
                                 }
                             })

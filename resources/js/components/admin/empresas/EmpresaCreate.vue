@@ -1,5 +1,5 @@
 <template>
-	<div v-show="show">
+	<div>
         <v-card>
             <v-card-title color="indigo">
                 <h2 color="indigo">{{titulo}}</h2>
@@ -36,92 +36,6 @@
                             >
                             </v-text-field>
                         </v-flex>
-                        <v-flex sm2>
-                            <v-text-field
-                                v-model="empresa.cif"
-                                :error-messages="errors.collect('cif')"
-                                label="CIF"
-                                data-vv-name="cif"
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
-                        <v-flex sm2>
-                            <v-text-field
-                                v-model="empresa.telefono1"
-                                :error-messages="errors.collect('telefono1')"
-                                label="Telefono"
-                                data-vv-name="telefono1"
-                                data-vv-as="Teléfono"
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
-                        <v-flex sm2>
-                            <v-text-field
-                                v-model="empresa.telefono2"
-                                :error-messages="errors.collect('telefono2')"
-                                label="Telefono"
-                                data-vv-name="telefono2"
-                                data-vv-as="Teléfono"
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                        <v-flex sm3>
-                            <v-text-field
-                                v-model="empresa.direccion"
-                                :error-messages="errors.collect('direccion')"
-                                label="Dirección"
-                                data-vv-name="direccion"
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
-                        <v-flex sm1>
-                            <v-text-field
-                                v-model="empresa.cpostal"
-                                :error-messages="errors.collect('cpostal')"
-                                label="CP"
-                                data-vv-name="CP"
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
-                        <v-flex sm3>
-                            <v-text-field
-                                v-model="empresa.poblacion"
-                                :error-messages="errors.collect('poblacion')"
-                                label="Población"
-                                data-vv-name="poblacion"
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
-                        <v-flex sm3>
-                            <v-text-field
-                                v-model="empresa.provincia"
-                                :error-messages="errors.collect('provincia')"
-                                label="Provincia"
-                                data-vv-name="provincia"
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
-                        <v-flex sm2>
-                            <v-text-field
-                                v-model="empresa.sigla"
-                                :error-messages="errors.collect('sigla')"
-                                label="Sigla"
-                                data-vv-name="sigla"
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
                         <v-flex sm3>
                             <v-text-field
                                 v-model="empresa.titulo"
@@ -130,140 +44,6 @@
                                 label="Tíitulo"
                                 data-vv-name="titulo"
                                 v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
-                        <v-flex sm3>
-                            <v-text-field
-                                v-model="empresa.contacto"
-                                :error-messages="errors.collect('contacto')"
-                                label="Contacto"
-                                data-vv-name="contacto"
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
-                        <v-flex sm3>
-                            <v-text-field
-                                v-model="empresa.email"
-                                :error-messages="errors.collect('email')"
-                                label="email"
-                                data-vv-name="email"
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
-                        <v-flex sm3>
-                            <v-text-field
-                                v-model="empresa.web"
-                                :error-messages="errors.collect('web')"
-                                label="Web"
-                                data-vv-name="web"
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                        <v-flex sm3>
-                            <v-text-field
-                                v-model="empresa.path_archivo"
-                                :error-messages="errors.collect('path_archivo')"
-                                v-validate="'required'"
-                                label="Path Archivo"
-                                data-vv-name="path_archivo"
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
-                        <v-flex sm3>
-                            <v-text-field
-                                v-model="empresa.certificado"
-                                :error-messages="errors.collect('certificado')"
-                                label="Certificado"
-                                data-vv-name="certificado"
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
-                        <v-flex sm3>
-                            <v-text-field
-                                v-model="empresa.passwd_cer"
-                                :error-messages="errors.collect('passwd_cer')"
-                                label="Password"
-                                data-vv-name="password"
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
-                        <v-flex sm3>
-                            <v-text-field
-                                v-model="empresa.logo"
-                                :error-messages="errors.collect('logo')"
-                                label="Logo"
-                                data-vv-name="logo"
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
-
-                    </v-layout>
-                    <v-layout row wrap>
-                        <v-flex sm12>
-                            <v-text-field
-                                v-model="empresa.txtpie1"
-                                :error-messages="errors.collect('txtpie1')"
-                                label="Pie"
-                                data-vv-name="txtpie1"
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                        <v-flex sm12>
-                            <v-text-field
-                                v-model="empresa.txtpie2"
-                                :error-messages="errors.collect('txtpie2')"
-                                label="Pie"
-                                data-vv-name="txtpie2"
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
-
-                    </v-layout>
-                    <v-layout row wrap>
-                        <v-flex sm3 d-flex>
-                            <v-select
-                            :items="items"
-                            label="Standard"
-                            ></v-select>
-                        </v-flex>
-                        <v-flex sm2>
-                            <v-text-field
-                                v-model="empresa.username"
-                                :error-messages="errors.collect('username')"
-                                label="Usuario"
-                                data-vv-name="username"
-                                readonly
-                                v-on:keyup.enter="submit"
-                            >
-                            </v-text-field>
-                        </v-flex>
-                        <v-flex sm2>
-                            <v-text-field
-                                v-model="computedFModFormat"
-                                label="Modificado"
-                                readonly
-                            >
-                            </v-text-field>
-                        </v-flex>
-                        <v-flex sm2>
-                            <v-text-field
-                                v-model="computedFCreFormat"
-                                label="Creado"
-                                readonly
                             >
                             </v-text-field>
                         </v-flex>
@@ -285,6 +65,8 @@
 <script>
 import moment from 'moment'
 import MenuOpe from './MenuOpe'
+import {mapActions} from "vuex";
+import {mapGetters} from 'vuex';
 
 	export default {
 		$_veeValidate: {
@@ -319,7 +101,8 @@ import MenuOpe from './MenuOpe'
                     logo:"",
                     certificado:"",
                     passwd_cer:"",
-                    archivo_id:"",
+                    carext_id:"",
+                    carn43_id:"",
                     username: "",
                     updated_at:"",
                     created_at:"",
@@ -339,11 +122,14 @@ import MenuOpe from './MenuOpe'
                 })
                 .catch(err => {
                     this.$toast.error(err.response.data.message);
-                    this.$router.push({ name: 'iva.index'})
+                    this.$router.push({ name: 'empresa.index'})
                 })
         },
 
         computed: {
+            ...mapGetters([
+                'userId'
+		    ]),
             computedFModFormat() {
                 moment.locale('es');
                 return this.empresa.updated_at ? moment(this.empresa.updated_at).format('D/MM/YYYY H:mm:ss') : '';
@@ -355,6 +141,9 @@ import MenuOpe from './MenuOpe'
 
         },
     	methods:{
+             ...mapActions([
+				'setAuthUser'
+			]),
             submit() {
 
                 //console.log("Edit user (submit):"+this.empresa.id);
@@ -366,14 +155,15 @@ import MenuOpe from './MenuOpe'
                     if (result){
                         axios.post(url, this.empresa)
                             .then(response => {
-                                //console.log(response.data);
-                                this.$toast.success(response.data.message);
+
+                                // this.setEmpresa(response.data.empresa.id);
+                                this.$toast.success('Cambiar a la nueva empresa para configurar');
 
                                 this.enviando = false;
-                                this.$router.push({ name: 'empresa.edit', params: { id: response.data.empresa.id } })
+                                this.$router.push({ name: 'dash' })
                             })
                             .catch(err => {
-                                console.log(err.request);
+
                                 if (err.request.status == 422){ // fallo de validated.
                                     const msg_valid = err.response.data.errors;
                                     for (const prop in msg_valid) {
@@ -393,6 +183,33 @@ import MenuOpe from './MenuOpe'
                     }
                 });
 
+            },
+            setEmpresa(empresa_id){
+
+                // this.empresas.map((e) =>{
+                //     if (e.id == this.empresa_id)
+                //             this.empresaTxt = e.name;
+                //     });
+
+                axios({
+                        method: 'put',
+                        url: '/admin/users/'+this.userId+'/empresa',
+                        data:{ empresa_id: empresa_id }
+                    })
+                    .then(res => {
+
+                        this.setAuthUser(res.data.user);
+
+                        console.log(res.data.user);
+
+                        this.$toast.success("Cambiando de empresa...");
+                        this.$router.push({name: 'dash'});
+                    })
+                    .catch(err => {
+                        this.$toast.error("No se ha podido seleccionar la empresa");
+                    });
+
+                this.myEmpresa=false;
             },
 
     }

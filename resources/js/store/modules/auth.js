@@ -37,6 +37,7 @@ const mutations = {
         state.permisos = payload.user.permisos;
 	},
 	[UNSET_USER](state, payload) {
+        state.id = null;
         state.name = null;
 		state.name = null;
         state.username = null;
@@ -67,6 +68,9 @@ const actions = {
 |--------------------------------------------------------------------------
 */
 const getters = {
+    userId: (state) =>{
+        return state.id
+    },
 	isLoggedIn: (state) => {
 		return !!(state.name && state.username);
     },

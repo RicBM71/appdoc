@@ -55,7 +55,9 @@ class CarpetasController extends Controller
         $data = $request->validate([
             'archivo_id' => ['required','integer'],
             'nombre' => ['required', 'string', 'max:50'],
-            'color' => ['required']
+            'path' => ['nullable','string'],
+            'color' => ['nullable','string'],
+
         ]);
 
         $data['empresa_id'] =  session()->get('empresa')->id;
@@ -112,7 +114,8 @@ class CarpetasController extends Controller
         $data = $request->validate([
             'archivo_id' => ['required'],
             'nombre' => ['required', 'string', 'max:50'],
-            'color' => ['required'],
+            'path' => ['nullable','string'],
+            'color' => ['nullable','string'],
             'activa'=> ['required','boolean']
         ]);
 

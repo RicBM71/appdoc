@@ -39,6 +39,7 @@
                                     <td>{{ props.item.id }}</td>
                                     <td :class="props.item.archivo.color">{{ props.item.archivo.nombre }}</td>
                                     <td :class="props.item.color">{{ props.item.nombre }}</td>
+                                    <td :class="props.item.color">{{ props.item.path }}</td>
                                     <td :class="props.item.color">{{ props.item.color }}</td>
                                     <td class="justify-center layout px-0">
                                         <v-icon
@@ -99,6 +100,11 @@ import {mapGetters} from 'vuex'
                 text: 'Nombre',
                 align: 'left',
                 value: 'nombre'
+            },
+            {
+                text: 'Path',
+                align: 'left',
+                value: 'path'
             },
             {
                 text: 'Color',

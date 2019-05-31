@@ -20,6 +20,7 @@
                             <template slot="items" slot-scope="props">
                                 <td>{{ props.item.id }}</td>
                                 <td>{{ props.item.nombre }}</td>
+                                <td>{{ props.item.path }}</td>
                                 <td :class="props.item.color">{{ props.item.color }}</td>
                                 <td class="justify-center layout px-0">
                                     <v-icon
@@ -70,6 +71,11 @@ import MenuOpe from './MenuOpe'
             text: 'Nombre',
             align: 'left',
             value: 'nombre'
+          },
+          {
+            text: 'Path',
+            align: 'left',
+            value: 'path'
           },
           {
             text: 'Color',

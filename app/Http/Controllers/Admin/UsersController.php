@@ -238,6 +238,13 @@ class UsersController extends Controller
 
             session(['empresa' => Empresa::find($request->empresa_id)]);
 
+            // $usr = session()->get('user');
+            // $usr['empresa_id'] = $request->empresa_id;
+
+            // return [
+            //     'user' => $usr
+            // ];
+
         }
         else
             $user->update(['empresa_id' => 0]);

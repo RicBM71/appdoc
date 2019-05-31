@@ -51,7 +51,7 @@ class CarpetaPolicy
      */
     public function update(User $user, Carpeta $carpeta)
     {
-        return ($user->hasRole('Documenta') || $user->hasRole('Admin')) ?: $this->deny("Acceso denegado. No dispone de permisos");
+        return ($user->hasRole('Documenta') || $user->hasRole('Admin')) ?: $this->deny("Acceso denegado. No dispone de permisos (admin-documenta)");
     }
 
     /**

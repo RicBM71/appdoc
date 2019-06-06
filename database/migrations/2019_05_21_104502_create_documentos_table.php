@@ -21,6 +21,7 @@ class CreateDocumentosTable extends Migration
             $table->date('fecha');
             $table->String('concepto');
             $table->boolean('cerrado')->default(true);
+            $table->boolean('confidencial')->default(false);
             $table->String('username',20)->nullable()->default(null);
             $table->timestamps();
         });

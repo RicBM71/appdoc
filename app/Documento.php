@@ -13,7 +13,7 @@ class Documento extends Model
     protected $dates =['fecha'];
 
     protected $fillable = [
-        'empresa_id','archivo_id','carpeta_id','fecha', 'concepto', 'cerrado','username',
+        'empresa_id','archivo_id','carpeta_id','fecha', 'concepto', 'cerrado','confidencial','username',
     ];
 
     protected static function boot()
@@ -51,5 +51,12 @@ class Documento extends Model
 
     public function filedocs(){
         return $this->hasMany(Filedoc::class);
+    }
+
+    public function scopeOrdinarios($query){
+
+        if (!auth()->user()->hasRole('Admin'))
+            return $query->where('confidencial', '=', false);
+
     }
 }

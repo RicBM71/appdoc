@@ -77,7 +77,7 @@
                         </v-flex>
                     </v-layout>
                     <v-layout row wrap>
-                        <v-flex sm11>
+                        <v-flex sm10>
                             <v-text-field
                                 :disabled="!hasDocumenta"
                                 v-model="documento.concepto"
@@ -91,6 +91,15 @@
                             >
                             </v-text-field>
                         </v-flex>
+                        <v-flex sm2>
+                            <v-switch
+                                :disabled="!hasDocumenta"
+                                v-model="documento.confidencial"
+                                color="error"
+                                label="Confidencial"
+                            ></v-switch>
+                        </v-flex>
+
                     </v-layout>
                     <v-layout row wrap>
                         <v-flex sm3>
@@ -158,7 +167,7 @@
                     </v-flex>
                 </v-layout>
             </v-container>
-            <v-container v-show="show_upload">
+            <v-container v-show="show_upload && !documento.cerrado && hasDocumenta">
                 <v-layout row wrap>
                     <v-flex sm12>
                         <vue-dropzone
@@ -203,6 +212,7 @@ import {mapGetters} from 'vuex';
                     concepto:"",
                     fecha:"",
                     cerrado: 0,
+                    confidencial:false,
                     username: "",
                     updated_at:"",
                     created_at:"",
@@ -243,6 +253,12 @@ import {mapGetters} from 'vuex';
                     .then(res => {
 
                         this.documento = res.data.documento;
+
+                        if (this.documento.confidencial && !this.isAdmin){
+                            this.$toast.error("Documento confidencial, contactar administrador!");
+                            this.$router.push({ name: 'documento.index'})
+                        }
+
                         this.extractos = res.data.extractos;
                         this.archivos = res.data.archivos;
                         this.carpetas = res.data.carpetas;
@@ -255,6 +271,7 @@ import {mapGetters} from 'vuex';
                         this.show_loading = false;
                     })
                     .catch(err => {
+                        console.log(err);
                         if (err.response.status == 404)
                             this.$toast.error("Documento No encontrado!");
                         else

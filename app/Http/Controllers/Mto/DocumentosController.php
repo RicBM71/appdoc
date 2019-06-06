@@ -22,7 +22,7 @@ class DocumentosController extends Controller
     {
         if (request()->wantsJson())
             return [
-                'documentos'=> Documento::with(['archivo','carpeta'])->whereYear('fecha',date('Y'))
+                'documentos'=> Documento::ordinarios()->with(['archivo','carpeta'])->whereYear('fecha',date('Y'))
                             ->orderBy('fecha','desc')
                             ->get(),
                 'archivos'  =>  Archivo::selArchivos(),
@@ -88,7 +88,6 @@ class DocumentosController extends Controller
 
         $data['username'] = $request->user()->username;
 
-
         $reg = Documento::create($data);
 
         $extracto_id = $request->get('extracto_id');
@@ -144,6 +143,11 @@ class DocumentosController extends Controller
      */
     public function edit(Documento $documento)
     {
+
+        if ($documento->confidencial && !auth()->user()->hasRole('Admin')){
+            abort(404);
+        }
+
         if (request()->wantsJson())
             return [
                 'documento' => $documento,

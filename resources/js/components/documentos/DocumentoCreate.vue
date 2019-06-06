@@ -146,6 +146,7 @@ import MenuOpe from './MenuOpe'
                     concepto:"",
                     fecha: new Date().toISOString().substr(0, 10),
                     cerrado: 1,
+                    confidencial:0,
                     username: "",
                     updated_at:"",
                     created_at:"",
@@ -165,8 +166,6 @@ import MenuOpe from './MenuOpe'
       		}
         },
         mounted(){
-
-
 
             this.extracto = this.$route.params.extracto;
 
@@ -210,7 +209,8 @@ import MenuOpe from './MenuOpe'
 
                 var url = "/mto/documentos";
 
-                this.documento.extracto_id = this.extracto.id;
+                if (this.extracto != false)
+                    this.documento.extracto_id = this.extracto.id;
 
                 this.$validator.validateAll().then((result) => {
                     if (result){
@@ -221,7 +221,6 @@ import MenuOpe from './MenuOpe'
 
                             })
                             .catch(err => {
-
                                 if (err.request.status == 422){ // fallo de validated.
                                     const msg_valid = err.response.data.errors;
                                     for (const prop in msg_valid) {

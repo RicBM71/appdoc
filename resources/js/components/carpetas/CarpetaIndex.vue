@@ -33,6 +33,8 @@
                             :headers="headers"
                             :items="this.carpetas"
                             :search="search"
+                            @update:pagination="updateEventPagina"
+                            :pagination.sync="pagination"
                             rows-per-page-text="Registros por página"
                             >
                                 <template slot="items" slot-scope="props">
@@ -75,6 +77,7 @@ import MyDialog from '@/components/shared/MyDialog'
 import Loading from '@/components/shared/Loading'
 import MenuOpe from './MenuOpe'
 import {mapGetters} from 'vuex'
+import {mapActions} from "vuex";
   export default {
     components: {
         'my-dialog': MyDialog,
@@ -84,6 +87,14 @@ import {mapGetters} from 'vuex'
     data () {
       return {
         titulo: "Carpeta",
+        paginaActual:{},
+        pagination:{
+            model: "carpeta",
+            descending: false,
+            page: 1,
+            rowsPerPage: 5,
+            sortBy: "id",
+        },
         search:"",
         headers: [
             {
@@ -128,6 +139,12 @@ import {mapGetters} from 'vuex'
     },
     mounted()
     {
+
+        if (this.getPagination.model == this.pagination.model)
+            this.updatePosPagina(this.getPagination);
+        else
+            this.unsetPagination();
+
         axios.get('/mto/carpetas')
             .then(res => {
                 this.carpetas = res.data;
@@ -142,14 +159,33 @@ import {mapGetters} from 'vuex'
     },
     computed: {
         ...mapGetters([
-            'isAdmin'
+            'isAdmin',
+            'getPagination'
         ]),
     },
     methods:{
+        ...mapActions([
+            'setPagination',
+            'unsetPagination'
+		]),
+        updateEventPagina(obj){
+
+            this.paginaActual = obj;
+
+        },
+        updatePosPagina(pag){
+
+            this.pagination.page = pag.page;
+            this.pagination.descending = pag.descending;
+            this.pagination.rowsPerPage= pag.rowsPerPage;
+            this.pagination.sortBy = pag.sortBy;
+
+        },
         create(){
             this.$router.push({ name: 'carpeta.create'})
         },
         editItem (id) {
+            this.setPagination(this.paginaActual);
             this.$router.push({ name: 'carpeta.edit', params: { id: id } })
         },
         openDialog (id){

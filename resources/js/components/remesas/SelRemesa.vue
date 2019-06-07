@@ -124,6 +124,7 @@
                 })
                 .catch(err => {
                     this.$toast.error(err.response.data.message);
+                    this.$router.push({ name: 'dash' })
                 })
         },
         computed: {

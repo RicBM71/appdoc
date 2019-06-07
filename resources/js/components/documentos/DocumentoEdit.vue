@@ -93,6 +93,7 @@
                         </v-flex>
                         <v-flex sm2>
                             <v-switch
+                                v-show="hasDocumenta"
                                 :disabled="!hasDocumenta"
                                 v-model="documento.confidencial"
                                 color="error"

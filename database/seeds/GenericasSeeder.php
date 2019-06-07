@@ -50,13 +50,25 @@ class GenericasSeeder extends Seeder
 
         $emp = new Empresa;
         $emp->nombre = "Sanaval";
+        $emp->razon = "Sanaval Fisioterapia SL";
+        $emp->cif="B82848417";
+        $emp->titulo = "Sanaval";
+        $emp->logo = "logo.jpg";
+        $emp->certificado = "sntfirma.crt";
+        $emp->passwd_cer="delta00";
+        $emp->path_archivo='sanaval';
+        $emp->save();
+
+
+        $emp = new Empresa;
+        $emp->nombre = "Sanaval";
         $emp->razon = "Sanaval Tecnología SL";
         $emp->cif="B83667402";
         $emp->titulo = "Sanaval";
         $emp->logo = "logo.jpg";
         $emp->certificado = "sntfirma.crt";
         $emp->passwd_cer="delta00";
-        $emp->path_archivo='sanaval';
+        $emp->path_archivo='sanatec';
         $emp->save();
 
         $json = File::get("database/data/carpetas.json");
@@ -75,11 +87,11 @@ class GenericasSeeder extends Seeder
             ['empresa_id' => 1, 'user_id' => '1']
         );
 
-        $carpeta = new Carpeta;
-        $carpeta->empresa_id = 1;
-        $carpeta->archivo_id = 1;
-        $carpeta->nombre = "Carpeta 1";
-        $carpeta->save();
+        // $carpeta = new Carpeta;
+        // $carpeta->empresa_id = 1;
+        // $carpeta->archivo_id = 1;
+        // $carpeta->nombre = "Carpeta 1";
+        // $carpeta->save();
 
         $fp = new Fpago;
         $fp->nombre = "Transferencia";
@@ -109,13 +121,16 @@ class GenericasSeeder extends Seeder
         $vto->save();
 
         $cuenta = new Cuenta;
-        $cuenta->empresa_id = 1;
+        $cuenta->empresa_id = 2;
         $cuenta->nombre = "Santander";
         $cuenta->iban="ES1500493102912114149064";
         $cuenta->bic="BSCHESMMXXX";
         $cuenta->sepa="ES35001B83667402";
 
         $cuenta->save();
+
+        //SELECT id,empresa,carpeta,nombre,'red',concat('emp',empresa),1,concat(sysfum," ", syshum),concat(sysfum," ", syshum) FROM `clientes`
+        //SELECT id,empresa,cliente,carpeta,fecha,texto,1,sysusr,concat(sysfum," ",syshum),concat(sysfum," ",syshum) FROM `documentos`
 
     }
 }

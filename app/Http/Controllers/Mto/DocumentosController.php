@@ -20,6 +20,7 @@ class DocumentosController extends Controller
      */
     public function index()
     {
+
         if (request()->wantsJson())
             return [
                 'documentos'=> Documento::ordinarios()->with(['archivo','carpeta'])->whereYear('fecha',date('Y'))
@@ -64,6 +65,9 @@ class DocumentosController extends Controller
      */
     public function create()
     {
+
+        $this->authorize('create', new Documento);
+
         if (request()->wantsJson())
             return [
                 'archivos'=> Archivo::selArchivos(),
@@ -80,6 +84,8 @@ class DocumentosController extends Controller
      */
     public function store(StoreDocumento $request)
     {
+
+        $this->authorize('create', new Documento);
 
         $data = $request->validated();
 
@@ -100,12 +106,15 @@ class DocumentosController extends Controller
 
     public function attach(Request $request, Documento $documento){
 
+        $this->authorize('create', $documento);
 
         $documento->extractos()->attach($request->get('extracto_id'));
         return response('ok',200);
     }
 
     public function detach(Request $request, Documento $documento){
+
+        $this->authorize('create', $documento);
 
         $documento->extractos()->detach($request->get('extracto_id'));
         return response('ok',200);
@@ -144,6 +153,7 @@ class DocumentosController extends Controller
     public function edit(Documento $documento)
     {
 
+
         if ($documento->confidencial && !auth()->user()->hasRole('Admin')){
             abort(404);
         }
@@ -167,7 +177,7 @@ class DocumentosController extends Controller
      */
     public function update(StoreDocumento $request, Documento $documento)
     {
-       // $this->authorize('update', $documento);
+        $this->authorize('update', $documento);
 
         $data = $request->validated();
 
@@ -188,7 +198,7 @@ class DocumentosController extends Controller
      */
     public function destroy(Documento $documento)
     {
-       // $this->authorize('delete', $cliente);
+        $this->authorize('delete', $documento);
 
         //$documento->extractos()->sync([]);
 

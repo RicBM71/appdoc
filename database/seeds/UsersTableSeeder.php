@@ -14,9 +14,9 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        Permission::truncate();
-        Role::truncate();
-        User::truncate();
+        // Permission::truncate();
+        // Role::truncate();
+        // User::truncate();
 
         $rootRole = Role::create(['name'=>'Root']);
         $adminRole = Role::create(['name'=>'Admin']);
@@ -49,18 +49,18 @@ class UsersTableSeeder extends Seeder
         $user->assignRole($rootRole);
 
 
-        for ($i=2; $i <= 10  ; $i++) {
+        // for ($i=2; $i <= 10  ; $i++) {
 
-            $user = new User;
+        //     $user = new User;
 
-            $user->name = "User ".$i;
-            $user->email = "user".$i."@rr.es";
-            $user->username = "User".$i;
-            $user->empresa_id = 1;
-            $user->password = Hash::make('123');
-            $user->save();
-            $user->assignRole($userRole);
-        }
+        //     $user->name = "User ".$i;
+        //     $user->email = "user".$i."@rr.es";
+        //     $user->username = "User".$i;
+        //     $user->empresa_id = 1;
+        //     $user->password = Hash::make('123');
+        //     $user->save();
+        //     $user->assignRole($userRole);
+        // }
 
     }
 }

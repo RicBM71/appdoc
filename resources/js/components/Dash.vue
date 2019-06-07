@@ -163,7 +163,8 @@ export default {
         ...mapGetters([
             'isLoggedIn',
             'isRoot',
-            'isAdmin'
+            'isAdmin',
+            'hasFactura'
 		]),
     },
     data: () => ({
@@ -216,13 +217,7 @@ export default {
             ]
         },
 
-        items: [
-            { icon: 'people', text: 'Clientes', name:'cliente.index' },
-            { icon: 'local_offer', text: 'Productos', name:'producto.index' },
-            { icon: 'account_balance', text: 'Extracto Banco', name:'extracto.index' },
-            { icon: 'save_alt', text: 'Documentos', name:'documento.index' },
-            { icon: 'folder', text: 'Carpetas', name:'carpeta.index' },
-            {
+        factu:{
             icon: 'keyboard_arrow_up',
             'icon-alt': 'keyboard_arrow_down',
             text: 'Facturación',
@@ -233,17 +228,27 @@ export default {
                 { text: 'Vencimientos', name: 'vencimiento.index' },
             ]
         },
+
+        items: [
+            { icon: 'people', text: 'Clientes', name:'cliente.index' },
+            { icon: 'local_offer', text: 'Productos', name:'producto.index' },
+            { icon: 'account_balance', text: 'Extracto Banco', name:'extracto.index' },
+            { icon: 'save_alt', text: 'Documentos', name:'documento.index' },
+            { icon: 'folder', text: 'Carpetas', name:'carpeta.index' },
         ]
     }),
     mounted(){
 
         axios.get('/dash')
             .then(res => {
-                //console.log(res.data);
+                
                 this.setAuthUser(res.data.user);
 
                 this.empresa_id = this.user.empresa_id;
                 //this.show = true;
+                if (this.hasFactura)
+                    this.items.push(this.factu);
+
                 if (this.isRoot)
                     this.items.push(this.root);
                 else if(this.isAdmin)

@@ -73,7 +73,7 @@
         },
         computed: {
             ...mapGetters([
-	    		'hasDocumenta'
+                'hasDocumenta',
             ]),
             computedDisabled(){
                 if (this.destino != '')

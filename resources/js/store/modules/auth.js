@@ -71,6 +71,9 @@ const getters = {
     userId: (state) =>{
         return state.id
     },
+    empresaActiva: (state) =>{
+        return state.empresa_id
+    },
 	isLoggedIn: (state) => {
 		return !!(state.name && state.username);
     },
@@ -88,7 +91,9 @@ const getters = {
     hasDocumenta: (state) =>{
         return (state.roles.indexOf('Documenta') >= 0) ? true : false;
     },
-
+    hasFactura: (state) =>{
+        return (state.roles.indexOf('Factura') >= 0) ? true : false;
+    },
 
 };
 

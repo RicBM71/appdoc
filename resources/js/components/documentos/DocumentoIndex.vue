@@ -46,14 +46,12 @@
                                     full-width
                                     min-width="290px"
                                 >
-
                                     <v-text-field
                                         slot="activator"
                                         :value="computedFechaD"
                                         label="Desde"
                                         append-icon="event"
                                         readonly
-
                                         data-vv-as="Desde"
                                         ></v-text-field>
                                     <v-date-picker
@@ -147,6 +145,7 @@
 
 
                                         <v-icon
+                                        v-show="hasDocumenta"
                                         small
                                         @click="openDialog(props.item.id)"
                                         >
@@ -170,6 +169,7 @@ import Loading from '@/components/shared/Loading'
 import MyDialog from '@/components/shared/MyDialog'
 import moment from 'moment';
 import MenuOpe from './MenuOpe'
+import {mapGetters} from 'vuex'
   export default {
     $_veeValidate: {
         validator: 'new'
@@ -258,6 +258,9 @@ import MenuOpe from './MenuOpe'
             })
     },
     computed:{
+        ...mapGetters([
+            'hasDocumenta'
+        ]),
         computedFechaD() {
             moment.locale('es');
             return this.fecha_d ? moment(this.fecha_d).format('L') : '';

@@ -603,11 +603,16 @@ class AlbacabsController extends Controller
      * Selección previa remesa
      */
     public function remesa(){
+
+        $this->authorize('create', new Albacab);
+
         if (request()->wantsJson())
             return ['cuentas'=> Cuenta::selCuentas()];
     }
 
     public function remesar(Request $request){
+
+        $this->authorize('create', new Albacab);
 
         $data = $request->validate([
             'cuenta_id'=>'required|integer',

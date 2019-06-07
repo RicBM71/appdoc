@@ -25,6 +25,7 @@
                                 <td>{{ props.item.telefono1 }}</td>
                                 <td class="justify-center layout px-0">
                                     <v-icon
+                                        v-show="props.item.id==empresaActiva"
                                         small
                                         class="mr-2"
                                         @click="editItem(props.item.id)"
@@ -34,8 +35,9 @@
 
 
                                     <v-icon
-                                    small
-                                    @click="openDialog(props.item.id)"
+                                        v-show="props.item.id!=empresaActiva"
+                                        small
+                                        @click="openDialog(props.item.id)"
                                     >
                                     delete
                                     </v-icon>
@@ -54,6 +56,7 @@
 <script>
 import MyDialog from '@/components/shared/MyDialog'
 import MenuOpe from './MenuOpe'
+import {mapGetters} from 'vuex';
   export default {
     components: {
         'my-dialog': MyDialog,
@@ -116,6 +119,11 @@ import MenuOpe from './MenuOpe'
                 this.$toast.error(err.response.data.message);
                 this.$router.push({ name: 'dash' })
             })
+    },
+    computed: {
+        ...mapGetters([
+            'empresaActiva',
+        ]),
     },
     methods:{
         create(){

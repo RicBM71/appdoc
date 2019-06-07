@@ -52,9 +52,11 @@ class StoreClientes extends FormRequest
             'factura'         => ['nullable','boolean'],
         ];
 
-        if ($this->filled('id'))
+        \Log::info($this->filled('cif'));
+
+         if ($this->filled('cif'))
             $data['cif'] = ['required',   Rule::unique('clientes')->ignore($this->route('cliente')->id)->where(function ($query) {
-            return $query->where('empresa_id', session()->get('empresa'));
+                return $query->where('empresa_id', session()->get('empresa')->id);
            })];
 
 

@@ -44,7 +44,7 @@
                 </v-btn>
             </v-flex>
             <v-flex xs1></v-flex>
-            <v-flex xs3>
+            <v-flex xs3 v-show="isAdmin">
                  <v-btn round block large color="grey" class="blue-grey lighten-3"
                      @click="goRemesas()">
                      Remesas SEPA
@@ -62,7 +62,7 @@ export default {
         ...mapGetters([
             'isLoggedIn',
             'isRoot',
-            'isAdmin'
+            'isAdmin',
 		]),
     },
     data: () => ({
@@ -72,6 +72,7 @@ export default {
         axios.get('/dash')
             .then(res => {
                 this.setAuthUser(res.data.user);
+                console.log(this.isAdmin);
             })
             .catch(err => {
                 console.log(err);

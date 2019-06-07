@@ -10,6 +10,16 @@ class DocumentoPolicy
 {
     use HandlesAuthorization;
 
+        public function before($user)
+    {
+
+            // con esto ya no pasa por ningún otro método, lo dejo por si lo necesito para más adelante.
+        if($user->hasRole('Admin')){
+            return true;
+        }
+    }
+
+
     /**
      * Determine whether the user can view the documento.
      *
@@ -30,7 +40,8 @@ class DocumentoPolicy
      */
     public function create(User $user)
     {
-        //
+
+        return $user->hasRole('Documenta') ?: $this->deny("Acceso denegado. No puede documentar");
     }
 
     /**
@@ -42,7 +53,7 @@ class DocumentoPolicy
      */
     public function update(User $user, Documento $documento)
     {
-        //
+        return $user->hasRole('Documenta') ?: $this->deny("Acceso denegado. No puede documentar");
     }
 
     /**
@@ -54,7 +65,7 @@ class DocumentoPolicy
      */
     public function delete(User $user, Documento $documento)
     {
-        //
+        return $user->hasRole('Documenta') ?: $this->deny("Acceso denegado. No puede documentar");
     }
 
     /**

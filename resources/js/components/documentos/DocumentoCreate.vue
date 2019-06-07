@@ -183,6 +183,7 @@ import MenuOpe from './MenuOpe'
                     this.show=true;
                 })
                 .catch(err => {
+
                     this.$toast.error(err.response.data.message);
                     this.$router.push({ name: 'documento.index'})
                 })

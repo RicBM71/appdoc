@@ -40,7 +40,7 @@
                                 <template slot="items" slot-scope="props">
                                     <td>{{ props.item.id }}</td>
                                     <td :class="props.item.archivo.color">{{ props.item.archivo.nombre }}</td>
-                                    <td :class="props.item.color">{{ props.item.nombre }}</td>
+                                    <td :class="props.item.color"><span :class="tachado(props.item.activa)">{{ props.item.nombre }}</span></td>
                                     <td :class="props.item.color">{{ props.item.path }}</td>
                                     <td :class="props.item.color">{{ props.item.color }}</td>
                                     <td class="justify-center layout px-0">
@@ -92,7 +92,7 @@ import {mapActions} from "vuex";
             model: "carpeta",
             descending: false,
             page: 1,
-            rowsPerPage: 5,
+            rowsPerPage: 10,
             sortBy: "id",
         },
         search:"",
@@ -147,6 +147,7 @@ import {mapActions} from "vuex";
 
         axios.get('/mto/carpetas')
             .then(res => {
+
                 this.carpetas = res.data;
                 this.registros = true;
                 this.show_loading = false;
@@ -161,7 +162,7 @@ import {mapActions} from "vuex";
         ...mapGetters([
             'isAdmin',
             'getPagination'
-        ]),
+        ])
     },
     methods:{
         ...mapActions([
@@ -212,7 +213,15 @@ import {mapActions} from "vuex";
             });
 
         },
-
+        tachado(activa){
+          
+            if (!activa) return 'tachado';
+            return null;
+        }
     }
   }
 </script>
+
+<style scope>
+  .tachado{text-decoration:line-through;}
+</style>

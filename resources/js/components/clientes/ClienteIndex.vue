@@ -73,6 +73,8 @@
 import MyDialog from '@/components/shared/MyDialog'
 import Loading from '@/components/shared/Loading'
 import MenuOpe from './MenuOpe'
+import {mapGetters} from 'vuex'
+import {mapActions} from "vuex";
   export default {
     components: {
         'my-dialog': MyDialog,
@@ -82,6 +84,14 @@ import MenuOpe from './MenuOpe'
     data () {
       return {
         titulo:"Clientes",
+        paginaActual:{},
+        pagination:{
+            model: "carpeta",
+            descending: false,
+            page: 1,
+            rowsPerPage: 10,
+            sortBy: "id",
+        },
         search:"",
         headers: [
           {
@@ -126,6 +136,10 @@ import MenuOpe from './MenuOpe'
     },
     mounted()
     {
+        if (this.getPagination.model == this.pagination.model)
+            this.updatePosPagina(this.getPagination);
+        else
+            this.unsetPagination();
 
         axios.get('/mto/clientes')
             .then(res => {
@@ -140,11 +154,35 @@ import MenuOpe from './MenuOpe'
                 this.$router.push({ name: 'dash' })
             })
     },
+    computed: {
+        ...mapGetters([
+            'isAdmin',
+            'getPagination'
+        ]),
+    },
     methods:{
+        ...mapActions([
+            'setPagination',
+            'unsetPagination'
+		]),
+        updateEventPagina(obj){
+
+            this.paginaActual = obj;
+
+        },
+        updatePosPagina(pag){
+
+            this.pagination.page = pag.page;
+            this.pagination.descending = pag.descending;
+            this.pagination.rowsPerPage= pag.rowsPerPage;
+            this.pagination.sortBy = pag.sortBy;
+
+        },
         create(){
             this.$router.push({ name: 'cliente.create'})
         },
         editItem (id) {
+            this.setPagination(this.paginaActual);
             this.$router.push({ name: 'cliente.edit', params: { id: id } })
         },
         openDialog (id){

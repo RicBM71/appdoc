@@ -21,7 +21,9 @@ class FiledocsController extends Controller
 
         $documento = Documento::with(['archivo','carpeta'])->find($documento_id);
 
-        $path = 'documentum/'.session()->get('empresa')->path_archivo.'/'.$documento->archivo->path.'/'.$documento->carpeta->path;
+        $ejercicio = date('Y',strtotime($documento->fecha));
+
+        $path = 'documentum/'.session()->get('empresa')->path_archivo.'/'.$ejercicio.'/'.$documento->archivo->path.'/'.$documento->carpeta->path;
 
         $files = request()->file('files')->store($path,'local');
 

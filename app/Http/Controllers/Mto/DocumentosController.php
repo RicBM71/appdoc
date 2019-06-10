@@ -21,11 +21,25 @@ class DocumentosController extends Controller
     public function index()
     {
 
+        if (request()->session()->has('filtro_docu')){
+            $filtro = request()->session()->get('filtro_docu');
+            $documentos = Documento::ordinarios()
+                            ->with(['archivo','carpeta'])
+                            ->where($filtro)
+                            ->orderBy('fecha','desc')
+                            ->get();
+        }else{
+            $documentos = Documento::ordinarios()
+                ->with(['archivo','carpeta'])
+                ->whereYear('fecha',date('Y'))
+                ->orderBy('fecha','desc')
+                ->get();
+        }
+
         if (request()->wantsJson())
             return [
-                'documentos'=> Documento::ordinarios()->with(['archivo','carpeta'])->whereYear('fecha',date('Y'))
-                            ->orderBy('fecha','desc')
-                            ->get(),
+
+                'documentos'=> $documentos,
                 'archivos'  =>  Archivo::selArchivos(),
             ];
 
@@ -48,6 +62,8 @@ class DocumentosController extends Controller
             $data[] = [
                 'archivo_id', '=', $archivo_id,
             ];
+
+        session(['filtro_docu' => $data]);
 
         if (request()->wantsJson())
             return [

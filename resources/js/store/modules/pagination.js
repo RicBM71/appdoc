@@ -15,7 +15,7 @@ const initialState = {
     model: null,
     descending: null,
     page: 1,
-    rowsPerPage: 5,
+    rowsPerPage: 10,
     sortBy: null
 };
 

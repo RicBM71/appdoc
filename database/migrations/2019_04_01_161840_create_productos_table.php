@@ -20,6 +20,7 @@ class CreateProductosTable extends Migration
             $table->unsignedInteger('retencion_id');
             $table->unsignedInteger('iva_id');
             $table->decimal('importe', 12, 2)->default(0);
+            $table->boolean('baja')->default(false);
             $table->String('username',20)->nullable()->default(null);
             $table->timestamps();
         });

@@ -39,6 +39,14 @@
                             >
                             </v-text-field>
                         </v-flex>
+                        <v-flex sm1></v-flex>
+                        <v-flex sm2>
+                            <v-switch
+                                v-model="producto.baja"
+                                color="primary"
+                                label="Baja"
+                            ></v-switch>
+                        </v-flex>
                     </v-layout>
                     <v-layout row wrap>
                         <v-flex sm4 d-flex>
@@ -125,6 +133,7 @@ import MenuOpe from './MenuOpe'
                     iva_id:"",
                     retencion_id:"",
                     importe: 0,
+                    baja: false,
                     username: "",
                     updated_at:"",
                     created_at:"",

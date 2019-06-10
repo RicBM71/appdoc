@@ -63,6 +63,9 @@ class HomeController extends Controller
         $empresa = Empresa::find($authUser->empresa_id);
        // \Log::info($empresa->titulo);
 
+       // de momento no quito filtros, ya veremos.
+        //$this->unloadSession($request);
+
         session([
             'empresa_id' => $authUser->empresa_id,
             'empresa' => Empresa::find($authUser->empresa_id),
@@ -71,5 +74,17 @@ class HomeController extends Controller
 
         if (request()->wantsJson())
             return (compact('user'));
+    }
+
+    /**
+     *  Descarga todos los filtros al pasar por inicio
+     */
+    private function unloadSession($request){
+        $data = $request->session()->all();
+        foreach ($data as $key => $value){
+            if (strstr($key, '_', true)=='filtro'){
+                $request->session()->forget($key);
+            }
+        }
     }
 }

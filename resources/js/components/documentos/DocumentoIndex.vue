@@ -8,7 +8,7 @@
                 <v-card-title>
                     <h2>{{titulo}}</h2>
                     <v-spacer></v-spacer>
-                    <menu-ope></menu-ope>
+
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                             <v-btn
@@ -17,11 +17,12 @@
                                 icon
                                 @click="filtro = !filtro"
                             >
-                                <v-icon color="primary">list_alt</v-icon>
+                                <v-icon color="primary">filter_list</v-icon>
                             </v-btn>
                         </template>
-                        <span>Filtros</span>
+                        <span>Filtrar</span>
                     </v-tooltip>
+                    <menu-ope></menu-ope>
                 </v-card-title>
             </v-card>
             <v-card v-show="filtro">
@@ -51,7 +52,7 @@
                                         :value="computedFechaD"
                                         label="Desde"
                                         append-icon="event"
-                                        readonly
+
                                         data-vv-as="Desde"
                                         ></v-text-field>
                                     <v-date-picker
@@ -81,7 +82,7 @@
                                         :value="computedFechaH"
                                         label="Hasta"
                                         append-icon="event"
-                                        readonly
+                                        
                                         data-vv-as="Hasta"
                                         ></v-text-field>
                                     <v-date-picker
@@ -125,15 +126,18 @@
                             <v-data-table
                             :headers="headers"
                             :items="documentos"
+                            @update:pagination="updateEventPagina"
+                            :pagination.sync="pagination"
                             :search="search"
                             rows-per-page-text="Registros por página"
                             >
                                 <template slot="items" slot-scope="props">
                                     <td>{{ formatDate(props.item.fecha) }}</td>
-                                    <td :class="props.item.archivo.color">{{ props.item.archivo.nombre }}</td>
-                                    <td :class="props.item.carpeta.color">{{ props.item.carpeta.nombre }}</td>
+                                    <td v-if="props.item.archivo==null">n/d {{props.item.archivo_id}}</td>
+                                    <td v-else :class="props.item.archivo.color">{{ props.item.archivo.nombre }}</td>
+                                    <td v-if="props.item.carpeta==null">n/d {{props.item.carpeta_id}}</td>
+                                    <td v-else :class="props.item.carpeta.color">{{ props.item.carpeta.nombre }}</td>
                                     <td>{{ props.item.concepto }}</td>
-                                    <td class="text-xs-right">{{ props.item.importe | currency('€', 2, { thousandsSeparator:'.', thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false })}}</td>
                                     <td class="justify-center layout px-0">
                                         <v-icon
                                             small
@@ -145,7 +149,7 @@
 
 
                                         <v-icon
-                                        v-show="hasDocumenta"
+                                        v-show="hasDocumenta && !props.item.cerrado"
                                         small
                                         @click="openDialog(props.item.id)"
                                         >
@@ -170,6 +174,8 @@ import MyDialog from '@/components/shared/MyDialog'
 import moment from 'moment';
 import MenuOpe from './MenuOpe'
 import {mapGetters} from 'vuex'
+import {mapActions} from "vuex";
+
   export default {
     $_veeValidate: {
         validator: 'new'
@@ -183,6 +189,14 @@ import {mapGetters} from 'vuex'
       return {
         titulo:"Documentos",
         search:"",
+        paginaActual:{},
+        pagination:{
+            model: "documentos",
+            descending: false,
+            page: 1,
+            rowsPerPage: 10,
+            sortBy: "id",
+        },
         headers: [
           {
             text: 'Fecha',
@@ -206,11 +220,6 @@ import {mapGetters} from 'vuex'
             value: 'concepto'
           },
           {
-            text: 'Importe',
-            align: 'left',
-            value: 'importe'
-          },
-          {
             text: 'Acciones',
             align: 'Center',
             value: ''
@@ -230,18 +239,23 @@ import {mapGetters} from 'vuex'
 
         menu_d: false,
         menu_h: false,
-        fecha_d: new Date().toISOString().substr(0, 8)+"01",
+        fecha_d: new Date().toISOString().substr(0, 5)+"01-01",
         fecha_h: new Date().toISOString().substr(0, 10),
 
       }
     },
     mounted()
     {
+         if (this.getPagination.model == this.pagination.model)
+            this.updatePosPagina(this.getPagination);
+        else
+            this.unsetPagination();
+
 
         this.show_loading = true;
         axios.get('/mto/documentos')
             .then(res => {
-
+                //console.log(res);
                 this.documentos = res.data.documentos;
                 this.archivos = res.data.archivos;
                 this.registros = true;
@@ -259,7 +273,8 @@ import {mapGetters} from 'vuex'
     },
     computed:{
         ...mapGetters([
-            'hasDocumenta'
+            'hasDocumenta',
+            'getPagination'
         ]),
         computedFechaD() {
             moment.locale('es');
@@ -271,6 +286,23 @@ import {mapGetters} from 'vuex'
         },
     },
     methods:{
+         ...mapActions([
+            'setPagination',
+            'unsetPagination'
+        ]),
+        updateEventPagina(obj){
+
+            this.paginaActual = obj;
+
+        },
+        updatePosPagina(pag){
+
+            this.pagination.page = pag.page;
+            this.pagination.descending = pag.descending;
+            this.pagination.rowsPerPage= pag.rowsPerPage;
+            this.pagination.sortBy = pag.sortBy;
+
+        },
         formatDate(f){
             if (f == null) return null;
                 moment.locale('es');
@@ -327,7 +359,7 @@ import {mapGetters} from 'vuex'
 
         },
         editItem (id) {
-
+            this.setPagination(this.paginaActual);
             this.$router.push({ name: 'documento.edit', params: { id: id } })
         },
     }

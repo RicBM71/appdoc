@@ -75,7 +75,10 @@ class EmpresasController extends Controller
             return [
                 'empresa' =>$empresa,
                 'carpetas'=>Carpeta::withoutGlobalScope(EmpresaScope::class)
-                    ->select('id AS value', 'nombre AS text')->where('empresa_id','=',$empresa->id)->get()
+                    ->select('id AS value', 'nombre AS text')
+                        ->where('empresa_id','=',$empresa->id)
+                        ->where('activa','=',true)
+                        ->orderBy('nombre')->get()
             ];
 
     }

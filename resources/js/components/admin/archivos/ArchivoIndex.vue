@@ -67,6 +67,7 @@ import {mapActions} from "vuex";
     components: {
         'my-dialog': MyDialog,
         'menu-ope': MenuOpe,
+        'loading': Loading
     },
     data () {
       return {

@@ -238,21 +238,13 @@
                         <v-flex sm3 d-flex>
                             <v-select
                             v-model="empresa.carext_id"
-                            v-validate="'required'"
-                            data-vv-name="carext_id"
-                            :error-messages="errors.collect('carext_id')"
                             :items="carpetas"
-                            data-vv-as="carpeta"
                             label="Carpeta Ext. Banco"
                             ></v-select>
                         </v-flex>
                         <v-flex sm3 d-flex>
                             <v-select
                             v-model="empresa.carn43_id"
-                            data-vv-name="carn43_id"
-                            v-validate="'required'"
-                            :error-messages="errors.collect('carn43_id')"
-                            data-vv-as="carpeta"
                             :items="carpetas"
                             label="Carpeta Ext. N43"
                             ></v-select>

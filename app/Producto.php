@@ -11,7 +11,7 @@ class Producto extends Model
     use HasRoles;
 
     protected $fillable = [
-        'empresa_id', 'nombre', 'retencion_id', 'iva_id', 'importe', 'username',
+        'empresa_id', 'nombre', 'retencion_id', 'iva_id', 'importe','baja', 'username',
     ];
 
     /**

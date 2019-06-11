@@ -149,7 +149,7 @@
                     <v-flex v-for="e in extractos" sm12
                         :key="e.id"
                     >
-                        {{ formatDate(e.fecha)+" - "+e.concepto + " = " + e.importe }}
+                        <span class="indigo--text">{{ formatDate(e.fecha)+" - "+e.concepto + " = " + e.importe }}</span>
                     </v-flex>
                 </v-layout>
             </v-container>

@@ -4,10 +4,10 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="author" content="Sanaval Tecnología">
-        <meta name="description" content="Laravel Vue SPA">
+        <meta name="description" content="Sanaval Tecnología">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name') }} |:</title>
+        <title>{{ config('app.name') }}</title>
 
         <!-- Fonts -->
         <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">

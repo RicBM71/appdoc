@@ -58,6 +58,7 @@ class ExtractosController extends Controller
                 'dh', '=', $dh,
             ];
 
+
         if (request()->wantsJson())
             return Extracto::with('documentos','documentos.archivo')->where($data)
                             ->orderBy('fecha')

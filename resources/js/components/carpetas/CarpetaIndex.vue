@@ -41,8 +41,8 @@
                                     <td>{{ props.item.id }}</td>
                                     <td :class="props.item.archivo.color">{{ props.item.archivo.nombre }}</td>
                                     <td :class="props.item.color"><span :class="tachado(props.item.activa)">{{ props.item.nombre }}</span></td>
-                                    <td :class="props.item.color">{{ props.item.path }}</td>
-                                    <td :class="props.item.color">{{ props.item.color }}</td>
+                                    <td :class="props.item.color"><span v-show="hasDocumenta">{{ props.item.path }}</span></td>
+                                    <td :class="props.item.color"><span v-show="hasDocumenta">{{ props.item.color }}</span></td>
                                     <td class="justify-center layout px-0">
                                         <v-icon
                                             small
@@ -161,6 +161,7 @@ import {mapActions} from "vuex";
     computed: {
         ...mapGetters([
             'isAdmin',
+            'hasDocumenta',
             'getPagination'
         ])
     },
@@ -214,7 +215,7 @@ import {mapActions} from "vuex";
 
         },
         tachado(activa){
-          
+
             if (!activa) return 'tachado';
             return null;
         }

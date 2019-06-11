@@ -29,65 +29,75 @@
                         <v-layout row wrap>
                             <v-flex xs1></v-flex>
                             <v-flex sm2>
-                                <v-menu
+                                 <v-menu
+                                    ref="menu_d"
                                     v-model="menu_d"
                                     :close-on-content-click="false"
                                     :nudge-right="40"
+                                    :return-value.sync="fecha_d"
                                     lazy
                                     transition="scale-transition"
                                     offset-y
                                     full-width
+                                    max-width="290px"
                                     min-width="290px"
                                 >
-
-                                    <v-text-field
-                                        slot="activator"
-                                        :value="computedFechaD"
-                                        label="Desde"
-                                        append-icon="event"
-                                        v-validate="'date_format:dd/MM/yyyy'"
-                                        data-vv-name="fecha_d"
-                                        :error-messages="errors.collect('fecha_d')"
-                                        data-vv-as="Desde"
+                                    <template v-slot:activator="{ on }">
+                                        <v-text-field
+                                            v-model="computedFechaD"
+                                            label="Desde"
+                                            prepend-icon="event"
+                                            readonly
+                                            v-on="on"
                                         ></v-text-field>
+                                    </template>
                                     <v-date-picker
-                                        v-model="fecha_d"
-                                        no-title
-                                        locale="es"
-                                        first-day-of-week=1
-                                        @input="menu_d = false"
-                                        ></v-date-picker>
+                                    v-model="fecha_d"
+                                    type="month"
+                                    locale="es"
+                                    no-title
+                                    scrollable
+                                    >
+                                    <v-spacer></v-spacer>
+                                    <v-btn flat color="primary" @click="menu_d = false">Cancelar</v-btn>
+                                    <v-btn flat color="primary" @click="$refs.menu_d.save(fecha_d)">OK</v-btn>
+                                    </v-date-picker>
                                 </v-menu>
                             </v-flex>
                             <v-flex sm2>
                                 <v-menu
+                                    ref="menu_h"
                                     v-model="menu_h"
                                     :close-on-content-click="false"
                                     :nudge-right="40"
+                                    :return-value.sync="fecha_h"
                                     lazy
                                     transition="scale-transition"
                                     offset-y
                                     full-width
+                                    max-width="290px"
                                     min-width="290px"
                                 >
-
-                                    <v-text-field
-                                        slot="activator"
-                                        :value="computedFechaH"
-                                        label="Hasta"
-                                        append-icon="event"
-                                        v-validate="'date_format:dd/MM/yyyy'"
-                                        data-vv-name="fecha_h"
-                                        :error-messages="errors.collect('fecha_h')"
-                                        data-vv-as="Hasta"
+                                    <template v-slot:activator="{ on }">
+                                        <v-text-field
+                                            v-model="computedFechaH"
+                                            label="Hasta"
+                                            prepend-icon="event"
+                                            readonly
+                                            v-on="on"
                                         ></v-text-field>
+                                    </template>
                                     <v-date-picker
-                                        v-model="fecha_h"
-                                        no-title
-                                        locale="es"
-                                        first-day-of-week=1
-                                        @input="menu_h = false"
-                                        ></v-date-picker>
+                                    v-model="fecha_h"
+                                    type="month"
+                                    locale="es"
+                                    no-title
+                                    scrollable
+                                    >
+                                    <v-spacer></v-spacer>
+                                    <v-btn flat color="primary" @click="menu_h = false">Cancelar</v-btn>
+                                    <v-btn flat color="primary" @click="$refs.menu_h.save(fecha_h)">OK</v-btn>
+                                    </v-date-picker>
                                 </v-menu>
                             </v-flex>
                             <v-flex xs2 d-flex>
@@ -145,8 +155,9 @@
                                             small
                                             class="mr-2"
                                             @click="props.expanded = !props.expanded"
+                                            color="blue lighten-1"
                                         >
-                                            expand_more
+                                            description
                                         </v-icon>
                                         <v-icon v-show="!props.item.documentos.length > 0 && hasDocumenta"
                                             small
@@ -285,8 +296,8 @@ import {mapGetters} from 'vuex';
 
         menu_d: false,
         menu_h: false,
-        fecha_d: new Date().toISOString().substr(0, 5)+"01-01",
-        fecha_h: new Date().toISOString().substr(0, 10),
+        fecha_d: new Date().toISOString().substr(0, 5)+"01",
+        fecha_h: new Date().toISOString().substr(0, 7),
         dh:"T"
       }
     },
@@ -319,11 +330,11 @@ import {mapGetters} from 'vuex';
 		]),
         computedFechaD() {
             moment.locale('es');
-            return this.fecha_d ? moment(this.fecha_d).format('L') : '';
+            return this.fecha_d ? moment(this.fecha_d).format('MM-YYYY') : '';
         },
         computedFechaH() {
             moment.locale('es');
-            return this.fecha_h ? moment(this.fecha_h).format('L') : '';
+            return this.fecha_h ? moment(this.fecha_h).format('MM-YYYY') : '';
         },
     },
     methods:{
@@ -331,7 +342,7 @@ import {mapGetters} from 'vuex';
             if (dh == 'D')
                 return "text-xs-right red--text";
             else
-                return "text-xs-right blue--text";
+                return "text-xs-right indigo--text";
         },
         formatDate(f){
             if (f == null) return null;
@@ -349,8 +360,8 @@ import {mapGetters} from 'vuex';
                         this.show_loading = true;
                         axios.post('mto/extractos/filtrar',
                                 {
-                                    fecha_d: this.fecha_d,
-                                    fecha_h: this.fecha_h,
+                                    fecha_d: this.fecha_d+"-01",
+                                    fecha_h: this.fecha_h+"-01",
                                     dh: this.dh,
                                 }
                             )
@@ -363,7 +374,7 @@ import {mapGetters} from 'vuex';
 
                             })
                             .catch(err => {
-                                
+
                                 this.show_loading = false;
                                 if (err.response.status != 419)
                                     this.$toast.error(err.response.data.message);

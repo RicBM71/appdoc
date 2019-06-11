@@ -164,6 +164,7 @@
                             <!-- <img src="/assets/adobe2.png" alt="pdf" height="50px"> -->
                             <div v-html="extensionFile(f.url)"></div>
                         </v-btn>
+                        <span>{{f.url.substr(-10)}}</span>
                         <v-icon v-if="!documento.cerrado" color="red accent-4" @click="destroyFile(f.id)">clear</v-icon>
                     </v-flex>
                 </v-layout>
@@ -223,6 +224,7 @@ import {mapGetters} from 'vuex';
                 carpetas:[],
                 extractos:[],
                 files: [],
+                nf: 0,
 
                 documento_id: "",
 
@@ -272,7 +274,7 @@ import {mapGetters} from 'vuex';
                         this.show_loading = false;
                     })
                     .catch(err => {
-                        console.log(err);
+
                         if (err.response.status == 404)
                             this.$toast.error("Documento No encontrado!");
                         else
@@ -296,6 +298,11 @@ import {mapGetters} from 'vuex';
             computedFCreFormat() {
                 moment.locale('es');
                 return this.documento.created_at ? moment(this.documento.created_at).format('D/MM/YYYY H:mm:ss') : '';
+            },
+            computedOrdenFile(){
+                this.nf = this.nf + 1;
+
+                return this.nf;
             }
 
         },

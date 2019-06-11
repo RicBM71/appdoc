@@ -39,6 +39,29 @@
                             >
                             </v-text-field>
                         </v-flex>
+                    </v-layout>
+                    <v-layout row wrap>
+                        <v-flex sm6>
+                            <v-text-field
+                                v-model="carpeta.patron"
+                                :error-messages="errors.collect('patron')"
+                                hint="Patrón búsqueda N.43"
+                                label="Patrón"
+                                data-vv-name="patron"
+                                data-vv-as="Patrón"
+                                v-on:keyup.enter="submit"
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-switch
+                                v-model="carpeta.activa"
+                                color="primary"
+                                label="Activa"
+                            ></v-switch>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row wrap>
                         <v-flex sm3>
                             <v-text-field
                                 v-model="carpeta.color"
@@ -63,15 +86,6 @@
                             >
                             </v-text-field>
                         </v-flex>
-                        <v-flex sm2>
-                            <v-switch
-                                v-model="carpeta.activa"
-                                color="primary"
-                                label="Activa"
-                            ></v-switch>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
                         <v-flex sm3>
                             <v-text-field
                                 v-model="computedFModFormat"
@@ -126,6 +140,7 @@ import MenuOpe from './MenuOpe'
                     nombre:  "",
                     color: "",
                     path:"",
+                    patron:"",
                     activa: "",
                     updated_at:"",
                     created_at:"",
@@ -186,7 +201,8 @@ import MenuOpe from './MenuOpe'
                                     archivo_id: this.carpeta.archivo_id,
                                     color: this.carpeta.color,
                                     activa: this.carpeta.activa,
-                                    path: this.carpeta.path
+                                    path: this.carpeta.path,
+                                    patron: this.carpeta.patron
 
 
                                 }

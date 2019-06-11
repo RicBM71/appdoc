@@ -16,7 +16,7 @@
                                 icon
                                 @click="filtro = !filtro"
                             >
-                                <v-icon color="primary">list_alt</v-icon>
+                                <v-icon color="primary">filter_list</v-icon>
                             </v-btn>
                         </template>
                         <span>Filtros</span>
@@ -45,7 +45,9 @@
                                         :value="computedFechaD"
                                         label="Desde"
                                         append-icon="event"
-                                        readonly
+                                        v-validate="'date_format:dd/MM/yyyy'"
+                                        data-vv-name="fecha_d"
+                                        :error-messages="errors.collect('fecha_d')"
                                         data-vv-as="Desde"
                                         ></v-text-field>
                                     <v-date-picker
@@ -74,7 +76,9 @@
                                         :value="computedFechaH"
                                         label="Hasta"
                                         append-icon="event"
-                                        readonly
+                                        v-validate="'date_format:dd/MM/yyyy'"
+                                        data-vv-name="fecha_h"
+                                        :error-messages="errors.collect('fecha_h')"
                                         data-vv-as="Hasta"
                                         ></v-text-field>
                                     <v-date-picker
@@ -221,6 +225,9 @@ import moment from 'moment';
 import MenuOpe from './MenuOpe'
 import {mapGetters} from 'vuex';
   export default {
+    $_veeValidate: {
+      		validator: 'new'
+    },
     components: {
         'menu-ope': MenuOpe,
         'loading': Loading
@@ -336,29 +343,36 @@ import {mapGetters} from 'vuex';
         },
         filtrar(){
 
-            this.show_loading = true;
-            axios.post('mto/extractos/filtrar',
-                    {
-                        fecha_d: this.fecha_d,
-                        fecha_h: this.fecha_h,
-                        dh: this.dh,
+
+            this.$validator.validateAll().then((result) => {
+                    if (result){
+                        this.show_loading = true;
+                        axios.post('mto/extractos/filtrar',
+                                {
+                                    fecha_d: this.fecha_d,
+                                    fecha_h: this.fecha_h,
+                                    dh: this.dh,
+                                }
+                            )
+                            .then(res => {
+
+                                this.filtro = false;
+
+                                this.apuntes = res.data;
+                                this.show_loading = false;
+
+                            })
+                            .catch(err => {
+                                
+                                this.show_loading = false;
+                                if (err.response.status != 419)
+                                    this.$toast.error(err.response.data.message);
+                                else
+                                    this.$toast.error("Sesión expirada!");
+
+                            });
                     }
-                )
-                .then(res => {
-
-                    this.filtro = false;
-
-                    this.apuntes = res.data;
-                    this.show_loading = false;
-
-                })
-                .catch(err => {
-
-                    this.show_loading = false;
-                    this.$toast.error(err.response.data.message);
-
-
-                });
+            });
 
         },
         editDoc (id) {

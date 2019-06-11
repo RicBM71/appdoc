@@ -28,11 +28,11 @@
 
         </v-layout>
         <v-layout row wrap>
-            <v-flex xs3 v-show="isAdmin">
+            <v-flex xs3>
                  <v-btn round block large color="grey" class="blue-grey lighten-3"
-                     @click="goImportar()">
-                     Importar N. 43
-                     <v-icon right dark>open_in_browser</v-icon>
+                     @click="goDocumentos()">
+                     Documentos
+                     <v-icon right dark>save_alt</v-icon>
                 </v-btn>
             </v-flex>
             <v-flex xs1></v-flex>
@@ -72,7 +72,7 @@ export default {
         axios.get('/dash')
             .then(res => {
                 this.setAuthUser(res.data.user);
-                console.log(this.isAdmin);
+
             })
             .catch(err => {
                 console.log(err);
@@ -92,8 +92,8 @@ export default {
         goProductos(){
             this.$router.push({ name: 'producto.index' })
         },
-        goImportar(){
-            this.$router.push({ name: 'extracto.importar' })
+        goDocumentos(){
+            this.$router.push({ name: 'documento.index' })
         },
         goExtractos(){
             this.$router.push({ name: 'extracto.index' })

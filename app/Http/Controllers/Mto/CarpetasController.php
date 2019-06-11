@@ -56,6 +56,7 @@ class CarpetasController extends Controller
             'archivo_id' => ['required','integer'],
             'nombre' => ['required', 'string', 'max:50'],
             'path' => ['nullable','string'],
+            'patron' => ['nullable','string'],
             'color' => ['nullable','string'],
 
         ]);
@@ -116,6 +117,7 @@ class CarpetasController extends Controller
             'nombre' => ['required', 'string', 'max:50'],
             'path' => ['nullable','string'],
             'color' => ['nullable','string'],
+            'patron' => ['nullable','string'],
             'activa'=> ['required','boolean']
         ]);
 

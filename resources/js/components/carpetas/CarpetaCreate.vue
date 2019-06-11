@@ -10,7 +10,7 @@
         </v-card>
         <v-card>
             <v-form>
-                <v-container>
+                 <v-container>
                     <v-layout row wrap>
                         <v-flex sm5 d-flex>
                             <v-autocomplete
@@ -39,7 +39,43 @@
                             >
                             </v-text-field>
                         </v-flex>
+                    </v-layout>
+                    <v-layout row wrap>
+                        <v-flex sm6>
+                            <v-text-field
+                                v-model="carpeta.patron"
+                                :error-messages="errors.collect('patron')"
+                                hint="Patrón búsqueda N.43"
+                                label="Patrón"
+                                data-vv-name="patron"
+                                data-vv-as="Patrón"
+                                v-on:keyup.enter="submit"
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-switch
+                                v-model="carpeta.activa"
+                                color="primary"
+                                label="Activa"
+                            ></v-switch>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row wrap>
                         <v-flex sm3>
+                            <v-text-field
+                                v-model="carpeta.color"
+                                :error-messages="errors.collect('color')"
+                                hint="red--text text--darken-1"
+                                label="Color"
+                                data-vv-name="color"
+                                data-vv-as="Color"
+                                v-on:keyup.enter="submit"
+
+                            >
+                            </v-text-field>
+                        </v-flex>
+                         <v-flex sm3>
                             <v-text-field
                                 v-model="carpeta.path"
                                 :error-messages="errors.collect('path')"
@@ -50,20 +86,6 @@
                             >
                             </v-text-field>
                         </v-flex>
-                        <v-flex sm3>
-                            <v-text-field
-                                v-model="carpeta.color"
-                                :error-messages="errors.collect('color')"
-                                label="Color"
-                                data-vv-name="color"
-                                data-vv-as="Color"
-                                v-on:keyup.enter="submit"
-
-                            >
-                            </v-text-field>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
                         <v-flex sm3>
                             <v-text-field
                                 v-model="computedFModFormat"
@@ -118,6 +140,7 @@ import Loading from '@/components/shared/Loading'
                     nombre:  "",
                     path: "",
                     color: "",
+                    patron:"",
                     updated_at:"",
                     created_at:"",
                 },
@@ -173,7 +196,8 @@ import Loading from '@/components/shared/Loading'
                                     nombre: this.carpeta.nombre,
                                     archivo_id: this.carpeta.archivo_id,
                                     color: this.carpeta.color,
-                                    path: this.carpeta.path
+                                    path: this.carpeta.path,
+                                    patron: this.carpeta.patron
 
                                 }
                             })

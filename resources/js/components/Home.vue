@@ -23,7 +23,7 @@
 	          >
 	            <img src="assets/vuetify.png" alt="Vuetify.js" height="200">
 	            <h1 class="white--text mb-2 display-1 text-xs-center">Sanaval Tecnología</h1>
-	            <div class="subheading mb-3 text-xs-center">Desarrollamos tu proyecto Web</div>
+	            <div class="subheading mb-3 text-xs-center">Desarrollamos tu aplicación Web</div>
 	            <v-btn
 	              class="blue lighten-2 mt-5"
 	              dark
@@ -108,8 +108,8 @@
 	      <section>
 	        <v-parallax src="assets/section.jpg" height="380">
 	          <v-layout column align-center justify-center>
-	            <div class="headline white--text mb-3 text-xs-center">Web development has never been easier</div>
-	            <em>Kick-start your application today</em>
+	            <div class="headline white--text mb-3 text-xs-center">Desarrollo fácil e intuitivo</div>
+	            <em>Proyectos cerrados adaptados a tus necesidades</em>
 	            <v-btn
 	              class="blue lighten-2 mt-5"
 	              dark
@@ -151,7 +151,7 @@
 	                      <v-icon class="blue--text text--lighten-2">phone</v-icon>
 	                    </v-list-tile-action>
 	                    <v-list-tile-content>
-	                      <v-list-tile-title>777-867-5309</v-list-tile-title>
+	                      <v-list-tile-title>666 48 30 94</v-list-tile-title>
 	                    </v-list-tile-content>
 	                  </v-list-tile>
 	                  <v-list-tile>
@@ -159,7 +159,7 @@
 	                      <v-icon class="blue--text text--lighten-2">place</v-icon>
 	                    </v-list-tile-action>
 	                    <v-list-tile-content>
-	                      <v-list-tile-title>Chicago, US</v-list-tile-title>
+	                      <v-list-tile-title>Madrid, ES</v-list-tile-title>
 	                    </v-list-tile-content>
 	                  </v-list-tile>
 	                  <v-list-tile>
@@ -167,7 +167,7 @@
 	                      <v-icon class="blue--text text--lighten-2">email</v-icon>
 	                    </v-list-tile-action>
 	                    <v-list-tile-content>
-	                      <v-list-tile-title>john@vuetifyjs.com</v-list-tile-title>
+	                      <v-list-tile-title>info@sanaval.com</v-list-tile-title>
 	                    </v-list-tile-content>
 	                  </v-list-tile>
 	                </v-list>

@@ -17,7 +17,7 @@ class Carpeta extends Model
 
 
     protected $fillable = [
-        'empresa_id', 'archivo_id', 'nombre','path', 'color', 'activa'
+        'empresa_id', 'archivo_id', 'nombre','path', 'color', 'patron', 'activa'
     ];
 
     // una carpeta tiene un archivo y solo uno
@@ -73,6 +73,10 @@ class Carpeta extends Model
 
         return $query->where('empresa_id', '=', $empresa_id);
 
+    }
+
+    public function scopeConPatron($query){
+        return $query->where('patron', '>', '');
     }
 
 }

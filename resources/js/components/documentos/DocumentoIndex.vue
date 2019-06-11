@@ -82,7 +82,7 @@
                                         :value="computedFechaH"
                                         label="Hasta"
                                         append-icon="event"
-                                        
+
                                         data-vv-as="Hasta"
                                         ></v-text-field>
                                     <v-date-picker
@@ -192,10 +192,10 @@ import {mapActions} from "vuex";
         paginaActual:{},
         pagination:{
             model: "documentos",
-            descending: false,
+            descending: true,
             page: 1,
             rowsPerPage: 10,
-            sortBy: "id",
+            sortBy: "fecha",
         },
         headers: [
           {

@@ -103,7 +103,10 @@ class ExtractosController extends Controller
         $documento = Documento::with(['archivo','carpeta'])->find($doc->id);
         // almacenamos el fichero físico y creamos el link en filedocs
 
-        $path = 'documentum/'.session()->get('empresa')->path_archivo.'/'.$documento->archivo->path.'/'.$documento->carpeta->path;
+        $ejercicio = date('Y',strtotime($documento->fecha));
+
+        //$path = 'documentum/'.session()->get('empresa')->path_archivo.'/'.$documento->archivo->path.'/'.$documento->carpeta->path;
+        $path = 'documentum/'.session()->get('empresa')->path_archivo.'/'.$ejercicio.'/'.$documento->archivo->path.'/'.$documento->carpeta->path;
 
         $files = request()->file('files')->store($path,'local');
 
@@ -129,7 +132,9 @@ class ExtractosController extends Controller
         $documento = Documento::where('id', $id)->with('filedocs')->first();
 
         // cargamos patrones de búsqueda
-        $this->patrones = Cliente::conpatron()->select('id', 'patron', 'carpeta_id')->get();
+        $patro_cli = Cliente::conpatron()->select('id', 'patron', 'carpeta_id')->get();
+
+        $this->patrones = $patro_cli->merge(Carpeta::conpatron()->select('id AS carpeta_id', 'patron')->get());
 
         $filename = $documento->filedocs->first()->url;
         $filename = str_replace('/storage', 'app', $filename);
@@ -268,10 +273,10 @@ class ExtractosController extends Controller
 
 		// buscamos la partida correspondiente.
 
-		foreach ($this->patrones as $value) {
-			if (strstr($concepto,$value->patron) != false){
+		foreach ($this->patrones as $item) {
+			if (strstr($concepto,$item->patron) != false){
 
-                $this->carpeta_id_patron = $value->carpeta_id;
+                $this->carpeta_id_patron = $item->id;
 
 				break;
 			}

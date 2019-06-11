@@ -37,12 +37,49 @@ class AlbacabsController extends Controller
     {
         $this->authorize('create', new Albacab);
 
-        $data =  Albacab::with(['cliente','albalins'])->get();
+        $data =  Albacab::with(['cliente','albalins'])
+                    ->whereYear('fecha_alb',date('Y'))
+                    ->orderBy('fecha_alb', 'desc')
+                    ->get();
        // dd($data);
 
         if (request()->wantsJson())
             return $data;
     }
+
+    public function filtrar(Request $request)
+    {
+
+        $fecha_d = $request->input('fecha_d');
+        $fecha_h = $request->input('fecha_h');
+        $dh = $request->input('dh');
+
+        if ($request->input('fecha')=="A")
+            {
+                $data[] = [
+                    'fecha_alb', '>=', $fecha_d,
+                ];
+                $data[] = [
+                    'fecha_alb', '<=', $fecha_h,
+                ];
+            }
+        else{
+            $data[] = [
+                'fecha_fac', '>=', $fecha_d,
+            ];
+            $data[] = [
+                'fecha_fac', '<=', $fecha_h,
+            ];
+        }
+
+        if (request()->wantsJson())
+            return Albacab::with(['cliente','albalins'])->where($data)
+                            ->orderBy('fecha_alb', 'desc')
+                            ->get();
+
+    }
+
+
 
     /**
      * Show the form for creating a new resource.

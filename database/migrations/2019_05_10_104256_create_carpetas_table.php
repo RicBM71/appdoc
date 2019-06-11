@@ -20,6 +20,7 @@ class CreateCarpetasTable extends Migration
             $table->string('nombre',50);
             $table->string('color',30)->nullable();
             $table->string('path',30)->nullable();
+            $table->string('patron',50)->nullable();
             $table->boolean('activa')->default(true);
             $table->timestamps();
         });

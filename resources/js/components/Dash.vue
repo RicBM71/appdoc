@@ -233,6 +233,7 @@ export default {
             { icon: 'people', text: 'Clientes', name:'cliente.index' },
             { icon: 'local_offer', text: 'Productos', name:'producto.index' },
             { icon: 'account_balance', text: 'Extracto Banco', name:'extracto.index' },
+            { icon: 'open_in_browser', text: 'Importar N.43', name:'extracto.importar' },
             { icon: 'save_alt', text: 'Documentos', name:'documento.index' },
             { icon: 'folder', text: 'Carpetas', name:'carpeta.index' },
         ]
@@ -241,7 +242,7 @@ export default {
 
         axios.get('/dash')
             .then(res => {
-                
+
                 this.setAuthUser(res.data.user);
 
                 this.empresa_id = this.user.empresa_id;

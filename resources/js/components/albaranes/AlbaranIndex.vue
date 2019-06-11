@@ -5,9 +5,106 @@
             <v-card-title>
                 <h2>{{titulo}}</h2>
                 <v-spacer></v-spacer>
+                <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                            <v-btn
+                                v-on="on"
+                                color="white"
+                                icon
+                                @click="filtro = !filtro"
+                            >
+                                <v-icon color="primary">filter_list</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Filtrar</span>
+                    </v-tooltip>
                 <menu-ope :albaran="albaran"></menu-ope>
             </v-card-title>
         </v-card>
+        <v-card v-show="filtro">
+                <v-form>
+                    <v-container>
+                        <v-layout row wrap>
+                            <v-flex xs3 d-flex>
+                                <v-select
+                                    v-model="quefecha"
+                                    :items="fechas"
+                                    label="Fecha"
+                                ></v-select>
+                            </v-flex>
+                            <v-flex sm2>
+                                <v-menu
+                                    v-model="menu_d"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                >
+                                    <v-text-field
+                                        slot="activator"
+                                        :value="computedFechaD"
+                                        label="Desde"
+                                        append-icon="event"
+                                        v-validate="'date_format:dd/MM/yyyy'"
+                                        data-vv-name="fecha_d"
+                                        :error-messages="errors.collect('fecha_d')"
+                                        data-vv-as="Desde"
+                                        ></v-text-field>
+                                    <v-date-picker
+                                        v-model="fecha_d"
+                                        no-title
+                                        locale="es"
+                                        first-day-of-week=1
+                                        @input="menu_d = false"
+                                        ></v-date-picker>
+                                </v-menu>
+                            </v-flex>
+                            <v-flex sm2>
+                                <v-menu
+                                    v-model="menu_h"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                >
+
+                                    <v-text-field
+                                        slot="activator"
+
+                                        :value="computedFechaH"
+                                        label="Hasta"
+                                        append-icon="event"
+                                        v-validate="'date_format:dd/MM/yyyy'"
+                                        data-vv-name="fecha_h"
+                                        :error-messages="errors.collect('fecha_h')"
+                                        data-vv-as="Hasta"
+                                        ></v-text-field>
+                                    <v-date-picker
+                                        v-model="fecha_h"
+                                        no-title
+                                        locale="es"
+                                        first-day-of-week=1
+                                        @input="menu_h = false"
+                                        ></v-date-picker>
+                                </v-menu>
+                            </v-flex>
+
+                            <v-spacer></v-spacer>
+                            <v-flex sm2>
+                                <v-btn @click="filtrar"  round  block  color="info">
+                                    Filtrar
+                                </v-btn>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
+                </v-form>
+            </v-card>
         <v-card>
             <v-container>
                 <v-layout row wrap>
@@ -73,6 +170,9 @@ import moment from 'moment';
 import MyDialog from '@/components/shared/MyDialog'
 import MenuOpe from './MenuOpe'
   export default {
+    $_veeValidate: {
+      		validator: 'new'
+    },
     components: {
         'my-dialog': MyDialog,
         'menu-ope': MenuOpe
@@ -90,7 +190,7 @@ import MenuOpe from './MenuOpe'
           {
             text: 'Albarán',
             align: 'center',
-            value: 'albaran1'
+            value: 'albaran'
           },
           {
             text: 'Fecha',
@@ -100,7 +200,7 @@ import MenuOpe from './MenuOpe'
           {
             text: 'Cliente',
             align: 'left',
-            value: 'cliente'
+            value: 'cliente.razon'
           },
           {
             text: 'Importe',
@@ -128,7 +228,21 @@ import MenuOpe from './MenuOpe'
         status: false,
 		registros: false,
         dialog: false,
+
         producto_id: 0,
+
+        quefecha: "A",
+        fechas: [
+                {text:'Albarán','value':'A'},
+                {text:'Factura','value':'F'},
+            ],
+
+        filtro: false,
+
+        menu_d: false,
+        menu_h: false,
+        fecha_d: new Date().toISOString().substr(0, 5)+"01-01",
+        fecha_h: new Date().toISOString().substr(0, 10),
 
       }
     },
@@ -137,7 +251,7 @@ import MenuOpe from './MenuOpe'
 
         axios.get('/ventas/albacabs')
             .then(res => {
-                //console.log(res);
+
                 this.albaranes = res.data;
                 this.registros = true;
             })
@@ -146,6 +260,16 @@ import MenuOpe from './MenuOpe'
                 this.$toast.error(err.response.data.message);
                 this.$router.push({ name: 'dash' })
             })
+    },
+    computed:{
+        computedFechaD() {
+            moment.locale('es');
+            return this.fecha_d ? moment(this.fecha_d).format('L') : '';
+        },
+        computedFechaH() {
+            moment.locale('es');
+            return this.fecha_h ? moment(this.fecha_h).format('L') : '';
+        },
     },
     methods:{
         formatDate(f){
@@ -165,6 +289,38 @@ import MenuOpe from './MenuOpe'
             })
             return total.toFixed(2);
         },
+        filtrar(){
+            this.$validator.validateAll().then((result) => {
+                if (result){
+                    this.show_loading = true;
+                    axios.post('ventas/albacabs/filtrar',
+                            {
+                                fecha_d: this.fecha_d,
+                                fecha_h: this.fecha_h,
+                                fecha: this.quefecha
+                            }
+                        )
+                        .then(res => {
+
+                            this.filtro = false;
+                            this.albaranes = res.data;
+                            this.show_loading = false;
+
+                        })
+                        .catch(err => {
+
+                            this.show_loading = false;
+                            if (err.response.status != 419)
+                                this.$toast.error(err.response.data.message);
+                            else
+                                this.$toast.error("Sesión expirada!");
+
+                        });
+                }
+            });
+
+        },
+
         create(){
             this.$router.push({ name: 'albaran.create'})
         },

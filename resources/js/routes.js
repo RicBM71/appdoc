@@ -67,6 +67,7 @@ import SelRemesa from './components/remesas/SelRemesa.vue';
 import DocumentoIndex from './components/documentos/DocumentoIndex.vue';
 import DocumentoCreate from './components/documentos/DocumentoCreate.vue';
 import DocumentoEdit from './components/documentos/DocumentoEdit.vue';
+import DocumentoShow from './components/documentos/DocumentoShow.vue';
 
 
 import EditPassword from './components/profile/edit-password/EditPassword.vue';
@@ -334,6 +335,11 @@ export default [
                 path: '/documentos/:id/edit',
                 name: 'documento.edit',
                 component: DocumentoEdit,
+            },
+            {
+                path: '/documentos/:id/show',
+                name: 'documento.show',
+                component: DocumentoShow,
             },
             // {
             //     path: '*',

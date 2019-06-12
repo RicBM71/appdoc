@@ -77,6 +77,19 @@
                     v-on="on"
                     color="white"
                     icon
+                    @click="goExtracto"
+                >
+                    <v-icon color="primary">account_balance</v-icon>
+                </v-btn>
+            </template>
+            <span>Ir a Extracto Banco</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+                <v-btn
+                    v-on="on"
+                    color="white"
+                    icon
                     @click="goIndex"
                 >
                     <v-icon color="primary">list</v-icon>
@@ -115,6 +128,9 @@ export default {
         },
         goIndex(){
             this.$router.push({ name: 'documento.index' })
+        },
+        goExtracto(){
+            this.$router.push({ name: 'extracto.index' })
         },
         openDialog (){
             this.dialog = true;

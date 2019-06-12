@@ -153,12 +153,19 @@
                                     <td v-else :class="props.item.carpeta.color">{{ props.item.carpeta.nombre }}</td>
                                     <td>{{ props.item.concepto }}</td>
                                     <td class="justify-center layout px-0">
-                                        <v-icon
+                                        <v-icon v-if="hasDocumenta"
                                             small
                                             class="mr-2"
                                             @click="editItem(props.item.id)"
                                         >
                                             edit
+                                        </v-icon>
+                                        <v-icon v-else
+                                            small
+                                            class="mr-2"
+                                            @click="editItem(props.item.id)"
+                                        >
+                                            search
                                         </v-icon>
 
 
@@ -210,6 +217,7 @@ import {mapActions} from "vuex";
             page: 1,
             rowsPerPage: 10,
             sortBy: "fecha",
+            search: ""
         },
         headers: [
           {
@@ -260,7 +268,7 @@ import {mapActions} from "vuex";
     },
     mounted()
     {
-         if (this.getPagination.model == this.pagination.model)
+        if (this.getPagination.model == this.pagination.model)
             this.updatePosPagina(this.getPagination);
         else
             this.unsetPagination();
@@ -307,10 +315,12 @@ import {mapActions} from "vuex";
         updateEventPagina(obj){
 
             this.paginaActual = obj;
+            this.paginaActual.search = this.search;
 
         },
         updatePosPagina(pag){
 
+            this.search = pag.search;
             this.pagination.page = pag.page;
             this.pagination.descending = pag.descending;
             this.pagination.rowsPerPage= pag.rowsPerPage;
@@ -334,7 +344,6 @@ import {mapActions} from "vuex";
                 )
                 .then(res => {
                     this.filtro = false;
-                    //console.log(res.data);
 
                      this.documentos = res.data.documentos;
                     this.show_loading = false;
@@ -373,8 +382,12 @@ import {mapActions} from "vuex";
 
         },
         editItem (id) {
+
             this.setPagination(this.paginaActual);
-            this.$router.push({ name: 'documento.edit', params: { id: id } })
+            if (this.hasDocumenta)
+                this.$router.push({ name: 'documento.edit', params: { id: id } })
+            else
+                this.$router.push({ name: 'documento.show', params: { id: id } })
         },
     }
   }

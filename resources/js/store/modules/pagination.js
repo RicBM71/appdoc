@@ -13,6 +13,7 @@ export const UNSET_PAGINATION = 'UNSET_PAGINATION';
 */
 const initialState = {
     model: null,
+    search: null,
     descending: null,
     page: 1,
     rowsPerPage: 10,
@@ -27,6 +28,7 @@ const initialState = {
 const mutations = {
 	[SET_PAGINATION](state, payload) {
         state.model = payload.pagination.model;
+        state.search = payload.pagination.search;
 		state.descending = payload.pagination.descending;
         state.page = payload.pagination.page;
         state.rowsPerPage = payload.pagination.rowsPerPage;
@@ -34,6 +36,7 @@ const mutations = {
 	},
 	[UNSET_PAGINATION](state, payload) {
         state.model = null;
+        state.search = null;
 		state.descending = null;
         state.page = 1;
         state.rowsPerPage = 5;

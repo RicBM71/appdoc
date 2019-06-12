@@ -145,7 +145,7 @@ import MenuOpe from './MenuOpe'
                     archivo_id:"",
                     concepto:"",
                     fecha: new Date().toISOString().substr(0, 10),
-                    cerrado: 1,
+                    cerrado: 0,
                     confidencial:0,
                     username: "",
                     updated_at:"",

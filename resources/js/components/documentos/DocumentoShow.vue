@@ -7,9 +7,7 @@
                 <v-spacer></v-spacer>
                 <menu-ope
                     :id="documento.id"
-                    :cerrado="documento.cerrado"
-                    @show-upload="showUpload"
-                    @set-bloqueo="setBloqueo">
+                    :cerrado="documento.cerrado">
                 </menu-ope>
             </v-card-title>
         </v-card>
@@ -18,62 +16,29 @@
                 <v-container>
                     <v-layout row wrap>
                         <v-flex sm4 d-flex>
-                            <v-select
+                            <v-text-field
                                 :disabled="!hasDocumenta"
-                                v-model="documento.archivo_id"
-                                :items="archivos"
-                                v-validate="'required'"
-                                data-vv-name="archivo_id"
-                                data-vv-as="Archivo"
-                                :error-messages="errors.collect('archivo_id')"
-                                @change="loadCarpeta(documento.archivo_id)"
+                                :value="archivo_nombre"
                                 label="Archivo"
-                            ></v-select>
+                                >
+                            </v-text-field>
                         </v-flex>
                         <v-flex sm4 d-flex>
-                            <v-select
+                            <v-text-field
                                 :disabled="!hasDocumenta"
-                                v-model="documento.carpeta_id"
-                                v-validate="'required'"
-                                :error-messages="errors.collect('carpeta_id')"
-                                data-vv-name="carpeta_id"
-                                data-vv-as="Carpeta"
-                                :items="carpetas"
+                                :value="carpeta_nombre"
                                 label="Carpeta"
-                            ></v-select>
+                                >
+                            </v-text-field>
                         </v-flex>
                          <v-flex sm3>
-                            <v-menu
-                                    :disabled="!hasDocumenta"
-                                    v-model="menu2"
-                                    :close-on-content-click="false"
-                                    :nudge-right="40"
-                                    lazy
-                                    transition="scale-transition"
-                                    offset-y
-                                    full-width
-                                    min-width="290px"
-                                >
-
-                                    <v-text-field
-                                        :disabled="!hasDocumenta"
-                                        slot="activator"
-                                        :value="computedFecha"
-                                        label="Fecha"
-                                        append-icon="event"
-                                        readonly
-                                        class="center"
-                                        data-vv-as="Fecha"
-                                        ></v-text-field>
-                                    <v-date-picker
-                                        :disabled="!hasDocumenta"
-                                        v-model="documento.fecha"
-                                        no-title
-                                        locale="es"
-                                        first-day-of-week=1
-                                        @input="menu2 = false"
-                                    ></v-date-picker>
-                                </v-menu>
+                            <v-text-field
+                                :disabled="!hasDocumenta"
+                                :value="computedFecha"
+                                label="Fecha"
+                                class="center"
+                                data-vv-as="Fecha"
+                                ></v-text-field>
                         </v-flex>
                     </v-layout>
                     <v-layout row wrap>
@@ -134,13 +99,6 @@
                             </v-text-field>
                         </v-flex>
                         <v-flex sm1></v-flex>
-                        <v-flex sm2 v-show="hasDocumenta">
-                            <div class="text-xs-center">
-                                        <v-btn @click="submit"  round  :loading="enviando" block  color="primary">
-                                Guardar
-                                </v-btn>
-                            </div>
-                        </v-flex>
                     </v-layout>
                 </v-container>
             </v-form>
@@ -170,28 +128,12 @@
                     </v-flex>
                 </v-layout>
             </v-container>
-            <v-container v-show="show_upload && !documento.cerrado && hasDocumenta">
-                <v-layout row wrap>
-                    <v-flex sm12>
-                        <vue-dropzone
-                            ref="myVueDropzone"
-                            id="dropzone"
-                            :options="dropzoneOptions"
-                            @vdropzone-success="upload"
-                            @vdropzone-error="verror"
-                        ></vue-dropzone>
-                    </v-flex>
-                </v-layout>
-            </v-container>
         </v-card>
 	</div>
 </template>
 <script>
-import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import moment from 'moment'
 import MenuOpe from './MenuOpe'
-import vue2Dropzone from 'vue2-dropzone'
-import MyDialog from '@/components/shared/MyDialog'
 import Loading from '@/components/shared/Loading'
 import {mapGetters} from 'vuex';
 
@@ -201,8 +143,6 @@ import {mapGetters} from 'vuex';
         },
         components: {
             'loading': Loading,
-            'my-dialog': MyDialog,
-            'vueDropzone': vue2Dropzone,
             'menu-ope': MenuOpe,
 		},
     	data () {
@@ -221,11 +161,8 @@ import {mapGetters} from 'vuex';
                     created_at:"",
                 },
 
-                archivos:[],
-                carpetas:[],
                 extractos:[],
                 files: [],
-                nf: 0,
 
                 documento_id: "",
 
@@ -236,17 +173,10 @@ import {mapGetters} from 'vuex';
                 show_upload: false,
                 show_loading: true,
 
-                dropzoneOptions: {
-                    url: '/mto/filedocs/'+this.$route.params.id,
-                    acceptedFiles:"image/*,.pdf,.zip,.txt,.n43,application/x-msdownload",
-                    paramName: 'files',
-                    thumbnailWidth: 150,
-                    maxFiles: 10,
-                    headers: {
-		    		    'X-CSRF-TOKEN':  window.axios.defaults.headers.common['X-CSRF-TOKEN']
-                    },
-                    dictDefaultMessage: 'Arrastra aquí tus documentos para subir al servidor'
-                }
+                archivo_nombre:"",
+                carpeta_nombre:""
+
+
       		}
         },
         mounted(){
@@ -254,7 +184,7 @@ import {mapGetters} from 'vuex';
             var id = this.$route.params.id;
             //console.log(this.$route.params);
             if (id > 0)
-                axios.get('/mto/documentos/'+id+'/edit')
+                axios.get('/mto/documentos/'+id)
                     .then(res => {
 
                         this.documento = res.data.documento;
@@ -265,9 +195,10 @@ import {mapGetters} from 'vuex';
                         }
 
                         this.extractos = res.data.extractos;
-                        this.archivos = res.data.archivos;
-                        this.carpetas = res.data.carpetas;
                         this.files = res.data.files;
+
+                        this.archivo_nombre = this.documento.archivo.nombre;
+                        this.carpeta_nombre = this.documento.carpeta.nombre;
 
                         if (this.files.length == 0)
                             this.show_upload = true;
@@ -381,88 +312,6 @@ import {mapGetters} from 'vuex';
                     moment.locale('es');
                 return moment(f).format('DD/MM/YYYY');
             },
-            submit() {
-
-                this.enviando = true;
-
-                var url = "/mto/documentos/"+this.documento.id;
-
-
-                this.$validator.validateAll().then((result) => {
-                    if (result){
-
-                        axios.put(url, this.documento)
-                            .then(response => {
-                                // console.log(response);
-                                this.$toast.success(response.data.message);
-                                this.documento = response.data.documento;
-                                this.enviando = false;
-                            })
-                            .catch(err => {
-                                //console.log(err.response.data.errors);
-                                if (err.request.status == 422){ // fallo de validated.
-                                    const msg_valid = err.response.data.errors;
-                                    for (const prop in msg_valid) {
-                                        // this.$toast.error(`${msg_valid[prop]}`);
-                                        //console.log(prop);
-                                        this.errors.add({
-                                            field: prop,
-                                            msg: `${msg_valid[prop]}`
-                                        })
-                                    }
-                                }else{
-                                    this.$toast.error(err.response.data.message);
-                                }
-                                this.enviando = false;
-                            });
-                        }
-                    else{
-                        this.enviando = false;
-                    }
-                });
-
-            },
-            upload(file, response){
-                this.files = response.files;
-
-                this.$toast.success("Ficheros subidos correctamente!");
-
-                this.show_upload = false;
-
-            },
-            verror(file, err) {
-                const m = err.errors.files[0];
-                this.$toast.error(m);
-            },
-            destroyFile(id){
-
-                axios.post('/mto/filedocs/'+id,{_method: 'delete'})
-                    .then(response => {
-                    this.$toast.success('Adjunto eliminado!');
-                    this.files = response.data.files;
-                })
-                .catch(err => {
-                    this.status = true;
-                    var msg = err.response.data.message;
-                    this.$toast.error(msg);
-
-                });
-
-            },
-            loadCarpeta(archivo_id){
-
-                axios.get('/mto/carpetas/'+archivo_id)
-                    .then(res => {
-                        this.carpetas = res.data.carpetas;
-                        this.documento.carpeta_id = "";
-                    })
-                    .catch(err => {
-                        if (err.response.status == 404)
-                            this.$toast.error("Error al recargar carpetas!");
-                        else
-                            this.$toast.error(err.response.data.message);
-                    })
-            }
     }
   }
 </script>

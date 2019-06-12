@@ -29,9 +29,16 @@ class ExtractosController extends Controller
     {
 
         if (request()->wantsJson())
-            return Extracto::with('documentos','documentos.archivo')->whereYear('fecha',date('Y'))
+            if (request()->session()->has('filtro_extrac')){
+                $filtro = request()->session()->get('filtro_extrac');
+                return Extracto::with('documentos','documentos.archivo')->where($filtro)
                             ->orderBy('fecha')
                             ->get();
+            }
+            else
+                return Extracto::with('documentos','documentos.archivo')->whereYear('fecha',date('Y'))
+                                ->orderBy('fecha')
+                                ->get();
 
     }
 
@@ -44,7 +51,7 @@ class ExtractosController extends Controller
     {
 
         $fecha_d = $request->input('fecha_d');
-        $fecha_h = $request->input('fecha_h');
+        $fecha_h = date('t',strtotime($request->input('fecha_h')));
         $dh = $request->input('dh');
 
         $data[] = [
@@ -58,6 +65,7 @@ class ExtractosController extends Controller
                 'dh', '=', $dh,
             ];
 
+        session(['filtro_extrac' => $data]);
 
         if (request()->wantsJson())
             return Extracto::with('documentos','documentos.archivo')->where($data)

@@ -6,6 +6,7 @@ use App\Archivo;
 use App\Carpeta;
 use App\Filedoc;
 use App\Documento;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
@@ -48,8 +49,9 @@ class DocumentosController extends Controller
     public function filtrar(Request $request)
     {
 
+
         $fecha_d = $request->input('fecha_d');
-        $fecha_h = $request->input('fecha_h');
+        $fecha_h = date('t',strtotime($request->input('fecha_h')));
         $archivo_id = $request->input('archivo_id');
 
         $data[] = [
@@ -155,7 +157,15 @@ class DocumentosController extends Controller
      */
     public function show($id)
     {
-        //return Carpeta::(1)->get();
+
+        $documento = Documento::with(['archivo','carpeta'])->findOrfail($id);
+
+        if (request()->wantsJson())
+            return [
+                'documento' => $documento,
+                'extractos'=> $documento->extractos,
+                'files' => Filedoc::FilesDocumento($documento->id)->get()
+            ];
 
 
     }

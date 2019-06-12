@@ -140,9 +140,9 @@
                             :headers="headers"
                             :items="apuntes"
                             :search="search"
-                            rows-per-page-text="Registros por página"
-
+                            @update:pagination="updateEventPagina"
                             :pagination.sync="pagination"
+                            rows-per-page-text="Registros por página"
                             >
                                 <template slot="items" slot-scope="props">
                                     <tr>
@@ -157,7 +157,7 @@
                                             @click="props.expanded = !props.expanded"
                                             color="blue lighten-1"
                                         >
-                                            description
+                                            control_point
                                         </v-icon>
                                         <v-icon v-show="!props.item.documentos.length > 0 && hasDocumenta"
                                             small
@@ -235,6 +235,8 @@ import Loading from '@/components/shared/Loading'
 import moment from 'moment';
 import MenuOpe from './MenuOpe'
 import {mapGetters} from 'vuex';
+import {mapActions} from "vuex";
+
   export default {
     $_veeValidate: {
       		validator: 'new'
@@ -246,8 +248,13 @@ import {mapGetters} from 'vuex';
     data () {
       return {
         titulo:"Extracto",
+        paginaActual:{},
         pagination:{
-             rowsPerPage: 10
+            model: "extracto",
+            descending: false,
+            page: 1,
+            rowsPerPage: 8,
+            sortBy: "id",
         },
         search:"",
         headers: [
@@ -305,6 +312,10 @@ import {mapGetters} from 'vuex';
     {
 
         this.show_loading = true;
+        if (this.getPagination.model == this.pagination.model)
+            this.updatePosPagina(this.getPagination);
+        else
+            this.unsetPagination();
 
         axios.get('/mto/extractos')
             .then(res => {
@@ -326,7 +337,8 @@ import {mapGetters} from 'vuex';
     computed:{
         ...mapGetters([
                 'hasDocumenta',
-                'isAdmin'
+                'isAdmin',
+                'getPagination'
 		]),
         computedFechaD() {
             moment.locale('es');
@@ -338,6 +350,23 @@ import {mapGetters} from 'vuex';
         },
     },
     methods:{
+        ...mapActions([
+            'setPagination',
+            'unsetPagination'
+		]),
+        updateEventPagina(obj){
+
+            this.paginaActual = obj;
+
+        },
+        updatePosPagina(pag){
+
+            this.pagination.page = pag.page;
+            this.pagination.descending = pag.descending;
+            this.pagination.rowsPerPage= pag.rowsPerPage;
+            this.pagination.sortBy = pag.sortBy;
+
+        },
         colorLin(dh){
             if (dh == 'D')
                 return "text-xs-right red--text";
@@ -387,7 +416,12 @@ import {mapGetters} from 'vuex';
 
         },
         editDoc (id) {
-            this.$router.push({ name: 'documento.edit', params: { id: id } })
+            this.setPagination(this.paginaActual);
+            
+            if (this.hasDocumenta)
+                this.$router.push({ name: 'documento.edit', params: { id: id } })
+            else
+                this.$router.push({ name: 'documento.show', params: { id: id } })
         },
         createDocu(extracto){
             if (this.documento_id == 0)

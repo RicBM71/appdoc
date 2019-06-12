@@ -238,7 +238,7 @@ import {mapGetters} from 'vuex';
 
                 dropzoneOptions: {
                     url: '/mto/filedocs/'+this.$route.params.id,
-                    acceptedFiles:"image/*,.pdf,.zip,.txt,.n43,application/x-msdownload",
+                    acceptedFiles:"image/*,.pdf,.rar,.zip,.txt,.n43,application/x-msdownload",
                     paramName: 'files',
                     thumbnailWidth: 150,
                     maxFiles: 10,
@@ -331,6 +331,9 @@ import {mapGetters} from 'vuex';
                         break
                     case 'xlsx':
                         var icono = 'excel.png';
+                        break
+                    case 'rar':
+                        var icono = 'rar.png';
                         break
                     case 'zip':
                         var icono = 'zip.png';

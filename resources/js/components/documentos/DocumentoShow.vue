@@ -263,6 +263,9 @@ import {mapGetters} from 'vuex';
                     case 'xlsx':
                         var icono = 'excel.png';
                         break
+                    case 'rar':
+                        var icono = 'rar.png';
+                        break
                     case 'zip':
                         var icono = 'zip.png';
                         break

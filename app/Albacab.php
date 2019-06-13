@@ -20,7 +20,7 @@ class Albacab extends Model
 
     protected $fillable = [
         'empresa_id','ejercicio','albaran', 'serie', 'fecha_alb', 'cliente_id', 'eje_fac', 'factura', 'fecha_fac',
-        'fpago_id', 'vencimiento_id', 'notificado', 'notas','username',
+        'fpago_id', 'vencimiento_id','iban', 'notificado', 'notas','username',
     ];
 
     protected static function boot()

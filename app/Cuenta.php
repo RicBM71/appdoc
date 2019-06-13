@@ -31,4 +31,8 @@ class Cuenta extends Model
 
         return $query->where('iban', 'like', '%'.$iban.'%');
     }
+
+    public function scopeActiva($query){
+        return $query->where('activa', true);
+    }
 }

@@ -26,6 +26,7 @@ class CreateAlbacabsTable extends Migration
             $table->date('fecha_fac')->nullable();
             $table->unsignedInteger('fpago_id');
             $table->unsignedInteger('vencimiento_id');
+            $table->String('iban', 24)->nullable();
             $table->boolean('notificado')->default(false);
             $table->String('notas')->nullable();
             $table->String('username', 20)->nullable();

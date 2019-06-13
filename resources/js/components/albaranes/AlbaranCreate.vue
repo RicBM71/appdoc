@@ -98,7 +98,7 @@
                         </v-flex>
                     </v-layout>
                     <v-layout row wrap>
-                        <v-flex sm4>
+                        <v-flex sm5>
                             <v-autocomplete
                                 v-model="albaran.cliente_id"
                                 v-validate="'required'"
@@ -106,6 +106,7 @@
                                 data-vv-as="Cliente"
                                 item-text="name"
                                 item-value="id"
+                                @change="selCliente"
                                 :error-messages="errors.collect('cliente_id')"
                                 :loading="loading"
                                 :items="clientes"
@@ -138,6 +139,16 @@
                                 label="Vencimiento"
                             ></v-select>
                         </v-flex>
+                    </v-layout>
+                    <v-layout row wrap>
+                        <v-flex sm5 d-flex>
+                            <v-text-field
+                                    readonly
+                                    v-model="albaran.iban"
+                                    label="IBAN"
+                                >
+                            </v-text-field>
+                        </v-flex>
                         <v-flex sm2>
                             <v-text-field
                                 v-model="albaran.username"
@@ -145,15 +156,6 @@
                                 readonly
                                 v-on:keyup.enter="submit"
                             >
-                            </v-text-field>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                        <v-flex sm6 d-flex>
-                            <v-text-field
-                                    v-model="albaran.notas"
-                                    label="Observaciones"
-                                >
                             </v-text-field>
                         </v-flex>
 
@@ -173,6 +175,16 @@
                             >
                             </v-text-field>
                         </v-flex>
+                    </v-layout>
+                    <v-layout row wrap>
+                        <v-flex sm9 d-flex>
+                            <v-text-field
+                                    v-model="albaran.notas"
+                                    label="Observaciones"
+                                >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm1></v-flex>
                         <v-flex sm2>
                             <div class="text-xs-center">
                                         <v-btn @click="submit"  round  :loading="enviando" block  color="primary">
@@ -213,6 +225,7 @@ import MenuOpe from './MenuOpe'
                     fecha_fac:null,
                     fpago_id: 1,
                     vencimiento_id:1,
+                    iban:"",
                     notificado:false,
                     notas:"",
                     username: "",
@@ -312,6 +325,9 @@ import MenuOpe from './MenuOpe'
                     }
                 });
 
+            },
+            selCliente(){
+               // console.log(this.albaran.cliente_id);
             }
     }
   }

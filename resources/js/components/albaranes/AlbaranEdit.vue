@@ -133,7 +133,7 @@
                         </v-flex>
                     </v-layout>
                     <v-layout row wrap>
-                        <v-flex sm4>
+                        <v-flex sm5>
                             <v-autocomplete
                                 v-model="albaran.cliente_id"
                                 v-validate="'required'"
@@ -182,6 +182,20 @@
                             >
                             </v-autocomplete>
                         </v-flex>
+
+                    </v-layout>
+                    <v-layout row wrap>
+                        <v-flex sm5>
+                            <v-text-field
+                                v-model="albaran.iban"
+                                mask="AA## #### **** **** **** ####"
+                                label="IBAN"
+                                readonly
+                                v-on:keyup.enter="submit"
+                                :disabled="computedFactura"
+                            >
+                            </v-text-field>
+                        </v-flex>
                         <v-flex sm2>
                             <v-text-field
                                 v-model="albaran.username"
@@ -192,17 +206,6 @@
                             >
                             </v-text-field>
                         </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                        <v-flex sm6 d-flex>
-                            <v-text-field
-                                    v-model="albaran.notas"
-                                    label="Observaciones"
-                                    :disabled="computedFactura"
-                                >
-                            </v-text-field>
-                        </v-flex>
-
                         <v-flex sm2>
                             <v-text-field
                                 v-model="computedFModFormat"
@@ -221,6 +224,18 @@
                             >
                             </v-text-field>
                         </v-flex>
+
+                    </v-layout>
+                    <v-layout row wrap>
+                        <v-flex sm9 d-flex>
+                            <v-text-field
+                                    v-model="albaran.notas"
+                                    label="Observaciones"
+                                    :disabled="computedFactura"
+                                >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm1></v-flex>
                         <v-flex sm2>
                             <div class="text-xs-center">
                                 <v-btn @click="submit"  round
@@ -376,7 +391,7 @@ import {mapGetters} from 'vuex';
 
                         axios.put(url, this.albaran)
                             .then(response => {
-
+                                console.log(response);
                                 this.$toast.success(response.data.message);
                                 this.albaran = response.data.albaran;
                                 this.show_loading = false;

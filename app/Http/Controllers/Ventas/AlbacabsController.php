@@ -121,6 +121,9 @@ class AlbacabsController extends Controller
         $data['albaran']= $contador->albaran;
         $data['eje_fac']=0;
 
+
+        $data['iban']= $this->setIbanAlb($data);
+
         //return $data;
         $reg = Albacab::create($data);
 
@@ -179,10 +182,30 @@ class AlbacabsController extends Controller
 
        // return $albacab;
 
+       $data['iban']= $this->setIbanAlb($data);
+
         $albacab->update($data);
 
         if (request()->wantsJson())
-            return ['albaran'=>$albacab, 'message' => 'EL albarán ha sido modificado'];
+            return [
+                'albaran'=>$albacab,
+                'message' => 'EL albarán ha sido modificado',
+
+            ];
+    }
+
+    private function setIbanAlb($data){
+
+        if ($data['fpago_id']==2){
+            $cuenta = Cuenta::activa()->first();
+            return $cuenta->iban;
+        }elseif ($data['fpago_id']==3) {
+            $cliente = Cliente::find($data['cliente_id']);
+
+            return $cliente->iban;
+        }else
+            return null;
+
     }
 
     /**
@@ -276,6 +299,9 @@ class AlbacabsController extends Controller
 
     public function print($id, $file=false)
     {
+
+        $this->authorize('update', new Albacab);
+
         $empresa  = session()->get('empresa');
 
         // echo 'file://'.base_path('storage/crt/');
@@ -344,7 +370,7 @@ class AlbacabsController extends Controller
 
         $this->setPrepararAlb($empresa);
 
-        $data =  Albacab::with(['cliente','fpago','vencimiento','albalins'])->find($id);
+        $data =  Albacab::with(['cliente','fpago','vencimiento','albalins'])->findOrfail($id);
 
         // cabecera cliente
         $this->setCabeceraCli($data->cliente);
@@ -625,10 +651,16 @@ class AlbacabsController extends Controller
      */
     private function setPieAlb($data){
 
+        $iban_print = '';
+        $iban = str_split($data->iban,4);
+        foreach ($iban as $e){
+            $iban_print .= $e.' ';
+        }
+
         PDF::MultiCell(30,8,'Forma de Pago', '1', 'C', 0, 0, '', '', true,0,false,true,8,'M',false);
 		PDF::MultiCell(60,8,$data->fpago->nombre, '1', 'L', 0, 0, '', '', true,0,false,true,8,'M',false);
         PDF::MultiCell(26,8,'IBAN', '1', 'C', 0, 0, '', '', true,0,false,true,8,'M',false);
-        PDF::MultiCell(68,8,$data->cliente->iban, '1', 'C', 0, 1, '', '', true,0,false,true,8,'M',false);
+        PDF::MultiCell(68,8,$iban_print, '1', 'C', 0, 1, '', '', true,0,false,true,8,'M',false);
 
         PDF::Ln();
         PDF::MultiCell(184,24,$data->notas, '1', 'L', 0, 0, '', '', true,0,false,true,24,'T',false);

@@ -43,7 +43,7 @@
                                 v-model="contador.albaran"
                                 v-validate="'required|numeric'"
                                 :error-messages="errors.collect('albaran')"
-                                label="Albarán"
+                                label="Ult. Albarán"
                                 data-vv-name="albaran"
                                 data-vv-as="albarán"
                                 required
@@ -69,7 +69,7 @@
                                 v-model="contador.factura"
                                 v-validate="'required|numeric'"
                                 :error-messages="errors.collect('factura')"
-                                label="Factura"
+                                label="Ult. Factura"
                                 data-vv-name="factura"
                                 data-vv-as="factura"
                                 required
@@ -95,7 +95,7 @@
                                 v-model="contador.abono"
                                 v-validate="'required|numeric'"
                                 :error-messages="errors.collect('abono')"
-                                label="Abono"
+                                label="Ult. Abono"
                                 data-vv-name="abono"
                                 data-vv-as="abono"
                                 required

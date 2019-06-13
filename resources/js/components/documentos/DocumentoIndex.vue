@@ -273,7 +273,6 @@ import {mapActions} from "vuex";
         else
             this.unsetPagination();
 
-
         this.show_loading = true;
         axios.get('/mto/documentos')
             .then(res => {
@@ -337,15 +336,14 @@ import {mapActions} from "vuex";
             this.show_loading = true;
             axios.post('mto/documentos/filtrar',
                     {
-                        fecha_d: this.fecha_d+"-01",
-                        fecha_h: this.fecha_h+"-01",
+                        fecha_d: this.fecha_d,
+                        fecha_h: this.fecha_h,
                         archivo_id: this.archivo_id
                     }
                 )
                 .then(res => {
                     this.filtro = false;
-
-                     this.documentos = res.data.documentos;
+                    this.documentos = res.data.documentos;
                     this.show_loading = false;
 
                 })

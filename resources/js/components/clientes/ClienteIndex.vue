@@ -31,6 +31,8 @@
                                 <v-data-table
                                 :headers="headers"
                                 :items="clientes"
+                                @update:pagination="updateEventPagina"
+                                :pagination.sync="pagination"
                                 :search="search"
                                 rows-per-page-text="Registros por página"
                                 >
@@ -84,15 +86,16 @@ import {mapActions} from "vuex";
     data () {
       return {
         titulo:"Clientes",
+        search:"",
         paginaActual:{},
         pagination:{
-            model: "carpeta",
+            model: "clientes",
             descending: false,
             page: 1,
             rowsPerPage: 10,
-            sortBy: "id",
+            sortBy: "nombre",
+            search: ""
         },
-        search:"",
         headers: [
           {
             text: 'ID',

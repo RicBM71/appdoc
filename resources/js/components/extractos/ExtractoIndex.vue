@@ -253,8 +253,9 @@ import {mapActions} from "vuex";
             model: "extracto",
             descending: false,
             page: 1,
-            rowsPerPage: 8,
+            rowsPerPage: 10,
             sortBy: "id",
+            search: ""
         },
         search:"",
         headers: [
@@ -357,10 +358,12 @@ import {mapActions} from "vuex";
         updateEventPagina(obj){
 
             this.paginaActual = obj;
+            this.paginaActual.search = this.search;
 
         },
         updatePosPagina(pag){
 
+            this.search = pag.search;
             this.pagination.page = pag.page;
             this.pagination.descending = pag.descending;
             this.pagination.rowsPerPage= pag.rowsPerPage;
@@ -389,8 +392,8 @@ import {mapActions} from "vuex";
                         this.show_loading = true;
                         axios.post('mto/extractos/filtrar',
                                 {
-                                    fecha_d: this.fecha_d+"-01",
-                                    fecha_h: this.fecha_h+"-01",
+                                    fecha_d: this.fecha_d,
+                                    fecha_h: this.fecha_h,
                                     dh: this.dh,
                                 }
                             )
@@ -417,7 +420,7 @@ import {mapActions} from "vuex";
         },
         editDoc (id) {
             this.setPagination(this.paginaActual);
-            
+
             if (this.hasDocumenta)
                 this.$router.push({ name: 'documento.edit', params: { id: id } })
             else

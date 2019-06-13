@@ -50,8 +50,9 @@ class DocumentosController extends Controller
     {
 
 
-        $fecha_d = $request->input('fecha_d');
-        $fecha_h = date('t',strtotime($request->input('fecha_h')));
+        $fecha_d = $request->input('fecha_d').'-01';
+        $fecha_h = $request->input('fecha_h').'-'.date('t',strtotime($request->input('fecha_h')));
+
         $archivo_id = $request->input('archivo_id');
 
         $data[] = [

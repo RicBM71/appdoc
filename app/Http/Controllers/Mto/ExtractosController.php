@@ -50,8 +50,8 @@ class ExtractosController extends Controller
     public function filtrar(Request $request)
     {
 
-        $fecha_d = $request->input('fecha_d');
-        $fecha_h = date('t',strtotime($request->input('fecha_h')));
+        $fecha_d = $request->input('fecha_d').'-01';
+        $fecha_h = $request->input('fecha_h').'-'.date('t',strtotime($request->input('fecha_h')));
         $dh = $request->input('dh');
 
         $data[] = [

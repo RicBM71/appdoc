@@ -1,5 +1,6 @@
 <template>
-    <div v-if="registros">
+    <div>
+        <loading :show_loading="show_loading"></loading>
         <my-dialog :dialog.sync="dialog" registro="registro" @destroyReg="destroyReg"></my-dialog>
         <v-card>
             <v-card-title>
@@ -124,9 +125,12 @@
                 <v-layout row wrap>
                     <v-flex xs12>
                         <v-data-table
+                        v-show="!show_loading"
                         :headers="headers"
                         :items="albaranes"
                         :search="search"
+                        @update:pagination="updateEventPagina"
+                        :pagination.sync="pagination"
                         rows-per-page-text="Registros por página"
                         >
                             <template slot="items" slot-scope="props">
@@ -167,15 +171,20 @@
 </template>
 <script>
 import moment from 'moment';
+import Loading from '@/components/shared/Loading'
 import MyDialog from '@/components/shared/MyDialog'
 import MenuOpe from './MenuOpe'
+import {mapGetters} from 'vuex'
+import {mapActions} from "vuex";
+
   export default {
     $_veeValidate: {
       		validator: 'new'
     },
     components: {
         'my-dialog': MyDialog,
-        'menu-ope': MenuOpe
+        'menu-ope': MenuOpe,
+        'loading': Loading
     },
     data () {
       return {
@@ -186,6 +195,15 @@ import MenuOpe from './MenuOpe'
         },
         titulo:"Albaranes",
         search:"",
+        paginaActual:{},
+        pagination:{
+            model: "albaranes",
+            descending: true,
+            page: 1,
+            rowsPerPage: 10,
+            sortBy: "factura",
+            search: ""
+        },
         headers: [
           {
             text: 'Albarán',
@@ -226,7 +244,6 @@ import MenuOpe from './MenuOpe'
         ],
         albaranes:[],
         status: false,
-		registros: false,
         dialog: false,
 
         producto_id: 0,
@@ -237,6 +254,7 @@ import MenuOpe from './MenuOpe'
                 {text:'Factura','value':'F'},
             ],
 
+        show_loading: true,
         filtro: false,
 
         menu_d: false,
@@ -249,11 +267,16 @@ import MenuOpe from './MenuOpe'
     mounted()
     {
 
+        if (this.getPagination.model == this.pagination.model)
+            this.updatePosPagina(this.getPagination);
+        else
+            this.unsetPagination();
+
         axios.get('/ventas/albacabs')
             .then(res => {
 
                 this.albaranes = res.data;
-                this.registros = true;
+                this.show_loading = false;
             })
             .catch(err =>{
                 //console.log(err.response);
@@ -262,6 +285,10 @@ import MenuOpe from './MenuOpe'
             })
     },
     computed:{
+        ...mapGetters([
+            'hasDocumenta',
+            'getPagination'
+        ]),
         computedFechaD() {
             moment.locale('es');
             return this.fecha_d ? moment(this.fecha_d).format('L') : '';
@@ -272,6 +299,26 @@ import MenuOpe from './MenuOpe'
         },
     },
     methods:{
+         ...mapActions([
+            'setPagination',
+            'unsetPagination'
+        ]),
+        updateEventPagina(obj){
+
+            this.paginaActual = obj;
+            this.paginaActual.search = this.search;
+
+        },
+        updatePosPagina(pag){
+
+            this.search = pag.search;
+            this.pagination.page = pag.page;
+            this.pagination.descending = pag.descending;
+            this.pagination.rowsPerPage= pag.rowsPerPage;
+            this.pagination.sortBy = pag.sortBy;
+
+        },
+
         formatDate(f){
             if (f == null) return null;
             moment.locale('es');
@@ -325,6 +372,7 @@ import MenuOpe from './MenuOpe'
             this.$router.push({ name: 'albaran.create'})
         },
         editItem (id) {
+            this.setPagination(this.paginaActual);
             this.$router.push({ name: 'albaran.edit', params: { id: id } })
         },
         openDialog (id){

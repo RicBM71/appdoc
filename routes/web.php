@@ -1,14 +1,14 @@
 <?php
 
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/dash', 'HomeController@dash')->name('dash');
 
-Route::get('/test', function(){
- 	return  App\Retencion::all();
-});
+// Route::get('/test', function(){
+//  	return  App\Retencion::all();
+// });
 
 
 Route::group([

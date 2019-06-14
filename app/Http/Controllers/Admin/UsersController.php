@@ -182,7 +182,7 @@ class UsersController extends Controller
 
         $user->update($data);
 
-        $user->syncEmpresas($request->get('empresas'));
+        //$user->syncEmpresas($request->get('empresas'));
 
         if (request()->wantsJson())
             return ['status'=>'U','user'=>$user, 'msg' => 'EL Usuario ha sido modficado'];

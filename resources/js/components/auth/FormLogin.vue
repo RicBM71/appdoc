@@ -49,6 +49,11 @@
             </v-card-actions>
             <input type="hidden" name="blocked" value="0" />
         </form>
+        <v-btn icon large  v-on:click="reset">
+            <v-avatar size="32px" tile>
+                <v-icon color="grey">help</v-icon>
+            </v-avatar>
+        </v-btn>
     </div>
 </template>
 <script>
@@ -82,6 +87,9 @@ export default {
                 }
             });
 
+        },
+        reset(){
+            window.open('password/reset');
         }
     }
 }

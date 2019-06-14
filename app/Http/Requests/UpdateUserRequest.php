@@ -42,7 +42,7 @@ class UpdateUserRequest extends FormRequest
         ];
 
         if ($this->filled('password')){ //va a actualizar la password
-            $rules['password'] = ['confirmed','min:2','password'];
+            $rules['password'] = ['confirmed','min:6','password'];
         }
 
         if ($this->filled('blocked_at')){

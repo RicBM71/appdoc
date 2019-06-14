@@ -81,7 +81,7 @@ class Albacab extends Model
     {
 
         return $query->with(['cliente'])->where('fecha_fac', '=', $fecha)
-                     ->where('fpago_id', '=', 1);
+                     ->where('fpago_id', '=', 3);
 
     }
 

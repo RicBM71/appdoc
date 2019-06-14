@@ -97,6 +97,8 @@ Vue.use(Vue2Filters)
 /***************************** */
 
 Vue.component('form-login', require('./components/auth/FormLogin.vue').default);
+Vue.component('mail-login', require('./components/auth/MailLogin.vue').default);
+Vue.component('reset-login', require('./components/auth/ResetLogin.vue').default);
 
 
 const app = new Vue({

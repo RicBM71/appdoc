@@ -330,6 +330,7 @@
 
                 this.$validator.validateAll().then((result) => {
                     if (result){
+
                         axios.put(url, this.user)
                             .then(response => {
 

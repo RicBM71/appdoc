@@ -457,7 +457,10 @@ import {mapGetters} from 'vuex';
                 axios.get('/mto/carpetas/'+archivo_id)
                     .then(res => {
                         this.carpetas = res.data.carpetas;
-                        this.documento.carpeta_id = "";
+                        if (this.carpetas.length == 1)
+                            this.documento.carpeta_id = this.carpetas[0];
+                        else
+                            this.documento.carpeta_id = "";
                     })
                     .catch(err => {
                         if (err.response.status == 404)

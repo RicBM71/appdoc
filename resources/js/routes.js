@@ -82,6 +82,10 @@ export default [
 		path: '/login',
 		name: 'login'
     },
+    {
+		path: '/password/reset',
+		name: 'password.reset'
+    },
 	{
 		path: '/home',
         component: Dash,

@@ -37,10 +37,18 @@ class AlbacabsController extends Controller
     {
         $this->authorize('create', new Albacab);
 
-        $data =  Albacab::with(['cliente','albalins'])
-                    ->whereYear('fecha_alb',date('Y'))
-                    ->orderBy('fecha_alb', 'desc')
-                    ->get();
+        if (request()->session()->has('filtro_alb')){
+            $filtro = request()->session()->get('filtro_alb');
+            $data =  Albacab::with(['cliente','albalins'])
+                        ->where($filtro)
+                        ->orderBy('fecha_alb', 'desc')
+                        ->get();
+
+        }else
+            $data =  Albacab::with(['cliente','albalins'])
+                        ->whereYear('fecha_alb',date('Y'))
+                        ->orderBy('fecha_alb', 'desc')
+                        ->get();
        // dd($data);
 
         if (request()->wantsJson())
@@ -71,6 +79,8 @@ class AlbacabsController extends Controller
                 'fecha_fac', '<=', $fecha_h,
             ];
         }
+
+        session(['filtro_alb' => $data]);
 
         if (request()->wantsJson())
             return Albacab::with(['cliente','albalins'])->where($data)
@@ -809,6 +819,7 @@ class AlbacabsController extends Controller
         $data['albaran']= $contador->albaran;
         $data['ejercicio']   = date('Y',strtotime($data['fecha_alb']));
 
+        $data['iban'] = $alb->iban;
         $data['username'] = session('username');
 
         $data['id'] = null;

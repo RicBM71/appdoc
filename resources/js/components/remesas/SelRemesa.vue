@@ -153,7 +153,7 @@
                             })
                             .then(response => {
 
-                              //  console.log(response.data);
+                             //  console.log(response.data);
 
                             let blob = new Blob([response.data.xml], { type: 'application/xml' })
                             let link = document.createElement('a')

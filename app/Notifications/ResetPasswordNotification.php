@@ -8,11 +8,13 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class ResetPasswordNotification extends Notification implements ShouldQueue
+class ResetPasswordNotification extends Notification
 {
+    //implements ShouldQueue
     use Queueable;
 
     public $token;
+    public $data;
 
     /**
      * Create a new notification instance.
@@ -22,6 +24,8 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
     public function __construct($token)
     {
         $this->token = $token;
+      //  $this->data = session()->all();
+
     }
 
     /**
@@ -44,15 +48,14 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
 
-        $data['razon']="sanaval.com";
-
         return (new MailMessage)
-            ->greeting('Hola '.$notifiable->name)
-                ->from('info@sanaval.com','sanaval')
+            ->greeting('Hola '.$notifiable->name.': ')
+//                ->with('data', $this->data)
+                ->from(config('mail.username'),config('app.name'))
                 ->subject('Solicitud reset Contraseña')
-                ->line('Ha recibido este email porque ha solicitado un reseteo de la contresaña asociada a su cuenta.')
+                ->line('Has recibido este email porque se ha solicitado un reseteo de la contraseña asociada a tu cuenta.')
                 ->action('Reset Password', url(config('app.url').route('password.reset', $this->token, false)))
-                ->line('Si usted no ha realizado esta petición puede ignorar este email.')
+                ->line('Si no has realizado esta petición puedes ignorar este email.')
                 ->salutation('¡Saludos!');
     }
 

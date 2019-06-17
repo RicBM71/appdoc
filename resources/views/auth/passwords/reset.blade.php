@@ -17,8 +17,8 @@
                             action="{{ route('password.update') }}"
                             token="{{ csrf_token() }}"
                             token_mail="{{ $token }}"
-                            email="{{ old('mail') }}"
-                            err_mail="{{ $errors->first('mail') }}"
+                            email="{{ old('email') }}"
+                            err_mail="{{ $errors->first('email') }}"
                             err_pass="{{ $errors->first('password') }}">
                         ></reset-login>
                 </v-card>

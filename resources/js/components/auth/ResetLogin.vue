@@ -36,11 +36,13 @@
                                 prepend-icon="lock"
                                 v-model="password"
                                 ref="password"
+                                :counter="8"
                                 :append-icon="show ? 'visibility_off' : 'visibility'"
                                 :type="show ? 'text' : 'password'"
                                 :error-messages="errors.collect('password')"
                                 v-validate="'min:6'"
                                 label="password"
+                                name="password"
                                 data-vv-name="password"
                                 @click:append="show = !show"
                                 >
@@ -56,12 +58,13 @@
                             <v-text-field
                                 prepend-icon="lock"
                                 v-model="password_confirmation"
-                                v-validate="'min:6|confirmed:password'"
+                                v-validate="'min:8|confirmed:password'"
                                 :append-icon="show ? 'visibility_off' : 'visibility'"
                                 :type="show ? 'text' : 'password'"
                                 :error-messages="errors.collect('password_confirmation')"
                                 label="confirmar password"
                                 hint="Confirmar password solo si va a modificarla"
+                                name="password_confirmation"
                                 data-vv-name="password_confirmation"
                                 data-vv-as="password"
                                 @click:append="show = !show"
@@ -98,7 +101,7 @@ export default {
     },
     data() {
         return {
-            show: true,
+            show: false,
             loading: false,
             f_email: this.email,
             password: "",

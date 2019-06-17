@@ -44,13 +44,13 @@ class ResetPasswordController extends Controller
      *
      * @return array
      */
-    // protected function rules()
-    // {
+    protected function rules()
+    {
 
-    //     return [
-    //         'token' => 'required',
-    //         'email' => 'required|email',
-    //         'password' => 'required|confirmed|password|min:6',
-    //     ];
-    // }
+        return [
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|confirmed|password|min:8',
+        ];
+    }
 }

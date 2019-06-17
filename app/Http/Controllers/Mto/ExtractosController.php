@@ -32,12 +32,12 @@ class ExtractosController extends Controller
             if (request()->session()->has('filtro_extrac')){
                 $filtro = request()->session()->get('filtro_extrac');
                 return Extracto::with('documentos','documentos.archivo')->where($filtro)
-                            ->orderBy('fecha')
+                            ->orderBy('fecha','desc')
                             ->get();
             }
             else
                 return Extracto::with('documentos','documentos.archivo')->whereYear('fecha',date('Y'))
-                                ->orderBy('fecha')
+                                ->orderBy('fecha','desc')
                                 ->get();
 
     }

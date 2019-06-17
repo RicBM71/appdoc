@@ -391,7 +391,7 @@ import {mapGetters} from 'vuex';
 
                         axios.put(url, this.albaran)
                             .then(response => {
-                                console.log(response);
+                                //console.log(response);
                                 this.$toast.success(response.data.message);
                                 this.albaran = response.data.albaran;
                                 this.show_loading = false;

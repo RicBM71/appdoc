@@ -54,12 +54,12 @@ class Albalin extends Model
             ->first();
 
         return $q;
-		return array('importe'=> $q->importe,
+		return array('importe'=> round($q->importe,2),
 				'iva'=> $q->iva,
 				'irpf'=> $q->irpf,
 				'poriva'=> $q->poriva,
 				'porirpf'=> $q->porirpf,
-				'base'=> $q->base);
+				'base'=> round($q->base,2));
 
 	}
 

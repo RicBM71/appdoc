@@ -251,10 +251,10 @@ import {mapActions} from "vuex";
         paginaActual:{},
         pagination:{
             model: "extracto",
-            descending: false,
+            descending: true,
             page: 1,
             rowsPerPage: 10,
-            sortBy: "id",
+            sortBy: "fecha",
             search: ""
         },
         search:"",

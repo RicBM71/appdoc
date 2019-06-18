@@ -269,8 +269,6 @@
                                         :error-messages="errors.collect('factura')"
                                         data-vv-name="factura"
                                         data-vv-as="Factura"
-                                        item-text="name"
-                                        item-value="id"
                                         :items="sino"
                                         label="Factura"
                                     ></v-select>
@@ -423,7 +421,7 @@ import AlbCliente from './ClienteAlbaran'
                 },
 
                 sino:[
-                    {id: 0, name:"Si"}, {id: 1, name:"No"},
+                    {value: 1, text:"Si"}, {value: 0, text:"No"},
                 ],
                 clientes:[],
                 carpetas:[],

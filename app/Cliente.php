@@ -62,14 +62,14 @@ class Cliente extends Model
 
     }
 
-    public function scopeFacturables($query, $nombre)
+    public function scopeFacturables($query)
     {
 
-        if (is_null($nombre))
-            return $query->where('factura', '=', true);
-        else
-            return $query->where('factura', '=', true)
-                         ->where('nombre', 'LIKE', '%' . $nombre . '%');
+        return $query->where('factura', true);
+
+            // no sé que pintaba esto aquí de momento fuera.
+            // return $query->where('factura', '=', true)
+            //              ->where('nombre', 'LIKE', '%' . $nombre . '%');
 
     }
 
@@ -83,16 +83,9 @@ class Cliente extends Model
      *
      */
 
-    public static function selClientesFacturables($nombre = null){
+    public static function selClientesFacturables(){
 
-        $arr=[];
-
-        $cli = Cliente::Facturables($nombre)->get();
-        foreach($cli as $row){
-             $arr[] = ['name' => $row->nombre, 'id' => $row->id];
-        }
-
-        return $arr;
+        return Cliente::select('id AS value', 'nombre AS text')->facturables()->get();
 
     }
 

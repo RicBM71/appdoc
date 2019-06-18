@@ -139,8 +139,7 @@
                                 v-validate="'required'"
                                 data-vv-name="cliente_id"
                                 data-vv-as="Cliente"
-                                item-text="name"
-                                item-value="id"
+
                                 :error-messages="errors.collect('cliente_id')"
                                 :loading="loading"
                                 :items="clientes"
@@ -326,7 +325,7 @@ import {mapGetters} from 'vuex';
             if (id > 0)
                 axios.get('/ventas/albacabs/'+id+'/edit')
                     .then(res => {
-
+                        console.log(res.data);
                         this.clientes = res.data.clientes;
                         this.fpagos = res.data.fpagos;
                         this.vencimientos = res.data.vencimientos;

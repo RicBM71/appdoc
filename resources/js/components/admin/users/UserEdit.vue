@@ -124,6 +124,12 @@
 
                                         ></v-date-picker>
                                     </v-menu>
+                                    <v-text-field v-if="!user.blocked"
+                                        v-model="computedLoginAt"
+                                        label="Ult. Login"
+                                        readonly
+                                    >
+                                    </v-text-field>
                                     <v-text-field
                                         v-model="computedFModFormat"
                                         label="Modificado"
@@ -222,6 +228,7 @@
                     avatar:   "",
                     blocked_at:"",
                     blocked:  "",
+                    login_at: "",
                     empresa_id:"",
                     password: "",
                     password_confirmation:"",
@@ -314,6 +321,10 @@
             computedFCreFormat() {
                 moment.locale('es');
                 return this.user.created_at ? moment(this.user.created_at).format('D/MM/YYYY H:mm:ss') : '';
+            },
+            computedLoginAt() {
+                moment.locale('es');
+                return this.user.login_at ? moment(this.user.login_at).format('L') : '';
             },
             computedId(){
                 if (this.user.id == 1) return true; else return false;

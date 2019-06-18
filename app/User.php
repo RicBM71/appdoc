@@ -15,7 +15,7 @@ class User extends Authenticatable
 {
     use Notifiable, HasRoles;
 
-    protected $dates =['bolcked_at'];
+    protected $dates =['blocked_at','login_at'];
 
     /**
      * The attributes that are mass assignable.
@@ -23,7 +23,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name','lastname', 'email', 'username', 'password', 'avatar','blocked', 'blocked_at','empresa_id'
+        'name','lastname', 'email', 'username', 'password', 'avatar','blocked', 'blocked_at','empresa_id','login_at'
     ];
 
 

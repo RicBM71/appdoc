@@ -57,4 +57,21 @@ class LoginController extends Controller
         return $request->only($this->username(), 'password', 'blocked');
     }
 
+
+
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        //\Log::info($user->username);
+
+        $data['login_at'] = date('Y-m-d H:i:s');
+        $user->update($data);
+    }
+
 }

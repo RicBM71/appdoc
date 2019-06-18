@@ -21,7 +21,7 @@
                             <td  v-if="props.item.blocked == false"  class="text-xs-left">{{ props.item.name }}</td>
                             <td v-else class="text-xs-left"><span class="red--text">BLOQUEADO -></span></td>
                             <td class="text-xs-left">{{ props.item.username }}</td>
-                            <td class="text-xs-left">{{ props.item.email }}</td>
+                            <td class="text-xs-left">{{ formatDate(props.item.login_at) }}</td>
                             <td class="text-xs-left">{{ extrae(props.item.roles) }}</td>
                             <td class="justify-center layout px-0">
                                 <v-icon
@@ -51,6 +51,7 @@
     </div>
 </template>
 <script>
+import moment from 'moment';
 import MyDialog from '@/components/shared/MyDialog'
 import MenuOpe from './MenuOpe'
   export default {
@@ -73,7 +74,7 @@ import MenuOpe from './MenuOpe'
             value: 'name'
           },
           { text: 'Username', align: 'left', value: 'name' },
-          { text: 'Email', align: 'left', value: 'email' },
+          { text: 'Login', align: 'left', value: 'login_at' },
           { text: 'Roles', align: 'left', value: 'roles', sortable: false, },
           { text: 'Acciones', align: 'left', value: 'acciones', sortable: false, }
         ],
@@ -100,6 +101,11 @@ import MenuOpe from './MenuOpe'
             })
     },
     methods:{
+        formatDate(f){
+            if (f == null) return null;
+            moment.locale('es');
+            return moment(f).format('DD/MM/YYYY HH:mm:ss');
+        },
         create(){
             this.$router.push({ name: 'users_create', params: { id: '0' } })
         },

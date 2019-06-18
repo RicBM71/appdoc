@@ -79,4 +79,55 @@ class FiledocsController extends Controller
         //return response()->download(storage_path('/app/' . $ficheroPath,$filename));
 
     }
+
+
+    public function download($id){
+
+        $zip_file = storage_path('zip/filedoc.zip');
+
+
+        if (file_exists(storage_path('zip'))==false)
+            mkdir(storage_path('zip'), '0755');
+
+
+        $zip = new \ZipArchive();
+        $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+
+
+
+    //     $path = storage_path('invoices');
+
+        $i = 0;
+
+        $files = Documento::with('filedocs')->whereYear('fecha',2019)->get();
+        //return $files;
+
+        foreach ($files as $doc){
+           // dd($doc->filedocs);
+
+            foreach ($doc->filedocs as $file){
+                $ficheroPath = str_replace('/storage', 'app', $file->url);
+                //return storage_path($ficheroPath);
+                $zip->addFile(storage_path($ficheroPath), $i.'.pdf');
+                //$zip->add($ficheroPath);
+               // echo storage_path($ficheroPath);
+                //return;
+                $i++;
+               // echo $zip->addFile(storage_path($ficheroPath), $i.".pdf");
+
+            }
+
+
+            if ($i >  10) break;
+
+
+        }
+
+        $zip->close();
+
+        // We return the file immediately after download
+        return response()->download($zip_file);
+
+    }
+
 }

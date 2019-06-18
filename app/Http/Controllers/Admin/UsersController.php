@@ -216,7 +216,7 @@ class UsersController extends Controller
     public function updatePassword(Request $request)
 	{
 		$rules = [
-			'new_password'         => 'min:8|required|password',
+			'new_password'         => 'min:6|required|password',
 			'password_confirmation' => 'required|same:new_password'
 		];
 
@@ -250,4 +250,20 @@ class UsersController extends Controller
             $user->update(['empresa_id' => 0]);
 
     }
+
+    public function reset(Request $request, User $user)
+    {
+
+
+        $data['password'] = Hash::make(date('dmY'));
+
+        $user->update($data);
+
+        if (request()->wantsJson())
+            return ['user'=>$user,'msg' => 'Password restablecida a: '.date('dmY')];
+
+    }
+
+
+
 }

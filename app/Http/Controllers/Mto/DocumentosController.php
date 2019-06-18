@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDocumento;
+use Illuminate\Support\Facades\Storage;
 
 class DocumentosController extends Controller
 {

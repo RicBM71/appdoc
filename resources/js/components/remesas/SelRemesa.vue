@@ -115,7 +115,7 @@
 
         },
         mounted(){
-            axios.get('/ventas/albacabs/remesa')
+            axios.get('/ventas/remesas/remesa')
                 .then(res => {
 
                     this.cuentas = res.data.cuentas;
@@ -142,7 +142,7 @@
                 //console.log("Edit user (submit):"+this.user.id);
                 this.show_loading = true;
 
-                var url = '/ventas/albacabs/remesar';
+                var url = '/ventas/remesas/remesar';
 
                 this.$validator.validateAll().then((result) => {
                     if (result){

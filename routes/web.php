@@ -6,6 +6,32 @@ Auth::routes(['register' => false]);
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/dash', 'HomeController@dash')->name('dash');
 
+Route::get('/zip', function () {
+
+
+    $zip_file = storage_path('zip/fileppww.zip');
+
+
+    if (file_exists(storage_path('zip'))==false)
+        mkdir(storage_path('zip'), '0755');
+
+
+    $zip = new ZipArchive();
+    $zip->open($zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+
+    $f = storage_path('app/documentum/emp1/2019_01.N43');
+   // return $f;
+    $zip->addFile($f, 'kk.pdf');
+
+    $zip->close();
+    return response()->download($zip_file);
+
+
+
+});
+
+
 // Route::get('/test', function(){
 //  	return  App\Retencion::all();
 // });
@@ -29,6 +55,7 @@ Route::group([
         Route::middleware('role:Root|Admin')
             ->put('users/{user}/empresas','UsersEmpresasController@update');
         Route::put('users/{user}/empresa', 'UsersController@updateEmpresa');
+        Route::put('users/{user}/reset', 'UsersController@reset');
 
         Route::post('users/{user}/avatar', 'AvatarsController@store');
         Route::delete('avatars/{user}/delete', 'AvatarsController@destroy');
@@ -80,7 +107,8 @@ Route::group([
     'namespace' => 'Ventas',
     'middleware' => 'auth'],
     function (){
-        Route::resource('albacabs', 'AlbacabsController', ['except'=>'show','as' => 'ventas']);
+        //Route::resource('albacabs', 'AlbacabsController', ['except'=>'show','as' => 'ventas']);
+        Route::resource('albacabs', 'AlbacabsController');
         Route::put('albacabs/{albacab}/facturar', 'AlbacabsController@facturar');
         Route::put('albacabs/{albacab}/desfacturar', 'AlbacabsController@desfacturar');
         Route::get('albacabs/{albacab}/print', 'AlbacabsController@print');
@@ -90,8 +118,10 @@ Route::group([
 
         Route::resource('albalins', 'AlbalinsController', ['except'=>'index','as' => 'ventas']);
 
-        Route::get('albacabs/remesa', 'AlbacabsController@remesa');
-        Route::post('albacabs/remesar', 'AlbacabsController@remesar');
+        Route::middleware('role:Root|Admin')->group(function () {
+            Route::get('remesas/remesa', 'RemesasController@remesa');
+            Route::post('remesas/remesar', 'RemesasController@remesar');
+        });
     }
 );
 

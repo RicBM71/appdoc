@@ -139,14 +139,14 @@ import {mapActions} from "vuex";
                 }
                 })
                 .then(res => {
-                    console.log(res);
-                    let blob = new Blob([res.data.zip]);
+                    //console.log(res);
+                    let blob = new Blob([res.data]);
                     let link = document.createElement('a');
                     link.href = window.URL.createObjectURL(blob);
                     link.download = 'DOCU'+new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'.zip';
                     link.click();
 
-                    this.$toast.success("Descarga completada! "+res.data.files+" descargados.");
+                    this.$toast.success("Descarga completada!");
 
                     this.show_loading = false;
 

@@ -82,9 +82,10 @@ class ExtractosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        return session()->get('empresa')->id;
+        \Log::info('show-ext');
+        //return session()->get('empresa')->id;
     }
 
     public function banco(){

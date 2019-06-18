@@ -6,36 +6,6 @@ Auth::routes(['register' => false]);
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/dash', 'HomeController@dash')->name('dash');
 
-Route::get('/zip', function () {
-
-
-    $zip_file = storage_path('zip/fileppww.zip');
-
-
-    if (file_exists(storage_path('zip'))==false)
-        mkdir(storage_path('zip'), '0755');
-
-
-    $zip = new ZipArchive();
-    $zip->open($zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-
-
-    $f = storage_path('app/documentum/emp1/2019_01.N43');
-   // return $f;
-    $zip->addFile($f, 'kk.pdf');
-
-    $zip->close();
-    return response()->download($zip_file);
-
-
-
-});
-
-
-// Route::get('/test', function(){
-//  	return  App\Retencion::all();
-// });
-
 
 Route::group([
     //'as' => '.admin' ver php artisan r:l para ver problema admin.admin.
@@ -93,10 +63,13 @@ Route::group([
         Route::post('documentos/filtrar', 'DocumentosController@filtrar');
         Route::post('documentos/{documento}/attach', 'DocumentosController@attach');
         Route::post('documentos/{documento}/detach', 'DocumentosController@detach');
+        Route::post('documentos/zip', 'DocumentosController@zip');
+
          //Route::resource('filedocs', 'FiledocsController', ['only'=>['store','show','destroy'],'as' => 'mto']);
         Route::post('filedocs/{filedoc}', 'FiledocsController@store');
         Route::delete('filedocs/{filedoc}', 'FiledocsController@destroy');
         Route::get('filedocs/{filedoc}', 'FiledocsController@show');
+
         Route::resource('carpetas', 'CarpetasController', ['as' => 'mto']);
     }
 );
@@ -122,6 +95,8 @@ Route::group([
             Route::get('remesas/remesa', 'RemesasController@remesa');
             Route::post('remesas/remesar', 'RemesasController@remesar');
         });
+
+
     }
 );
 

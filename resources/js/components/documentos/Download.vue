@@ -1,0 +1,165 @@
+<template>
+    <div>
+        <loading :show_loading="show_loading"></loading>
+
+        <div>
+            <v-card>
+                <v-card-title>
+                    <h2>{{titulo}}</h2>
+                    <v-spacer></v-spacer>
+
+                </v-card-title>
+            </v-card>
+            <v-card>
+                <v-form>
+                    <v-container>
+                        <v-layout row wrap>
+                            <v-flex xs4 d-flex>
+                                <v-select
+                                    v-model="archivo_id"
+                                    :items="archivos"
+                                    label="Archivo"
+                                ></v-select>
+                            </v-flex>
+                            <v-flex sm1></v-flex>
+                            <v-flex sm3>
+                                 <v-menu
+                                    ref="menu_d"
+                                    v-model="menu_d"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    :return-value.sync="fecha_d"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    max-width="290px"
+                                    min-width="290px"
+                                >
+                                    <template v-slot:activator="{ on }">
+                                        <v-text-field
+                                            v-model="computedFechaD"
+                                            label="Mes"
+                                            prepend-icon="event"
+                                            readonly
+                                            v-on="on"
+                                        ></v-text-field>
+                                    </template>
+                                    <v-date-picker
+                                    v-model="fecha_d"
+                                    type="month"
+                                    locale="es"
+                                    no-title
+                                    scrollable
+                                    >
+                                    <v-spacer></v-spacer>
+                                    <v-btn flat color="primary" @click="menu_d = false">Cancelar</v-btn>
+                                    <v-btn flat color="primary" @click="$refs.menu_d.save(fecha_d)">OK</v-btn>
+                                    </v-date-picker>
+                                </v-menu>
+                            </v-flex>
+
+                            <v-spacer></v-spacer>
+                            <v-flex sm2>
+                                <v-btn @click="zip"  round  block  color="info">
+                                    Download
+                                </v-btn>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
+                </v-form>
+            </v-card>
+        </div>
+    </div>
+</template>
+<script>
+import Loading from '@/components/shared/Loading'
+import moment from 'moment';
+import {mapGetters} from 'vuex'
+import {mapActions} from "vuex";
+
+  export default {
+    components: {
+        'loading': Loading
+    },
+    data () {
+      return {
+        titulo:"Download documentos",
+        archivos:[],
+        archivo_id:"",
+
+        show_loading: false,
+
+        menu_d: false,
+        fecha_d: new Date().toISOString().substr(0, 5)+"01",
+
+      }
+    },
+    mounted()
+    {
+
+        this.show_loading = true;
+        axios.get('/mto/documentos')
+            .then(res => {
+                this.archivos = res.data.archivos;
+                this.archivo_id = this.archivos[0].value;
+                this.show_loading = false;
+            })
+            .catch(err =>{
+
+                this.show_loading = false;
+
+                this.$toast.error(err.response.data.message);
+                this.$router.push({ name: 'dash' })
+
+            })
+    },
+    computed:{
+        ...mapGetters([
+            'hasDocumenta',
+            'getPagination'
+        ]),
+        computedFechaD() {
+            moment.locale('es');
+            return this.fecha_d ? moment(this.fecha_d).format('MM-YYYY') : '';
+        }
+    },
+    methods:{
+        zip(){
+
+            this.show_loading = true;
+
+            axios({
+                method: 'post',
+                url: '/mto/documentos/zip',
+                responseType: 'blob',
+                data: {
+                    fecha_d: this.fecha_d,
+                    archivo_id: this.archivo_id
+                }
+                })
+                .then(res => {
+                    console.log(res);
+                    let blob = new Blob([res.data.zip]);
+                    let link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = 'DOCU'+new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'.zip';
+                    link.click();
+
+                    this.$toast.success("Descarga completada! "+res.data.files+" descargados.");
+
+                    this.show_loading = false;
+
+                })
+                .catch(err => {
+
+                    this.show_loading = false;
+                    if (err.response.status == 404)
+                        this.$toast.error('No hay documentos!');
+                    else
+                        this.$toast.error(err.response.data.message);
+                });
+        }
+    }
+  }
+</script>

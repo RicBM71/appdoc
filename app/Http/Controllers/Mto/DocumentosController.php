@@ -241,4 +241,55 @@ class DocumentosController extends Controller
             ];
         }
     }
+
+    public function zip(Request $request){
+
+
+        $zip_file = storage_path('zip/filedoc.zip');
+
+        if (file_exists(storage_path('zip'))==false)
+            mkdir(storage_path('zip'), '0755');
+
+        $zip = new \ZipArchive();
+        $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+
+        $periodo = explode("-", $request->input('fecha_d'));
+        $archivo_id = $request->input('archivo_id');
+        // $archivo_id = 4;
+        // $periodo=[2019,1];
+
+
+    //     $path = storage_path('invoices');
+
+        $i = 0;
+
+        $files = Documento::with('filedocs')
+            ->whereYear('fecha',$periodo[0])
+            ->whereMonth('fecha',$periodo[1])
+            ->where('archivo_id',$archivo_id)
+            ->get();
+
+        if (count($files)==0){
+            return abort(404);
+        }
+
+        foreach ($files as $doc){
+           // dd($doc->filedocs);
+
+            foreach ($doc->filedocs as $file){
+                $ficheroPath = str_replace('/storage', 'app', $file->url);
+
+                $filename = explode(".",$file->url);
+
+                $zip->addFile(storage_path($ficheroPath), $i.'.'.$filename[1]);
+                $i++;
+            }
+
+        }
+
+        $zip->close();
+
+        return response()->download($zip_file);
+
+    }
 }

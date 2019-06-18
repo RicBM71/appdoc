@@ -68,6 +68,7 @@ import DocumentoIndex from './components/documentos/DocumentoIndex.vue';
 import DocumentoCreate from './components/documentos/DocumentoCreate.vue';
 import DocumentoEdit from './components/documentos/DocumentoEdit.vue';
 import DocumentoShow from './components/documentos/DocumentoShow.vue';
+import DocumentoDownload from './components/documentos/Download.vue';
 
 
 import EditPassword from './components/profile/edit-password/EditPassword.vue';
@@ -345,6 +346,11 @@ export default [
                 name: 'documento.show',
                 component: DocumentoShow,
             },
+            {
+                path: '/documentos/download',
+                name: 'documento.zip',
+                component: DocumentoDownload,
+            }
             // {
             //     path: '*',
             //     redirect: {

@@ -44,6 +44,16 @@
                 </v-btn>
             </v-flex>
             <v-flex xs1></v-flex>
+            <v-flex xs3>
+                 <v-btn round block large color="grey" class="blue-grey lighten-3"
+                     @click="goDownload()">
+                     Download ZIP
+                     <v-icon right dark>get_app</v-icon>
+                </v-btn>
+            </v-flex>
+        </v-layout>
+        <v-layout row wrap>
+            <v-flex xs4></v-flex>
             <v-flex xs3 v-show="isAdmin">
                  <v-btn round block large color="grey" class="blue-grey lighten-3"
                      @click="goRemesas()">
@@ -100,6 +110,9 @@ export default {
         },
         goRemesas(){
             this.$router.push({ name: 'remesa.seleccion' })
+        },
+        goDownload(){
+            this.$router.push({ name: 'documento.zip' })
         }
     }
   }

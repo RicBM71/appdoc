@@ -196,10 +196,11 @@
                                     <td :class=colorLin(props.item.dh)>{{ props.item.importe | currency('€', 2, { thousandsSeparator:'.', thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false })}}</td>
                                     <td class="justify-center layout px-0">
                                         <v-icon
+                                            v-show="hasDocumenta"
                                             small
                                             class="mr-2"
                                             @click="editNota(props.item)"
-                                            color="blue lighten-1"
+                                            color="deep-purple darken-4"
                                         >
                                             textsms
                                         </v-icon>
@@ -240,7 +241,7 @@
                                             <v-tooltip bottom>
                                                 <template v-slot:activator="{ on }">
                                                     <v-btn
-                                                        v-show="hasDocumenta"
+                                                        v-show="hasDocumenta && !child.cerrado"
                                                         v-on="on"
                                                         color="white"
                                                         icon
@@ -299,7 +300,7 @@ import {mapActions} from "vuex";
     },
     data () {
       return {
-        titulo:"Extracto2",
+        titulo:"Extracto",
         paginaActual:{},
         pagination:{
             model: "extracto",
@@ -501,6 +502,8 @@ import {mapActions} from "vuex";
                 this.$router.push({ name: 'documento.show', params: { id: id } })
         },
         createDocu(extracto){
+            this.setPagination(this.paginaActual);
+
             if (this.documento_id == 0)
                 this.$router.push({ name: 'documento.create', params: { extracto: extracto } })
             else{

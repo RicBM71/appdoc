@@ -242,37 +242,37 @@ export default {
     mounted(){
 
         axios.get('/dash')
-            .then(res => {
+                .then(res => {
 
-                this.setAuthUser(res.data.user);
+                    this.setAuthUser(res.data.user);
 
-                this.empresa_id = this.user.empresa_id;
-                //this.show = true;
-                if (this.hasFactura)
-                    this.items.push(this.factu);
+                    this.empresa_id = this.user.empresa_id;
+                    //this.show = true;
+                    if (this.hasFactura)
+                        this.items.push(this.factu);
 
-                if (this.isRoot)
-                    this.items.push(this.root);
-                else if(this.isAdmin)
-                    this.items.push(this.admin);
+                    if (this.isRoot)
+                        this.items.push(this.root);
+                    else if(this.isAdmin)
+                        this.items.push(this.admin);
 
-                res.data.user.empresas.map((e) =>{
-                    if (e.id == this.empresa_id)
-                        this.empresaTxt = e.titulo;
-                    this.empresas.push({id: e.id, name: e.titulo});
+                    res.data.user.empresas.map((e) =>{
+                        if (e.id == this.empresa_id)
+                            this.empresaTxt = e.titulo;
+                        this.empresas.push({id: e.id, name: e.titulo});
+                    })
+
+
+
                 })
-
-
-
-            })
-            .catch(err => {
-                //console.log(err);
-                this.show = false;
-                if (err.request.status == 401){ // fallo de validated.
-                    //this.$router.push("/login");
-                    window.location = '/login';
-                }
-            })
+                .catch(err => {
+                    //console.log(err);
+                    this.show = false;
+                    if (err.request.status == 401){ // fallo de validated.
+                        //this.$router.push("/login");
+                        window.location = '/login';
+                    }
+                })
 
     },
     methods:{
@@ -311,6 +311,17 @@ export default {
         empresa(){
             this.myEmpresa=true;
         },
+        getReloadEmpresa(){
+            axios.get('/dash')
+                .then(res => {
+                    
+                    this.setAuthUser(res.data.user);
+
+                })
+                .catch(err => {
+                    this.$toast.error("Fallo en reload empresa...");
+                })
+        },
         setEmpresa(){
 
             this.empresas.map((e) =>{
@@ -325,6 +336,9 @@ export default {
                 })
                 .then(res => {
                     //this.$toast.success("Cambiando de empresa...");
+                   // this.setAuthUser(res.data.user);
+
+                    this.getReloadEmpresa();
                     this.$router.push({name: 'dash'});
                 })
                 .catch(err => {

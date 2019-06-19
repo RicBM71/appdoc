@@ -20,6 +20,7 @@ class CreateExtractosTable extends Migration
             $table->date('fecha');
             $table->String('dh',1);
             $table->String('concepto');
+            $table->String('nota', 50)->nullable();
             $table->decimal('importe', 10, 2)->default(0);
             $table->String('username',20)->nullable()->default(null);
             $table->timestamps();

@@ -64,7 +64,7 @@ class HomeController extends Controller
        // \Log::info($empresa->titulo);
 
        // de momento no quito filtros, ya veremos.
-        //$this->unloadSession($request);
+        $this->unloadSession($request);
 
         session([
             'empresa_id' => $authUser->empresa_id,

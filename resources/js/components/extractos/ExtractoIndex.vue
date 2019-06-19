@@ -4,10 +4,47 @@
 
         <div v-if="registros">
 
+            <v-dialog v-model="dialog" max-width="500px">
+                <v-card>
+                    <v-card-title>
+                        <span class="headline">Nota</span>
+                    </v-card-title>
+
+                    <v-card-text>
+                        <v-container grid-list-md>
+                        <v-layout wrap>
+                            <v-flex xs12>
+                            <v-text-field v-model="editedItem.nota" label="Nota"></v-text-field>
+                            </v-flex>
+                        </v-layout>
+                        </v-container>
+                    </v-card-text>
+
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" flat @click="close">Cancelar</v-btn>
+                        <v-btn color="blue darken-1" flat @click="save">Guardar</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
             <v-card>
                 <v-card-title>
                     <h2>{{titulo}}</h2>
                     <v-spacer></v-spacer>
+                    <v-tooltip bottom v-if="documento_id != 0">
+                        <template v-slot:activator="{ on }">
+                            <v-btn
+                                v-on="on"
+                                color="white"
+                                icon
+                                @click="cancelLink"
+                            >
+                                <v-icon color="red">clear</v-icon>
+                            </v-btn>
+                            <span class="red--text">Cancelar enlace</span>
+                        </template>
+                        <span>Cancelar enlace</span>
+                    </v-tooltip>
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                             <v-btn
@@ -107,6 +144,13 @@
                                     label="D/H"
                                 ></v-select>
                             </v-flex>
+                             <v-flex xs2 d-flex>
+                                <v-select
+                                    v-model="docu"
+                                    :items="documentos"
+                                    label="Documentos"
+                                ></v-select>
+                            </v-flex>
                             <v-spacer></v-spacer>
                             <v-flex sm2>
                                 <v-btn @click="filtrar"  round  block  color="info">
@@ -148,23 +192,31 @@
                                     <tr>
                                     <td>{{ formatDate(props.item.fecha) }}</td>
                                     <td>{{ props.item.dh }}</td>
-                                    <td>{{ props.item.concepto }}</td>
+                                    <td>{{ props.item.concepto }} <p v-if="props.item.nota != ''"><span class='font-italic black--text'><span class="lime accent-2">{{ props.item.nota }}</span></span></p></td>
                                     <td :class=colorLin(props.item.dh)>{{ props.item.importe | currency('€', 2, { thousandsSeparator:'.', thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false })}}</td>
                                     <td class="justify-center layout px-0">
+                                        <v-icon
+                                            small
+                                            class="mr-2"
+                                            @click="editNota(props.item)"
+                                            color="blue lighten-1"
+                                        >
+                                            textsms
+                                        </v-icon>
                                         <v-icon v-show="props.item.documentos.length > 0"
                                             small
                                             class="mr-2"
                                             @click="props.expanded = !props.expanded"
                                             color="blue lighten-1"
                                         >
-                                            control_point
+                                            attach_file
                                         </v-icon>
                                         <v-icon v-show="!props.item.documentos.length > 0 && hasDocumenta"
                                             small
                                             class="mr-2"
                                             @click="createDocu(props.item)"
                                         >
-                                            sd_storage
+                                            save
                                         </v-icon>
                                     </td>
                                      </tr>
@@ -247,7 +299,7 @@ import {mapActions} from "vuex";
     },
     data () {
       return {
-        titulo:"Extracto",
+        titulo:"Extracto2",
         paginaActual:{},
         pagination:{
             model: "extracto",
@@ -285,6 +337,20 @@ import {mapActions} from "vuex";
             value: ''
           }
         ],
+        editedIndex: 0,
+        editedItem: {
+            'id' : "",
+            empresa_id: "",
+            cuenta_id: "",
+            fecha: "",
+            dh: "",
+            concepto: "",
+            nota: "",
+            importe: "",
+            username:"",
+            created_at:"",
+            updated_at:"",
+        },
         apuntes:[],
         status: false,
 		registros: false,
@@ -298,7 +364,13 @@ import {mapActions} from "vuex";
                 {text:'Haber','value':'H'},
                 {text:'Todos','value':'T'}
             ],
+        documentos: [
+                {text:'Con documentos','value':'S'},
+                {text:'Sin documentos','value':'N'},
+                {text:'Todos','value':'T'}
+            ],
 
+        docu: "T",
         show_loading: false,
         filtro: false,
 
@@ -306,7 +378,9 @@ import {mapActions} from "vuex";
         menu_h: false,
         fecha_d: new Date().toISOString().substr(0, 5)+"01",
         fecha_h: new Date().toISOString().substr(0, 7),
-        dh:"T"
+        dh:"T",
+
+        nota: "",
       }
     },
     mounted()
@@ -372,7 +446,7 @@ import {mapActions} from "vuex";
         },
         colorLin(dh){
             if (dh == 'D')
-                return "text-xs-right red--text";
+                return "text-xs-right red--text text--accent-4";
             else
                 return "text-xs-right indigo--text";
         },
@@ -386,7 +460,6 @@ import {mapActions} from "vuex";
         },
         filtrar(){
 
-
             this.$validator.validateAll().then((result) => {
                     if (result){
                         this.show_loading = true;
@@ -395,10 +468,11 @@ import {mapActions} from "vuex";
                                     fecha_d: this.fecha_d,
                                     fecha_h: this.fecha_h,
                                     dh: this.dh,
+                                    docu: this.docu
                                 }
                             )
                             .then(res => {
-
+                                //console.log(res);
                                 this.filtro = false;
 
                                 this.apuntes = res.data;
@@ -438,6 +512,9 @@ import {mapActions} from "vuex";
             this.titulo = "Enlazando a documento, seleccionar otro apunte";
             this.$toast.warning("Enlazando a documento, seleccionar otro apunte");
            // console.log(documento_id);
+        },
+        cancelLink(){
+            this.documento_id = 0;
         },
         attachDoc(id){
             //console.log(id);
@@ -495,7 +572,30 @@ import {mapActions} from "vuex";
 
                 });
 
+        },editNota(item){
+
+            this.editedIndex = this.apuntes.indexOf(item)
+            this.editedItem = Object.assign({}, item)
+
+            this.dialog = true;
         },
+        close(){
+            this.dialog = false;
+        },
+        save(){
+            this.dialog = false;
+
+            Object.assign(this.apuntes[this.editedIndex], this.editedItem)
+
+            var url = "/mto/extractos/"+this.editedItem.id;
+            axios.put(url, {nota: this.editedItem.nota})
+                .then(res => {
+
+                })
+                .catch(err => {
+                    this.$toast.error(err.response.data.message);
+                });
+        }
 
     }
   }

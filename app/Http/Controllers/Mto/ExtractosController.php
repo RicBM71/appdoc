@@ -10,6 +10,7 @@ use App\Filedoc;
 use App\Extracto;
 use App\Documento;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
@@ -27,18 +28,27 @@ class ExtractosController extends Controller
      */
     public function index()
     {
-
-        if (request()->wantsJson())
+        //return request()->session()->has('filtro_extrac');
+        if (request()->wantsJson()){
             if (request()->session()->has('filtro_extrac')){
+
                 $filtro = request()->session()->get('filtro_extrac');
-                return Extracto::with('documentos','documentos.archivo')->where($filtro)
+                $docu = request()->session()->get('filtro_extrac_docu');
+
+                return Extracto::select('extractos.*')
+                            ->with('documentos','documentos.archivo')
+                            ->conDocumentos($docu)
+                            ->where($filtro)
                             ->orderBy('fecha','desc')
                             ->get();
             }
             else
-                return Extracto::with('documentos','documentos.archivo')->whereYear('fecha',date('Y'))
+                return Extracto::select('extractos.*')
+                                ->with('documentos','documentos.archivo')
+                                ->whereYear('fecha',date('Y'))
                                 ->orderBy('fecha','desc')
                                 ->get();
+        }
 
     }
 
@@ -53,6 +63,7 @@ class ExtractosController extends Controller
         $fecha_d = $request->input('fecha_d').'-01';
         $fecha_h = $request->input('fecha_h').'-'.date('t',strtotime($request->input('fecha_h')));
         $dh = $request->input('dh');
+        $docu = $request->input('docu');
 
         $data[] = [
             'fecha', '>=', $fecha_d,
@@ -66,11 +77,28 @@ class ExtractosController extends Controller
             ];
 
         session(['filtro_extrac' => $data]);
+        session(['filtro_extrac_docu' => $docu]);
 
-        if (request()->wantsJson())
-            return Extracto::with('documentos','documentos.archivo')->where($data)
+        if (request()->wantsJson()){
+            $q = Extracto::select('extractos.*')
+                            ->with('documentos','documentos.archivo')
+                            ->conDocumentos($docu)
+                            //->sinDocumentos(false)
+                            // ->whereNotIn('extractos.id', function($q){
+                            //     $q->select('extracto_id')->from('documento_extracto');
+                            // })
+                          //  ->join('documento_extracto', 'extractos.id', '=', 'documento_extracto.extracto_id')
+                          //  ->whereJsonLength('extractos.documentos->id','>', 0)
+                        //   ->whereExists(function ($query) {
+                        //     $query->select(DB::raw(1))
+                        //         ->from('documento_extracto')
+                        //         ->whereRaw('documento_extracto.extracto_id = extractos.id');
+                        // })
+                            ->where($data)
                             ->orderBy('fecha')
                             ->get();
+            return $q;
+        }
 
     }
 
@@ -134,6 +162,49 @@ class ExtractosController extends Controller
 
         return $this->importar($doc->id);
 
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Extracto $extracto)
+    {
+
+
+        if ($documento->confidencial && !auth()->user()->hasRole('Admin')){
+            abort(404);
+        }
+
+        if (request()->wantsJson())
+            return [
+                'documento' => $documento,
+                'archivos'=> Archivo::selArchivos(),
+                'carpetas'=> Carpeta::selCarpetasArchivo($documento->archivo_id),
+                'extractos'=> $documento->extractos,
+                'files' => Filedoc::FilesDocumento($documento->id)->get()
+            ];
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Extracto $extracto)
+    {
+
+        $data['nota'] =  $request->input('nota');
+        $data['username'] = $request->user()->username;
+
+        $extracto->update($data);
+
+        if (request()->wantsJson())
+            return ['extracto'=>$extracto, 'message' => 'EL documento ha sido modficado'];
     }
 
     public function importar($id){

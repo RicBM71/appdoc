@@ -11,7 +11,7 @@ class Extracto extends Model
     protected $dates =['fecha'];
 
     protected $fillable = [
-        'empresa_id','cuenta_id', 'concepto', 'dh', 'fecha','importe','username'
+        'empresa_id','cuenta_id', 'concepto', 'nota', 'dh', 'fecha','importe','username'
     ];
 
     protected static function boot()
@@ -24,6 +24,18 @@ class Extracto extends Model
     public function documentos(){
 
         return $this->belongsToMany(Documento::class);
+
+    }
+
+    public function scopeConDocumentos($query, $tipo){
+
+        if ($tipo == "S")
+            return $query->join('documento_extracto', 'extractos.id', '=', 'documento_extracto.extracto_id');
+        elseif ($tipo == "N")
+            return $query->whereNotIn('extractos.id', function($q){
+                $q->select('extracto_id')->from('documento_extracto');
+            });
+        else return $query;
 
     }
 

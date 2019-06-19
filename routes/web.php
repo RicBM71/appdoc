@@ -55,7 +55,7 @@ Route::group([
         Route::get('clientes/{cliente}/albaranes', 'ClientesController@albaranes');
         Route::resource('productos', 'ProductosController', ['as' => 'mto']);
         Route::resource('vencimientos', 'VencimientosController', ['except'=>'show','as' => 'mto']);
-        Route::resource('extractos', 'ExtractosController', ['only'=>['index','show'],'as' => 'mto']);
+        Route::resource('extractos', 'ExtractosController', ['only'=>['index','show','update'],'as' => 'mto']);
         Route::post('extractos/filtrar', 'ExtractosController@filtrar');
         Route::get('extractos/{id}/importar', 'ExtractosController@importar');
         Route::post('extractos/banco', 'ExtractosController@banco');

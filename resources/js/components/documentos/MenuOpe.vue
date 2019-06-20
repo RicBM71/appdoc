@@ -57,7 +57,7 @@
             </template>
             <span>Bloquear adjuntos</span>
         </v-tooltip>
-        <v-tooltip bottom v-else>
+        <v-tooltip bottom v-if="id > 0 && !cerrado">
             <template v-slot:activator="{ on }">
                 <v-btn
                     v-on="on"

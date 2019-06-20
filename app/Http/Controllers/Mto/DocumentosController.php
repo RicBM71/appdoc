@@ -26,13 +26,13 @@ class DocumentosController extends Controller
         if (request()->session()->has('filtro_docu')){
             $filtro = request()->session()->get('filtro_docu');
             $documentos = Documento::ordinarios()
-                            ->with(['archivo','carpeta'])
+                            ->with(['archivo','carpeta','filedocs'])
                             ->where($filtro)
                             ->orderBy('fecha','desc')
                             ->get();
         }else{
             $documentos = Documento::ordinarios()
-                ->with(['archivo','carpeta'])
+                ->with(['archivo','carpeta','filedocs'])
                 ->whereYear('fecha',date('Y'))
                 ->orderBy('fecha','desc')
                 ->get();
@@ -51,17 +51,23 @@ class DocumentosController extends Controller
     {
 
 
+        $concepto = $request->input('concepto');
         $fecha_d = $request->input('fecha_d').'-01';
         $fecha_h = $request->input('fecha_h').'-'.date('t',strtotime($request->input('fecha_h')));
 
         $archivo_id = $request->input('archivo_id');
 
-        $data[] = [
-            'fecha', '>=', $fecha_d,
-        ];
-        $data[] = [
-            'fecha', '<=', $fecha_h,
-        ];
+        if ($concepto > ""){
+            $data[] = ['concepto', 'like' , '%'.$concepto.'%'];
+        }
+        else{
+            $data[] = [
+                'fecha', '>=', $fecha_d,
+            ];
+            $data[] = [
+                'fecha', '<=', $fecha_h,
+            ];
+        }
         if ($archivo_id <> '')
             $data[] = [
                 'archivo_id', '=', $archivo_id,
@@ -71,7 +77,7 @@ class DocumentosController extends Controller
 
         if (request()->wantsJson())
             return [
-                'documentos'=> Documento::with(['archivo','carpeta'])->where($data)
+                'documentos'=> Documento::with(['archivo','carpeta','filedocs'])->where($data)
                             ->orderBy('fecha','desc')
                             ->get()
             ];
@@ -234,9 +240,9 @@ class DocumentosController extends Controller
 
         if (request()->wantsJson()){
             return [
-                'documentos'=> Documento::with(['archivo','carpeta'])->whereYear('fecha',date('Y'))
-                            ->orderBy('fecha','desc')
-                            ->get(),
+                // 'documentos'=> Documento::with(['archivo','carpeta'])->whereYear('fecha',date('Y'))
+                //             ->orderBy('fecha','desc')
+                //             ->get(),
                 'archivos'  =>  Archivo::selArchivos(),
             ];
         }

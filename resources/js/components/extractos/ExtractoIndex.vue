@@ -200,7 +200,7 @@
                                             small
                                             class="mr-2"
                                             @click="editNota(props.item)"
-                                            color="deep-purple darken-4"
+                                            color="grey"
                                         >
                                             textsms
                                         </v-icon>
@@ -451,7 +451,7 @@ import {mapActions} from "vuex";
             if (dh == 'D')
                 return "text-xs-right red--text text--accent-4";
             else
-                return "text-xs-right indigo--text";
+                return "text-xs-right indigo--black";
         },
         formatDate(f){
             if (f == null) return null;
@@ -462,7 +462,7 @@ import {mapActions} from "vuex";
             if (cerrado) return ''; else return 'warning';
         },
         filtrar(){
-            
+
             this.$validator.validateAll().then((result) => {
                     if (result){
                         this.show_loading = true;

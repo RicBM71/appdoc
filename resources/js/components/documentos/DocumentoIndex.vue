@@ -29,7 +29,7 @@
                 <v-form>
                     <v-container>
                         <v-layout row wrap>
-                            <v-flex xs4 d-flex>
+                            <v-flex xs3 d-flex>
                                 <v-select
                                     v-model="archivo_id"
                                     :items="archivos"
@@ -108,6 +108,14 @@
                                     </v-date-picker>
                                 </v-menu>
                             </v-flex>
+                            <v-flex sm3>
+                                <v-text-field
+                                    v-model="concepto"
+                                    label="Texto a buscar"
+                                    hint="No tiene en cuenta fechas"
+                                    v-on:keyup.enter="filtrar"
+                                ></v-text-field>
+                            </v-flex>
 
                             <v-spacer></v-spacer>
                             <v-flex sm2>
@@ -170,9 +178,10 @@
 
 
                                         <v-icon
-                                        v-show="hasDocumenta && !props.item.cerrado"
-                                        small
-                                        @click="openDialog(props.item.id)"
+                                            :color="colorBoton(props.item.filedocs)"
+                                            v-show="hasDocumenta && hasBorraDoc"
+                                            small
+                                            @click="openDialog(props.item)"
                                         >
                                         delete
                                         </v-icon>
@@ -254,8 +263,9 @@ import {mapActions} from "vuex";
 		registros: false,
         dialog: false,
         archivo_id: 0,
+        concepto:"",
 
-
+        index: 0,
         show_loading: false,
         filtro: false,
 
@@ -276,7 +286,7 @@ import {mapActions} from "vuex";
         this.show_loading = true;
         axios.get('/mto/documentos')
             .then(res => {
-                //console.log(res);
+
                 this.documentos = res.data.documentos;
                 this.archivos = res.data.archivos;
                 this.registros = true;
@@ -295,7 +305,8 @@ import {mapActions} from "vuex";
     computed:{
         ...mapGetters([
             'hasDocumenta',
-            'getPagination'
+            'getPagination',
+            'hasBorraDoc'
         ]),
         computedFechaD() {
             moment.locale('es');
@@ -311,6 +322,12 @@ import {mapActions} from "vuex";
             'setPagination',
             'unsetPagination'
         ]),
+        colorBoton(i){
+            if (i.length == 0)
+                return 'orange';
+            else
+                return '';
+        },
         updateEventPagina(obj){
 
             this.paginaActual = obj;
@@ -338,7 +355,8 @@ import {mapActions} from "vuex";
                     {
                         fecha_d: this.fecha_d,
                         fecha_h: this.fecha_h,
-                        archivo_id: this.archivo_id
+                        archivo_id: this.archivo_id,
+                        concepto: this.concepto
                     }
                 )
                 .then(res => {
@@ -355,9 +373,11 @@ import {mapActions} from "vuex";
 
                 });
         },
-        openDialog (id){
+        openDialog (item){
+
             this.dialog = true;
-            this.documento_id = id;
+            this.documento_id = item.id;
+            this.index = this.documentos.indexOf(item)
         },
         destroyReg () {
             this.dialog = false;
@@ -365,7 +385,7 @@ import {mapActions} from "vuex";
             axios.post('/mto/documentos/'+this.documento_id,{_method: 'delete'})
                 .then(response => {
 
-                this.documentos = response.data.documentos;
+                this.documentos.splice(this.index, 1)
                 this.$toast.success('Documento eliminado!');
 
 

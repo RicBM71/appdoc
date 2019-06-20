@@ -214,6 +214,7 @@
                                         </v-icon>
                                         <v-icon v-show="!props.item.documentos.length > 0 && hasDocumenta"
                                             small
+                                            color="orange"
                                             class="mr-2"
                                             @click="createDocu(props.item)"
                                         >
@@ -241,7 +242,7 @@
                                             <v-tooltip bottom>
                                                 <template v-slot:activator="{ on }">
                                                     <v-btn
-                                                        v-show="hasDocumenta && !child.cerrado"
+                                                        v-show="hasDocumenta && hasBorraDoc"
                                                         v-on="on"
                                                         color="white"
                                                         icon
@@ -414,7 +415,8 @@ import {mapActions} from "vuex";
         ...mapGetters([
                 'hasDocumenta',
                 'isAdmin',
-                'getPagination'
+                'getPagination',
+                'hasBorraDoc'
 		]),
         computedFechaD() {
             moment.locale('es');
@@ -460,7 +462,7 @@ import {mapActions} from "vuex";
             if (cerrado) return ''; else return 'warning';
         },
         filtrar(){
-
+            
             this.$validator.validateAll().then((result) => {
                     if (result){
                         this.show_loading = true;

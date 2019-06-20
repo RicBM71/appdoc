@@ -103,13 +103,19 @@
                 </v-container>
             </v-form>
             <v-container v-show="extractos.length > 0">
-                <v-layout row wrap>
-                    <v-flex v-for="e in extractos" sm12
-                        :key="e.id"
-                    >
-                        <span class="indigo--text">{{ formatDate(e.fecha)+" - "+e.concepto + " = " + e.importe }}</span>
-                    </v-flex>
-                </v-layout>
+                <v-data-table
+                    hide-actions
+                    :headers="headers"
+                    :items="extractos"
+                    class="elevation-1"
+                >
+                    <template v-slot:items="props">
+                        <td class="text-xs-left">{{ formatDate(props.item.fecha) }}</td>
+                        <td class="text-xs-left">{{ props.item.concepto }}
+                        <p v-if="props.item.nota>''"><span class='font-italic black--text'><span class="lime accent-2">{{ props.item.nota }}</span></span></p></td>
+                        <td class="text-xs-right">{{ props.item.importe | currency('€', 2, { thousandsSeparator:'.', thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false })}}</td>
+                    </template>
+                </v-data-table>
             </v-container>
             <v-container v-show="files.length > 0">
                 <v-layout row wrap>
@@ -160,6 +166,12 @@ import {mapGetters} from 'vuex';
                     updated_at:"",
                     created_at:"",
                 },
+
+                 headers: [
+                    { text: 'Fecha', value: 'fecha' },
+                    { text: 'Concepto extracto', value: 'nombre' },
+                    { text: 'Importe', value: 'importe' },
+                ],
 
                 extractos:[],
                 files: [],

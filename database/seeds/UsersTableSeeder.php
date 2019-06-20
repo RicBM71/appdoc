@@ -28,7 +28,7 @@ class UsersTableSeeder extends Seeder
         // $crearPost = Permission::create(['name'=>'Crear Posts']);
         // $borrarPost = Permission::create(['name'=>'Borrar Posts']);
 
-        $verUser = Permission::create(['name'=>'Usuarios']);
+        $verUser = Permission::create(['name'=>'Borra documentos']);
         Permission::create(['name'=>'Edita Clientes']);
         //$actUser = Permission::create(['name'=>'Actualizar Usuarios']);
         // $crearUser = Permission::create(['name'=>'Crear Usuarios']);

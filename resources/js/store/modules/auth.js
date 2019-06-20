@@ -94,6 +94,9 @@ const getters = {
     hasFactura: (state) =>{
         return (state.roles.indexOf('Factura') >= 0) ? true : false;
     },
+    hasBorraDoc: (state) =>{
+        return (state.permisos.indexOf('Borra documentos') >= 0) ? true : false;
+    },
 
 };
 

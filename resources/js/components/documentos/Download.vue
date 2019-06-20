@@ -91,7 +91,7 @@ import {mapActions} from "vuex";
         show_loading: false,
 
         menu_d: false,
-        fecha_d: new Date().toISOString().substr(0, 5)+"01",
+        fecha_d: new Date().toISOString().substr(0, 7),
 
       }
     },
@@ -140,11 +140,19 @@ import {mapActions} from "vuex";
                 })
                 .then(res => {
                     //console.log(res);
-                    let blob = new Blob([res.data]);
-                    let link = document.createElement('a');
-                    link.href = window.URL.createObjectURL(blob);
-                    link.download = 'DOCU'+new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'.zip';
-                    link.click();
+                    // let blob = new Blob([res.data]);
+                    // let link = document.createElement('a');
+                    // link.href = window.URL.createObjectURL(blob);
+                    // link.download = 'DOCU'+new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'.zip';
+                    // link.click();
+
+                    let link = document.createElement('a')
+                    link.href = window.URL.createObjectURL(res.data)
+                    link.download = 'DOCU'+new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'.zip'
+
+                    document.body.appendChild(link);
+                    link.click()
+                    document.body.removeChild(link);
 
                     this.$toast.success("Descarga completada!");
 

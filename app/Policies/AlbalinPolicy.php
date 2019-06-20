@@ -37,7 +37,7 @@ class AlbalinPolicy
      */
     public function create(User $authUser)
     {
-        return $authUser->hasRole('Usuario') ?: $this->deny("Acceso denegado. Role de Usuario requerido");
+        return $authUser->hasRole('Factura') ?: $this->deny("Acceso denegado. Role de facturación requerido");
     }
 
 

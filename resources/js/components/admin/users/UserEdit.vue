@@ -1,5 +1,6 @@
 <template>
 	<div>
+        <loading :show_loading="show_loading"></loading>
         <my-dialog :dialog.sync="dialog" registro="avatar" @destroyReg="destroyReg"></my-dialog>
         <v-card>
             <v-card-title color="indigo">
@@ -180,13 +181,18 @@
                 </v-tab-item>
                 <v-tab-item>
                     <v-container>
-                        <v-flex sm12>
-                                    <div v-if="showPer">
-                                        <user-emp :user_id="this.user.id" :emp_user="this.emp_user"></user-emp>
-                                        <user-role :user_id="this.user.id" :role_user="this.role_user"></user-role>
-                                        <user-permiso :user_id="this.user.id" :permisos="this.permisos" :permisos_selected="permisos_selected"></user-permiso>
-                                    </div>
-                        </v-flex>
+                        <v-layout row wrap text-xs-center>
+                            <v-flex sm12><h2>{{user.username}}</h2></v-flex>
+                        </v-layout>
+                        <v-layout row wrap>
+                            <v-flex sm12>
+                                <div v-if="showPer">
+                                    <user-emp :user_id="this.user.id" :emp_user="this.emp_user"></user-emp>
+                                    <user-role :user_id="this.user.id" :role_user="this.role_user"></user-role>
+                                    <user-permiso :user_id="this.user.id" :permisos="this.permisos" :permisos_selected="permisos_selected"></user-permiso>
+                                </div>
+                            </v-flex>
+                        </v-layout>
                     </v-container>
                 </v-tab-item>
             </v-tabs>
@@ -202,6 +208,7 @@
     import UserPermiso from './UserPermiso'
     import vue2Dropzone from 'vue2-dropzone'
     import MyDialog from '@/components/shared/MyDialog'
+    import Loading from '@/components/shared/Loading'
     import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 
 	export default {
@@ -215,6 +222,7 @@
             'my-dialog': MyDialog,
             'vueDropzone': vue2Dropzone,
             'menu-ope': MenuOpe,
+            'loading': Loading
 
 		},
     	data () {
@@ -249,6 +257,7 @@
                 icon: "warning",
                 enviando: false,
 
+                show_loading: true,
                 show: false,
                 menu2: false,
 
@@ -294,6 +303,7 @@
                         this.emp_user = res.data.emp_user;
 
                         this.showPer=true;
+                        this.show_loading = false;
 
                     })
                     .catch(err => {

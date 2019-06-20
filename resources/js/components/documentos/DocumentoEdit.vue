@@ -165,13 +165,20 @@
                     <v-flex sm2
                         v-for="f in files"
                         :key="f.url">
-                        <!-- <v-icon @click="download(f.id)">cloud_download</v-icon> - -->
-                        <!-- <v-btn flat @click="download(f.id)"> -->
-                            <!-- <span>{{f.url.substr(-10)}}</span> -->
-                        <v-btn icon @click="download(f.id)" >
-                            <!-- <img src="/assets/adobe2.png" alt="pdf" height="50px"> -->
-                            <div v-html="extensionFile(f.url)"></div>
-                        </v-btn>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on }">
+                                <v-btn
+                                    icon
+                                    @click="download(f.id)"
+                                    v-on="on"
+                                >
+
+                                    <div v-html="extensionFile(f.url)"></div>
+                                </v-btn>
+                            </template>
+                            <span>Abrir Documento</span>
+                        </v-tooltip>
+
 
                         <v-icon v-if="!documento.cerrado" color="red accent-4" @click="destroyFile(f.id)">clear</v-icon>
                     </v-flex>
@@ -471,7 +478,7 @@ import {mapGetters} from 'vuex';
                     .then(res => {
                         this.carpetas = res.data.carpetas;
                         if (this.carpetas.length == 1)
-                            this.documento.carpeta_id = this.carpetas[0];
+                            this.documento.carpeta_id = this.carpetas[0].id;
                         else
                             this.documento.carpeta_id = "";
                     })

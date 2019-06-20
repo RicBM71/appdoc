@@ -195,31 +195,50 @@
                                     <td>{{ props.item.concepto }} <p v-if="props.item.nota != ''"><span class='font-italic black--text'><span class="lime accent-2">{{ props.item.nota }}</span></span></p></td>
                                     <td :class=colorLin(props.item.dh)>{{ props.item.importe | currency('€', 2, { thousandsSeparator:'.', thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false })}}</td>
                                     <td class="justify-center layout px-0">
-                                        <v-icon
-                                            v-show="hasDocumenta"
-                                            small
-                                            class="mr-2"
-                                            @click="editNota(props.item)"
-                                            color="grey"
-                                        >
-                                            textsms
-                                        </v-icon>
-                                        <v-icon v-show="props.item.documentos.length > 0"
-                                            small
-                                            class="mr-2"
-                                            @click="props.expanded = !props.expanded"
-                                            color="blue lighten-1"
-                                        >
-                                            attach_file
-                                        </v-icon>
-                                        <v-icon v-show="!props.item.documentos.length > 0 && hasDocumenta"
-                                            small
-                                            color="orange"
-                                            class="mr-2"
-                                            @click="createDocu(props.item)"
-                                        >
-                                            save
-                                        </v-icon>
+                                        <v-tooltip bottom>
+                                            <template v-slot:activator="{ on }">
+                                                <v-icon
+                                                    v-on="on"
+                                                    v-show="hasDocumenta"
+                                                    small
+                                                    class="mr-2"
+                                                    @click="editNota(props.item)"
+                                                    color="grey"
+                                                >
+                                                    textsms
+                                                </v-icon>
+                                            </template>
+                                            <span>Editar nota</span>
+                                        </v-tooltip>
+                                        <v-tooltip bottom>
+                                            <template v-slot:activator="{ on }">
+                                                <v-icon v-show="props.item.documentos.length > 0"
+                                                    v-on="on"
+                                                    small
+                                                    class="mr-2"
+                                                    @click="props.expanded = !props.expanded"
+                                                    color="blue lighten-1"
+                                                >
+                                                    attach_file
+                                                </v-icon>
+                                            </template>
+                                            <span>Ver anexos</span>
+                                        </v-tooltip>
+                                        <v-tooltip bottom>
+                                            <template v-slot:activator="{ on }">
+                                                <v-icon v-show="!props.item.documentos.length > 0 && hasDocumenta"
+                                                     v-on="on"
+                                                    small
+                                                    color="orange"
+                                                    class="mr-2"
+                                                    @click="createDocu(props.item)"
+                                                >
+                                                    save
+                                                </v-icon>
+                                            </template>
+                                            <span>Anexar Documento</span>
+                                        </v-tooltip>
+
                                     </td>
                                      </tr>
                                 </template>

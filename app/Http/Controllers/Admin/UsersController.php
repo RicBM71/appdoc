@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\User;
 use App\Empresa;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Events\UsuarioFueCreado;
@@ -83,11 +84,11 @@ class UsersController extends Controller
         if (isset($data['password']))
             $data['password'] = Hash::make($data['password']);
        else
-            $data['password'] = Hash::make('12345678');
+            $data['password'] = Hash::make(Str::random(8));
 
         $user = User::create($data);
 
-        $user->assignRole('Usuario');
+        //$user->assignRole('Usuario');
 
         //$user->givePermissionTo($request->permissions);
 

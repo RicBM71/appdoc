@@ -80,7 +80,6 @@
                             </v-text-field>
                             <v-switch
                                 v-model="user.blocked"
-                                :disabled="computedId"
                                 color="primary"
                                 label="Bloqueado"
                             ></v-switch>
@@ -143,8 +142,6 @@
 </template>
 <script>
     import moment from 'moment'
-    import UserRole from './UserRole'
-    import UserPermiso from './UserPermiso'
     import {mapGetters} from 'vuex';
     import MenuOpe from './MenuOpe'
 
@@ -153,8 +150,6 @@
       		validator: 'new'
     	},
         components: {
-            'user-role': UserRole,
-            'user-permiso': UserPermiso,
             'menu-ope': MenuOpe
 
 		},
@@ -191,8 +186,8 @@
       		}
         },
         mounted(){
-            if (!this.isRoot)
-                this.items.splice(3,1)
+            // if (!this.isRoot)
+            //     this.items.splice(3,1)
 
             axios.get('/admin/users/create')
                 .then(res => {
@@ -221,9 +216,6 @@
                 moment.locale('es');
                 return this.user.created_at ? moment(this.user.created_at).format('D/MM/YYYY H:mm:ss') : '';
             },
-            computedId(){
-                if (this.user.id == 1) return true; else return false;
-            }
 
         },
     	methods:{

@@ -161,30 +161,43 @@
                                     <td v-else :class="props.item.carpeta.color">{{ props.item.carpeta.nombre }}</td>
                                     <td>{{ props.item.concepto }}</td>
                                     <td class="justify-center layout px-0">
-                                        <v-icon v-if="hasDocumenta"
-                                            small
-                                            class="mr-2"
-                                            @click="editItem(props.item.id)"
-                                        >
-                                            edit
-                                        </v-icon>
-                                        <v-icon v-else
-                                            small
-                                            class="mr-2"
-                                            @click="editItem(props.item.id)"
-                                        >
-                                            search
-                                        </v-icon>
+                                        <v-tooltip bottom>
+                                            <template v-slot:activator="{ on }">
+                                                <v-icon v-if="props.item.filedocs.length > 0"
+                                                    v-on="on"
+                                                    small
+                                                    class="mr-2"
+                                                    @click="editItem(props.item.id)"
+                                                >
+                                                    edit
+                                                </v-icon>
+                                                <v-icon v-else
+                                                    v-on="on"
+                                                    small
+                                                    :color="colorear(props.item.filedocs)"
+                                                    class="mr-2"
+                                                    @click="editItem(props.item.id)"
+                                                >
+                                                    report_problem
+                                                </v-icon>
+                                            </template>
+                                            <span>Ir a documento</span>
+                                        </v-tooltip>
+                                        <v-tooltip bottom>
+                                            <template v-slot:activator="{ on }">
+                                                <v-icon
+                                                    v-on="on"
+                                                    :color="colorear(props.item.filedocs)"
+                                                    v-show="hasDocumenta && hasBorraDoc"
+                                                    small
+                                                    @click="openDialog(props.item)"
+                                                >
+                                                delete
+                                                </v-icon>
+                                            </template>
+                                            <span>Borrar Documento y ficheros</span>
+                                        </v-tooltip>
 
-
-                                        <v-icon
-                                            :color="colorBoton(props.item.filedocs)"
-                                            v-show="hasDocumenta && hasBorraDoc"
-                                            small
-                                            @click="openDialog(props.item)"
-                                        >
-                                        delete
-                                        </v-icon>
                                     </td>
                                 </template>
                                 <template slot="pageText" slot-scope="props">
@@ -288,6 +301,7 @@ import {mapActions} from "vuex";
             .then(res => {
 
                 this.documentos = res.data.documentos;
+
                 this.archivos = res.data.archivos;
                 this.registros = true;
 
@@ -322,7 +336,7 @@ import {mapActions} from "vuex";
             'setPagination',
             'unsetPagination'
         ]),
-        colorBoton(i){
+        colorear(i){
             if (i.length == 0)
                 return 'orange';
             else

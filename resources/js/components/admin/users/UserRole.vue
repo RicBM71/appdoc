@@ -3,7 +3,7 @@
         <h3>Roles Usuario</h3>
 
         <v-layout row wrap>
-            <v-flex sm4
+            <v-flex sm3
                 v-for="item in roles"
                 :key="item"
             >

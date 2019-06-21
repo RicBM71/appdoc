@@ -229,7 +229,7 @@
                                                 <v-icon v-show="!props.item.documentos.length > 0 && hasDocumenta"
                                                      v-on="on"
                                                     small
-                                                    color="orange"
+                                                    :color="computedColor(props.item)"
                                                     class="mr-2"
                                                     @click="createDocu(props.item)"
                                                 >
@@ -253,7 +253,7 @@
                                                         icon
                                                         @click="editDoc(child.id)"
                                                     >
-                                                        <v-icon :color="estaCerrado(child.cerrado)">pageview</v-icon>
+                                                        <v-icon :color="estaCerrado(child.cerrado)">zoom_out_map</v-icon>
                                                     </v-btn>
                                                 </template>
                                                 <span>Ver documento</span>
@@ -281,7 +281,7 @@
                                                         icon
                                                         @click="agruparADoc(child.id)"
                                                     >
-                                                        <v-icon>call_split</v-icon>
+                                                        <v-icon>merge_type</v-icon>
                                                     </v-btn>
                                                 </template>
                                                 <span>Unir extractos a documento</span>
@@ -437,6 +437,7 @@ import {mapActions} from "vuex";
                 'getPagination',
                 'hasBorraDoc'
 		]),
+
         computedFechaD() {
             moment.locale('es');
             return this.fecha_d ? moment(this.fecha_d).format('MM-YYYY') : '';
@@ -451,6 +452,12 @@ import {mapActions} from "vuex";
             'setPagination',
             'unsetPagination'
 		]),
+        computedColor(item){
+            if (item.documentos.length > 0 || item.nota > '')
+                return 'primary';
+            else
+                return 'orange';
+        },
         updateEventPagina(obj){
 
             this.paginaActual = obj;

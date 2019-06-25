@@ -365,6 +365,7 @@
                     <alb-cliente v-if="cliente.id > 0" :cliente_id="cliente.id"></alb-cliente>
                 </v-tab-item>
                 <v-tab-item>
+                    <docu-cli v-if="cliente.id > 0" :documentos="documentos"></docu-cli>
                 </v-tab-item>
             </v-tabs>
         </v-card>
@@ -374,6 +375,7 @@
 import moment from 'moment'
 import MenuOpe from './MenuOpe'
 import AlbCliente from './ClienteAlbaran'
+import DocuCli from './ClienteDocumento'
 
 	export default {
 		$_veeValidate: {
@@ -382,6 +384,7 @@ import AlbCliente from './ClienteAlbaran'
         components: {
             'menu-ope': MenuOpe,
             'alb-cliente': AlbCliente,
+            'docu-cli': DocuCli
 		},
     	data () {
       		return {
@@ -425,6 +428,8 @@ import AlbCliente from './ClienteAlbaran'
                 ],
                 clientes:[],
                 carpetas:[],
+                documentos:[],
+
                 fpagos:[],
 
                 cliente_id: "",
@@ -444,6 +449,7 @@ import AlbCliente from './ClienteAlbaran'
             if (id > 0)
                 axios.get('/mto/clientes/'+id+'/edit')
                     .then(res => {
+                        this.documentos = res.data.documentos;
                         this.cliente = res.data.cliente;
                         this.carpetas = res.data.carpetas;
                         this.fpagos = res.data.fpagos;

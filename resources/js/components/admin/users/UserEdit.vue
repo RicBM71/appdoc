@@ -30,6 +30,7 @@
                                         label="Nombre"
                                         data-vv-name="name"
                                         data-vv-as="nombre"
+                                        v-on:keyup.enter="submit"
                                         required
                                     >
                                     </v-text-field>
@@ -41,6 +42,7 @@
                                         label="Usuario"
                                         data-vv-name="username"
                                         data-vv-as="usuario"
+                                        v-on:keyup.enter="submit"
                                         required
                                     >
                                     </v-text-field>
@@ -50,6 +52,7 @@
                                         :error-messages="errors.collect('email')"
                                         label="email"
                                         data-vv-name="email"
+                                        v-on:keyup.enter="submit"
                                         required
                                     >
                                     </v-text-field>
@@ -63,6 +66,7 @@
                                         label="password"
                                         hint="Indicar password solo si va a modificarla"
                                         data-vv-name="password"
+                                        v-on:keyup.enter="submit"
                                         @click:append="show = !show"
                                         >
                                     </v-text-field>
@@ -76,6 +80,7 @@
                                         hint="Confirmar password solo si va a modificarla"
                                         data-vv-name="password_confirmation"
                                         data-vv-as="password"
+                                        v-on:keyup.enter="submit"
                                         @click:append="show = !show"
                                         >
                                     </v-text-field>
@@ -87,6 +92,7 @@
                                         label="Apellidos"
                                         data-vv-name="lastname"
                                         data-vv-as="apellidos"
+                                        v-on:keyup.enter="submit"
                                     >
                                     </v-text-field>
                                     <v-switch

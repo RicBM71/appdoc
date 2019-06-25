@@ -6,6 +6,7 @@ use App\Fpago;
 use App\Albacab;
 use App\Carpeta;
 use App\Cliente;
+use App\Documento;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClientes;
@@ -101,6 +102,7 @@ class ClientesController extends Controller
         if (request()->wantsJson())
             return [
                 'cliente' =>$cliente,
+                'documentos'=> Documento::where('carpeta_id','=',$cliente->carpeta_id)->take(50)->get(),
                 'carpetas'=> Carpeta::selCarpetas(),
                 'fpagos'=> Fpago::selFPagos(),
             ];

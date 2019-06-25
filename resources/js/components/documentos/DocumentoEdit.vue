@@ -19,7 +19,7 @@
                     <v-layout row wrap>
                         <v-flex sm4 d-flex>
                             <v-select
-                                :disabled="!hasDocumenta || !cerrado"
+                                :disabled="!hasDocumenta"
                                 v-model="documento.archivo_id"
                                 :items="archivos"
                                 v-validate="'required'"
@@ -32,7 +32,7 @@
                         </v-flex>
                         <v-flex sm4 d-flex>
                             <v-select
-                                :disabled="!hasDocumenta  || !cerrado"
+                                :disabled="!hasDocumenta"
                                 v-model="documento.carpeta_id"
                                 v-validate="'required'"
                                 :error-messages="errors.collect('carpeta_id')"
@@ -44,7 +44,7 @@
                         </v-flex>
                          <v-flex sm3>
                             <v-menu
-                                    :disabled="!hasDocumenta || !cerrado"
+                                    :disabled="!hasDocumenta || computedCerrado"
                                     v-model="menu2"
                                     :close-on-content-click="false"
                                     :nudge-right="40"
@@ -56,7 +56,7 @@
                                 >
 
                                     <v-text-field
-                                        :disabled="!hasDocumenta || !cerrado"
+                                        :disabled="!hasDocumenta || computedCerrado"
                                         slot="activator"
                                         :value="computedFecha"
                                         label="Fecha"
@@ -79,7 +79,7 @@
                     <v-layout row wrap>
                         <v-flex sm10>
                             <v-text-field
-                                :disabled="!hasDocumenta || !cerrado"
+                                :disabled="!hasDocumenta || computedCerrado"
                                 v-model="documento.concepto"
                                 v-validate="'required'"
                                 :error-messages="errors.collect('concepto')"
@@ -94,7 +94,7 @@
                         <v-flex sm2>
                             <v-switch
                                 v-show="hasDocumenta"
-                                :disabled="!hasDocumenta || !cerrado"
+                                :disabled="!hasDocumenta || computedCerrado"
                                 v-model="documento.confidencial"
                                 color="error"
                                 label="Confidencial"
@@ -186,11 +186,11 @@
                         </v-tooltip>
 
 
-                        <v-icon v-if="!documento.cerrado" color="red accent-4" @click="destroyFile(f.id)">clear</v-icon>
+                        <v-icon v-if="!computedCerrado" color="red accent-4" @click="destroyFile(f.id)">clear</v-icon>
                     </v-flex>
                 </v-layout>
             </v-container>
-            <v-container v-show="show_upload && !documento.cerrado && hasDocumenta">
+            <v-container v-show="show_upload && !computedCerrado && hasDocumenta">
                 <v-layout row wrap>
                     <v-flex sm12>
                         <vue-dropzone
@@ -284,6 +284,7 @@ import {mapGetters} from 'vuex';
                     .then(res => {
 
                         this.documento = res.data.documento;
+                        console.log(this.documento);
 
                         if (this.documento.confidencial && !this.isAdmin){
                             this.$toast.error("Documento confidencial, contactar administrador!");

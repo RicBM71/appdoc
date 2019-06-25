@@ -55,7 +55,7 @@
                     <v-icon color="primary">lock_open</v-icon>
                 </v-btn>
             </template>
-            <span>Bloquear adjuntos</span>
+            <span>Cerrar documento</span>
         </v-tooltip>
         <v-tooltip bottom v-if="id > 0 && cerrado">
             <template v-slot:activator="{ on }">
@@ -69,7 +69,7 @@
                     <v-icon color="primary">lock</v-icon>
                 </v-btn>
             </template>
-            <span>Desbloquear adjuntos</span>
+            <span>Abrir documento</span>
         </v-tooltip>
         <v-tooltip bottom>
             <template v-slot:activator="{ on }">

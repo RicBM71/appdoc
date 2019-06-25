@@ -19,6 +19,7 @@
             <v-layout row wrap>
                 <v-flex xs12>
                     <v-data-table
+                    :pagination.sync="pagination"
                     :headers="headers"
                     :items="documentos"
                     :search="search"
@@ -74,7 +75,10 @@ import moment from 'moment';
             value: ''
           }
         ],
-
+        pagination:{
+            descending: true,
+            sortBy: fecha,
+        },
         status: false,
 		registros: false,
 

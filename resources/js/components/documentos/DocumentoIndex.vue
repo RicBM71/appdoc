@@ -159,7 +159,16 @@
                                     <td v-else :class="props.item.archivo.color">{{ props.item.archivo.nombre }}</td>
                                     <td v-if="props.item.carpeta==null">n/d {{props.item.carpeta_id}}</td>
                                     <td v-else :class="props.item.carpeta.color">{{ props.item.carpeta.nombre }}</td>
-                                    <td>{{ props.item.concepto }}</td>
+                                    <td>
+                                        <v-icon
+                                            v-if="props.item.confidencial"
+                                            color="red"
+                                            small
+                                        >
+                                            grade
+                                        </v-icon>
+                                        {{ props.item.concepto }}
+                                    </td>
                                     <td class="justify-center layout px-0">
                                         <v-tooltip bottom>
                                             <template v-slot:activator="{ on }">
@@ -374,6 +383,7 @@ import {mapActions} from "vuex";
                     }
                 )
                 .then(res => {
+                    this.pagination.page = 1;
                     this.filtro = false;
                     this.documentos = res.data.documentos;
                     this.show_loading = false;

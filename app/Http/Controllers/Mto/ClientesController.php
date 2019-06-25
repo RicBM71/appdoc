@@ -102,7 +102,7 @@ class ClientesController extends Controller
         if (request()->wantsJson())
             return [
                 'cliente' =>$cliente,
-                'documentos'=> Documento::where('carpeta_id','=',$cliente->carpeta_id)->take(50)->get(),
+                'documentos'=> Documento::where('carpeta_id','=',$cliente->carpeta_id)->orderBy('fecha','desc')->take(50)->get(),
                 'carpetas'=> Carpeta::selCarpetas(),
                 'fpagos'=> Fpago::selFPagos(),
             ];
@@ -127,7 +127,11 @@ class ClientesController extends Controller
         $cliente->update($data);
 
         if (request()->wantsJson())
-            return ['cliente'=>$cliente, 'message' => 'EL cliente ha sido modficado'];
+            return [
+                'cliente'=>$cliente,
+                'documentos'=> Documento::where('carpeta_id','=',$cliente->carpeta_id)->orderBy('fecha','desc')->take(50)->get(),
+                'message' => 'EL cliente ha sido modficado'
+                ];
     }
 
     /**

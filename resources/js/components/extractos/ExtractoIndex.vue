@@ -14,7 +14,12 @@
                         <v-container grid-list-md>
                         <v-layout wrap>
                             <v-flex xs12>
-                            <v-text-field v-model="editedItem.nota" label="Nota"></v-text-field>
+                            <v-text-field
+                                ref="myText"
+                                v-model="editedItem.nota"
+                                v-on:keyup.enter="save"
+                                label="Nota">
+                            </v-text-field>
                             </v-flex>
                         </v-layout>
                         </v-container>
@@ -502,6 +507,7 @@ import {mapActions} from "vuex";
                             )
                             .then(res => {
                                 //console.log(res);
+                                this.pagination.page = 1;
                                 this.filtro = false;
 
                                 this.apuntes = res.data;
@@ -607,6 +613,8 @@ import {mapActions} from "vuex";
 
             this.editedIndex = this.apuntes.indexOf(item)
             this.editedItem = Object.assign({}, item)
+
+            this.$nextTick(() => this.$refs.myText.focus())
 
             this.dialog = true;
         },

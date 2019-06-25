@@ -75,6 +75,7 @@ import MyDialog from '@/components/shared/MyDialog'
         },
         titulo:"Albaranes",
         search:"",
+
         headers: [
           {
             text: 'Albarán',

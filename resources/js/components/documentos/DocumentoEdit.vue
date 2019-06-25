@@ -284,7 +284,7 @@ import {mapGetters} from 'vuex';
                     .then(res => {
 
                         this.documento = res.data.documento;
-                        console.log(this.documento);
+                       // console.log(this.documento);
 
                         if (this.documento.confidencial && !this.isAdmin){
                             this.$toast.error("Documento confidencial, contactar administrador!");

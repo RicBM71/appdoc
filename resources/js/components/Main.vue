@@ -62,6 +62,16 @@
                 </v-btn>
             </v-flex>
         </v-layout>
+        <v-layout row wrap>
+            <v-flex xs2></v-flex>
+            <v-flex xs8>
+                <v-responsive>
+                    <v-layout column>
+                        <v-img class="img-fluid" :src="logo"></v-img>
+                    </v-layout>
+                </v-responsive>
+            </v-flex>
+        </v-layout>
     </div>
 </template>
 <script>
@@ -73,21 +83,29 @@ export default {
             'isLoggedIn',
             'isRoot',
             'isAdmin',
+            'empresaActiva'
 		]),
     },
     data: () => ({
-
+        logo: ""
     }),
     mounted(){
+
         axios.get('/dash')
             .then(res => {
                 this.setAuthUser(res.data.user);
-
+                this.logo = "/storage/logos/"+this.empresaActiva+".png";
             })
             .catch(err => {
                 console.log(err);
         })
 
+    },
+    watch: {
+        empresaActiva: function (newValue) {
+
+            this.logo = "/storage/logos/"+newValue+".png";
+        }
     },
     methods:{
         ...mapActions([

@@ -267,7 +267,7 @@ class DocumentosController extends Controller
 
     //     $path = storage_path('invoices');
 
-        $i = 0;
+        $i = 1;
 
         $files = Documento::with('filedocs')
             ->whereYear('fecha',$periodo[0])
@@ -279,6 +279,8 @@ class DocumentosController extends Controller
             return abort(404);
         }
 
+        $str="";
+
         foreach ($files as $doc){
            // dd($doc->filedocs);
 
@@ -288,10 +290,15 @@ class DocumentosController extends Controller
                 $filename = explode(".",$file->url);
 
                 $zip->addFile(storage_path($ficheroPath), $i.'.'.$filename[1]);
+
+                $str.=($i.'.'.$filename[1].' -> '.$doc->concepto)."\r\n";
+
                 $i++;
             }
 
         }
+
+        $zip->addFromString('indice.txt',$str);
 
         $zip->close();
 

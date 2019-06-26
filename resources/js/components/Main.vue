@@ -94,6 +94,7 @@ export default {
         axios.get('/dash')
             .then(res => {
                 this.setAuthUser(res.data.user);
+
                 this.logo = "/storage/logos/"+this.empresaActiva+".png";
             })
             .catch(err => {

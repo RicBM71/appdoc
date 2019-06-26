@@ -130,7 +130,7 @@
                 </v-btn>
                 <v-btn icon v-on:click="passwd">
                     <v-avatar v-if="user.avatar !='#'" size="32px">
-                        
+                        <img class="img-fluid" :src="user.avatar">
                     </v-avatar>
                     <v-icon v-else>settings</v-icon>
                 </v-btn>

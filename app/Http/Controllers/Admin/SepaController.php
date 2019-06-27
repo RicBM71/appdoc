@@ -63,11 +63,12 @@ class SepaController extends Controller
 
         $cuenta = Cuenta::find($cuenta_id);
 
-        $idPayment = session()->get('empresa')->cif."000";
+        $idPayment = session()->get('empresa')->cif;
 
 
                 // Create the initiating information
         $groupHeader = new GroupHeader($idPayment, session()->get('empresa')->razon);
+        $groupHeader->setInitiatingPartyId(session()->get('empresa')->cif);
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
 
         $imp_total_remesa = $adeudos = 0;
@@ -92,29 +93,32 @@ class SepaController extends Controller
             );
             $transfer->setBic($row->bic_abono); // Set the BIC explicitly
             $transfer->setRemittanceInformation($row->concepto);
+            $transfer->setEndToEndIdentification(uniqid());
 
+            // Create a PaymentInformation the Transfer belongs to
+            $payment = new PaymentInformation(
+                $idPayment,
+                $cuenta->iban, // IBAN the money is transferred from
+                $cuenta->bic,  // BIC
+                session()->get('empresa')->razon // Debitor Name
+            );
+
+            $payment->setCategoryPurposeCode('SALA');
+            // It's possible to add multiple Transfers in one Payment
+            $payment->addTransfer($transfer);
+
+            // It's possible to add multiple payments to one SEPA File
+            $sepaFile->addPaymentInformation($payment);
         }
 
 
 
-        // Create a PaymentInformation the Transfer belongs to
-        $payment = new PaymentInformation(
-            $idPayment,
-            $cuenta->iban, // IBAN the money is transferred from
-            $cuenta->bic,  // BIC
-            session()->get('empresa')->razon // Debitor Name
-        );
-        // It's possible to add multiple Transfers in one Payment
-        $payment->addTransfer($transfer);
-
-        // It's possible to add multiple payments to one SEPA File
-        $sepaFile->addPaymentInformation($payment);
 
         // Attach a dombuilder to the sepaFile to create the XML output
         //$domBuilder = DomBuilderFactory::createDomBuilder($sepaFile);
 
         // Or if you want to use the format 'pain.001.001.03' instead
-        $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile, 'pain.001.001.03');
+       $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile, 'pain.001.001.03');
 
         $xml = $domBuilder->asXml();
 

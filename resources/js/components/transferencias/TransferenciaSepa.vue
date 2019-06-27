@@ -13,7 +13,7 @@
                         icon
                         @click="goTransferencia"
                     >
-                        <v-icon color="primary">functions</v-icon>
+                        <v-icon color="primary">airplay</v-icon>
                     </v-btn>
                 </template>
                 <span>Ir a transferencias</span>

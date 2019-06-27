@@ -65,7 +65,7 @@
                     icon
                     @click="goSepa"
                 >
-                    <v-icon color="primary">euro_symbol</v-icon>
+                    <v-icon color="primary">present_to_all</v-icon>
                 </v-btn>
             </template>
             <span>Generar fichero órden SEPA</span>

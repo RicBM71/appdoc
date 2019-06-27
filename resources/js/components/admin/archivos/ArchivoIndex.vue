@@ -22,7 +22,6 @@
                             rows-per-page-text="Registros por página"
                             >
                                 <template slot="items" slot-scope="props">
-                                    <td>{{ props.item.id }}</td>
                                     <td>{{ props.item.nombre }}</td>
                                     <td>{{ props.item.path }}</td>
                                     <td :class="props.item.color">{{ props.item.color }}</td>
@@ -81,11 +80,6 @@ import {mapActions} from "vuex";
             sortBy: "id",
         },
         headers: [
-          {
-            text: 'ID',
-            align: 'center',
-            value: 'id'
-          },
           {
             text: 'Nombre',
             align: 'left',

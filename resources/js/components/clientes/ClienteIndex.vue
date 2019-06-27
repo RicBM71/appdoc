@@ -37,11 +37,11 @@
                                 rows-per-page-text="Registros por página"
                                 >
                                     <template slot="items" slot-scope="props">
-                                        <td>{{ props.item.id }}</td>
                                         <td>{{ props.item.nombre }}</td>
                                         <td>{{ props.item.cif }}</td>
                                         <td>{{ props.item.email }}</td>
                                         <td>{{ props.item.telefono1 }}</td>
+                                        <td>{{ props.item.patron }}</td>
                                         <td class="justify-center layout px-0">
                                             <v-icon
                                                 small
@@ -97,36 +97,36 @@ import {mapActions} from "vuex";
             search: ""
         },
         headers: [
-          {
-            text: 'ID',
-            align: 'center',
-            value: 'id'
-          },
-          {
+            {
             text: 'Nombre',
             align: 'left',
             value: 'nombre'
-          },
-          {
+            },
+            {
             text: 'CIF',
             align: 'left',
             value: 'cif'
-          },
-          {
+            },
+            {
             text: 'email',
             align: 'left',
             value: 'email'
-          },
-          {
+            },
+            {
             text: 'Teléfono',
-            align: 'Left',
+            align: 'left',
             value: 'telefono1'
-          },
-          {
+            },
+            {
+            text: 'Patrón N.43',
+            align: 'left',
+            value: 'patron'
+            },
+            {
             text: 'Acciones',
             align: 'Center',
             value: ''
-          }
+            }
         ],
         clientes:[],
         status: false,

@@ -17,10 +17,10 @@
                     rows-per-page-text="Registros por página"
                     >
                         <template slot="items" slot-scope="props">
-                            <td>{{ props.item.id }}</td>
                             <td  v-if="props.item.blocked == false"  class="text-xs-left">{{ props.item.name }}</td>
                             <td v-else class="text-xs-left"><span class="red--text">BLOQUEADO -></span></td>
                             <td class="text-xs-left">{{ props.item.username }}</td>
+                            <td>{{ props.item.email }}</td>
                             <td class="text-xs-left">{{ formatDate(props.item.login_at) }}</td>
                             <td class="text-xs-left">{{ extrae(props.item.roles) }}</td>
                             <td class="justify-center layout px-0">
@@ -64,16 +64,16 @@ import MenuOpe from './MenuOpe'
         titulo: "Usuarios",
         headers: [
           {
-            text: 'ID',
-            align: 'center',
-            value: 'id'
-          },
-          {
             text: 'Nombre',
             align: 'left',
             value: 'name'
           },
           { text: 'Username', align: 'left', value: 'name' },
+           {
+            text: 'Mail',
+            align: 'left',
+            value: 'email'
+          },
           { text: 'Login', align: 'left', value: 'login_at' },
           { text: 'Roles', align: 'left', value: 'roles', sortable: false, },
           { text: 'Acciones', align: 'left', value: 'acciones', sortable: false, }

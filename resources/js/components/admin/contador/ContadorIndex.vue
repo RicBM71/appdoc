@@ -18,7 +18,6 @@
                         rows-per-page-text="Registros por página"
                         >
                             <template slot="items" slot-scope="props">
-                                <td>{{ props.item.id }}</td>
                                 <td>{{ props.item.ejercicio }}</td>
                                 <td class="text-xs-center">{{ props.item.seriealb+"-"+props.item.albaran}}</td>
                                 <td class="text-xs-center">{{ props.item.seriefac+"-"+props.item.factura}}</td>
@@ -63,11 +62,6 @@ import MenuOpe from './MenuOpe'
       return {
         titulo:"Contadores",
         headers: [
-          {
-            text: 'ID',
-            align: 'center',
-            value: 'id'
-          },
           {
             text: 'Ejercicio',
             align: 'left',

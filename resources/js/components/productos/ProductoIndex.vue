@@ -33,7 +33,6 @@
                         rows-per-page-text="Registros por página"
                         >
                             <template slot="items" slot-scope="props">
-                                <td>{{ props.item.id }}</td>
                                 <td>{{ props.item.nombre }}</td>
                                 <td>{{ props.item.iva.nombre }}</td>
                                 <td>{{ props.item.retencion.nombre }}</td>
@@ -79,11 +78,6 @@ import MenuOpe from './MenuOpe'
         titulo:"Productos",
         search:"",
         headers: [
-          {
-            text: 'ID',
-            align: 'center',
-            value: 'id'
-          },
           {
             text: 'Nombre',
             align: 'left',

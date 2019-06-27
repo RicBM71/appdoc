@@ -18,7 +18,6 @@
                         rows-per-page-text="Registros por página"
                         >
                             <template slot="items" slot-scope="props">
-                                <td>{{ props.item.id }}</td>
                                 <td>{{ props.item.nombre }}</td>
                                 <td class="justify-center layout px-0">
                                     <v-icon
@@ -60,11 +59,6 @@ import MenuOpe from './MenuOpe'
       return {
         titulo: "Vencimientos",
         headers: [
-          {
-            text: 'ID',
-            align: 'center',
-            value: 'id'
-          },
           {
             text: 'Nombre',
             align: 'left',

@@ -17,7 +17,6 @@
                     rows-per-page-text="Registros por página"
                     >
                         <template slot="items" slot-scope="props">
-                            <td>{{ props.item.id }}</td>
                             <td>{{ props.item.nombre }}</td>
                             <td>{{ props.item.importe | currency('%', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false }) }}</td>
                             <td class="justify-center layout px-0">
@@ -59,11 +58,6 @@ import MenuOpe from './MenuOpe'
       return {
         titulo:"Tipos IVA",
         headers: [
-          {
-            text: 'ID',
-            align: 'center',
-            value: 'id'
-          },
           {
             text: 'Nombre',
             align: 'left',

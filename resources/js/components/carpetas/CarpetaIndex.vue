@@ -38,7 +38,6 @@
                             rows-per-page-text="Registros por página"
                             >
                                 <template slot="items" slot-scope="props">
-                                    <td>{{ props.item.id }}</td>
                                     <td :class="props.item.archivo.color">{{ props.item.archivo.nombre }}</td>
                                     <td :class="props.item.color"><span :class="tachado(props.item.activa)">{{ props.item.nombre }}</span></td>
                                     <td :class="props.item.color"><span v-show="hasDocumenta">{{ props.item.path }}</span></td>
@@ -97,11 +96,6 @@ import {mapActions} from "vuex";
         },
         search:"",
         headers: [
-            {
-                text: 'ID',
-                align: 'center',
-                value: 'id'
-            },
             {
                 text: 'Archivo',
                 align: 'left',

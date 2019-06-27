@@ -6,8 +6,13 @@ use App\Cuenta;
 use App\Cliente;
 use App\Transferencia;
 use Illuminate\Http\Request;
+use Digitick\Sepa\GroupHeader;
 use App\Http\Controllers\Controller;
+use Digitick\Sepa\PaymentInformation;
+use Digitick\Sepa\DomBuilder\DomBuilderFactory;
+use Digitick\Sepa\TransferFile\CustomerCreditTransferFile;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
+use Digitick\Sepa\TransferInformation\CustomerCreditTransferInformation;
 
 
 class SepaController extends Controller
@@ -58,46 +63,101 @@ class SepaController extends Controller
 
         $cuenta = Cuenta::find($cuenta_id);
 
-
-        //Set the initial information
-        $customerCredit = TransferFileFacadeFactory::createCustomerCredit(session()->get('empresa')->cif, session()->get('empresa')->razon);
-
         $idPayment = session()->get('empresa')->cif."000";
 
-        $customerCredit->addPaymentInfo($idPayment, array(
-            'id'                      => $idPayment,
-            'debtorName'              => session()->get('empresa')->razon,
-            'debtorAccountIBAN'       => $cuenta->iban,
-            'debtorAgentBIC'          => $cuenta->bic,
-        ));
+
+                // Create the initiating information
+        $groupHeader = new GroupHeader($idPayment, session()->get('empresa')->razon);
+        $sepaFile = new CustomerCreditTransferFile($groupHeader);
 
         $imp_total_remesa = $adeudos = 0;
         foreach ($data as $row){
 
             $t = [
                 'enviada' => true,
+                'iban_cargo' => $cuenta->iban,
+                'bic_cargo' => $cuenta->bic,
                 'username' => session()->get('username')
             ];
             $row->update($t);
 
             $adeudos++;
-            // create a payment, it's possible to create multiple payments,
-            // "firstPayment" is the identifier for the transactions
 
             $imp_total_remesa += $row->importe;
 
-                // Add a Single Transaction to the named payment
-            $customerCredit->addTransfer($idPayment, array(
-                'amount'                  => $row->importe,
-                'creditorIban'            => $row->iban_abono,
-                'creditorBic'             => $row->bic_abono,
-                'creditorName'            => $row->cliente->razon,
-                'remittanceInformation'   => $row->concepto
-            ));
+            $transfer = new CustomerCreditTransferInformation(
+                $row->importe, // Amount
+                $row->iban_abono, //IBAN of creditor
+                $row->cliente->razon //Name of Creditor
+            );
+            $transfer->setBic($row->bic_abono); // Set the BIC explicitly
+            $transfer->setRemittanceInformation($row->concepto);
 
         }
 
-        $xml = $customerCredit->asXML();
+
+
+        // Create a PaymentInformation the Transfer belongs to
+        $payment = new PaymentInformation(
+            $idPayment,
+            $cuenta->iban, // IBAN the money is transferred from
+            $cuenta->bic,  // BIC
+            session()->get('empresa')->razon // Debitor Name
+        );
+        // It's possible to add multiple Transfers in one Payment
+        $payment->addTransfer($transfer);
+
+        // It's possible to add multiple payments to one SEPA File
+        $sepaFile->addPaymentInformation($payment);
+
+        // Attach a dombuilder to the sepaFile to create the XML output
+        //$domBuilder = DomBuilderFactory::createDomBuilder($sepaFile);
+
+        // Or if you want to use the format 'pain.001.001.03' instead
+        $domBuilder = DomBuilderFactory::createDomBuilder($sepaFile, 'pain.001.001.03');
+
+        $xml = $domBuilder->asXml();
+
+
+
+        // $customerCredit = TransferFileFacadeFactory::createCustomerCredit(session()->get('empresa')->cif, session()->get('empresa')->razon);
+
+        // $idPayment = session()->get('empresa')->cif."000";
+
+        // $customerCredit->addPaymentInfo($idPayment, array(
+        //     'id'                      => $idPayment,
+        //     'debtorName'              => session()->get('empresa')->razon,
+        //     'debtorAccountIBAN'       => $cuenta->iban,
+        //     'debtorAgentBIC'          => $cuenta->bic,
+        // ));
+
+        // $imp_total_remesa = $adeudos = 0;
+        // foreach ($data as $row){
+
+        //     $t = [
+        //         'enviada' => true,
+        //         'username' => session()->get('username')
+        //     ];
+        //     $row->update($t);
+
+        //     $adeudos++;
+        //     // create a payment, it's possible to create multiple payments,
+        //     // "firstPayment" is the identifier for the transactions
+
+        //     $imp_total_remesa += $row->importe;
+
+        //         // Add a Single Transaction to the named payment
+        //     $customerCredit->addTransfer($idPayment, array(
+        //         'amount'                  => $row->importe,
+        //         'creditorIban'            => $row->iban_abono,
+        //         'creditorBic'             => $row->bic_abono,
+        //         'creditorName'            => $row->cliente->razon,
+        //         'remittanceInformation'   => $row->concepto
+        //     ));
+
+        // }
+
+        // $xml = $customerCredit->asXML();
 
         return [
             'xml' => $xml,

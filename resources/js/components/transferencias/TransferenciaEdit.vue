@@ -15,6 +15,18 @@
         <v-card>
             <v-form>
                 <v-container>
+                    <v-layout row wrap v-if="transferencia.iban_cargo > ''">
+                        <v-flex sm4>
+                                <v-text-field
+                                    :disabled="computedEnviada"
+                                    v-model="transferencia.iban_cargo"
+                                    label="Cuenta Ordenante"
+                                    mask="AA## #### #### #### #### ####"
+                                    readonly
+                                >
+                                </v-text-field>
+                            </v-flex>
+                    </v-layout>
                     <v-layout row wrap>
                         <v-flex sm4 d-flex>
                             <v-select

@@ -51,7 +51,7 @@ import MenuOpe from './MenuOpe'
 		},
     	data () {
       		return {
-                titulo:"Nuevo Cliente",
+                titulo:"Nuevo Cliente/Proveedor",
                 cliente: {
                     id:0,
                     empresa_id:"",

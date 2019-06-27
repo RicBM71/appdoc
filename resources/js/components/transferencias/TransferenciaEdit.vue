@@ -77,7 +77,6 @@
                                 :error-messages="errors.collect('iban')"
                                 label="IBAN"
                                 mask="AA## #### #### #### #### ####"
-                                counter=24
                                 data-vv-name="iban"
                                 readonly
                                 v-on:keyup.enter="submit"
@@ -243,10 +242,7 @@ import {mapGetters} from 'vuex';
                 'isAdmin'
             ]),
             computedEnviada(){
-                if (this.transferencia.enviada)
-                    return true;
-                else
-                    return false;
+                return this.transferencia.enviada ? true : false;
             },
             computedFecha() {
                 moment.locale('es');

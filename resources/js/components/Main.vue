@@ -12,7 +12,7 @@
                 <v-btn
                     round block large color="grey" class="blue-grey lighten-3"
                     @click="goClientes()">
-                        Clientes
+                        Clientes-Proveedores
                     <v-icon right dark>group</v-icon>
                 </v-btn>
             </v-flex>

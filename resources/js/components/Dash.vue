@@ -232,7 +232,7 @@ export default {
         },
 
         items: [
-            { icon: 'people', text: 'Clientes', name:'cliente.index' },
+            { icon: 'people', text: 'Clientes-Proveedores', name:'cliente.index' },
             { icon: 'local_offer', text: 'Productos', name:'producto.index' },
             { icon: 'account_balance', text: 'Extracto Banco', name:'extracto.index' },
             { icon: 'open_in_browser', text: 'Importar N.43', name:'extracto.importar' },

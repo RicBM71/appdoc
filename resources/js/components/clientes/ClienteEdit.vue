@@ -389,7 +389,7 @@ import DocuCli from './ClienteDocumento'
 		},
     	data () {
       		return {
-                titulo:"Clientes",
+                titulo:"Cliente/Proveedor",
                 cliente: {
                     id:0,
                     empresa_id:"",
@@ -479,7 +479,7 @@ import DocuCli from './ClienteDocumento'
                 return this.cliente.fechabaja ? moment(this.cliente.fechabaja).format('D/MM/YYYY') : '';
             },
             rules() {
-                return this.cliente.iban.length ? 'required' : '';
+                return this.cliente.iban == '' ? 'required' : '';
             }
         },
     	methods:{

@@ -85,7 +85,7 @@ import {mapActions} from "vuex";
     },
     data () {
       return {
-        titulo:"Clientes",
+        titulo:"Clientes/Proveedores",
         search:"",
         paginaActual:{},
         pagination:{

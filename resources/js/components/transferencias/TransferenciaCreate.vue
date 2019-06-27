@@ -157,10 +157,7 @@ import MenuOpe from './MenuOpe'
         },
         computed: {
             computedEnviada(){
-                if (this.transferencia.enviada)
-                    return true;
-                else
-                    return false;
+                return this.transferencia.enviada ? true : false;
             },
             computedFecha() {
                 moment.locale('es');

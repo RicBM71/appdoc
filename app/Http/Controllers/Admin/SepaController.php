@@ -27,11 +27,12 @@ class SepaController extends Controller
         // return $remesa;
 
         if (request()->wantsJson())
-            return ['cuentas'=> Cuenta::selCuentas()];
+            return [
+                'cuentas'  => Cuenta::selCuentas(),
+            ];
     }
 
     public function transfer(Request $request){
-
 
         $data = $request->validate([
             'cuenta_id'=>'required|integer',
@@ -41,7 +42,7 @@ class SepaController extends Controller
 
         $transferencias =  Transferencia::with(['cliente'])->remesar($data['fecha'])->get();
 
-        if (count($transferencias)==0)
+        if ($transferencias->count()==0)
             abort(404,'No hay transferencias para remesar');
 
         $remesa = $this->generarTransfer($transferencias,$data['cuenta_id'],$data['fecha']);
@@ -74,13 +75,13 @@ class SepaController extends Controller
         $imp_total_remesa = $adeudos = 0;
         foreach ($data as $row){
 
-            $t = [
+            $tr = [
                 'enviada' => true,
                 'iban_cargo' => $cuenta->iban,
                 'bic_cargo' => $cuenta->bic,
                 'username' => session()->get('username')
             ];
-            $row->update($t);
+            $row->update($tr);
 
             $adeudos++;
 

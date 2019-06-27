@@ -18,11 +18,61 @@ class TransferenciasController extends Controller
     public function index()
     {
 
-        $transferencias = Transferencia::with(['cliente'])->get();
+
+        if (request()->session()->has('filtro_trans')){
+            $filtro = request()->session()->get('filtro_trans');
+            $transferencias = Transferencia::with(['cliente'])
+                            ->where($filtro)
+                            ->orderBy('fecha','desc')
+                            ->get();
+        }else{
+            $transferencias = Transferencia::with(['cliente'])
+                ->whereYear('fecha',date('Y'))
+                ->orderBy('fecha','desc')
+                ->get();
+        }
 
         if (request()->wantsJson())
             return [
                 'transferencias'=> $transferencias,
+                'clientes' => Cliente::selClientes()->iban()->get(),
+            ];
+
+    }
+
+    public function filtrar(Request $request)
+    {
+
+
+        $concepto = $request->input('concepto');
+        $fecha_d = $request->input('fecha_d').'-01';
+        $fecha_h = $request->input('fecha_h').'-'.date('t',strtotime($request->input('fecha_h')));
+
+        $cliente_id = $request->input('cliente_id');
+
+        if ($concepto > ""){
+            $data[] = ['concepto', 'like' , '%'.$concepto.'%'];
+        }
+        else{
+            $data[] = [
+                'fecha', '>=', $fecha_d,
+            ];
+            $data[] = [
+                'fecha', '<=', $fecha_h,
+            ];
+        }
+        if ($cliente_id <> '')
+            $data[] = [
+                'cliente_id', '=', $cliente_id,
+            ];
+
+        session(['filtro_trans' => $data]);
+
+        if (request()->wantsJson())
+            return [
+                'transferencias'=> Documento::with(['cliente'])->where($data)
+                            ->orderBy('fecha','desc')
+                            ->get()
             ];
 
     }

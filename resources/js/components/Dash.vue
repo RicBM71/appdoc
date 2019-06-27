@@ -223,10 +223,10 @@ export default {
             text: 'Facturación y Remesas',
             model: false,
             children: [
-                { text: 'Albaranes y Facturas', name: 'albaran.index' },
-                { text: 'Remesa Domiciliaciones', name: 'remesa.seleccion' },
-                { text: 'Transferencias', name: 'transferencia.index' },
-                { text: 'Remesa Transferencias', name: 'sepa.transfer' },
+                { text: 'Albaranes y Facturas', name: 'albaran.index' , icon: 'create_new_folder'},
+                { text: 'Remesa Domiciliaciones', name: 'remesa.seleccion', icon: 'cloud_download' },
+                { text: 'Transferencias', name: 'transferencia.index', icon: 'airplay' },
+                { text: 'Remesa Transferencias', name: 'sepa.transfer', icon: 'present_to_all'},
                 { text: 'Vencimientos', name: 'vencimiento.index' },
             ]
         },

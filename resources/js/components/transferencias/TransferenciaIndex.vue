@@ -161,17 +161,18 @@
                                     <td>
                                         <v-icon
                                             v-if="props.item.enviada"
-                                            color="green"
+                                            color="primary"
                                             small
                                         >
-                                            grade
+
+                                            lock
                                         </v-icon>
                                         <v-icon
                                             v-else
-                                            color="yellow"
+                                            color="red"
                                             small
                                         >
-                                            grade
+                                            touch_app
                                         </v-icon>
                                     </td>
                                     <td class="justify-center layout px-0">

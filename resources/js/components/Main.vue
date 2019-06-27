@@ -4,7 +4,7 @@
             <v-flex sm3 xs12>
                  <v-btn round block large color="grey" class="blue-grey lighten-3" @click="goAlbaranes()">
                      Albaranes
-                     <v-icon right dark>keyboard</v-icon>
+                     <v-icon right dark>create_new_folder</v-icon>
                 </v-btn>
             </v-flex>
             <v-flex xs1></v-flex>

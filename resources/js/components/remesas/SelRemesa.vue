@@ -158,7 +158,7 @@
                             let blob = new Blob([response.data.xml], { type: 'application/xml' })
                             let link = document.createElement('a')
                             link.href = window.URL.createObjectURL(blob)
-                            link.download = 'REM'+new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'.XML';
+                            link.download = 'DOMI'+new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'.XML';
                             link.click()
 
                                 // let blob = new Blob([response.data], { type: 'application/xml' }),

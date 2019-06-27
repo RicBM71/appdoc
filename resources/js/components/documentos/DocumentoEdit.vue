@@ -383,26 +383,21 @@ import {mapGetters} from 'vuex';
 
                 var url = '/mto/filedocs/'+file_id;
                 window.open(url, '_blank');
-                return;
+                // return;
 
-                axios.get('/mto/filedocs/'+file_id)
-                    .then(res => {
-                        let blob = new Blob([res.data], { type: 'application/pdf' })
-                        let link = document.createElement('a')
-                        link.href = window.URL.createObjectURL(blob)
-                        link.download = 'REM'+new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'.pdf';
-                        link.click()
+                // axios.get('/mto/filedocs/'+file_id)
+                //     .then(res => {
+                //         let blob = new Blob([res.data], { type: 'application/pdf' })
+                //         let link = document.createElement('a')
+                //         link.href = window.URL.createObjectURL(blob)
+                //         link.download = 'REM'+new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'.pdf';
+                //         link.click()
+                //     })
+                //     .catch(err => {
 
-                        //console.log(res);
-                    })
-                    .catch(err => {
+                //         this.$toast.error('Error al obtener documento!');
+                //     })
 
-                        this.$toast.error('Error al obtener documento!');
-                    })
-
-                //var url = '/mto/documentos/'+file_id+'/print';
-
-                //window.open(url, '_blank');
 
             },
             showUpload(e){

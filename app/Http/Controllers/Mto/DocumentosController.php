@@ -23,6 +23,7 @@ class DocumentosController extends Controller
     public function index()
     {
 
+
         if (request()->session()->has('filtro_docu')){
             $filtro = request()->session()->get('filtro_docu');
             $documentos = Documento::ordinarios()
@@ -275,8 +276,9 @@ class DocumentosController extends Controller
             ->where('archivo_id',$archivo_id)
             ->get();
 
-        if (count($files)==0){
-            return abort(404);
+
+        if ($files->count() == 0){
+            abort(404, 'No hay documentos');
         }
 
         $str="";

@@ -164,18 +164,22 @@
                             })
                             .then(response => {
 
-                               // console.log(response.data);
+                                // let blob = new Blob([res.data.xml], { type: 'application/xml' })
+                                // let link = document.createElement('a')
+                                // link.href = window.URL.createObjectURL(blob);
+                                // link.download = 'TR'+new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'.XML';
+                                // link.click();
 
                                 let blob = new Blob([response.data.xml], { type: 'application/xml' })
                                 let link = document.createElement('a')
                                 link.href = window.URL.createObjectURL(blob)
-                                link.download = 'TR'+new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'.XML';
+                                link.download = 'TRANSF'+new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'.XML';
+
+                                //document.body.appendChild(link);
                                 link.click()
+                                 //document.body.removeChild(link);
 
-                                    // let blob = new Blob([response.data], { type: 'application/xml' }),
-                                    // url = window.URL.createObjectURL(blob)
 
-                                    // window.open(url)
                                 this.imp_remesa = response.data.importe;
                                 this.adeudos = response.data.adeudos;
 
@@ -185,9 +189,9 @@
                                 })
                                 .catch(err => {
 
-                                    this.$toast.error(err.response.data.message);
+                                    this.$toast.error(err.response.message);
                                     this.show_loading = false;
-                            });
+                                })
                         }
                     else{
                         this.show_loading = false;

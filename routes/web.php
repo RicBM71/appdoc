@@ -38,6 +38,10 @@ Route::group([
             Route::resource('fpagos', 'FpagosController', ['except'=>'show','as' => 'admin']);
             Route::resource('contadors', 'ContadorsController', ['except'=>'show','as' => 'admin']);
             Route::resource('cuentas', 'CuentasController', ['except'=>'show','as' => 'admin']);
+
+            Route::get('sepa/transfer', 'SepaController@index');
+            Route::post('sepa/transfer', 'SepaController@transfer');
+
         });
 
 
@@ -71,6 +75,10 @@ Route::group([
         Route::get('filedocs/{filedoc}', 'FiledocsController@show');
 
         Route::resource('carpetas', 'CarpetasController', ['as' => 'mto']);
+
+        Route::middleware('role:Root|Admin')->group(function () {
+            Route::resource('transferencias', 'TransferenciasController', ['as' => 'mto']);
+        });
     }
 );
 

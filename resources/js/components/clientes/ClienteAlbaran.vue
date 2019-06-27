@@ -21,7 +21,6 @@
                     <v-data-table
                     :headers="headers"
                     :items="albaranes"
-                    :search="search"
                     rows-per-page-text="Registros por página"
                     >
                         <template slot="items" slot-scope="props">

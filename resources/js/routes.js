@@ -70,6 +70,11 @@ import DocumentoEdit from './components/documentos/DocumentoEdit.vue';
 import DocumentoShow from './components/documentos/DocumentoShow.vue';
 import DocumentoDownload from './components/documentos/Download.vue';
 
+import TransferenciaIndex from './components/transferencias/TransferenciaIndex.vue';
+import TransferenciaCreate from './components/transferencias/TransferenciaCreate.vue';
+import TransferenciaEdit from './components/transferencias/TransferenciaEdit.vue';
+
+import TransferenciaSepa from './components/transferencias/TransferenciaSepa.vue';
 
 import EditPassword from './components/profile/edit-password/EditPassword.vue';
 
@@ -350,7 +355,27 @@ export default [
                 path: '/documentos/download',
                 name: 'documento.zip',
                 component: DocumentoDownload,
-            }
+            },
+            {
+                path: '/transferencias',
+                name: 'transferencia.index',
+                component: TransferenciaIndex,
+            },
+            {
+                path: '/transferencias/create',
+                name: 'transferencia.create',
+                component: TransferenciaCreate,
+            },
+            {
+                path: '/transferencias/:id/edit',
+                name: 'transferencia.edit',
+                component: TransferenciaEdit,
+            },
+            {
+                path: '/sepa/transfer',
+                name: 'sepa.transfer',
+                component: TransferenciaSepa,
+            },
             // {
             //     path: '*',
             //     redirect: {

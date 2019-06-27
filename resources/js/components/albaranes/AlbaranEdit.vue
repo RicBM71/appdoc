@@ -139,7 +139,6 @@
                                 v-validate="'required'"
                                 data-vv-name="cliente_id"
                                 data-vv-as="Cliente"
-
                                 :error-messages="errors.collect('cliente_id')"
                                 :loading="loading"
                                 :items="clientes"

@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-show="!show_loading">
         <loading :show_loading="show_loading"></loading>
         <my-dialog :dialog.sync="dialog" registro="avatar" @destroyReg="destroyReg"></my-dialog>
         <v-card>

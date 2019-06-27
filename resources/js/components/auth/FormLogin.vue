@@ -48,6 +48,7 @@
                 </v-btn>
             </v-card-actions>
             <input type="hidden" name="blocked" value="0" />
+
         </form>
         <v-btn icon large  v-on:click="reset">
             <v-avatar size="32px" tile>

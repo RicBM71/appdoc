@@ -101,7 +101,7 @@ class AlbacabsController extends Controller
 
         if (request()->wantsJson())
             return [
-                'clientes'=>  Cliente::selClientesFacturables(),
+                'clientes'=>  Cliente::selClientes()->facturables()->get(),
                 'fpagos'  =>  Fpago::selFPagos(),
                 'vencimientos'  =>  Vencimiento::selVencimientos(),
         ];
@@ -165,7 +165,7 @@ class AlbacabsController extends Controller
         if (request()->wantsJson())
             return [
                 'albaran' =>  $albacab,
-                'clientes'=>  Cliente::selClientesFacturables(),
+                'clientes'=>  Cliente::selClientes()->facturables()->get(),
                 'fpagos'  =>  Fpago::selFPagos(),
                 'vencimientos'  =>  Vencimiento::selVencimientos(),
         ];

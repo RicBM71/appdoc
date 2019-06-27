@@ -53,16 +53,6 @@
             </v-flex>
         </v-layout>
         <v-layout row wrap>
-            <v-flex xs4></v-flex>
-            <v-flex sm3 xs12 v-show="isAdmin">
-                 <v-btn round block large color="grey" class="blue-grey lighten-3"
-                     @click="goRemesas()">
-                     Remesas SEPA
-                     <v-icon right dark>euro_symbol</v-icon>
-                </v-btn>
-            </v-flex>
-        </v-layout>
-        <v-layout row wrap>
             <v-flex xs2></v-flex>
             <v-flex xs8>
                 <v-responsive>

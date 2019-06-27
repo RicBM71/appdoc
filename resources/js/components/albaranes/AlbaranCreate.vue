@@ -104,8 +104,6 @@
                                 v-validate="'required'"
                                 data-vv-name="cliente_id"
                                 data-vv-as="Cliente"
-                                item-text="name"
-                                item-value="id"
                                 @change="selCliente"
                                 :error-messages="errors.collect('cliente_id')"
                                 :loading="loading"

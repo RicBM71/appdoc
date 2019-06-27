@@ -220,11 +220,13 @@ export default {
         factu:{
             icon: 'keyboard_arrow_up',
             'icon-alt': 'keyboard_arrow_down',
-            text: 'Facturación',
+            text: 'Facturación y Remesas',
             model: false,
             children: [
-                { text: 'Albaranes', name: 'albaran.index' },
-                { text: 'Remesa SEPA', name: 'remesa.seleccion' },
+                { text: 'Albaranes y Facturas', name: 'albaran.index' },
+                { text: 'Remesa Domiciliaciones', name: 'remesa.seleccion' },
+                { text: 'Transferencias', name: 'transferencia.index' },
+                { text: 'Remesa Transferencias', name: 'sepa.transfer' },
                 { text: 'Vencimientos', name: 'vencimiento.index' },
             ]
         },

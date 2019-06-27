@@ -244,6 +244,7 @@
                                 <v-flex sm3>
                                     <v-text-field
                                         v-model="cliente.bic"
+                                        v-validate="rules"
                                         :error-messages="errors.collect('bic')"
                                         label="BIC"
                                         counter=11
@@ -476,8 +477,10 @@ import DocuCli from './ClienteDocumento'
             computedFechaBaja() {
                 moment.locale('es');
                 return this.cliente.fechabaja ? moment(this.cliente.fechabaja).format('D/MM/YYYY') : '';
+            },
+            rules() {
+                return this.cliente.iban.length ? 'required' : '';
             }
-
         },
     	methods:{
             submit() {

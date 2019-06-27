@@ -66,33 +66,25 @@ class Cliente extends Model
     {
 
         return $query->where('factura', true);
-
-            // no sé que pintaba esto aquí de momento fuera.
-            // return $query->where('factura', '=', true)
-            //              ->where('nombre', 'LIKE', '%' . $nombre . '%');
-
     }
 
     public function scopeConPatron($query){
         return $query->where('patron', '>', '');
     }
 
-    /**
-     *
-     * Selecciona clientes facturables y prepara para JSON select
-     *
-     */
 
-    public static function selClientesFacturables(){
+    public static function selClientes(){
 
-        return Cliente::select('id AS value', 'nombre AS text')->facturables()->get();
+        return Cliente::select('id AS value', 'nombre AS text');
 
     }
 
-       // establecemos la relación muchos a muchos
-    //    public function users()
-    //    {
-    //        return $this->belongsToMany(User::class);
-    //    }
+    public function scopeIban($query)    {
+
+        return $query->where('iban', '>', '')
+                     ->where('fpago_id', '=', 2);
+
+    }
+
 }
 

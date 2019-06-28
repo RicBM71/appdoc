@@ -116,7 +116,6 @@
                                 data-vv-name="importe"
                                 data-vv-as="Importe"
                                 class="inputPrice"
-                                type="number"
                                 v-on:keyup.enter="submit"
                             >
                             </v-text-field>

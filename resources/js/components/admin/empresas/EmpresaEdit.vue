@@ -189,11 +189,14 @@
                         </v-flex>
                         <v-flex sm3>
                             <v-text-field
+                                :append-icon="show ? 'visibility_off' : 'visibility'"
+                                :type="show ? 'text' : 'password'"
                                 v-model="empresa.passwd_cer"
                                 :error-messages="errors.collect('passwd_cer')"
                                 label="Password"
                                 data-vv-name="password"
                                 v-on:keyup.enter="submit"
+                                @click:append="show = !show"
                             >
                             </v-text-field>
                         </v-flex>
@@ -354,8 +357,6 @@ import MenuOpe from './MenuOpe'
                        // console.log(res);
                         this.empresa = res.data.empresa;
                         this.carpetas = res.data.carpetas;
-
-                        this.show = true;
 
                     })
                     .catch(err => {

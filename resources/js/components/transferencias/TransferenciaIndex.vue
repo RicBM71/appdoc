@@ -157,7 +157,7 @@
                                     <td>{{ formatDate(props.item.fecha) }}</td>
                                     <td>{{props.item.cliente.nombre}}</td>
                                     <td>{{props.item.concepto}}</td>
-                                    <td>{{ props.item.importe}}</td>
+                                    <td>{{ props.item.importe| currency('€', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false })}}</td>
                                     <td>
                                         <v-icon
                                             v-if="props.item.enviada"

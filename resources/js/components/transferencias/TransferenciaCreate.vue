@@ -73,13 +73,13 @@
                         <v-flex sm2>
                             <v-text-field
                                 v-model="transferencia.importe"
-                                v-validate="'required|decimal:2'"
+                                v-validate="'required|numeric:2'"
                                 :error-messages="errors.collect('importe')"
                                 label="Importe"
                                 data-vv-name="importe"
                                 data-vv-as="Importe"
                                 class="inputPrice"
-                                type="number"
+                                mask="#.###.###,##"
                             >
                             </v-text-field>
                         </v-flex>

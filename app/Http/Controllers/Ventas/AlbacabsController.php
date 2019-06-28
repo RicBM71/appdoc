@@ -337,7 +337,9 @@ class AlbacabsController extends Controller
 
         PDF::setHeaderCallback(function($pdf) {
             $file = '@'.(Storage::disk('public')->get('logos/'. session()->get('empresa')->logo));
-            $pdf->Image($file, 0, 10, 40, 14, 'JPG', null, 'M', true, 300, 'L', false, false, 0, false, false, false);
+            $pdf->setJPEGQuality(75);
+            $pdf->Image($file, 0, 10, 50, 14, 'JPG', null, 'M', false, 300, 'L', false, false, 0, false, false, false);
+            //$pdf->Image($file, 0, 10, 0, 0, 'JPG', null, 'M', false, 300, 'L', false, false, 0, false, false, false);
 
             // PDF::SetFont('helvetica', 'R', 7);
 
@@ -486,6 +488,12 @@ class AlbacabsController extends Controller
          PDF::setSignature($clave_firma,$clave_privada,$empresa->passwd_cer,"",1,$info);
          PDF::setSignatureAppearance(10,10,10,10,-1);
 
+        $x = PDF::getX();
+        $y = PDF::getY();
+        PDF::SetX(15);
+        PDF::Write($h=0, $empresa->razon."\nCIF: ".$empresa->cif, $link='', $fill=0, $align='L', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0, $w=0, array(100,100,10));
+        PDF::SetX($x);
+        PDF::SetY($y);
     }
 
     /**
@@ -496,7 +504,7 @@ class AlbacabsController extends Controller
     private function setCabeceraCli($cliente){
 
 		// recuadro cliente
-		PDF::SetLineStyle(array('width' => 0.3, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(4, 4, 180)));
+		PDF::SetLineStyle(array('width' => 0.3, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(20, 70, 155)));
 		PDF::RoundedRect(110, 22, 86, 24, 3.50, '1111', '');
 
         $y = PDF::getY();
@@ -667,7 +675,7 @@ class AlbacabsController extends Controller
         }
 
         PDF::MultiCell(30,8,'Forma de Pago', '1', 'C', 0, 0, '', '', true,0,false,true,8,'M',false);
-		PDF::MultiCell(60,8,$data->fpago->nombre, '1', 'L', 0, 0, '', '', true,0,false,true,8,'M',false);
+		PDF::MultiCell(60,8,$data->fpago->nombre.' '.$data->vencimiento->nombre, '1', 'L', 0, 0, '', '', true,0,false,true,8,'M',false);
         PDF::MultiCell(26,8,'IBAN', '1', 'C', 0, 0, '', '', true,0,false,true,8,'M',false);
         PDF::MultiCell(68,8,$iban_print, '1', 'C', 0, 1, '', '', true,0,false,true,8,'M',false);
 

@@ -173,11 +173,11 @@
                                 let blob = new Blob([response.data.xml], { type: 'application/xml' })
                                 let link = document.createElement('a')
                                 link.href = window.URL.createObjectURL(blob)
-                                link.download = 'TRANSF'+new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'.XML';
+                                link.download = 'TRANSF'+new Date().getFullYear()+(new Date().getMonth()+1)+(new Date().getDate())+'.XML';
 
-                                //document.body.appendChild(link);
+                                document.body.appendChild(link);
                                 link.click()
-                                 //document.body.removeChild(link);
+                                document.body.removeChild(link);
 
 
                                 this.imp_remesa = response.data.importe;
@@ -188,8 +188,8 @@
                                 this.show_loading = false;
                                 })
                                 .catch(err => {
-
-                                    this.$toast.error(err.response.message);
+                                    console.log(err.response);
+                                    this.$toast.error(err.response.data.message);
                                     this.show_loading = false;
                                 })
                         }

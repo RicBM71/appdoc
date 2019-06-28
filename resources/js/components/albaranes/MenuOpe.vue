@@ -37,20 +37,6 @@
                     v-on="on"
                     color="white"
                     icon
-                    @click="goIndex"
-                >
-                    <v-icon color="primary">list</v-icon>
-                </v-btn>
-            </template>
-            <span>Lista</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-                <v-btn
-                    v-show="albaran.id > 0"
-                    v-on="on"
-                    color="white"
-                    icon
                     @click="goClonar">
                     <v-icon color="primary">repeat_one</v-icon>
                 </v-btn>
@@ -98,6 +84,20 @@
                 </v-btn>
             </template>
             <span>Generar PDF</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+                <v-btn
+                    v-show="albaran.id > 0"
+                    v-on="on"
+                    color="white"
+                    icon
+                    @click="goIndex"
+                >
+                    <v-icon color="primary">list</v-icon>
+                </v-btn>
+            </template>
+            <span>Lista</span>
         </v-tooltip>
     </div>
 </template>

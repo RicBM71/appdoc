@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "moment": "^2.24.0",
+        "v-currency-field": "^1.0.6",
         "vee-validate": "^2.1.7",
         "vue-toastr": "^2.0.16",
         "vue2-dropzone": "^3.5.8",

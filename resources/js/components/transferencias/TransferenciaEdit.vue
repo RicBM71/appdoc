@@ -107,7 +107,7 @@
                             </v-text-field>
                         </v-flex>
                         <v-flex sm2>
-                            <v-text-field
+                             <v-currency-field
                                 :disabled="computedEnviada"
                                 v-model="transferencia.importe"
                                 v-validate="'required|decimal:2'"
@@ -115,10 +115,11 @@
                                 label="Importe"
                                 data-vv-name="importe"
                                 data-vv-as="Importe"
-                                class="inputPrice"
+                                v-bind="currency_config"
                                 v-on:keyup.enter="submit"
+                                class="inputPrice"
                             >
-                            </v-text-field>
+                             </v-currency-field>
                         </v-flex>
                     </v-layout>
                     <v-layout row wrap>
@@ -209,6 +210,15 @@ import {mapGetters} from 'vuex';
                 show: true,
                 show_upload: false,
                 show_loading: true,
+
+                currency_config: {
+                    decimal: ',',
+                    thousands: '.',
+                    suffix: ' €',
+                    precision: 2,
+
+                    allowBlank: false,
+                    }
       		}
         },
         mounted(){
@@ -310,18 +320,9 @@ import {mapGetters} from 'vuex';
     }
   }
 </script>
-<style scoped>
-.v-text-field {
-    padding-top: 2px;
-    margin-top: 4px;
-}
-.theme--light.v-input--is-disabled,  .theme--light.v-input--is-disabled input, .theme--light.v-input--is-disabled textarea {
-    color: #263238;
-}
 
-.v-form>.container>.layout>.flex{
-    padding: 0px 8px;
-}
+<style scoped>
+
 
 .inputPrice >>> input {
   text-align: center;

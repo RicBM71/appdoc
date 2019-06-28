@@ -52,6 +52,31 @@
                 </v-btn>
             </v-flex>
         </v-layout>
+        <v-layout row wrap v-if="isAdmin">
+            <v-flex sm3 xs12>
+                 <v-btn round block large color="grey" class="blue-grey lighten-3"
+                     @click="goRecibos()">
+                     Emitir Recibos
+                     <v-icon right dark>cloud_download</v-icon>
+                </v-btn>
+            </v-flex>
+            <v-flex xs1></v-flex>
+            <v-flex sm3 xs12>
+                 <v-btn round block large color="grey" class="blue-grey lighten-3"
+                     @click="goTransfer()">
+                    Transferencias
+                     <v-icon right dark>airplay</v-icon>
+                </v-btn>
+            </v-flex>
+            <v-flex xs1></v-flex>
+            <v-flex sm3 xs12>
+                 <v-btn round block large color="grey" class="blue-grey lighten-3"
+                     @click="goEmitTrans()">
+                     Emitir Transferencias
+                     <v-icon right dark>present_to_all</v-icon>
+                </v-btn>
+            </v-flex>
+        </v-layout>
         <v-layout row wrap>
             <v-flex xs2></v-flex>
             <v-flex xs8>
@@ -117,12 +142,18 @@ export default {
         goExtractos(){
             this.$router.push({ name: 'extracto.index' })
         },
-        goRemesas(){
-            this.$router.push({ name: 'remesa.seleccion' })
-        },
         goDownload(){
             this.$router.push({ name: 'documento.zip' })
-        }
+        },
+        goRecibos(){
+            this.$router.push({ name: 'remesa.seleccion' })
+        },
+        goTransfer(){
+            this.$router.push({ name: 'transferencia.index' })
+        },
+        goEmitTrans(){
+            this.$router.push({ name: 'sepa.transfer' })
+        },
     }
   }
 </script>

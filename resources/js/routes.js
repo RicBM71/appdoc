@@ -62,7 +62,7 @@ import AlbaranEdit from './components/albaranes/AlbaranEdit.vue';
 import ExtractoIndex from './components/extractos/ExtractoIndex.vue';
 import ExtractoImp from './components/extractos/Importar.vue';
 
-import SelRemesa from './components/remesas/SelRemesa.vue';
+import SelRemesa from './components/adeudos/SelRemesa.vue';
 
 import DocumentoIndex from './components/documentos/DocumentoIndex.vue';
 import DocumentoCreate from './components/documentos/DocumentoCreate.vue';
@@ -309,8 +309,8 @@ export default [
                 component: PdfRemesa,
             },
             {
-                path: '/remesa',
-                name: 'remesa.seleccion',
+                path: '/adeudo',
+                name: 'adeudo.seleccion',
                 component: SelRemesa,
             },
             {

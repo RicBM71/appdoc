@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
 
 
-class RemesasController extends Controller
+class AdeudosController extends Controller
 {
      /**
      * Selección previa remesa

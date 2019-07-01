@@ -410,7 +410,7 @@ class AlbacabsController extends Controller
             if (file_exists(storage_path('facturas'))==false)
                 mkdir(storage_path('facturas'), '0755');
 
-            PDF::Output(storage_path('facturas/'.$data->factura.'.pdf'), 'F');
+            PDF::Output(storage_path('facturas/F'.$data->factura.'.pdf'), 'F');
 
         }else{
             PDF::Output($data->factura.'.pdf');

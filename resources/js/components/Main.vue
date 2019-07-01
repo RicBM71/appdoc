@@ -146,7 +146,7 @@ export default {
             this.$router.push({ name: 'documento.zip' })
         },
         goRecibos(){
-            this.$router.push({ name: 'remesa.seleccion' })
+            this.$router.push({ name: 'adeudo.seleccion' })
         },
         goTransfer(){
             this.$router.push({ name: 'transferencia.index' })

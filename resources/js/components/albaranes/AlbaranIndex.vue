@@ -140,6 +140,7 @@
                                 <td class="text-xs-right">{{ totalImpLinea(props.item.albalins) | currency('€', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false })}}</td>
                                 <td>{{ props.item.factura }}</td>
                                 <td>{{ formatDate(props.item.fecha_fac) }}</td>
+                                <td>{{ Notificado(props.item.notificado) }}</td>
                                 <td class="justify-center layout px-0">
                                     <v-icon
                                         small
@@ -237,6 +238,11 @@ import {mapActions} from "vuex";
             value: 'fecha_fac'
           },
           {
+            text: 'N',
+            align: 'Left',
+            value: 'notificado'
+          },
+          {
             text: 'Acciones',
             align: 'Center',
             value: ''
@@ -308,6 +314,9 @@ import {mapActions} from "vuex";
             this.paginaActual = obj;
             this.paginaActual.search = this.search;
 
+        },
+        Notificado(noti){
+            return noti ? 'Ok' : '';
         },
         updatePosPagina(pag){
 

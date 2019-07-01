@@ -69,7 +69,10 @@ class SepaController extends Controller
 
                 // Create the initiating information
         $groupHeader = new GroupHeader($idPayment, session()->get('empresa')->razon);
+
         $groupHeader->setInitiatingPartyId(session()->get('empresa')->cif);
+        //$groupHeader->setInitiatingPartyId($cuenta->sepa);
+
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
 
         $imp_total_remesa = $adeudos = 0;
@@ -105,7 +108,10 @@ class SepaController extends Controller
             );
 
             // poner est para indicar que es nómina
-          //  $payment->setCategoryPurposeCode('SALA');
+            // SALA: Salario
+            // OTHR: Otros
+            // SUPP: Pagos a proveedores
+            $payment->setCategoryPurposeCode('SUPP');
             // It's possible to add multiple Transfers in one Payment
             $payment->addTransfer($transfer);
 

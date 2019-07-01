@@ -100,8 +100,8 @@ Route::group([
         Route::resource('albalins', 'AlbalinsController', ['except'=>'index','as' => 'ventas']);
 
         Route::middleware('role:Root|Admin')->group(function () {
-            Route::get('remesas/remesa', 'RemesasController@remesa');
-            Route::post('remesas/remesar', 'RemesasController@remesar');
+            Route::get('adeudos/remesa', 'AdeudosController@remesa');
+            Route::post('adeudos/remesar', 'AdeudosController@remesar');
             Route::get('facturas/{fecha}/print', 'PrintFacturasController@print');
         });
 

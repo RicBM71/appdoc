@@ -115,7 +115,7 @@
 
         },
         mounted(){
-            axios.get('/ventas/remesas/remesa')
+            axios.get('/ventas/adeudos/remesa')
                 .then(res => {
 
                     this.cuentas = res.data.cuentas;
@@ -142,7 +142,7 @@
                 //console.log("Edit user (submit):"+this.user.id);
                 this.show_loading = true;
 
-                var url = '/ventas/remesas/remesar';
+                var url = '/ventas/adeudos/remesar';
 
                 this.$validator.validateAll().then((result) => {
                     if (result){

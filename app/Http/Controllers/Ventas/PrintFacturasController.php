@@ -32,7 +32,7 @@ class PrintFacturasController extends Controller
     {
 
         $file = false;
-        $fecha_factura = "2019-07-01";
+     //   $fecha_factura = "2019-07-01";
         $empresa  = session()->get('empresa');
 
         // echo 'file://'.base_path('storage/crt/');
@@ -147,7 +147,7 @@ class PrintFacturasController extends Controller
             PDF::Output(storage_path('facturas/rem'.$data->factura.'.pdf'), 'F');
 
         }else{
-            PDF::Output($data->factura.'.pdf');
+            PDF::Output('FAC'.str_replace('-','',$fecha_factura).'.pdf');
         }
 
         PDF::reset();

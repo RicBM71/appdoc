@@ -19,298 +19,20 @@ use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 
 
-use App\Http\Requests\StoreAlbaranes;
 use Digitick\Sepa\PaymentInformation;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Permission;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
 
-class AlbacabsController extends Controller
+
+class PrintFacturasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $this->authorize('create', new Albacab);
 
-        if (request()->session()->has('filtro_alb')){
-            $filtro = request()->session()->get('filtro_alb');
-            $data =  Albacab::with(['cliente','albalins'])
-                        ->where($filtro)
-                        ->orderBy('fecha_alb', 'desc')
-                        ->get();
-
-        }else
-            $data =  Albacab::with(['cliente','albalins'])
-                        ->whereYear('fecha_alb',date('Y'))
-                        ->orderBy('fecha_alb', 'desc')
-                        ->get();
-       // dd($data);
-
-        if (request()->wantsJson())
-            return $data;
-    }
-
-    public function filtrar(Request $request)
+    public function print($fecha_factura)
     {
 
-        $fecha_d = $request->input('fecha_d');
-        $fecha_h = $request->input('fecha_h');
-        $dh = $request->input('dh');
-
-        if ($request->input('fecha')=="A")
-            {
-                $data[] = [
-                    'fecha_alb', '>=', $fecha_d,
-                ];
-                $data[] = [
-                    'fecha_alb', '<=', $fecha_h,
-                ];
-            }
-        else{
-            $data[] = [
-                'fecha_fac', '>=', $fecha_d,
-            ];
-            $data[] = [
-                'fecha_fac', '<=', $fecha_h,
-            ];
-        }
-
-        session(['filtro_alb' => $data]);
-
-        if (request()->wantsJson())
-            return Albacab::with(['cliente','albalins'])->where($data)
-                            ->orderBy('fecha_alb', 'desc')
-                            ->get();
-
-    }
-
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $this->authorize('create', new Albacab);
-
-        if (request()->wantsJson())
-            return [
-                'clientes'=>  Cliente::selClientes()->facturables()->get(),
-                'fpagos'  =>  Fpago::selFPagos(),
-                'vencimientos'  =>  Vencimiento::selVencimientos(),
-        ];
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreAlbaranes $request)
-    {
-
-        //return $request;
-
-        $data = $request->validated();
-
-        $data['ejercicio']   = date('Y',strtotime($data['fecha_alb']));
-        $data['empresa_id'] =  session()->get('empresa')->id;
-        $data['username'] = $request->user()->username;
-
-        $contador = Contador::incrementaContador($data['ejercicio']);
-
-        $data['serie']= $contador->seriealb;
-        $data['albaran']= $contador->albaran;
-        $data['eje_fac']=0;
-
-
-        $data['iban']= $this->setIbanAlb($data);
-
-        //return $data;
-        $reg = Albacab::create($data);
-
-        if (request()->wantsJson())
-            return ['albaran'=>$reg, 'message' => 'EL registro ha sido creado'];
-
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Albacab $albacab)
-    {
-        $this->authorize('update', $albacab);
-
-        if (request()->wantsJson())
-            return [
-                'albaran' =>  $albacab,
-                'clientes'=>  Cliente::selClientes()->facturables()->get(),
-                'fpagos'  =>  Fpago::selFPagos(),
-                'vencimientos'  =>  Vencimiento::selVencimientos(),
-        ];
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(StoreAlbaranes $request, Albacab $albacab)
-    {
-
-        $this->authorize('update', $albacab);
-
-        $data = $request->validated();
-
-        $data['empresa_id'] =  session()->get('empresa_id');
-        $data['username'] = $request->user()->username;
-
-       // return $albacab;
-
-       $data['iban']= $this->setIbanAlb($data);
-
-        $albacab->update($data);
-
-        if (request()->wantsJson())
-            return [
-                'albaran'=>$albacab,
-                'message' => 'EL albarán ha sido modificado',
-
-            ];
-    }
-
-    private function setIbanAlb($data){
-
-        if ($data['fpago_id']==2){
-            $cuenta = Cuenta::activa()->first();
-            return $cuenta->iban;
-        }elseif ($data['fpago_id']==3) {
-            $cliente = Cliente::find($data['cliente_id']);
-
-            return $cliente->iban;
-        }else
-            return null;
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request, Albacab $albacab)
-    {
-        $cliente_id =  $request->input('cliente_id', 0);
-
-        $this->authorize('delete', $albacab);
-
-        $albacab->delete();
-
-        if (request()->wantsJson()){
-            if ($cliente_id == 0)
-                return response()->json(Albacab::with(['cliente','albalins'])->get());
-            else
-                return response()->json(Albacab::AlbaranesCliente($cliente_id)->get());
-        }
-
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function facturar(Request $request, Albacab $albacab)
-    {
-
-        $this->authorize('update', $albacab);
-
-        $data = $request->validate([
-            'factura' => 'nullable|string',
-            'fecha_fac' => 'nullable|date',
-        ]);
-
-        if (is_null($data['fecha_fac'])){
-            $data['fecha_fac'] = date('Y-m-d');
-            $data['eje_fac'] = (int) date('Y');
-        }else{
-            $data['eje_fac'] = (int) date('Y',strtotime($data['fecha_fac']));
-        }
-
-        if (is_null($data['factura'])){
-            $data['factura'] = Contador::incrementaContadorFactura($data['eje_fac']);
-        }
-
-        $data['username'] = $request->user()->username;
-
-        $albacab->update($data);
-
-
-        if (request()->wantsJson())
-            return ['albaran'=>$albacab, 'message' => 'EL albarán ha sido facturado'];
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @param boolean $file
-     * @return \Illuminate\Http\Response
-     */
-    public function desfacturar(Request $request, Albacab $albacab)
-    {
-
-        $this->authorize('update', $albacab);
-
-        $data = [
-            'factura'   => null,
-            'fecha_fac' => null,
-            'eje_fac'   => 0
-        ];
-
-        Contador::restaContadorFactura( $albacab->eje_fac, $albacab->factura) ?
-            $msg = 'Contador sincronizado' :
-            $msg = '¡Revisar contador!' ;
-
-        $albacab->update($data);
-
-        if (request()->wantsJson())
-            return ['albaran'=>$albacab, 'message' => 'EL albarán ha sido desfacturado '.$msg];
-    }
-
-    public function print($id, $file=false)
-    {
-
-        $this->authorize('update', new Albacab);
-
+        $file = false;
+        $fecha_factura = "2019-07-01";
         $empresa  = session()->get('empresa');
 
         // echo 'file://'.base_path('storage/crt/');
@@ -381,27 +103,39 @@ class AlbacabsController extends Controller
 
         $this->setPrepararAlb($empresa);
 
-        $data =  Albacab::with(['cliente','fpago','vencimiento','albalins'])->findOrfail($id);
+        $remesa_facturas = Albacab::with(['cliente','fpago','vencimiento','albalins'])->where('fecha_fac','=',$fecha_factura)->get();
 
-        // cabecera cliente
-        $this->setCabeceraCli($data->cliente);
+        foreach ($remesa_facturas as $data) {
 
-        // cabecera albarán, cif y fecha y número
+            PDF::AddPage();
+            // cabecera empresa
+            $this->setCabEmpresa($empresa);
 
-        $this->setCabeceraAlb($data);
+            // cabecera cliente
+            $this->setCabeceraCli($data->cliente);
 
-        // body albarán, líneas.
+            // cabecera albarán, cif y fecha y número
 
-        $this->setLineasAlb($data->albalins);
+            $this->setCabeceraAlb($data);
 
-        $totales = Albalin::totalLineasByAlb($id);
+            // body albarán, líneas.
 
-        // totales albarán
+            $this->setLineasAlb($data->albalins);
 
-        $this->setTotalesAlb($totales);
+            $totales = Albalin::totalLineasByAlb($data->id);
 
-        // forma de pago, vencimiento
-        $this->setPieAlb($data);
+            // totales albarán
+
+            $this->setTotalesAlb($totales);
+
+            // forma de pago, vencimiento
+            $this->setPieAlb($data);
+            $this->setFirmaDigital($empresa);
+
+        }
+
+        //$data =  Albacab::with(['cliente','fpago','vencimiento','albalins'])->findOrfail($id);
+
 
 
         //PDF::Write(0, 'Hello Worldd');
@@ -410,7 +144,7 @@ class AlbacabsController extends Controller
             if (file_exists(storage_path('facturas'))==false)
                 mkdir(storage_path('facturas'), '0755');
 
-            PDF::Output(storage_path('facturas/'.$data->factura.'.pdf'), 'F');
+            PDF::Output(storage_path('facturas/rem'.$data->factura.'.pdf'), 'F');
 
         }else{
             PDF::Output($data->factura.'.pdf');
@@ -463,31 +197,11 @@ class AlbacabsController extends Controller
 
         // ---------------------------------------------------------
 
+    }
+
+
+    private function setCabEmpresa($empresa){
         PDF::SetFont('helvetica', '', 9, '', false);
-
-        // add a page
-        PDF::AddPage();
-
-        (config('app.env') == "production")
-            ? $clave_firma = 'file://'.base_path('storage/crt/'.$empresa->certificado)
-            : $clave_firma = 'file://'.realpath('../storage/crt/'.$empresa->certificado);
-
-        //dd('file://'.base_path('storage/crt/'.$empresa->certificado));
-        //dd(config('app.env'));
-           // \Log::info($clave_firma);
-           // \Log::info(base_path());
-
-       // $clave_firma = 'file:///home/sanaval-tec/myapp/storage/crt/sntfirma.crt';
-        $clave_privada = $clave_firma;
-        $info = array('Name' => 'CIF '.$empresa->cif,
-                'Location' => $empresa->poblacion,
-                'Reason' =>  $empresa->razon,
-                'ContactInfo' => $empresa->email);
-
-
-         PDF::setSignature($clave_firma,$clave_privada,$empresa->passwd_cer,"",1,$info);
-         PDF::setSignatureAppearance(10,10,10,10,-1);
-
         $x = PDF::getX();
         $y = PDF::getY();
         PDF::SetX(15);
@@ -495,7 +209,6 @@ class AlbacabsController extends Controller
         PDF::SetX($x);
         PDF::SetY($y);
     }
-
     /**
      *
      * @param Model Cliente
@@ -685,123 +398,28 @@ class AlbacabsController extends Controller
 
     }
 
+    private function setFirmaDigital($empresa){
 
-    /**
-     * Clona el registro
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function clonar(Albacab $albacab)
-    {
-        $this->authorize('update', $albacab);
 
-        $alb = Albacab::with(['albalins'])->findOrFail($albacab->id);
+        (config('app.env') == "production")
+            ? $clave_firma = 'file://'.base_path('storage/crt/'.$empresa->certificado)
+            : $clave_firma = 'file://'.realpath('../storage/crt/'.$empresa->certificado);
 
-        $nuevoAlbaran = $this->crearCabecera($alb);
-        $this->crearLineas($nuevoAlbaran->id, $alb);
+        //dd('file://'.base_path('storage/crt/'.$empresa->certificado));
+        //dd(config('app.env'));
+           // \Log::info($clave_firma);
+           // \Log::info(base_path());
 
-        if (request()->wantsJson())
-            return [
-                'albaran' =>  $nuevoAlbaran,
-        ];
-    }
+       // $clave_firma = 'file:///home/sanaval-tec/myapp/storage/crt/sntfirma.crt';
+        $clave_privada = $clave_firma;
+        $info = array('Name' => 'CIF '.$empresa->cif,
+                'Location' => $empresa->poblacion,
+                'Reason' =>  $empresa->razon,
+                'ContactInfo' => $empresa->email);
 
-    /**
-     * Prepara los datos del nuevo albarán a partir del que vamos a clonar
-     *
-     * @param object $alb
-     * @return array $data
-     *
-     */
-    private function crearCabecera($alb){
 
-        $data['ejercicio']=date('Y');
-        $contador = Contador::incrementaContador($data['ejercicio']);
-
-        $data['empresa_id'] = $alb->empresa_id;
-        $data['cliente_id'] = $alb->cliente_id;
-        $data['fpago_id'] = $alb->fpago_id;
-        $data['vencimiento_id'] = $alb->vencimiento_id;
-        $data['fecha_alb']=date('Y-m-d');
-        $data['serie']= $contador->seriealb;
-        $data['albaran']= $contador->albaran;
-        $data['ejercicio']   = date('Y',strtotime($data['fecha_alb']));
-
-        $data['iban'] = $alb->iban;
-        $data['username'] = session('username');
-
-        $data['id'] = null;
-        $data['factura'] = null;
-        $data['eje_fac'] = 0;
-
-        return Albacab::create($data);
-    }
-
-    /**
-     * Prepara los datos del nuevo albarán a partir del que vamos a clonar
-     *
-     * @param integer $id del nuevo albaran
-     * @param object $alb el albarán a clonar
-     * @return array $data
-     *
-     */
-    private function crearLineas($id, $alb){
-
-        foreach ($alb->albalins as $albalin) {
-
-            $data['id'] = 0;
-            $data['albacab_id'] = $id;
-            $data['producto_id'] = $albalin->producto_id;
-            $data['nombre'] = $albalin->nombre;
-            $data['unidades'] = $albalin->unidades;
-            $data['impuni'] = $albalin->impuni;
-            $data['poriva'] = $albalin->poriva;
-            $data['porirpf'] = $albalin->porirpf;
-            $data['dto'] = $albalin->dto;
-            $data['importe'] = $albalin->importe;
-            $data['username'] = session('username');
-
-            Albalin::create($data);
-        }
-
-    }
-
-    /**
-     * Envía factura a través de job por email. De momento con sync
-     */
-    public function mail(Albacab $albacab){
-
-        $this->print($albacab->id, true);
-
-        $alb =  Albacab::with(['cliente'])->find($albacab->id);
-
-        if ($alb->cliente->email=='')
-            return response('El cliente no tiene email configurado', 403);
-        elseif (session('empresa')->email=='')
-            return response('Configurar email empresa', 403);
-
-        $data = [
-            'razon'=> session('empresa')->razon,
-            'from'=> session('empresa')->email,
-            'msg' => null,
-            'alb' => $alb
-        ];
-
-        // con esto previsualizamos el mail
-        //return new Factura($data);
-
-        dispatch(new SendFactura($data));
-
-        // unlink (storage_path('facturas/'.$alb->factura.'.pdf'));
-
-        $data['notificado'] =  TRUE;
-        $data['username'] = session('username');;
-
-        $albacab->update($data);
-
-        if (request()->wantsJson())
-            return ['albaran'=>$albacab, 'message' => 'Factura enviada'];
+         PDF::setSignature($clave_firma,$clave_privada,$empresa->passwd_cer,"",1,$info);
+         PDF::setSignatureAppearance(10,10,10,10,-1);
 
     }
 

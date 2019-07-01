@@ -102,6 +102,7 @@ Route::group([
         Route::middleware('role:Root|Admin')->group(function () {
             Route::get('remesas/remesa', 'RemesasController@remesa');
             Route::post('remesas/remesar', 'RemesasController@remesar');
+            Route::get('facturas/{fecha}/print', 'PrintFacturasController@print');
         });
 
 

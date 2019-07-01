@@ -227,6 +227,7 @@ export default {
                 { text: 'Remesa Domiciliaciones', name: 'remesa.seleccion', icon: 'cloud_download' },
                 { text: 'Transferencias', name: 'transferencia.index', icon: 'airplay' },
                 { text: 'Remesa Transferencias', name: 'sepa.transfer', icon: 'present_to_all'},
+                { text: 'Imprimir facturas', name: 'facturas.print', icon: 'print'},
                 { text: 'Vencimientos', name: 'vencimiento.index' },
             ]
         },

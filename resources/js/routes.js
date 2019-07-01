@@ -76,6 +76,8 @@ import TransferenciaEdit from './components/transferencias/TransferenciaEdit.vue
 
 import TransferenciaSepa from './components/transferencias/TransferenciaSepa.vue';
 
+import PdfRemesa from './components/facturas/PdfRemesa.vue';
+
 import EditPassword from './components/profile/edit-password/EditPassword.vue';
 
 export default [
@@ -300,6 +302,11 @@ export default [
                 path: '/albaranes/:id/edit',
                 name: 'albaran.edit',
                 component: AlbaranEdit,
+            },
+            {
+                path: '/facturas/print',
+                name: 'facturas.print',
+                component: PdfRemesa,
             },
             {
                 path: '/remesa',

@@ -104,7 +104,8 @@ class SepaController extends Controller
                 session()->get('empresa')->razon // Debitor Name
             );
 
-            $payment->setCategoryPurposeCode('SALA');
+            // poner est para indicar que es nómina
+          //  $payment->setCategoryPurposeCode('SALA');
             // It's possible to add multiple Transfers in one Payment
             $payment->addTransfer($transfer);
 

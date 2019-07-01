@@ -148,7 +148,7 @@ import {mapActions} from "vuex";
 
                     let link = document.createElement('a')
                     link.href = window.URL.createObjectURL(res.data)
-                    link.download = 'DOCU'+new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'.zip'
+                    link.download = 'DOCU'+new Date().getFullYear()+'-'+(new Date().getMonth()+1)+(new Date().getUTCMilliseconds())+'.zip'
 
                     document.body.appendChild(link);
                     link.click()

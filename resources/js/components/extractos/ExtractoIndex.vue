@@ -156,8 +156,15 @@
                                     label="Documentos"
                                 ></v-select>
                             </v-flex>
+                            <v-flex xs2 d-flex>
+                                <v-select
+                                    v-model="validado"
+                                    :items="validados"
+                                    label="Validados"
+                                ></v-select>
+                            </v-flex>
                             <v-spacer></v-spacer>
-                            <v-flex sm2>
+                            <v-flex sm1>
                                 <v-btn @click="filtrar"  round  block  color="info">
                                     Filtrar
                                 </v-btn>
@@ -425,6 +432,13 @@ import {mapActions} from "vuex";
                 {text:'Todos','value':'T'}
             ],
 
+        validados: [
+                {text:'Si','value':'1'},
+                {text:'No','value':'0'},
+                {text:'Todos','value':'T'}
+            ],
+
+        validado: 'T',
         docu: "T",
         show_loading: false,
         filtro: false,
@@ -531,7 +545,8 @@ import {mapActions} from "vuex";
                                     fecha_d: this.fecha_d,
                                     fecha_h: this.fecha_h,
                                     dh: this.dh,
-                                    docu: this.docu
+                                    docu: this.docu,
+                                    validado: this.validado
                                 }
                             )
                             .then(res => {

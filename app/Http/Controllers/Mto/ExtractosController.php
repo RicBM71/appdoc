@@ -64,6 +64,7 @@ class ExtractosController extends Controller
         $fecha_h = $request->input('fecha_h').'-'.date('t',strtotime($request->input('fecha_h')));
         $dh = $request->input('dh');
         $docu = $request->input('docu');
+        $validado = $request->input('validado');
 
         $data[] = [
             'fecha', '>=', $fecha_d,
@@ -75,7 +76,11 @@ class ExtractosController extends Controller
             $data[] = [
                 'dh', '=', $dh,
             ];
-
+        if ($validado <> 'T')
+            $data[] = [
+                'validado', '=', $validado,
+            ];
+            
         session(['filtro_extrac' => $data]);
         session(['filtro_extrac_docu' => $docu]);
 

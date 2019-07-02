@@ -59,7 +59,7 @@ Route::group([
     'namespace' => 'Mto',
     'middleware' => 'auth'],
     function (){
-        Route::resource('clientes', 'ClientesController', ['except'=>'show','as' => 'mto']);
+        Route::resource('clientes', 'ClientesController', ['as' => 'mto']);
         Route::get('clientes/{cliente}/albaranes', 'ClientesController@albaranes');
         Route::resource('productos', 'ProductosController', ['as' => 'mto']);
         Route::resource('vencimientos', 'VencimientosController', ['except'=>'show','as' => 'mto']);

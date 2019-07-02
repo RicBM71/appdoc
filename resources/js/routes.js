@@ -51,6 +51,7 @@ import CuentaEdit from './components/admin/cuentas/CuentaEdit.vue';
 import ClienteIndex from './components/clientes/ClienteIndex.vue';
 import ClienteCreate from './components/clientes/ClienteCreate.vue';
 import ClienteEdit from './components/clientes/ClienteEdit.vue';
+import ClienteShow from './components/clientes/ClienteShow.vue';
 import ProductoIndex from './components/productos/ProductoIndex.vue';
 import ProductoCreate from './components/productos/ProductoCreate.vue';
 import ProductoEdit from './components/productos/ProductoEdit.vue';
@@ -227,6 +228,11 @@ export default [
                 path: '/clientes/:id/edit',
                 name: 'cliente.edit',
                 component: ClienteEdit,
+            },
+            {
+                path: '/clientes/:id',
+                name: 'cliente.show',
+                component: ClienteShow,
             },
             {
                 path: '/fpagos',

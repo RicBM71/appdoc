@@ -95,6 +95,25 @@ class ClientesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function show(Cliente $cliente)
+    {
+
+        if (request()->wantsJson())
+            return [
+                'cliente' =>$cliente,
+                'documentos'=> Documento::where('carpeta_id','=',$cliente->carpeta_id)->orderBy('fecha','desc')->take(50)->get(),
+                'carpetas'=> Carpeta::selCarpetas(),
+                'fpagos'=> Fpago::selFPagos(),
+            ];
+
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function edit(Cliente $cliente)
     {
         $this->authorize('update', $cliente);

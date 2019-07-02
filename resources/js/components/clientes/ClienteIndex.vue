@@ -53,6 +53,7 @@
 
 
                                             <v-icon
+                                            v-show="isAdmin"
                                             small
                                             @click="openDialog(props.item.id)"
                                             >
@@ -186,7 +187,10 @@ import {mapActions} from "vuex";
         },
         editItem (id) {
             this.setPagination(this.paginaActual);
-            this.$router.push({ name: 'cliente.edit', params: { id: id } })
+            if (this.isAdmin)
+                this.$router.push({ name: 'cliente.edit', params: { id: id } })
+            else
+                this.$router.push({ name: 'cliente.show', params: { id: id } })
         },
         openDialog (id){
             this.dialog = true;

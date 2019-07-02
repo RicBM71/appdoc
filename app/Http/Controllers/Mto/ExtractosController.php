@@ -36,7 +36,7 @@ class ExtractosController extends Controller
                 $docu = request()->session()->get('filtro_extrac_docu');
 
                 return Extracto::select('extractos.*')
-                            ->with('documentos','documentos.archivo','documentos.carpeta')
+                            ->with(['documentos','documentos.archivo','documentos.carpeta'])
                             ->conDocumentos($docu)
                             ->where($filtro)
                             ->orderBy('fecha','desc')
@@ -44,7 +44,7 @@ class ExtractosController extends Controller
             }
             else
                 return Extracto::select('extractos.*')
-                                ->with('documentos','documentos.archivo','documentos.carpeta')
+                            ->with(['documentos','documentos.archivo','documentos.carpeta'])
                                 ->whereYear('fecha',date('Y'))
                                 ->orderBy('fecha','desc')
                                 ->get();
@@ -86,7 +86,7 @@ class ExtractosController extends Controller
 
         if (request()->wantsJson()){
             $q = Extracto::select('extractos.*')
-                            ->with('documentos','documentos.archivo')
+                            ->with(['documentos','documentos.archivo','documentos.carpeta'])
                             ->conDocumentos($docu)
                             //->sinDocumentos(false)
                             // ->whereNotIn('extractos.id', function($q){

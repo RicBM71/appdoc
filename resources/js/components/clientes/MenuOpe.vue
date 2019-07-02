@@ -17,7 +17,7 @@
          <v-tooltip bottom>
             <template v-slot:activator="{ on }">
                 <v-btn
-                    v-show="id > 0"
+                    v-show="id > 0 && isAdmin"
                     v-on="on"
                     color="white"
                     icon
@@ -45,6 +45,7 @@
 </template>
 <script>
 import MyDialog from '@/components/shared/MyDialog'
+import {mapGetters} from 'vuex'
 export default {
     props:{
         id: Number
@@ -56,6 +57,11 @@ export default {
       return {
           dialog: false,
       }
+    },
+    computed: {
+        ...mapGetters([
+            'isAdmin',
+        ]),
     },
     methods:{
         goCreate(){

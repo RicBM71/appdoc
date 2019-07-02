@@ -326,7 +326,9 @@
                                                 </template>
                                                 <span>Unir extractos a documento</span>
                                             </v-tooltip>
-                                            <span :class="child.archivo.color">{{child.archivo.nombre}}</span>- <span :class="child.carpeta.color">{{child.carpeta.nombre}}</span>: <span class="font-weight-bold font-italic">{{formatDate(child.fecha)+" "+child.concepto}}</span>
+                                            <span :class="child.archivo.color">{{child.archivo.nombre}}</span>-
+                                            <span :class="child.carpeta.color">{{child.carpeta.nombre}}</span>:
+                                            <span class="font-weight-bold font-italic">{{formatDate(child.fecha)+" "+child.concepto}}</span>
 
                                         </v-card-text>
                                     </v-card>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Ventas;
+namespace App\Http\Controllers\Admin;
 
 use App\Cuenta;
 use App\Albacab;
@@ -19,7 +19,7 @@ class AdeudosController extends Controller
      /**
      * Selección previa remesa
      */
-    public function remesa(){
+    public function index(){
 
         if (!auth()->user()->hasRole('Admin'))
             abort(403,'No Autorizado');
@@ -39,6 +39,9 @@ class AdeudosController extends Controller
         ]);
 
         $alb =  Albacab::remesarFacturas($data['fecha']);
+
+        if ($alb->count() == 0)
+            abort(404,'No hay facturas para remesar');
 
         $remesa = $this->generarRemesa($alb,$data['cuenta_id'],$data['fecha']);
 

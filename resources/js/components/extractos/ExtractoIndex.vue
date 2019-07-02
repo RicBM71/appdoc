@@ -207,11 +207,11 @@
                                         <td>{{ props.item.concepto }} <p v-if="props.item.nota != ''"><span class='font-italic black--text'><span class="lime accent-2">{{ props.item.nota }}</span></span></p></td>
                                         <td :class=colorLin(props.item.dh)>{{ props.item.importe | currency('€', 2, { thousandsSeparator:'.', thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false })}}</td>
                                         <td class="justify-center layout px-0">
-                                            <v-tooltip bottom v-if="!props.item.validado">
+                                            <v-tooltip bottom>
                                                 <template v-slot:activator="{ on }">
                                                     <v-icon
                                                         v-on="on"
-                                                        v-show="hasDocumenta"
+                                                        v-show="hasDocumenta && !props.item.validado"
                                                         small
                                                         class="mr-2"
                                                         @click="editNota(props.item)"
@@ -235,9 +235,9 @@
                                                 </template>
                                                 <span>Ver anexos</span>
                                             </v-tooltip>
-                                            <v-tooltip bottom v-if="!props.item.validado">
+                                            <v-tooltip bottom>
                                                 <template v-slot:activator="{ on }">
-                                                    <v-icon v-show="!props.item.documentos.length > 0 && hasDocumenta"
+                                                    <v-icon v-show="!props.item.documentos.length > 0 && hasDocumenta && !props.item.validado"
                                                         v-on="on"
                                                         small
                                                         :color="computedColor(props.item)"
@@ -249,35 +249,35 @@
                                                 </template>
                                                 <span>Anexar Documento</span>
                                             </v-tooltip>
-                                             <v-tooltip bottom v-if="!props.item.validado">
+                                             <v-tooltip bottom>
                                                 <template v-slot:activator="{ on }">
                                                     <v-icon
                                                         v-on="on"
-                                                        v-show="hasDocumenta"
+                                                        v-show="hasDocumenta && !props.item.validado"
                                                         small
                                                         class="mr-2"
                                                         @click="bloquear(props.item)"
+                                                        color="orange"
+                                                    >
+                                                        lock
+                                                    </v-icon>
+                                                </template>
+                                                <span>Validar apunte</span>
+                                            </v-tooltip>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon
+                                                        v-on="on"
+                                                        v-show="hasDocumenta && props.item.validado"
+                                                        small
+                                                        class="mr-2"
+                                                        @click="liberar(props.item)"
                                                         color="green"
                                                     >
                                                         done
                                                     </v-icon>
                                                 </template>
-                                                <span>Validar ok</span>
-                                            </v-tooltip>
-                                            <v-tooltip bottom v-if="props.item.validado">
-                                                <template v-slot:activator="{ on }">
-                                                    <v-icon
-                                                        v-on="on"
-                                                        v-show="hasDocumenta"
-                                                        small
-                                                        class="mr-2"
-                                                        @click="liberar(props.item)"
-                                                        color="grey"
-                                                    >
-                                                        restore
-                                                    </v-icon>
-                                                </template>
-                                                <span>Desbloquear</span>
+                                                <span>Liberar apunte</span>
                                             </v-tooltip>
                                         </td>
                                      </tr>
@@ -326,7 +326,7 @@
                                                 </template>
                                                 <span>Unir extractos a documento</span>
                                             </v-tooltip>
-                                            <span :class="child.archivo.color+'--text'">{{child.archivo.nombre+": "+formatDate(child.fecha)+" "+child.concepto}}</span>
+                                            <span :class="child.archivo.color">{{child.archivo.nombre}}</span>- <span :class="child.carpeta.color">{{child.carpeta.nombre}}</span>: <span class="font-weight-bold font-italic">{{formatDate(child.fecha)+" "+child.concepto}}</span>
 
                                         </v-card-text>
                                     </v-card>
@@ -463,7 +463,7 @@ import {mapActions} from "vuex";
 
         axios.get('/mto/extractos')
             .then(res => {
-
+                //console.log(res.data);
                 this.apuntes = res.data;
                 this.registros = true;
 

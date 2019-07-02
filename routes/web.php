@@ -42,6 +42,10 @@ Route::group([
             Route::get('sepa/transfer', 'SepaController@index');
             Route::post('sepa/transfer', 'SepaController@transfer');
 
+            Route::get('adeudos', 'AdeudosController@index');
+            Route::post('adeudos/remesar', 'AdeudosController@remesar');
+
+
         });
 
 
@@ -101,8 +105,6 @@ Route::group([
         Route::resource('albalins', 'AlbalinsController', ['except'=>'index','as' => 'ventas']);
 
         Route::middleware('role:Root|Admin')->group(function () {
-            Route::get('adeudos/remesa', 'AdeudosController@remesa');
-            Route::post('adeudos/remesar', 'AdeudosController@remesar');
             Route::get('facturas/{fecha}/print', 'PrintFacturasController@print');
         });
 

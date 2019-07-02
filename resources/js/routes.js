@@ -309,8 +309,8 @@ export default [
                 component: PdfRemesa,
             },
             {
-                path: '/adeudo',
-                name: 'adeudo.seleccion',
+                path: '/adeudos',
+                name: 'adeudo.index',
                 component: SelRemesa,
             },
             {

@@ -160,7 +160,7 @@ import {mapActions} from "vuex";
 
                 })
                 .catch(err => {
-
+                    console.log(err);
                     this.show_loading = false;
                     if (err.response.status == 404)
                         this.$toast.error('No hay documentos!');

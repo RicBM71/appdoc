@@ -252,13 +252,6 @@ class DocumentosController extends Controller
     public function zip(Request $request){
 
 
-        $zip_file = storage_path('zip/filedoc.zip');
-
-        if (file_exists(storage_path('zip'))==false)
-            mkdir(storage_path('zip'), '0755');
-
-        $zip = new \ZipArchive();
-        $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
 
         $periodo = explode("-", $request->input('fecha_d'));
         $archivo_id = $request->input('archivo_id');
@@ -266,20 +259,28 @@ class DocumentosController extends Controller
         // $periodo=[2019,1];
 
 
-    //     $path = storage_path('invoices');
+        //     $path = storage_path('invoices');
 
         $i = 1;
 
         $files = Documento::with('filedocs')
-            ->whereYear('fecha',$periodo[0])
-            ->whereMonth('fecha',$periodo[1])
-            ->where('archivo_id',$archivo_id)
-            ->get();
+        ->whereYear('fecha',$periodo[0])
+        ->whereMonth('fecha',$periodo[1])
+        ->where('archivo_id',$archivo_id)
+        ->get();
 
 
         if ($files->count() == 0){
             abort(404, 'No hay documentos');
         }
+        
+        $zip_file = storage_path('zip/filedoc.zip');
+
+        if (file_exists(storage_path('zip'))==false)
+            mkdir(storage_path('zip'), '0755');
+
+        $zip = new \ZipArchive();
+        $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
 
         $str="";
 

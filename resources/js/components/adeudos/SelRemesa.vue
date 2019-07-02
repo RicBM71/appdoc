@@ -115,7 +115,7 @@
 
         },
         mounted(){
-            axios.get('/ventas/adeudos/remesa')
+            axios.get('/admin/adeudos')
                 .then(res => {
 
                     this.cuentas = res.data.cuentas;
@@ -142,7 +142,7 @@
                 //console.log("Edit user (submit):"+this.user.id);
                 this.show_loading = true;
 
-                var url = '/ventas/adeudos/remesar';
+                var url = '/admin/adeudos/remesar';
 
                 this.$validator.validateAll().then((result) => {
                     if (result){
@@ -173,17 +173,8 @@
                             this.show_loading = false;
                             })
                             .catch(err => {
-                                //console.log(err);
-                                //if (err.request.status == 422){ // fallo de validated.
-                                    const msg_valid = err.response.data.errors;
-                                    //console.log(`obj.${prop} = ${msg_valid[prop]}`);
-                                    for (const prop in msg_valid) {
-                                        this.errors.add({
-                                            field: prop,
-                                            msg: `${msg_valid[prop]}`
-                                        })
-                                    }
-                                //}
+                                
+                                this.$toast.error(err.response.data.message);
                                 this.show_loading = false;
                             });
                         }

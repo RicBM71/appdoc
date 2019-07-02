@@ -207,6 +207,18 @@ class ExtractosController extends Controller
             return ['extracto'=>$extracto, 'message' => 'EL documento ha sido modficado'];
     }
 
+    public function liberar(Request $request, Extracto $extracto)
+    {
+
+        $data['validado'] =  $request->input('validado');
+        $data['username'] = $request->user()->username;
+
+        $extracto->update($data);
+
+        if (request()->wantsJson())
+            return ['extracto'=>$extracto, 'message' => 'EL documento ha sido liberado'];
+    }
+
     public function importar($id){
 
 

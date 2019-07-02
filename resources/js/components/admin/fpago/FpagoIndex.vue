@@ -21,6 +21,7 @@
                                 <td>{{ props.item.nombre }}</td>
                                 <td class="justify-center layout px-0">
                                     <v-icon
+                                        v-if="props.item.id > 3"
                                         small
                                         class="mr-2"
                                         @click="editItem(props.item.id)"
@@ -30,6 +31,7 @@
 
 
                                     <v-icon
+                                    v-if="props.item.id > 3"
                                     small
                                     @click="openDialog(props.item.id)"
                                     >

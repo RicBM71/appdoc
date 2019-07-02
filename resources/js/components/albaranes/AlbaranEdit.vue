@@ -82,8 +82,8 @@
                                 :disabled="computedFactura"
                             >
                                 <v-tooltip slot="append" bottom color="black">
-                                    <v-icon v-if="albaran.eje_fac==0" slot="activator" @click="facturar(albaran.id)">lock</v-icon>
-                                    <v-icon v-else if="isAdmin" slot="activator" @click="desFacturar(albaran.id)">lock_open</v-icon>
+                                    <v-icon v-if="albaran.eje_fac==0" slot="activator" @click="facturar(albaran.id)">lock_open</v-icon>
+                                    <v-icon v-else if="isAdmin" slot="activator" @click="desFacturar(albaran.id)">lock</v-icon>
                                     <span v-if="albaran.eje_fac==0">Generar factura automática</span>
                                     <span v-else>Desfacturar</span>
                                 </v-tooltip>
@@ -180,7 +180,6 @@
                             >
                             </v-autocomplete>
                         </v-flex>
-
                     </v-layout>
                     <v-layout row wrap>
                         <v-flex sm5>

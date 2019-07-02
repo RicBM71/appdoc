@@ -22,6 +22,7 @@ class CreateExtractosTable extends Migration
             $table->String('concepto');
             $table->String('nota')->nullable();
             $table->decimal('importe', 10, 2)->default(0);
+            $table->boolean('validado')->default(false);
             $table->String('username',20)->nullable()->default(null);
             $table->timestamps();
         });
@@ -36,4 +37,5 @@ class CreateExtractosTable extends Migration
     {
         Schema::dropIfExists('extractos');
     }
+    
 }

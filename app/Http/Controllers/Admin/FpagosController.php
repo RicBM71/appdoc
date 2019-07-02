@@ -56,6 +56,9 @@ class FpagosController extends Controller
      */
     public function edit(Fpago $fpago)
     {
+        if ($fpago->id <= 3)
+            abort(422, 'No es posible modificar el tipo');
+
         if (request()->wantsJson())
         return [
             'fpago' =>$fpago
@@ -73,8 +76,12 @@ class FpagosController extends Controller
     public function update(Request $request, Fpago $fpago)
     {
         $data = $request->validate([
+            'id' => 'required',
             'nombre' => ['required', 'string', 'max:255'],
         ]);
+
+        if ($fpago->id <= 3)
+            abort(422, 'No es posible modificar el tipo');
 
         $fpago->update($data);
 
@@ -90,8 +97,11 @@ class FpagosController extends Controller
      */
     public function destroy(Fpago $fpago)
     {
-        $fpago->delete();
 
+        if ($fpago->id <= 3)
+        abort(422, 'No es posible modificar el tipo');
+
+        $fpago->delete();
 
         if (request()->wantsJson()){
             return response()->json(Fpago::all());

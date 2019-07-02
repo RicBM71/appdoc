@@ -11,7 +11,7 @@ class Extracto extends Model
     protected $dates =['fecha'];
 
     protected $fillable = [
-        'empresa_id','cuenta_id', 'concepto', 'nota', 'dh', 'fecha','importe','username'
+        'empresa_id','cuenta_id', 'concepto', 'nota', 'dh', 'fecha','importe','validado','username'
     ];
 
     protected static function boot()

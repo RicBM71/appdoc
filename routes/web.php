@@ -62,6 +62,7 @@ Route::group([
         Route::resource('extractos', 'ExtractosController', ['only'=>['index','show','update'],'as' => 'mto']);
         Route::post('extractos/filtrar', 'ExtractosController@filtrar');
         Route::get('extractos/{id}/importar', 'ExtractosController@importar');
+        Route::put('extractos/{extracto}/liberar', 'ExtractosController@liberar');
         Route::post('extractos/banco', 'ExtractosController@banco');
         Route::resource('documentos', 'DocumentosController', ['as' => 'mto']);
         Route::post('documentos/filtrar', 'DocumentosController@filtrar');

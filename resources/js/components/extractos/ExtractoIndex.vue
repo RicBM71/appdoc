@@ -195,56 +195,84 @@
                             >
                                 <template slot="items" slot-scope="props">
                                     <tr>
-                                    <td>{{ formatDate(props.item.fecha) }}</td>
-                                    <td>{{ props.item.dh }}</td>
-                                    <td>{{ props.item.concepto }} <p v-if="props.item.nota != ''"><span class='font-italic black--text'><span class="lime accent-2">{{ props.item.nota }}</span></span></p></td>
-                                    <td :class=colorLin(props.item.dh)>{{ props.item.importe | currency('€', 2, { thousandsSeparator:'.', thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false })}}</td>
-                                    <td class="justify-center layout px-0">
-                                        <v-tooltip bottom>
-                                            <template v-slot:activator="{ on }">
-                                                <v-icon
-                                                    v-on="on"
-                                                    v-show="hasDocumenta"
-                                                    small
-                                                    class="mr-2"
-                                                    @click="editNota(props.item)"
-                                                    color="grey"
-                                                >
-                                                    textsms
-                                                </v-icon>
-                                            </template>
-                                            <span>Editar nota</span>
-                                        </v-tooltip>
-                                        <v-tooltip bottom>
-                                            <template v-slot:activator="{ on }">
-                                                <v-icon v-show="props.item.documentos.length > 0"
-                                                    v-on="on"
-                                                    small
-                                                    class="mr-2"
-                                                    @click="props.expanded = !props.expanded"
-                                                    color="blue lighten-1"
-                                                >
-                                                    attach_file
-                                                </v-icon>
-                                            </template>
-                                            <span>Ver anexos</span>
-                                        </v-tooltip>
-                                        <v-tooltip bottom>
-                                            <template v-slot:activator="{ on }">
-                                                <v-icon v-show="!props.item.documentos.length > 0 && hasDocumenta"
-                                                     v-on="on"
-                                                    small
-                                                    :color="computedColor(props.item)"
-                                                    class="mr-2"
-                                                    @click="createDocu(props.item)"
-                                                >
-                                                    save
-                                                </v-icon>
-                                            </template>
-                                            <span>Anexar Documento</span>
-                                        </v-tooltip>
-
-                                    </td>
+                                        <td>{{ formatDate(props.item.fecha) }}</td>
+                                        <td>{{ props.item.dh }}</td>
+                                        <td>{{ props.item.concepto }} <p v-if="props.item.nota != ''"><span class='font-italic black--text'><span class="lime accent-2">{{ props.item.nota }}</span></span></p></td>
+                                        <td :class=colorLin(props.item.dh)>{{ props.item.importe | currency('€', 2, { thousandsSeparator:'.', thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false })}}</td>
+                                        <td class="justify-center layout px-0">
+                                            <v-tooltip bottom v-if="!props.item.validado">
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon
+                                                        v-on="on"
+                                                        v-show="hasDocumenta"
+                                                        small
+                                                        class="mr-2"
+                                                        @click="editNota(props.item)"
+                                                        color="grey"
+                                                    >
+                                                        textsms
+                                                    </v-icon>
+                                                </template>
+                                                <span>Editar nota</span>
+                                            </v-tooltip>
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon v-show="props.item.documentos.length > 0"
+                                                        v-on="on"
+                                                        class="mr-2"
+                                                        @click="props.expanded = !props.expanded"
+                                                        color="blue lighten-1"
+                                                    >
+                                                        attach_file
+                                                    </v-icon>
+                                                </template>
+                                                <span>Ver anexos</span>
+                                            </v-tooltip>
+                                            <v-tooltip bottom v-if="!props.item.validado">
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon v-show="!props.item.documentos.length > 0 && hasDocumenta"
+                                                        v-on="on"
+                                                        small
+                                                        :color="computedColor(props.item)"
+                                                        class="mr-2"
+                                                        @click="createDocu(props.item)"
+                                                    >
+                                                        save
+                                                    </v-icon>
+                                                </template>
+                                                <span>Anexar Documento</span>
+                                            </v-tooltip>
+                                             <v-tooltip bottom v-if="!props.item.validado">
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon
+                                                        v-on="on"
+                                                        v-show="hasDocumenta"
+                                                        small
+                                                        class="mr-2"
+                                                        @click="bloquear(props.item)"
+                                                        color="green"
+                                                    >
+                                                        done
+                                                    </v-icon>
+                                                </template>
+                                                <span>Validar ok</span>
+                                            </v-tooltip>
+                                            <v-tooltip bottom v-if="props.item.validado">
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon
+                                                        v-on="on"
+                                                        v-show="hasDocumenta"
+                                                        small
+                                                        class="mr-2"
+                                                        @click="liberar(props.item)"
+                                                        color="grey"
+                                                    >
+                                                        restore
+                                                    </v-icon>
+                                                </template>
+                                                <span>Desbloquear</span>
+                                            </v-tooltip>
+                                        </td>
                                      </tr>
                                 </template>
                                 <template v-slot:expand="props">
@@ -373,6 +401,7 @@ import {mapActions} from "vuex";
             concepto: "",
             nota: "",
             importe: "",
+            validado: false,
             username:"",
             created_at:"",
             updated_at:"",
@@ -634,7 +663,37 @@ import {mapActions} from "vuex";
                 .catch(err => {
                     this.$toast.error(err.response.data.message);
                 });
+        },
+        liberar(item){
+
+            this.editedIndex = this.apuntes.indexOf(item)
+
+            var url = "/mto/extractos/"+item.id+"/liberar";
+            axios.put(url, {validado: false})
+                .then(res => {
+                    Object.assign(this.apuntes[this.editedIndex], res.data.extracto)
+
+                })
+                .catch(err => {
+                    this.$toast.error(err.response.data.message);
+                });
+        },
+        bloquear(item){
+
+            this.editedIndex = this.apuntes.indexOf(item)
+
+            var url = "/mto/extractos/"+item.id+"/liberar";
+            axios.put(url, {validado: true})
+                .then(res => {
+                    Object.assign(this.apuntes[this.editedIndex], res.data.extracto)
+
+                })
+                .catch(err => {
+                    this.$toast.error(err.response.data.message);
+                });
         }
+
+
 
     }
   }

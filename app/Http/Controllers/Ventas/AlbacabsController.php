@@ -189,6 +189,9 @@ class AlbacabsController extends Controller
         $data['empresa_id'] =  session()->get('empresa_id');
         $data['username'] = $request->user()->username;
 
+        if ($data['factura'] > '')
+            $data['eje_fac'] = (int) date('Y',strtotime($data['fecha_fac']));
+
        // return $albacab;
 
        $data['iban']= $this->setIbanAlb($data);

@@ -76,7 +76,7 @@
                         </v-flex>
                         <v-flex sm1 v-if="imp_remesa > 0">
                             <v-text-field
-                                v-model="adeudos"
+                                v-model="transferencias"
                                 label="Adeudos"
                                 readonly
                                 class="centered-input"
@@ -119,7 +119,7 @@
                 menu2: false,
                 cuenta_id: 0,
                 imp_remesa:0,
-                adeudos: 0,
+                transferencias: 0,
                 cuentas: [],
                 show_loading: false
               }
@@ -181,7 +181,7 @@
 
 
                                 this.imp_remesa = response.data.importe;
-                                this.adeudos = response.data.adeudos;
+                                this.transferencias = response.data.transferencias;
 
                                 this.$toast.success("Se ha generado correctamente la remesa");
 

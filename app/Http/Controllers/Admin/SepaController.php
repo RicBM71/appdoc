@@ -51,7 +51,7 @@ class SepaController extends Controller
             return [
                 'xml'       => $remesa['xml'],
                 'importe'   => $remesa['importe'],
-                'adeudos'   => $remesa['adeudos']
+                'transferencias'   => $remesa['transferencias']
             ];
 
     }
@@ -75,7 +75,7 @@ class SepaController extends Controller
 
         $sepaFile = new CustomerCreditTransferFile($groupHeader);
 
-        $imp_total_remesa = $adeudos = 0;
+        $imp_total_remesa = $transferencias = 0;
         foreach ($data as $row){
 
             $tr = [
@@ -86,7 +86,7 @@ class SepaController extends Controller
             ];
             $row->update($tr);
 
-            $adeudos++;
+            $transferencias++;
 
             $imp_total_remesa += $row->importe;
 
@@ -143,7 +143,7 @@ class SepaController extends Controller
         //     'debtorAgentBIC'          => $cuenta->bic,
         // ));
 
-        // $imp_total_remesa = $adeudos = 0;
+        // $imp_total_remesa = $transferencias = 0;
         // foreach ($data as $row){
 
         //     $t = [
@@ -152,7 +152,7 @@ class SepaController extends Controller
         //     ];
         //     $row->update($t);
 
-        //     $adeudos++;
+        //     $transferencias++;
         //     // create a payment, it's possible to create multiple payments,
         //     // "firstPayment" is the identifier for the transactions
 
@@ -174,7 +174,7 @@ class SepaController extends Controller
         return [
             'xml' => $xml,
             'importe' => $imp_total_remesa,
-            'adeudos' => $adeudos
+            'transferencias' => $transferencias
         ];
 
         // \Storage::disk('local')->put('remesa.xml',$xml);

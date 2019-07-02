@@ -256,8 +256,10 @@
                                 <v-flex sm3>
                                     <v-text-field
                                         v-model="cliente.ref19"
+                                        v-validate="ref19"
                                         :error-messages="errors.collect('ref19')"
                                         label="Ref. Recibos N.19"
+                                        data-vv-as="referencia"
                                         data-vv-name="ref19"
                                         v-on:keyup.enter="submit"
                                     >
@@ -480,6 +482,9 @@ import DocuCli from './ClienteDocumento'
             },
             rules() {
                 return this.cliente.iban > '' ? 'required' : '';
+            },
+            ref19() {
+                return this.cliente.fpago_id == 3 ? 'required' : '';
             }
         },
     	methods:{

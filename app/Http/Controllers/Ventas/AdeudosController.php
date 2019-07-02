@@ -68,16 +68,19 @@ class AdeudosController extends Controller
         $directDebit = TransferFileFacadeFactory::createDirectDebitWithGroupHeader($header, 'pain.008.001.02');
         //$directDebit = TransferFileFacadeFactory::createDirectDebit(session()->get('empresa')->cif.'000', $cuenta->sepa, 'pain.008.001.02');
 
+        //ReqdExctnDt -- ReqdColltnDt --
         // create a payment, it's possible to create multiple payments,
         // "firstPayment" is the identifier for the transactions
         // This creates a one time debit. If needed change use ::S_FIRST, ::S_RECURRING or ::S_FINAL respectively
         $directDebit->addPaymentInfo($PmtInfId, array(
             'id'                    => $PmtInfId,
-            'dueDate'               => new \DateTime(), // optional. Otherwise default period is used
+            // 'dueDate'               => new \DateTime(), // optional. Otherwise default period is used
+            'dueDate'               => $fecha,
             'creditorName'          => session()->get('empresa')->razon,
             'creditorAccountIBAN'   => $cuenta->iban,
             'creditorAgentBIC'      => $cuenta->bic,
             'seqType'               => PaymentInformation::S_ONEOFF,
+            //'seqType'               => PaymentInformation::S_RECURRING,
             'creditorId'            => $cuenta->sepa,
             'localInstrumentCode'   => 'CORE' // default. optional.
         ));
@@ -96,8 +99,9 @@ class AdeudosController extends Controller
                 'debtorBic'             => $row->cliente->bic,
                 'debtorName'            => $row->cliente->razon,
                 'debtorMandate'         => $row->cliente->ref19,
-                'debtorMandateSignDate' => $row->fecha_fac,
-                'remittanceInformation' => 'Factura',
+                'debtorMandateSignDate' => date('Y-m-d'),
+             //   'debtorMandateSignDate' => $row->fecha_fac,
+                'remittanceInformation' => 'Factura '.$row->factura,
                 'endToEndId'            => $row->factura
             ));
 

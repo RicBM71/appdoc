@@ -186,7 +186,7 @@
                         <v-flex sm5>
                             <v-text-field
                                 v-model="albaran.iban"
-                                mask="AA## #### **** **** **** ####"
+                                mask="AA## #### #### #### #### ####"
                                 label="IBAN"
                                 readonly
                                 v-on:keyup.enter="submit"
@@ -324,7 +324,7 @@ import {mapGetters} from 'vuex';
             if (id > 0)
                 axios.get('/ventas/albacabs/'+id+'/edit')
                     .then(res => {
-                        console.log(res.data);
+                      //  console.log(res.data);
                         this.clientes = res.data.clientes;
                         this.fpagos = res.data.fpagos;
                         this.vencimientos = res.data.vencimientos;

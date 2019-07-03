@@ -35,19 +35,10 @@ class ExtractosController extends Controller
                 $filtro = request()->session()->get('filtro_extrac');
                 $docu = request()->session()->get('filtro_extrac_docu');
 
-                return Extracto::select('extractos.*')
-                            ->with(['documentos','documentos.archivo','documentos.carpeta'])
-                            ->conDocumentos($docu)
-                            ->where($filtro)
-                            ->orderBy('fecha','desc')
-                            ->get();
+                return $this->seleccionar($data, $docu);
             }
             else
-                return Extracto::select('extractos.*')
-                            ->with(['documentos','documentos.archivo','documentos.carpeta'])
-                                ->whereYear('fecha',date('Y'))
-                                ->orderBy('fecha','desc')
-                                ->get();
+                return $this->seleccionar();
         }
 
     }
@@ -85,25 +76,26 @@ class ExtractosController extends Controller
         session(['filtro_extrac_docu' => $docu]);
 
         if (request()->wantsJson()){
-            $q = Extracto::select('extractos.*')
-                            ->with(['documentos','documentos.archivo','documentos.carpeta'])
-                            ->conDocumentos($docu)
-                            //->sinDocumentos(false)
-                            // ->whereNotIn('extractos.id', function($q){
-                            //     $q->select('extracto_id')->from('documento_extracto');
-                            // })
-                          //  ->join('documento_extracto', 'extractos.id', '=', 'documento_extracto.extracto_id')
-                          //  ->whereJsonLength('extractos.documentos->id','>', 0)
-                        //   ->whereExists(function ($query) {
-                        //     $query->select(DB::raw(1))
-                        //         ->from('documento_extracto')
-                        //         ->whereRaw('documento_extracto.extracto_id = extractos.id');
-                        // })
-                            ->where($data)
-                            ->orderBy('fecha')
-                            ->get();
-            return $q;
+            return $this->seleccionar($data,$docu);
         }
+
+    }
+
+    private function seleccionar($data=false, $docu=false){
+
+        if ($data == false)
+            return Extracto::select('extractos.*')
+                        ->with(['documentos','documentos.archivo','documentos.carpeta'])
+                        ->whereYear('fecha',date('Y'))
+                        ->orderBy('fecha','desc')
+                        ->get();
+        else
+            return Extracto::select('extractos.*')
+                ->with(['documentos','documentos.archivo','documentos.carpeta'])
+                ->conDocumentos($docu)
+                ->where($data)
+                ->orderBy('fecha')
+                ->get();
 
     }
 
@@ -117,7 +109,8 @@ class ExtractosController extends Controller
      */
     public function show()
     {
-        \Log::info('show-ext');
+        return;
+       // \Log::info('show-ext');
         //return session()->get('empresa')->id;
     }
 

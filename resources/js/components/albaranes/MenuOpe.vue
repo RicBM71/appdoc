@@ -46,8 +46,7 @@
         <v-tooltip bottom>
             <template v-slot:activator="{ on }">
                 <v-btn
-                    v-show="albaran.id > 0"
-                    :disabled="computedMail"
+                    v-show="computedMail"
                     v-on="on"
                     color="white"
                     icon
@@ -56,6 +55,19 @@
                 </v-btn>
             </template>
             <span>Enviar por email</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+                <v-btn
+                    v-show="!computedMail"
+                    v-on="on"
+                    color="white"
+                    icon
+                    @click="goQuitarNot">
+                    <v-icon color="primary">unsubscribe</v-icon>
+                </v-btn>
+            </template>
+            <span>Quitar notificación envío</span>
         </v-tooltip>
         <v-tooltip bottom>
             <template v-slot:activator="{ on }">
@@ -121,11 +133,11 @@ export default {
     computed:{
         computedMail(){
             if (this.albaran.notificado)
-                return true;
+                return false;
             if (this.albaran.eje_fac == 0)
-                return true;
+                return false;
 
-            return false;
+            return true;
         }
     },
     methods:{
@@ -176,6 +188,48 @@ export default {
 
             window.open(url, '_blank');
         },
+        goQuitarNot() {
+
+                this.show_loading = true;
+
+                this.albaran.notificado = false;
+                var url = "/ventas/albacabs/"+this.albaran.id;
+
+                this.$validator.validateAll().then((result) => {
+                    if (result){
+
+                        axios.put(url, this.albaran)
+                            .then(response => {
+                                //console.log(response);
+                                this.$toast.success(response.data.message);
+                                this.albaran = response.data.albaran;
+                                this.show_loading = false;
+                            })
+                            .catch(err => {
+                                //console.log(err.response.data.errors);
+                                if (err.request.status == 422){ // fallo de validated.
+                                    const msg_valid = err.response.data.errors;
+                                    for (const prop in msg_valid) {
+                                        // this.$toast.error(`${msg_valid[prop]}`);
+                                        //console.log(prop);
+                                        this.errors.add({
+                                            field: prop,
+                                            msg: `${msg_valid[prop]}`
+                                        })
+                                    }
+                                }else{
+                                    console.log(err.response.data);
+                                    this.$toast.error(err.response.data.message);
+                                }
+                                this.show_loading = false;
+                            });
+                        }
+                    else{
+                        this.show_loading = false;
+                    }
+                });
+
+            },
         openDialog (){
             this.dialog = true;
         },

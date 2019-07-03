@@ -32,7 +32,7 @@ class Factura extends Mailable
     {
         //\Log::info($this->data['alb']->factura.'.pdf');
 
-        $file = $this->data['alb']->factura.'.pdf';
+        $file = 'F'.$this->data['alb']->factura.'.pdf';
 
         return $this->markdown('emails.factura')
                     ->with('data', $this->data)

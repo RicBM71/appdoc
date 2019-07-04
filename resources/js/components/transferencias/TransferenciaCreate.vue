@@ -70,16 +70,19 @@
                             >
                             </v-text-field>
                         </v-flex>
-                        <v-flex sm2>
-                            <v-text-field
+                         <v-flex sm2>
+                             <v-text-field
+                                :disabled="computedEnviada"
                                 v-model="transferencia.importe"
-                                v-validate="'required|numeric:2'"
+                                v-validate="'required|decimal:2'"
                                 :error-messages="errors.collect('importe')"
                                 label="Importe"
                                 data-vv-name="importe"
                                 data-vv-as="Importe"
+                                required
                                 class="inputPrice"
-                                mask="#.###.###,##"
+                                type="number"
+                                v-on:keyup.enter="submit"
                             >
                             </v-text-field>
                         </v-flex>

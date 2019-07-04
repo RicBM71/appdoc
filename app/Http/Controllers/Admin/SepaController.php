@@ -64,13 +64,15 @@ class SepaController extends Controller
 
         $cuenta = Cuenta::find($cuenta_id);
 
-        $idPayment = session()->get('empresa')->cif;
+        //$idPayment = session()->get('empresa')->cif;
+        $idPayment = session()->get('empresa')->cif.date('Ymdhis');
 
 
                 // Create the initiating information
         $groupHeader = new GroupHeader($idPayment, session()->get('empresa')->razon);
+        $idSufijo=$cuenta->sufijo_transf;
 
-        $groupHeader->setInitiatingPartyId(session()->get('empresa')->cif);
+        $groupHeader->setInitiatingPartyId($idSufijo);
         //$groupHeader->setInitiatingPartyId($cuenta->sepa);
 
         $sepaFile = new CustomerCreditTransferFile($groupHeader);

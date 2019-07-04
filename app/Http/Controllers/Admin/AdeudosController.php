@@ -66,10 +66,10 @@ class AdeudosController extends Controller
         $PmtInfId =  session()->get('empresa')->cif.'000'.date('Ymdhisv');
 
         $header = new GroupHeader(date('Y-m-d-H-i-s'), session()->get('empresa')->razon);
-        $header->setInitiatingPartyId($cuenta->sepa);
+        $header->setInitiatingPartyId($cuenta->sufijo_adeudo);
 
         $directDebit = TransferFileFacadeFactory::createDirectDebitWithGroupHeader($header, 'pain.008.001.02');
-        //$directDebit = TransferFileFacadeFactory::createDirectDebit(session()->get('empresa')->cif.'000', $cuenta->sepa, 'pain.008.001.02');
+        //$directDebit = TransferFileFacadeFactory::createDirectDebit(session()->get('empresa')->cif.'000', $cuenta->sufijo_adeudo, 'pain.008.001.02');
 
         //ReqdExctnDt -- ReqdColltnDt --
         // create a payment, it's possible to create multiple payments,
@@ -84,7 +84,7 @@ class AdeudosController extends Controller
             'creditorAgentBIC'      => $cuenta->bic,
             'seqType'               => PaymentInformation::S_ONEOFF,
             //'seqType'               => PaymentInformation::S_RECURRING,
-            'creditorId'            => $cuenta->sepa,
+            'creditorId'            => $cuenta->sufijo_adeudo,
             'localInstrumentCode'   => 'CORE' // default. optional.
         ));
 

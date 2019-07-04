@@ -68,11 +68,11 @@ Route::group([
         Route::get('extractos/{id}/importar', 'ExtractosController@importar');
         Route::put('extractos/{extracto}/liberar', 'ExtractosController@liberar');
         Route::post('extractos/banco', 'ExtractosController@banco');
-        Route::resource('documentos', 'DocumentosController', ['as' => 'mto']);
         Route::post('documentos/filtrar', 'DocumentosController@filtrar');
-        Route::post('documentos/{documento}/attach', 'DocumentosController@attach');
+        Route::post('documentos/attach', 'DocumentosController@attach');
         Route::post('documentos/{documento}/detach', 'DocumentosController@detach');
         Route::post('documentos/zip', 'DocumentosController@zip');
+        Route::resource('documentos', 'DocumentosController', ['as' => 'mto']);
 
          //Route::resource('filedocs', 'FiledocsController', ['only'=>['store','show','destroy'],'as' => 'mto']);
         Route::post('filedocs/{filedoc}', 'FiledocsController@store');

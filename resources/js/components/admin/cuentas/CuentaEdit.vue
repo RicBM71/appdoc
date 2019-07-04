@@ -64,16 +64,30 @@
                                     >
                                     </v-text-field>
                                 </v-flex>
-                                <v-flex sm3>
-                                    <v-text-field
-                                        v-model="cuenta.sepa"
-                                        :error-messages="errors.collect('sepa')"
-                                        label="Id. Presentador SEPA"
-                                        data-vv-name="sepa"
-                                        v-on:keyup.enter="submit"
-                                    >
-                                    </v-text-field>
-                                </v-flex>
+                    </v-layout>
+                    <br/>
+                    <v-layout row wrap>
+                        <v-flex sm3>
+                            <v-text-field
+                                v-model="cuenta.sufijo_adeudo"
+                                :error-messages="errors.collect('sufijo_adeudo')"
+                                label="Sufijo adeudos SEPA"
+                                data-vv-name="sufijo_adeudo"
+                                v-on:keyup.enter="submit"
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm3>
+                            <v-text-field
+                                v-model="cuenta.sufijo_transf"
+                                :error-messages="errors.collect('sufijo_transf')"
+                                label="Sufijo transferencias SEPA"
+                                data-vv-name="sufijo_transf"
+                                v-on:keyup.enter="submit"
+                            >
+                            </v-text-field>
+                        </v-flex>
+
                     </v-layout>
                     <br/>
                     <v-layout row wrap>
@@ -137,7 +151,8 @@ import MenuOpe from './MenuOpe'
                     nombre:  "",
                     iban:"",
                     bic:"",
-                    sepa:"",
+                    sufijo_adeudo:"",
+                    sufijo_transf:"",
                     activa: false,
                     remesa: false,
                     username:"",

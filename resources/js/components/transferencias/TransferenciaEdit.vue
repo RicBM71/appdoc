@@ -107,7 +107,7 @@
                             </v-text-field>
                         </v-flex>
                         <v-flex sm2>
-                             <v-currency-field
+                             <v-text-field
                                 :disabled="computedEnviada"
                                 v-model="transferencia.importe"
                                 v-validate="'required|decimal:2'"
@@ -115,11 +115,12 @@
                                 label="Importe"
                                 data-vv-name="importe"
                                 data-vv-as="Importe"
-                                v-bind="currency_config"
-                                v-on:keyup.enter="submit"
+                                required
                                 class="inputPrice"
+                                type="number"
+                                v-on:keyup.enter="submit"
                             >
-                             </v-currency-field>
+                            </v-text-field>
                         </v-flex>
                     </v-layout>
                     <v-layout row wrap>
@@ -130,7 +131,6 @@
                                 label="Usuario"
                                 data-vv-name="username"
                                 readonly
-                                v-on:keyup.enter="submit"
                             >
                             </v-text-field>
                         </v-flex>

@@ -125,7 +125,7 @@ class GenericasSeeder extends Seeder
         $cuenta->nombre = "Santander";
         $cuenta->iban="ES1500493102912114149064";
         $cuenta->bic="BSCHESMMXXX";
-        $cuenta->sepa="ES35001B83667402";
+        $cuenta->sufijo_adeudo="ES35001B83667402";
 
         $cuenta->save();
 

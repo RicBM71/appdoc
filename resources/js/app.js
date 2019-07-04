@@ -99,9 +99,9 @@ Vue.use(Vue2Filters)
 /***************************** */
 
 
-import currency from 'v-currency-field'
-import 'v-currency-field/dist/index.css'
-Vue.use(currency)
+// import currency from 'v-currency-field'
+// import 'v-currency-field/dist/index.css'
+// Vue.use(currency)
 
 Vue.component('form-login', require('./components/auth/FormLogin.vue').default);
 Vue.component('mail-login', require('./components/auth/MailLogin.vue').default);

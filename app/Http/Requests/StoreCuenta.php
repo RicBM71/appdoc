@@ -28,7 +28,8 @@ class StoreCuenta extends FormRequest
             'nombre'        => ['required', 'string', 'max:50'],
             'iban'          => ['nullable','iban', 'max:50'],
             'bic'           => ['nullable','bic', 'max:11'],
-            'sepa'          => ['nullable','string', 'max:20'],
+            'sufijo_adeudo' => ['nullable','string', 'max:20'],
+            'sufijo_transf' => ['nullable','string', 'max:20'],
             'activa'        => ['boolean'],
             'remesa'        => ['boolean'],
         ];

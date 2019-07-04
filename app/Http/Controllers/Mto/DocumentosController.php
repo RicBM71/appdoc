@@ -131,11 +131,19 @@ class DocumentosController extends Controller
             return ['documento'=>$reg, 'message' => 'EL registro ha sido creado'];
     }
 
-    public function attach(Request $request, Documento $documento){
+    public function attach(Request $request){
 
-        $this->authorize('create', $documento);
+        $this->authorize('create', new Documento);
 
-        $documento->extractos()->attach($request->get('extracto_id'));
+        $data = $request->input('documentos');
+
+        foreach ($data as $id){
+
+            $documento = Documento::findOrfail($id);
+
+            $documento->extractos()->syncWithoutDetaching($request->get('extractos'));
+        }
+
         return response('ok',200);
     }
 
@@ -273,7 +281,7 @@ class DocumentosController extends Controller
         if ($files->count() == 0){
             abort(404, 'No hay documentos');
         }
-        
+
         $zip_file = storage_path('zip/filedoc.zip');
 
         if (file_exists(storage_path('zip'))==false)

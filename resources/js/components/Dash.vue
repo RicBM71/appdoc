@@ -238,6 +238,7 @@ export default {
             { icon: 'account_balance', text: 'Extracto Banco', name:'extracto.index' },
             { icon: 'open_in_browser', text: 'Importar N.43', name:'extracto.importar' },
             { icon: 'save_alt', text: 'Documentos', name:'documento.index' },
+            { icon: 'save_alt', text: 'Enlazar Extracto-Documento', name:'extracto.link' },
             { icon: 'get_app', text: 'Download ZIP', name:'documento.zip' },
             { icon: 'folder', text: 'Carpetas', name:'carpeta.index' },
         ]

@@ -35,7 +35,7 @@ class ExtractosController extends Controller
                 $filtro = request()->session()->get('filtro_extrac');
                 $docu = request()->session()->get('filtro_extrac_docu');
 
-                return $this->seleccionar($data, $docu);
+                return $this->seleccionar($filtro, $docu);
             }
             else
                 return $this->seleccionar();
@@ -81,6 +81,10 @@ class ExtractosController extends Controller
 
     }
 
+    /**
+     *  @param array $data // condiciones where genéricas
+     *  @param array $doc  // condiciones para documentos
+     */
     private function seleccionar($data=false, $docu=false){
 
         if ($data == false)

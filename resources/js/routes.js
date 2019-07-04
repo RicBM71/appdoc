@@ -61,6 +61,7 @@ import AlbaranCreate from './components/albaranes/AlbaranCreate.vue';
 import AlbaranEdit from './components/albaranes/AlbaranEdit.vue';
 
 import ExtractoIndex from './components/extractos/ExtractoIndex.vue';
+import ExtDocRel from './components/extractos/ExtDocRel.vue';
 import ExtractoImp from './components/extractos/Importar.vue';
 
 import SelRemesa from './components/adeudos/SelRemesa.vue';
@@ -338,6 +339,11 @@ export default [
                 path: '/extractos',
                 name: 'extracto.index',
                 component: ExtractoIndex,
+            },
+            {
+                path: '/extractos/link',
+                name: 'extracto.link',
+                component: ExtDocRel,
             },
             {
                 path: '/extractos/importar',

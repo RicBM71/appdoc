@@ -19,7 +19,8 @@ class CreateCuentasTable extends Migration
             $table->string('nombre',50);
             $table->string('iban',24)->nullable();
             $table->string('bic',11)->nullable();
-            $table->string('sepa',20)->nullable();
+            $table->string('sufijo_adeudo',20)->nullable();
+            $table->string('sufijo_transf',20)->nullable();
             $table->boolean('remesa')->default(true);
             $table->boolean('activa')->default(true);
             $table->String('username', 20)->nullable();

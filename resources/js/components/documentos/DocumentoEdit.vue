@@ -19,7 +19,7 @@
                     <v-layout row wrap>
                         <v-flex sm4 d-flex>
                             <v-select
-                                :disabled="!hasDocumenta"
+                                :readonly="computedCerrado"
                                 v-model="documento.archivo_id"
                                 :items="archivos"
                                 v-validate="'required'"
@@ -32,7 +32,7 @@
                         </v-flex>
                         <v-flex sm4 d-flex>
                             <v-select
-                                :disabled="!hasDocumenta"
+                                :readonly="computedCerrado"
                                 v-model="documento.carpeta_id"
                                 v-validate="'required'"
                                 :error-messages="errors.collect('carpeta_id')"
@@ -152,9 +152,10 @@
             </v-form>
             <v-container v-show="extractos.length > 0">
                 <v-data-table
-                    hide-actions
+
                     :headers="headers"
                     :items="extractos"
+                    rows-per-page-text="Registros por página"
                     class="elevation-1"
                 >
                     <template v-slot:items="props">
@@ -162,6 +163,9 @@
                         <td class="text-xs-left">{{ props.item.concepto }}
                         <p v-if="props.item.nota>''"><span class='font-italic black--text'><span class="lime accent-2">{{ props.item.nota }}</span></span></p></td>
                         <td class="text-xs-right">{{ props.item.importe | currency('€', 2, { thousandsSeparator:'.', thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false })}}</td>
+                    </template>
+                    <template slot="pageText" slot-scope="props">
+                        Registros {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
                     </template>
                 </v-data-table>
 

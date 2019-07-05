@@ -31,7 +31,6 @@ class StoreCuenta extends FormRequest
             'sufijo_adeudo' => ['nullable','string', 'max:20'],
             'sufijo_transf' => ['nullable','string', 'max:20'],
             'activa'        => ['boolean'],
-            'remesa'        => ['boolean'],
         ];
 
         return $data;

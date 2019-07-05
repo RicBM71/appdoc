@@ -9,7 +9,7 @@ class Cuenta extends Model
 {
 
     protected $fillable = [
-        'empresa_id','nombre', 'iban', 'bic', 'sufijo_adeudo','sufijo_transf','activa', 'remesa', 'username'
+        'empresa_id','nombre', 'iban', 'bic', 'sufijo_adeudo','sufijo_transf','activa', 'username'
     ];
 
     protected static function boot()

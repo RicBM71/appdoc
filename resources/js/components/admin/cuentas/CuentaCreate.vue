@@ -25,73 +25,33 @@
                             >
                             </v-text-field>
                         </v-flex>
-                        <v-flex sm3>
-                             <v-switch
-                                v-model="cuenta.activa"
-                                color="primary"
-                                label="Activa"
-                            ></v-switch>
-                        </v-flex>
-                        <v-flex sm3>
-                             <v-switch
-                                v-model="cuenta.remesa"
-                                color="primary"
-                                label="Genera Remesas SEPA"
-                            ></v-switch>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
                         <v-flex sm4>
-                                    <v-text-field
-                                        v-model="cuenta.iban"
-                                        :error-messages="errors.collect('iban')"
-                                        label="IBAN"
-                                        mask="AA## #### #### #### #### ####"
-                                        counter=24
-                                        data-vv-name="iban"
-                                        v-on:keyup.enter="submit"
-                                    >
-                                    </v-text-field>
-                                </v-flex>
-                                <v-flex sm3>
-                                    <v-text-field
-                                        v-model="cuenta.bic"
-                                        :error-messages="errors.collect('bic')"
-                                        label="BIC"
-                                        counter=11
-                                        data-vv-name="bic"
-                                        v-on:keyup.enter="submit"
-                                    >
-                                    </v-text-field>
-                                </v-flex>
-                    </v-layout>
-                    <br/>
-                    <v-layout row wrap>
-                        <v-flex sm3>
                             <v-text-field
-                                v-model="cuenta.sufijo_adeudo"
-                                :error-messages="errors.collect('sufijo_adeudo')"
-                                label="Sufijo adeudos SEPA"
-                                data-vv-name="sufijo_adeudo"
+                                v-model="cuenta.iban"
+                                :error-messages="errors.collect('iban')"
+                                label="IBAN"
+                                mask="AA## #### #### #### #### ####"
+                                counter=24
+                                data-vv-name="iban"
                                 v-on:keyup.enter="submit"
                             >
                             </v-text-field>
                         </v-flex>
                         <v-flex sm3>
                             <v-text-field
-                                v-model="cuenta.sufijo_transf"
-                                :error-messages="errors.collect('sufijo_transf')"
-                                label="Sufijo transferencias SEPA"
-                                data-vv-name="sufijo_transf"
+                                v-model="cuenta.bic"
+                                :error-messages="errors.collect('bic')"
+                                label="BIC"
+                                counter=11
+                                data-vv-name="bic"
                                 v-on:keyup.enter="submit"
                             >
                             </v-text-field>
                         </v-flex>
-
                     </v-layout>
                     <br/>
-                    <br/>
                     <v-layout row wrap>
+                        <v-flex sm2></v-flex>
                         <v-flex sm3>
                             <v-text-field
                                 v-model="cuenta.username"
@@ -155,7 +115,6 @@ import MenuOpe from './MenuOpe'
                     sufijo_adeudo:"",
                     sufijo_transf:"",
                     activa: true,
-                    remesa: true,
                     username:"",
                     updated_at:"",
                     created_at:"",

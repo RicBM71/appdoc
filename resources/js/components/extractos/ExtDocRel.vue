@@ -18,7 +18,7 @@
                                 icon
                                 @click="attachDoc()"
                             >
-                                <v-icon color="primary">call_merge</v-icon>
+                                <v-icon color="success">call_merge</v-icon>
                             </v-btn>
                         </template>
                         <span>Enlazar documentos</span>
@@ -122,13 +122,6 @@
                                     label="D/H"
                                 ></v-select>
                             </v-flex>
-                            <v-flex xs2 d-flex>
-                                <v-select
-                                    v-model="validado"
-                                    :items="validados"
-                                    label="Validados"
-                                ></v-select>
-                            </v-flex>
                             <v-spacer></v-spacer>
                             <v-flex sm1>
                                 <v-btn @click="filtrar"  round  block  color="info">
@@ -171,6 +164,7 @@
                             v-model="selected"
                             :headers="headers"
                             :items="apuntes"
+                            :pagination.sync="pagination"
                             :search="search"
                             rows-per-page-text="Registros por página"
                             >
@@ -199,6 +193,7 @@
                             <v-data-table
                             v-model="doc_selected"
                             :headers="doc_headers"
+                            :pagination.sync="pagination"
                             :items="documentos"
                             :search="doc_search"
                             rows-per-page-text="Registros por página"
@@ -245,14 +240,9 @@ import {mapActions} from "vuex";
     data () {
       return {
         titulo:"Enlazar extracto-documento",
-        paginaActual:{},
         pagination:{
-            model: "extracto",
-            descending: true,
-            page: 1,
-            rowsPerPage: 10,
             sortBy: "fecha",
-            search: ""
+            descending: true,
         },
         search:"",
         headers: [
@@ -340,6 +330,11 @@ import {mapActions} from "vuex";
     mounted()
     {
 
+        if (!this.hasDocumenta){
+            this.$toast.error("No autorizado!");
+            this.$router.push({ name: 'dash' })
+        }
+
         this.show_loading = true;
 
         axios.get('/mto/extractos')
@@ -373,7 +368,6 @@ import {mapActions} from "vuex";
         ...mapGetters([
                 'hasDocumenta',
                 'isAdmin',
-                'getPagination',
                 'hasBorraDoc'
 		]),
         computedDocs(){
@@ -389,11 +383,15 @@ import {mapActions} from "vuex";
             return this.fecha_h ? moment(this.fecha_h).format('MM-YYYY') : '';
         },
     },
+    watch: {
+        apuntes: function() {
+            (this.apuntes.length > 0 && this.documentos.length > 0) ? this.show_loading = false : this.show_loading = true;
+        },
+        documentos: function() {
+            (this.apuntes.length > 0 && this.documentos.length > 0) ? this.show_loading = false : this.show_loading = true;
+        }
+    },
     methods:{
-        ...mapActions([
-            'setPagination',
-            'unsetPagination'
-		]),
         formatDate(f){
             if (f == null) return null;
                 moment.locale('es');
@@ -401,12 +399,14 @@ import {mapActions} from "vuex";
         },
         attachDoc(){
 
+
             var ext = [];
             this.selected.forEach(element => {
                 ext.push(element.id)
             });
             var doc = [];
             this.doc_selected.forEach(element => {
+                this.documento_id = element.id;
                 doc.push(element.id)
             });
 
@@ -418,15 +418,14 @@ import {mapActions} from "vuex";
                     }
                 )
                 .then(res => {
-
+                    this.show_loading = false;
                     this.filtro = false;
                     this.$toast.success("Apunte enlazado correctamente!");
-                    this.show_loading = false;
+
+                    this.$router.push({ name: 'documento.edit', params: { id: this.documento_id} })
 
                 })
                 .catch(err => {
-
-                    this.show_loading = false;
                     this.$toast.error(err.response.data.message);
 
 
@@ -435,83 +434,36 @@ import {mapActions} from "vuex";
         },
         filtrar(){
 
-            this.$validator.validateAll().then((result) => {
-                    if (result){
-                        this.show_loading = true;
-                        axios.post('mto/extractos/filtrar',
-                                {
-                                    fecha_d: this.fecha_d,
-                                    fecha_h: this.fecha_h,
-                                    dh: this.dh,
-                                    docu: this.docu,
-                                    validado: this.validado
-                                }
-                            )
-                            .then(res => {
-                                //console.log(res);
-                                this.pagination.page = 1;
-                                this.filtro = false;
-
-                                this.apuntes = res.data;
-                                this.show_loading = false;
-
-                            })
-                            .catch(err => {
-
-                                this.show_loading = false;
-                                if (err.response.status != 419)
-                                    this.$toast.error(err.response.data.message);
-                                else
-                                    this.$toast.error("Sesión expirada!");
-
-                            });
+            this.show_loading = true;
+            this.apuntes = [];
+            axios.post('/mto/extractos/filtrar',
+                    {
+                        fecha_d: this.fecha_d,
+                        fecha_h: this.fecha_h,
+                        dh: this.dh,
+                        docu: 'T',
+                        validado: 'T',
+                        concepto: this.search
                     }
-            });
+                )
+                .then(res => {
+                    this.apuntes = res.data;
+                });
+            axios.post('/mto/documentos/filtrar',
+                    {
+                        fecha_d: this.fecha_d,
+                        fecha_h: this.fecha_h,
+                        archivo_id: '',
+                        concepto: this.doc_search
+                    }
+                )
+                .then(res => {
+                    this.documentos = res.data.documentos;
+                })
+
+            this.loading = true;
 
         },
-
-        // agruparADoc(documento_id){
-        //     this.documento_id = documento_id;
-        //     this.titulo = "Enlazando a documento, seleccionar otro apunte";
-        //     this.$toast.warning("Enlazando a documento, seleccionar otro apunte");
-        //    // console.log(documento_id);
-        // },
-        // cancelLink(){
-        //     this.documento_id = 0;
-        // },
-        // attachDoc(id){
-        //     //console.log(id);
-
-        //     if (id == 0 || this.documento_id == 0){
-        //         this.$toast.error("No se ha podido realizar el enlace");
-        //         return;
-        //     }
-
-        //     this.show_loading = true;
-        //     axios.post('mto/documentos/'+this.documento_id+'/attach',
-        //             {
-        //                 extracto_id: id
-        //             }
-        //         )
-        //         .then(res => {
-        //             this.filtro = false;
-
-        //             this.titulo = "Extracto";
-        //             this.$toast.success("Apunte enlazado correctamente!");
-
-        //             this.filtrar();
-        //             this.show_loading = false;
-
-        //         })
-        //         .catch(err => {
-
-        //             this.show_loading = false;
-        //             this.$toast.error(err.response.data.message);
-
-
-        //         });
-
-        // },
         detachDoc(child){
 
             this.show_loading = true;

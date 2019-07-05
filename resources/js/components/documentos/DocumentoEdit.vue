@@ -249,6 +249,7 @@ import {mapGetters} from 'vuex';
                     { text: 'Fecha', value: 'fecha' },
                     { text: 'Concepto extracto', value: 'nombre' },
                     { text: 'Importe', value: 'importe' },
+                    // { text: 'Acciones', align: 'Center'}
                 ],
 
                 archivos:[],

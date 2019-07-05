@@ -56,13 +56,19 @@ class ExtractosController extends Controller
         $dh = $request->input('dh');
         $docu = $request->input('docu');
         $validado = $request->input('validado');
+        $concepto = $request->input('concepto');
 
-        $data[] = [
-            'fecha', '>=', $fecha_d,
-        ];
-        $data[] = [
-            'fecha', '<=', $fecha_h,
-        ];
+        if ($concepto > ""){
+            $data[] = ['concepto', 'like' , '%'.$concepto.'%'];
+        }
+        else{
+            $data[] = [
+                'fecha', '>=', $fecha_d,
+            ];
+            $data[] = [
+                'fecha', '<=', $fecha_h,
+            ];
+        }
         if ($dh <> 'T')
             $data[] = [
                 'dh', '=', $dh,

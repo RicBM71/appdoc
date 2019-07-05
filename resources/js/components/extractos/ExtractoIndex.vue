@@ -55,7 +55,6 @@
                 <v-form>
                     <v-container>
                         <v-layout row wrap>
-                            <v-flex xs1></v-flex>
                             <v-flex sm2>
                                  <v-menu
                                     ref="menu_d"
@@ -128,7 +127,7 @@
                                     </v-date-picker>
                                 </v-menu>
                             </v-flex>
-                            <v-flex xs2 d-flex>
+                            <v-flex xs1 d-flex>
                                 <v-select
                                     v-model="dh"
                                     :items="tipos"
@@ -148,6 +147,14 @@
                                     :items="validados"
                                     label="Validados"
                                 ></v-select>
+                            </v-flex>
+                            <v-flex sm2>
+                                <v-text-field
+                                    v-model="concepto"
+                                    label="Texto a buscar"
+                                    hint="No tiene en cuenta fechas"
+                                    v-on:keyup.enter="filtrar"
+                                ></v-text-field>
                             </v-flex>
                             <v-spacer></v-spacer>
                             <v-flex sm1>
@@ -399,6 +406,7 @@ import {mapActions} from "vuex";
         extracto_id: 0,
         documento_id: 0,
         expand: true,
+        concepto: "",
 
         tipos: [
                 {text:'Debe','value':'D'},
@@ -525,7 +533,8 @@ import {mapActions} from "vuex";
                                     fecha_h: this.fecha_h,
                                     dh: this.dh,
                                     docu: this.docu,
-                                    validado: this.validado
+                                    validado: this.validado,
+                                    concepto: this.concepto
                                 }
                             )
                             .then(res => {
@@ -567,48 +576,6 @@ import {mapActions} from "vuex";
                 this.attachDoc(extracto.id);
             }
         },
-        // agruparADoc(documento_id){
-        //     this.documento_id = documento_id;
-        //     this.titulo = "Enlazando a documento, seleccionar otro apunte";
-        //     this.$toast.warning("Enlazando a documento, seleccionar otro apunte");
-        //    // console.log(documento_id);
-        // },
-        // cancelLink(){
-        //     this.documento_id = 0;
-        // },
-        // attachDoc(id){
-        //     //console.log(id);
-
-        //     if (id == 0 || this.documento_id == 0){
-        //         this.$toast.error("No se ha podido realizar el enlace");
-        //         return;
-        //     }
-
-        //     this.show_loading = true;
-        //     axios.post('mto/documentos/'+this.documento_id+'/attach',
-        //             {
-        //                 extracto_id: id
-        //             }
-        //         )
-        //         .then(res => {
-        //             this.filtro = false;
-
-        //             this.titulo = "Extracto";
-        //             this.$toast.success("Apunte enlazado correctamente!");
-
-        //             this.filtrar();
-        //             this.show_loading = false;
-
-        //         })
-        //         .catch(err => {
-
-        //             this.show_loading = false;
-        //             this.$toast.error(err.response.data.message);
-
-
-        //         });
-
-        // },
         detachDoc(child){
 
             this.show_loading = true;

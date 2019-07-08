@@ -56,6 +56,16 @@
                             </v-text-field>
                         </v-flex>
                         <v-flex sm2>
+                            <v-switch
+                                v-model="archivo.docuzip"
+                                color="primary"
+                                hint="Marcar para selección defecto en ZIP"
+                                label="Incluir en ZIP"
+                            ></v-switch>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row wrap>
+                        <v-flex sm2>
                             <v-text-field
                                 v-model="computedFModFormat"
                                 label="Modificado"
@@ -105,6 +115,7 @@ import MenuOpe from './MenuOpe'
                     nombre:  "",
                     path: "",
                     color: "",
+                    docuzip: false,
                     updated_at:"",
                     created_at:"",
                 },

@@ -44,6 +44,7 @@ class DocumentosController extends Controller
 
                 'documentos'=> $documentos,
                 'archivos'  =>  Archivo::selArchivos(),
+                'archi_defecto' => Archivo::docuzip()->select('id')->pluck('id')
             ];
 
     }
@@ -271,10 +272,15 @@ class DocumentosController extends Controller
 
         $i = 1;
 
+        $fecha_d = $request->input('fecha_d').'-01';
+        $fecha_h = $request->input('fecha_h').'-'.date('t',strtotime($request->input('fecha_h')));
+
         $files = Documento::with('filedocs')
-        ->whereYear('fecha',$periodo[0])
-        ->whereMonth('fecha',$periodo[1])
-        ->where('archivo_id',$archivo_id)
+        // ->whereYear('fecha',$periodo[0])
+        // ->whereMonth('fecha',$periodo[1])
+        ->whereIn('archivo_id',$archivo_id)
+        ->whereBetween('fecha', [$fecha_d, $fecha_h])
+        ->orderBy('fecha')
         ->get();
 
 
@@ -302,7 +308,7 @@ class DocumentosController extends Controller
 
                 $zip->addFile(storage_path($ficheroPath), $i.'.'.$filename[1]);
 
-                $str.=($i.'.'.$filename[1].' -> '.$doc->concepto)."\r\n";
+                $str.=($i.'.'.$filename[1].': '.getFecha($doc->fecha).' -> '.$doc->concepto)."\r\n";
 
                 $i++;
             }

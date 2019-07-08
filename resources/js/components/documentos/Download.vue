@@ -18,11 +18,13 @@
                                 <v-select
                                     v-model="archivo_id"
                                     :items="archivos"
+                                    multiple
                                     label="Archivo"
+                                    required
                                 ></v-select>
                             </v-flex>
                             <v-flex sm1></v-flex>
-                            <v-flex sm3>
+                            <v-flex sm2>
                                  <v-menu
                                     ref="menu_d"
                                     v-model="menu_d"
@@ -39,7 +41,7 @@
                                     <template v-slot:activator="{ on }">
                                         <v-text-field
                                             v-model="computedFechaD"
-                                            label="Mes"
+                                            label="Desde"
                                             prepend-icon="event"
                                             readonly
                                             v-on="on"
@@ -58,7 +60,42 @@
                                     </v-date-picker>
                                 </v-menu>
                             </v-flex>
-
+                            <v-flex sm2>
+                                <v-menu
+                                    ref="menu_h"
+                                    v-model="menu_h"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    :return-value.sync="fecha_h"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    max-width="290px"
+                                    min-width="290px"
+                                >
+                                    <template v-slot:activator="{ on }">
+                                        <v-text-field
+                                            v-model="computedFechaH"
+                                            label="Hasta"
+                                            prepend-icon="event"
+                                            readonly
+                                            v-on="on"
+                                        ></v-text-field>
+                                    </template>
+                                    <v-date-picker
+                                    v-model="fecha_h"
+                                    type="month"
+                                    locale="es"
+                                    no-title
+                                    scrollable
+                                    >
+                                    <v-spacer></v-spacer>
+                                    <v-btn flat color="primary" @click="menu_h = false">Cancelar</v-btn>
+                                    <v-btn flat color="primary" @click="$refs.menu_h.save(fecha_h)">OK</v-btn>
+                                    </v-date-picker>
+                                </v-menu>
+                            </v-flex>
                             <v-spacer></v-spacer>
                             <v-flex sm2>
                                 <v-btn @click="zip"  round  block  color="info">
@@ -91,7 +128,10 @@ import {mapActions} from "vuex";
         show_loading: false,
 
         menu_d: false,
-        fecha_d: new Date().toISOString().substr(0, 7),
+        menu_h: false,
+        fecha_d: new Date().toISOString().substr(0, 5)+"01",
+        fecha_h: new Date().toISOString().substr(0, 7),
+
 
       }
     },
@@ -101,8 +141,9 @@ import {mapActions} from "vuex";
         this.show_loading = true;
         axios.get('/mto/documentos')
             .then(res => {
+               // console.log(res);
                 this.archivos = res.data.archivos;
-                this.archivo_id = this.archivos[0].value;
+                this.archivo_id = res.data.archi_defecto;
                 this.show_loading = false;
             })
             .catch(err =>{
@@ -122,12 +163,17 @@ import {mapActions} from "vuex";
         computedFechaD() {
             moment.locale('es');
             return this.fecha_d ? moment(this.fecha_d).format('MM-YYYY') : '';
-        }
+        },
+        computedFechaH() {
+            moment.locale('es');
+            return this.fecha_h ? moment(this.fecha_h).format('MM-YYYY') : '';
+        },
     },
     methods:{
         zip(){
 
             this.show_loading = true;
+            console.log(this.archivo_id);
 
             axios({
                 method: 'post',
@@ -135,6 +181,7 @@ import {mapActions} from "vuex";
                 responseType: 'blob',
                 data: {
                     fecha_d: this.fecha_d,
+                    fecha_h: this.fecha_h,
                     archivo_id: this.archivo_id
                 }
                 })

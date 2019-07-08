@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Archivo extends Model
 {
     protected $fillable = [
-        'nombre', 'color', 'path'
+        'nombre', 'color', 'path', 'docuzip'
     ];
 
     protected static function boot()
@@ -45,5 +45,12 @@ class Archivo extends Model
         $this->attributes['nombre'] = strtoupper($s);
 
     }
+
+    public function scopeDocuZip($query)
+    {
+
+        return $query->where('docuzip', true);
+    }
+
 
 }

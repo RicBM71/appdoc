@@ -54,6 +54,16 @@
                             </v-text-field>
                         </v-flex>
                         <v-flex sm2>
+                            <v-switch
+                                v-model="archivo.docuzip"
+                                color="primary"
+                                label="Incluir en ZIP"
+                            ></v-switch>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row wrap>
+                        <v-flex sm1></v-flex>
+                        <v-flex sm2>
                             <v-text-field
                                 v-model="computedFModFormat"
                                 label="Modificado"
@@ -103,6 +113,7 @@ import MenuOpe from './MenuOpe'
                     nombre:  "",
                     path: "",
                     color: "",
+                    docuzip: false,
                     updated_at:"",
                     created_at:"",
                 },
@@ -156,11 +167,13 @@ import MenuOpe from './MenuOpe'
                                 {
                                     nombre: this.archivo.nombre,
                                     color: this.archivo.color,
-                                    path: this.archivo.path
+                                    path: this.archivo.path,
+                                    docuzip: this.archivo.docuzip
 
                                 }
                             })
                             .then(response => {
+                                //console.log(response);
                                 this.$toast.success(response.data.message);
                                 this.archivo = response.data.archivo;
                                 this.enviando = false;

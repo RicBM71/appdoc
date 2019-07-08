@@ -54,6 +54,7 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
                 ->from(config('mail.username'),config('app.name'))
                 ->subject('Solicitud reset Contraseña')
                 ->line('Has recibido este email porque se ha solicitado un reseteo de la contraseña asociada a tu cuenta.')
+                ->line('Usuario: '.$notifiable->username)
                 ->action('Reset Password', url(config('app.url').route('password.reset', $this->token, false)))
                 ->line('Si no has realizado esta petición puedes ignorar este email.')
                 ->salutation('¡Saludos!');

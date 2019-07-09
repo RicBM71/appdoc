@@ -83,6 +83,7 @@ Route::group([
 
         Route::middleware('role:Root|Admin')->group(function () {
             Route::resource('transferencias', 'TransferenciasController', ['as' => 'mto']);
+            Route::post('transferencias/filtrar', 'TransferenciasController@filtrar');
         });
     }
 );

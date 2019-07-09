@@ -376,6 +376,7 @@ import {mapActions} from "vuex";
                     }
                 )
                 .then(res => {
+                //    console.log(res);
                     this.pagination.page = 1;
                     this.filtro = false;
                     this.transferencias = res.data.transferencias;

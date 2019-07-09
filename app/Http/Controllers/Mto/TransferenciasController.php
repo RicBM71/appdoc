@@ -70,9 +70,9 @@ class TransferenciasController extends Controller
 
         if (request()->wantsJson())
             return [
-                'transferencias'=> Documento::with(['cliente'])->where($data)
-                            ->orderBy('fecha','desc')
-                            ->get()
+                'transferencias'=> Transferencia::with(['cliente'])->where($data)
+                    ->orderBy('fecha','desc')
+                    ->get()
             ];
 
     }

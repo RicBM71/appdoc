@@ -19,7 +19,9 @@ class CreateActivityLogTable extends Migration
             $table->string('subject_type')->nullable();
             $table->unsignedBigInteger('causer_id')->nullable();
             $table->string('causer_type')->nullable();
-            $table->json('properties')->nullable();
+            //falla en produc, necesita mySQL 5.7
+            //$table->json('properties')->nullable();
+            $table->text('properties')->nullable();
             $table->timestamps();
 
             $table->index('log_name');

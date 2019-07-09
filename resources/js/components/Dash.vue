@@ -248,6 +248,7 @@ export default {
         axios.get('/dash')
                 .then(res => {
 
+                   // console.log(res);
                     this.setAuthUser(res.data.user);
 
                     this.empresa_id = this.user.empresa_id;

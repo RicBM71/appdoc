@@ -354,6 +354,7 @@ export default {
         Logout() {
             this.$toast.success('Logout, espere...');
             axios.post('/logout').then(res => {
+                console.log(res);
                 this.$store.dispatch('unsetAuthUser')
                 this.$router.push({name: 'index'});
 			})

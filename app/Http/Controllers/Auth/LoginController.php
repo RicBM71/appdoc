@@ -70,8 +70,38 @@ class LoginController extends Controller
     {
         //\Log::info($user->username);
 
+        activity()
+            ->causedBy($user)
+            ->withProperties([
+                'username' => $user->username,
+                'ip' => $request->ip()
+            ])
+            ->log('Login');
+
         $data['login_at'] = date('Y-m-d H:i:s');
         $user->update($data);
     }
+
+    //  /**
+    //  * Get the failed login response instance.
+    //  *
+    //  * @param  \Illuminate\Http\Request  $request
+    //  * @return \Symfony\Component\HttpFoundation\Response
+    //  *
+    //  * @throws \Illuminate\Validation\ValidationException
+    //  */
+    // protected function sendFailedLoginResponse(Request $request)
+    // {
+
+    //     activity()
+    //         ->withProperties(['username' => $request->input('username')])
+    //         ->log('Failed Login');
+
+    //     throw ValidationException::withMessages([
+    //         $this->username() => [trans('auth.failed')],
+    //     ]);
+    // }
+
+
 
 }

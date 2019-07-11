@@ -37,7 +37,7 @@
                                 rows-per-page-text="Registros por página"
                                 >
                                     <template slot="items" slot-scope="props">
-                                        <td>{{ props.item.nombre }}</td>
+                                        <td :class="baja(props.item.fechabaja)">{{ props.item.nombre }}</td>
                                         <td>{{ props.item.cif }}</td>
                                         <td>{{ props.item.email }}</td>
                                         <td>{{ props.item.telefono1 }}</td>
@@ -168,7 +168,13 @@ import {mapActions} from "vuex";
         ...mapActions([
             'setPagination',
             'unsetPagination'
-		]),
+        ]),
+        baja(fecha){
+            //console.log(fecha);
+
+            return (fecha == null) ? '' : 'red--text tachado';
+
+        },
         updateEventPagina(obj){
 
             this.paginaActual = obj;
@@ -220,3 +226,8 @@ import {mapActions} from "vuex";
     }
   }
 </script>
+<style scoped>
+.tachado{
+    text-decoration: line-through
+}
+</style>

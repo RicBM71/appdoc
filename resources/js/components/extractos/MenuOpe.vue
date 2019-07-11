@@ -6,19 +6,21 @@
                     v-on="on"
                     color="white"
                     icon
-                    @click="goIndex"
+                    @click="goExport"
                 >
-                    <v-icon color="primary">list_alt</v-icon>
+                    <v-avatar size="32px">
+                        <img class="img-fluid" src="/assets/export.jpg">
+                    </v-avatar>
                 </v-btn>
             </template>
-            <span>Filtrar</span>
+            <span>Exportar a Excel</span>
         </v-tooltip>
     </div>
 </template>
 <script>
 export default {
     props:{
-        id: Number
+        fecha: String
     },
     data () {
       return {
@@ -26,8 +28,12 @@ export default {
       }
     },
     methods:{
-        goIndex(){
-            this.$router.push({ name: 'extracto.index' })
+        goExport(){
+            //console.log(this.fecha);
+            var e = this.fecha.split('-')
+            var url = '/mto/extractos/'+e[0]+'/export/';
+
+            window.open(url);
         },
     }
 }

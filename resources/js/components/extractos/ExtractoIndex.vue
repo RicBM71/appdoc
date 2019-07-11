@@ -46,6 +46,7 @@
                 <v-card-title>
                     <h2>{{titulo}}</h2>
                     <v-spacer></v-spacer>
+                    <menu-ope :fecha="fecha_d"></menu-ope>
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                             <v-btn

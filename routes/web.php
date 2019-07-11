@@ -68,6 +68,8 @@ Route::group([
         Route::get('extractos/{id}/importar', 'ExtractosController@importar');
         Route::put('extractos/{extracto}/liberar', 'ExtractosController@liberar');
         Route::post('extractos/banco', 'ExtractosController@banco');
+        Route::get('extractos/{ejercicio}/export', 'ExtractosController@export');
+
         Route::post('documentos/filtrar', 'DocumentosController@filtrar');
         Route::post('documentos/attach', 'DocumentosController@attach');
         Route::post('documentos/{documento}/detach', 'DocumentosController@detach');

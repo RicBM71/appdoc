@@ -10,8 +10,10 @@ use App\Filedoc;
 use App\Extracto;
 use App\Documento;
 use Illuminate\Http\Request;
+use App\Exports\ExtractosExport;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 
 class ExtractosController extends Controller
@@ -119,9 +121,10 @@ class ExtractosController extends Controller
      */
     public function show($id)
     {
-        return Documento::with(['extractos'])
-            ->where('carpeta_id',6)
-            ->toSql();
+        return "show".$id;
+        // return Documento::with(['extractos'])
+        //     ->where('carpeta_id',6)
+        //     ->toSql();
 
        // \Log::info('show-ext');
         //return session()->get('empresa')->id;
@@ -390,7 +393,18 @@ class ExtractosController extends Controller
 
         return $concepto;
 
-	}
+    }
+
+    public function export($ejercicio)
+    {
+        //$ejercicio = explode("-",$request->input('fecha'));
+
+        // $this->validate($ejercicio,[
+        //     'files' => 'required|integer'
+        // ]);
+
+        return Excel::download(new ExtractosExport($ejercicio), 'extracto.xlsx');
+    }
 
 
 }

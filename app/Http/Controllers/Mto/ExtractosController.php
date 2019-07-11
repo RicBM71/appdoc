@@ -117,9 +117,12 @@ class ExtractosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show($id)
     {
-        return;
+        return Documento::with(['extractos'])
+            ->where('carpeta_id',6)
+            ->toSql();
+
        // \Log::info('show-ext');
         //return session()->get('empresa')->id;
     }
@@ -181,19 +184,20 @@ class ExtractosController extends Controller
     public function edit(Extracto $extracto)
     {
 
+        abort(404);
 
-        if ($documento->confidencial && !auth()->user()->hasRole('Admin')){
-            abort(404);
-        }
+        // if ($documento->confidencial && !auth()->user()->hasRole('Admin')){
+        //     abort(404);
+        // }
 
-        if (request()->wantsJson())
-            return [
-                'documento' => $documento,
-                'archivos'=> Archivo::selArchivos(),
-                'carpetas'=> Carpeta::selCarpetasArchivo($documento->archivo_id),
-                'extractos'=> $documento->extractos,
-                'files' => Filedoc::FilesDocumento($documento->id)->get()
-            ];
+        // if (request()->wantsJson())
+        //     return [
+        //         'documento' => $documento,
+        //         'archivos'=> Archivo::selArchivos(),
+        //         'carpetas'=> Carpeta::selCarpetasArchivo($documento->archivo_id),
+        //         'extractos'=> $documento->extractos,
+        //         'files' => Filedoc::FilesDocumento($documento->id)->get()
+        //     ];
     }
 
     /**
@@ -206,6 +210,7 @@ class ExtractosController extends Controller
     public function update(Request $request, Extracto $extracto)
     {
 
+        $data['concepto'] = $request->input('concepto');
         $data['nota'] =  $request->input('nota');
         $data['username'] = $request->user()->username;
 

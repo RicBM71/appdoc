@@ -4,22 +4,32 @@
 
         <div v-if="registros">
 
-            <v-dialog v-model="dialog" max-width="500px">
+            <v-dialog v-model="dialog" max-width="600px">
                 <v-card>
                     <v-card-title>
-                        <span class="headline">Nota</span>
+                        <span class="headline">Editar</span>
                     </v-card-title>
 
                     <v-card-text>
                         <v-container grid-list-md>
                         <v-layout wrap>
                             <v-flex xs12>
-                            <v-text-field
-                                ref="myText"
-                                v-model="editedItem.nota"
-                                v-on:keyup.enter="save"
-                                label="Nota">
-                            </v-text-field>
+                                <v-text-field
+                                    ref="myText"
+                                    v-model="editedItem.concepto"
+                                    v-on:keyup.enter="save"
+                                    label="Concepto">
+                                </v-text-field>
+                            </v-flex>
+                        </v-layout>
+                         <v-layout wrap>
+                            <v-flex xs12>
+                                <v-text-field
+                                    ref="myText"
+                                    v-model="editedItem.nota"
+                                    v-on:keyup.enter="save"
+                                    label="Nota">
+                                </v-text-field>
                             </v-flex>
                         </v-layout>
                         </v-container>
@@ -213,7 +223,7 @@
                                                         textsms
                                                     </v-icon>
                                                 </template>
-                                                <span>Editar nota</span>
+                                                <span>Editar apute/nota</span>
                                             </v-tooltip>
                                             <v-tooltip bottom>
                                                 <template v-slot:activator="{ on }">
@@ -381,7 +391,7 @@ import {mapActions} from "vuex";
           {
             text: 'Acciones',
             align: 'Center',
-            value: ''
+            value: 'nota'
           }
         ],
         editedIndex: 0,
@@ -617,7 +627,8 @@ import {mapActions} from "vuex";
             Object.assign(this.apuntes[this.editedIndex], this.editedItem)
 
             var url = "/mto/extractos/"+this.editedItem.id;
-            axios.put(url, {nota: this.editedItem.nota})
+            axios.put(url, {nota: this.editedItem.nota,
+                            concepto: this.editedItem.concepto})
                 .then(res => {
 
                 })

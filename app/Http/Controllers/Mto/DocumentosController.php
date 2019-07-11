@@ -23,7 +23,6 @@ class DocumentosController extends Controller
     public function index()
     {
 
-
         if (request()->session()->has('filtro_docu')){
             $filtro = request()->session()->get('filtro_docu');
             $documentos = Documento::ordinarios()

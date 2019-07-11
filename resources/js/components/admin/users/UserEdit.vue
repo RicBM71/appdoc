@@ -340,7 +340,7 @@
             },
             computedLoginAt() {
                 moment.locale('es');
-                return this.user.login_at ? moment(this.user.login_at).format('L') : '';
+                return this.user.login_at ? moment(this.user.login_at).format('D/MM/YYYY H:mm:ss') : '';
             },
             computedId(){
                 if (this.user.id == 1) return true; else return false;

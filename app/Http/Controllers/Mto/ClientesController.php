@@ -7,6 +7,7 @@ use App\Albacab;
 use App\Carpeta;
 use App\Cliente;
 use App\Documento;
+use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClientes;
@@ -21,17 +22,51 @@ class ClientesController extends Controller
      */
     public function index()
     {
-        $data = Cliente::all();
 
-
-        // dd(Cliente::get()->toSql());
-
-        //\Log::info(Cliente::all()->toSql());
+        $baja = "A";
+        if (request()->session()->has('filtro_cli')){
+            $baja = request()->session()->get('filtro_cli');
+        }
 
         if (request()->wantsJson())
-            return $data;
+            return $this->seleccionar($baja);
 
     }
+
+
+/**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function filtrar(Request $request)
+    {
+
+        $baja = $request->input('fbaja');
+
+        session(['filtro_cli' => $baja]);
+
+        if (request()->wantsJson()){
+            return $this->seleccionar($baja);
+        }
+
+    }
+
+    /**
+     *  @param array $data // condiciones where genéricas
+     *  @param array $doc  // condiciones para documentos
+     */
+    private function seleccionar($baja="A"){
+
+        if ($baja == "T")
+            return Cliente::all();
+        elseif ($baja == "A")
+            return Cliente::whereNull('fechabaja')->get();
+        else
+            return Cliente::where('fechabaja','>','')->get();
+
+    }
+
 
     /**
      * Show the form for creating a new resource.

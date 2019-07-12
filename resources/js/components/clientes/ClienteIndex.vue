@@ -7,9 +7,44 @@
                     <v-card-title>
                         <h2>{{titulo}}</h2>
                         <v-spacer></v-spacer>
+
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on }">
+                                <v-btn
+                                    v-on="on"
+                                    color="white"
+                                    icon
+                                    @click="filtro = !filtro"
+                                >
+                                    <v-icon color="primary">filter_list</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Filtros</span>
+                        </v-tooltip>
                         <menu-ope></menu-ope>
                     </v-card-title>
                 </v-card>
+                 <v-card v-show="filtro">
+                <v-form>
+                    <v-container>
+                        <v-layout row wrap>
+                            <v-spacer></v-spacer>
+                            <v-flex xs2 d-flex>
+                                <v-select
+                                    v-model="fbaja"
+                                    :items="sino"
+                                    label="Clientes"
+                                ></v-select>
+                            </v-flex>
+                            <v-flex sm1>
+                                <v-btn @click="filtrar"  round  block  color="info">
+                                    Filtrar
+                                </v-btn>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
+                </v-form>
+            </v-card>
                 <v-card>
                     <v-container>
                         <v-layout row wrap>
@@ -135,7 +170,13 @@ import {mapActions} from "vuex";
         dialog: false,
         cliente_id: 0,
         show_loading: true,
-
+        filtro: false,
+        fbaja: 'A',
+        sino: [
+            {text:'Alta','value':'A'},
+            {text:'Baja','value':'B'},
+            {text:'Todos','value':'T'}
+        ]
       }
     },
     mounted()
@@ -219,6 +260,38 @@ import {mapActions} from "vuex";
                 var msg = err.response.data.message;
                 this.$toast.error(msg);
 
+            });
+
+        },
+        filtrar(){
+
+            this.$validator.validateAll().then((result) => {
+                    if (result){
+                        this.show_loading = true;
+                        axios.post('/mto/clientes/filtrar',
+                                {
+                                    fbaja: this.fbaja,
+                                }
+                            )
+                            .then(res => {
+                                //console.log(res);
+                                this.pagination.page = 1;
+                                this.filtro = false;
+
+                                this.clientes   = res.data;
+                                this.show_loading = false;
+
+                            })
+                            .catch(err => {
+
+                                this.show_loading = false;
+                                if (err.response.status != 419)
+                                    this.$toast.error(err.response.data.message);
+                                else
+                                    this.$toast.error("Sesión expirada!");
+
+                            });
+                    }
             });
 
         },

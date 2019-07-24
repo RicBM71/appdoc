@@ -4,7 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="author" content="Sanaval Tecnología">
-        <meta name="description" content="Laravel Vue SPA">
+        <meta name="description" content="Desarrollo web de aplicaciones a medida con Laravel y VueJs. Alojamos tu
+            aplicación en un servidor propio. Desarrollo profesional, adaptado a tus necesidades.">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name') }} </title>
@@ -13,7 +14,7 @@
         <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
 
         <!-- Styles -->
-        <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+        {{-- <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet"> --}}
 
         <script>
             window.Laravel = {!! json_encode([

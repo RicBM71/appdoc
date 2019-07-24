@@ -21,17 +21,9 @@
 	            justify-center
 	            class="white--text"
 	          >
-	            <img src="assets/vuetify.png" alt="Vuetify.js" height="200">
+
 	            <h1 class="white--text mb-2 display-1 text-xs-center">Sanaval Tecnología</h1>
 	            <div class="subheading mb-3 text-xs-center">Desarrollamos tu aplicación Web</div>
-	            <v-btn
-	              class="blue lighten-2 mt-5"
-	              dark
-	              large
-	              href="/pre-made-themes"
-	            >
-	              Get Started
-	            </v-btn>
 	          </v-layout>
 	        </v-parallax>
 	      </section>
@@ -63,9 +55,10 @@
 	                      <div class="headline text-xs-center">Análisis funcional</div>
 	                    </v-card-title>
 	                    <v-card-text>
-	                      Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-	                      Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-	                      Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
+	                      Cuéntanos tu proyecto y buscaremos la solución más adecuada, nos comprometemos
+                          con el proyecto de principio a fin, ajustamos el presupuesto a la viabilidad
+                          de tu aplicación. Soluciones escalables, verás resultados en menos de cuatro semanas
+                          desde la firma del proyecto.
 	                    </v-card-text>
 	                  </v-card>
 	                </v-flex>
@@ -78,9 +71,10 @@
 	                      <div class="headline">Desarrollo en Laravel</div>
 	                    </v-card-title>
 	                    <v-card-text>
-	                      Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-	                      Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-	                      Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
+	                      Desarrollo en Laravel 5 junto con Vue JS. Laravel es un framework de código abierto para
+                          desarrollo de aplicaciones web con PHP 7 y su filosofía es desarrollar en PHP de forma elegante y simple, que
+                          junto con Vue Js que es un JavaScript framework hacen una combinación perfecta para el desarrollo de aplicaciones
+                          seguras y profesionales.
 	                    </v-card-text>
 	                  </v-card>
 	                </v-flex>
@@ -93,9 +87,9 @@
 	                      <div class="headline text-xs-center">Entrega del proyecto</div>
 	                    </v-card-title>
 	                    <v-card-text>
-	                      Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-	                      Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-	                      Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
+	                      Una vez desarrollado tu proyecto nos encargamos de todo, alojamos tu aplicación en un servidor propio, con
+                          tu propio dominio, gestionamos actualizaciones del servidor, backup... solo tendrás que preocuparte de la
+                          gestión de tu negocio, déjamos la parte técnica a nosotros y despreocúpate de grandes inversiones.
 	                    </v-card-text>
 	                  </v-card>
 	                </v-flex>
@@ -110,14 +104,6 @@
 	          <v-layout column align-center justify-center>
 	            <div class="headline white--text mb-3 text-xs-center">Desarrollo fácil e intuitivo</div>
 	            <em>Proyectos cerrados adaptados a tus necesidades</em>
-	            <v-btn
-	              class="blue lighten-2 mt-5"
-	              dark
-	              large
-	              href="/pre-made-themes"
-	            >
-	              Get Started
-	            </v-btn>
 	          </v-layout>
 	        </v-parallax>
 	      </section>
@@ -126,32 +112,19 @@
 	        <v-container grid-list-xl>
 	          <v-layout row wrap justify-center class="my-5">
 	            <v-flex xs12 sm4>
-	              <v-card class="elevation-0 transparent">
-	                <v-card-title primary-title class="layout justify-center">
-	                  <div class="headline">Company info</div>
-	                </v-card-title>
-	                <v-card-text>
-	                  Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-	                  Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-	                  Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
-	                </v-card-text>
-	              </v-card>
 	            </v-flex>
 	            <v-flex xs12 sm4 offset-sm1>
 	              <v-card class="elevation-0 transparent">
 	                <v-card-title primary-title class="layout justify-center">
-	                  <div class="headline">Contact us</div>
+	                  <div class="headline">Contactar</div>
 	                </v-card-title>
-	                <v-card-text>
-	                  Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-	                </v-card-text>
 	                <v-list class="transparent">
 	                  <v-list-tile>
 	                    <v-list-tile-action>
 	                      <v-icon class="blue--text text--lighten-2">phone</v-icon>
 	                    </v-list-tile-action>
 	                    <v-list-tile-content>
-	                      <v-list-tile-title>666 48 30 94</v-list-tile-title>
+	                      <v-list-tile-title>+34 666 48 30 94</v-list-tile-title>
 	                    </v-list-tile-content>
 	                  </v-list-tile>
 	                  <v-list-tile>
@@ -167,7 +140,7 @@
 	                      <v-icon class="blue--text text--lighten-2">email</v-icon>
 	                    </v-list-tile-action>
 	                    <v-list-tile-content>
-	                      <v-list-tile-title>info@sanaval.com</v-list-tile-title>
+	                      <v-list-tile-title>info@sanaval-tec.com</v-list-tile-title>
 	                    </v-list-tile-content>
 	                  </v-list-tile>
 	                </v-list>

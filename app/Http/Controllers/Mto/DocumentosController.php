@@ -274,7 +274,7 @@ class DocumentosController extends Controller
         $fecha_d = $request->input('fecha_d').'-01';
         $fecha_h = $request->input('fecha_h').'-'.date('t',strtotime($request->input('fecha_h')));
 
-        $files = Documento::with('filedocs')
+        $files = Documento::ordinarios()->with('filedocs')
         // ->whereYear('fecha',$periodo[0])
         // ->whereMonth('fecha',$periodo[1])
         ->whereIn('archivo_id',$archivo_id)

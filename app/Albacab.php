@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Albacab;
+// use App\Albacab;
 use App\Vencimiento;
 use App\Scopes\EmpresaScope;
 use Illuminate\Support\Carbon;
@@ -97,10 +97,10 @@ class Albacab extends Model
     }
 
 
-	public static function remesarFacturas($fecha){
+	// public static function remesarFacturas($fecha){
 
-        return Albacab::Remesables($fecha)->get();
+    //     return Albacab::Remesables($fecha)->get();
 
-	}
+	// }
 
 }

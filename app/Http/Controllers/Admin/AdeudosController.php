@@ -38,7 +38,7 @@ class AdeudosController extends Controller
             'fecha'=>'required|date'
         ]);
 
-        $alb =  Albacab::remesarFacturas($data['fecha']);
+        $alb =  Albacab::Remesables($data['fecha'])->get();
 
         if ($alb->count() == 0)
             abort(404,'No hay facturas para remesar');

@@ -35,7 +35,8 @@ class AdeudosController extends Controller
 
         $data = $request->validate([
             'cuenta_id'=>'required|integer',
-            'fecha'=>'required|date'
+            'fecha'=>'required|date',
+            'fecha_cob'=>'required|date'
         ]);
 
         $alb =  Albacab::Remesables($data['fecha'])->get();
@@ -43,7 +44,7 @@ class AdeudosController extends Controller
         if ($alb->count() == 0)
             abort(404,'No hay facturas para remesar');
 
-        $remesa = $this->generarRemesa($alb,$data['cuenta_id'],$data['fecha']);
+        $remesa = $this->generarRemesa($alb,$data['cuenta_id'],$data['fecha_cob']);
 
         if (request()->wantsJson())
             return [
@@ -57,7 +58,7 @@ class AdeudosController extends Controller
     /**
      * Vamos a generar el fichero de remesa.
      */
-    private function generarRemesa($data, $cuenta_id, $fecha){
+    private function generarRemesa($data, $cuenta_id, $fecha_cob){
 
 
         $cuenta = Cuenta::find($cuenta_id);
@@ -78,7 +79,7 @@ class AdeudosController extends Controller
         $directDebit->addPaymentInfo($PmtInfId, array(
             'id'                    => $PmtInfId,
             // 'dueDate'               => new \DateTime(), // optional. Otherwise default period is used
-            'dueDate'               => $fecha,
+            'dueDate'               => $fecha_cob,
             'creditorName'          => session()->get('empresa')->razon,
             'creditorAccountIBAN'   => $cuenta->iban,
             'creditorAgentBIC'      => $cuenta->bic,

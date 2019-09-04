@@ -75,14 +75,13 @@ class Cliente extends Model
 
     public static function selClientes(){
 
-        return Cliente::select('id AS value', 'nombre AS text');
+        return Cliente::select('id AS value', 'nombre AS text', 'ref19 AS ref19');
 
     }
 
     public function scopeIban($query)    {
 
-        return $query->where('iban', '>', '')
-                     ->where('fpago_id', '=', 2);
+        return $query->where('iban', '>', '');
 
     }
 

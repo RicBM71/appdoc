@@ -39,8 +39,9 @@ Route::group([
             Route::resource('contadors', 'ContadorsController', ['except'=>'show','as' => 'admin']);
             Route::resource('cuentas', 'CuentasController', ['except'=>'show','as' => 'admin']);
 
-            Route::get('sepa/transfer', 'SepaController@index');
+            Route::get('sepa/index', 'SepaController@index');
             Route::post('sepa/transfer', 'SepaController@transfer');
+            Route::post('sepa/recibos', 'SepaController@recibos');
 
             Route::get('adeudos', 'AdeudosController@index');
             Route::post('adeudos/remesar', 'AdeudosController@remesar');
@@ -85,8 +86,8 @@ Route::group([
         Route::resource('carpetas', 'CarpetasController', ['as' => 'mto']);
 
         Route::middleware('role:Root|Admin')->group(function () {
-            Route::resource('transferencias', 'TransferenciasController', ['as' => 'mto']);
-            Route::post('transferencias/filtrar', 'TransferenciasController@filtrar');
+            Route::resource('remesa', 'RemesasController', ['as' => 'mto']);
+            Route::post('remesa/filtrar', 'RemesasController@filtrar');
         });
     }
 );

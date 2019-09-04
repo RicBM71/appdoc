@@ -5,7 +5,19 @@
             <v-card-title color="indigo">
                 <h2 color="indigo">{{titulo}}</h2>
                 <v-spacer></v-spacer>
-                <!-- <menu-ope :id="user.id"></menu-ope> -->
+                <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                    <v-btn
+                        v-on="on"
+                        color="white"
+                        icon
+                        @click="goRemesas"
+                    >
+                        <v-icon color="primary">airplay</v-icon>
+                    </v-btn>
+                </template>
+                <span>Ir a Remesas</span>
+            </v-tooltip>
             </v-card-title>
         </v-card>
         <v-card>
@@ -130,7 +142,7 @@
 		},
     	data () {
       		return {
-                titulo:   "Remesa de facturación",
+                titulo:   "Generar remesa facturación: recibos",
                 fecha: new Date().toISOString().substr(0, 10),
                 fecha_cob: new Date().toISOString().substr(0, 10),
                 disabled: true,
@@ -190,16 +202,12 @@
 
                              //  console.log(response.data);
 
-                            let blob = new Blob([response.data.xml], { type: 'application/xml' })
-                            let link = document.createElement('a')
-                            link.href = window.URL.createObjectURL(blob)
-                            link.download = 'DOMI'+new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'.XML';
-                            link.click()
+                            // let blob = new Blob([response.data.xml], { type: 'application/xml' })
+                            // let link = document.createElement('a')
+                            // link.href = window.URL.createObjectURL(blob)
+                            // link.download = 'DOMI'+new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'.XML';
+                            // link.click()
 
-                                // let blob = new Blob([response.data], { type: 'application/xml' }),
-                                // url = window.URL.createObjectURL(blob)
-
-                                // window.open(url)
                             this.imp_remesa = response.data.importe;
                             this.adeudos = response.data.adeudos;
 
@@ -218,6 +226,9 @@
                     }
                 });
 
+            },
+            goRemesas(){
+                this.$router.push({ name: 'remesa.index' })
             }
     }
   }

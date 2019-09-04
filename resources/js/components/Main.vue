@@ -56,7 +56,7 @@
             <v-flex sm3 xs12>
                  <v-btn round block large color="grey" class="blue-grey lighten-3"
                      @click="goRecibos()">
-                     Emitir Recibos
+                     Recibos SEPA
                      <v-icon right dark>cloud_download</v-icon>
                 </v-btn>
             </v-flex>
@@ -64,7 +64,7 @@
             <v-flex sm3 xs12>
                  <v-btn round block large color="grey" class="blue-grey lighten-3"
                      @click="goTransfer()">
-                    Transferencias
+                    Remesas
                      <v-icon right dark>airplay</v-icon>
                 </v-btn>
             </v-flex>
@@ -72,7 +72,7 @@
             <v-flex sm3 xs12>
                  <v-btn round block large color="grey" class="blue-grey lighten-3"
                      @click="goEmitTrans()">
-                     Emitir Transferencias
+                     Transferencias SEPA
                      <v-icon right dark>present_to_all</v-icon>
                 </v-btn>
             </v-flex>
@@ -149,7 +149,7 @@ export default {
             this.$router.push({ name: 'adeudo.index' })
         },
         goTransfer(){
-            this.$router.push({ name: 'transferencia.index' })
+            this.$router.push({ name: 'remesa.index' })
         },
         goEmitTrans(){
             this.$router.push({ name: 'sepa.transfer' })

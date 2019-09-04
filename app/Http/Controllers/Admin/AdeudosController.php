@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Cuenta;
+use App\Remesa;
 use App\Albacab;
 use App\Albalin;
+use App\Cliente;
 use Illuminate\Http\Request;
+
 use Digitick\Sepa\GroupHeader;
 use App\Http\Controllers\Controller;
-
 use Digitick\Sepa\PaymentInformation;
 use Illuminate\Support\Facades\Storage;
 use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
@@ -28,7 +30,7 @@ class AdeudosController extends Controller
             return ['cuentas'=> Cuenta::selCuentas()];
     }
 
-    public function remesar(Request $request){
+     public function remesar(Request $request){
 
         if (!auth()->user()->hasRole('Admin'))
             abort(403,'No Autorizado');
@@ -44,86 +46,60 @@ class AdeudosController extends Controller
         if ($alb->count() == 0)
             abort(404,'No hay facturas para remesar');
 
-        $remesa = $this->generarRemesa($alb,$data['cuenta_id'],$data['fecha_cob']);
+        $remesa = $this->generarAdeudos($alb,$data['cuenta_id'],$data['fecha_cob']);
 
         if (request()->wantsJson())
             return [
-                'xml'       => $remesa['xml'],
                 'importe'   => $remesa['importe'],
                 'adeudos'   => $remesa['adeudos']
             ];
 
     }
 
-    /**
-     * Vamos a generar el fichero de remesa.
-     */
-    private function generarRemesa($data, $cuenta_id, $fecha_cob){
-
+    private function generarAdeudos($data, $cuenta_id, $fecha_cob){
 
         $cuenta = Cuenta::find($cuenta_id);
-
-        // firstPayment,
-        $PmtInfId =  session()->get('empresa')->cif.'000'.date('Ymdhisv');
-
-        $header = new GroupHeader(date('Y-m-d-H-i-s'), session()->get('empresa')->razon);
-        $header->setInitiatingPartyId($cuenta->sufijo_adeudo);
-
-        $directDebit = TransferFileFacadeFactory::createDirectDebitWithGroupHeader($header, 'pain.008.001.02');
-        //$directDebit = TransferFileFacadeFactory::createDirectDebit(session()->get('empresa')->cif.'000', $cuenta->sufijo_adeudo, 'pain.008.001.02');
-
-        //ReqdExctnDt -- ReqdColltnDt --
-        // create a payment, it's possible to create multiple payments,
-        // "firstPayment" is the identifier for the transactions
-        // This creates a one time debit. If needed change use ::S_FIRST, ::S_RECURRING or ::S_FINAL respectively
-        $directDebit->addPaymentInfo($PmtInfId, array(
-            'id'                    => $PmtInfId,
-            // 'dueDate'               => new \DateTime(), // optional. Otherwise default period is used
-            'dueDate'               => $fecha_cob,
-            'creditorName'          => session()->get('empresa')->razon,
-            'creditorAccountIBAN'   => $cuenta->iban,
-            'creditorAgentBIC'      => $cuenta->bic,
-            'seqType'               => PaymentInformation::S_ONEOFF,
-            //'seqType'               => PaymentInformation::S_RECURRING,
-            'creditorId'            => $cuenta->sufijo_adeudo,
-            'localInstrumentCode'   => 'CORE' // default. optional.
-        ));
 
         $imp_total_remesa = $adeudos = 0;
         foreach ($data as $row){
 
             $total = Albalin::totalLineasByAlb($row->id);
 
+            $cliente = Cliente::find($row->cliente_id);
+
+            $remesa['tipo'] = 'A';
+            $remesa['fecha'] = $fecha_cob;
+            $remesa['empresa_id'] =  session()->get('empresa')->id;
+            $remesa['cliente_id'] = $row->cliente_id;
+
+            $remesa['iban_cargo'] = $cuenta->iban;
+            $remesa['bic_cargo'] = $cuenta->bic;
+
+            $remesa['iban_abono'] = $cliente->iban;
+            $remesa['bic_abono'] = $cliente->bic;
+            $remesa['ref19'] = $cliente->ref19;
+
+            $remesa['concepto']='Factura '.$row->factura;
+            $remesa['enviada'] = false;
+            $remesa['importe'] = $total->importe;
+
+            $remesa['username'] = session()->get('username');
+
+            $reg = Remesa::create($remesa);
+
             $imp_total_remesa += $total->importe;
             $adeudos++;
-
-            $directDebit->addTransfer($PmtInfId, array(
-                'amount'                => $total->importe,
-                'debtorIban'            => $row->cliente->iban,
-                'debtorBic'             => $row->cliente->bic,
-                'debtorName'            => $row->cliente->razon,
-                'debtorMandate'         => $row->cliente->ref19,
-                'debtorMandateSignDate' => date('Y-m-d'),
-             //   'debtorMandateSignDate' => $row->fecha_fac,
-                'remittanceInformation' => 'Factura '.$row->factura,
-                'endToEndId'            => $row->factura
-            ));
-
         }
 
-        $xml = $directDebit->asXML();
-
         return [
-            'xml' => $xml,
             'importe' => $imp_total_remesa,
             'adeudos' => $adeudos
         ];
 
-        // \Storage::disk('local')->put('remesa.xml',$xml);
-
-        // \Storage::disk('local')->download('remesa.xml');
-
     }
+
+
+
 
 
 

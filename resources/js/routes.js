@@ -72,11 +72,12 @@ import DocumentoEdit from './components/documentos/DocumentoEdit.vue';
 import DocumentoShow from './components/documentos/DocumentoShow.vue';
 import DocumentoDownload from './components/documentos/Download.vue';
 
-import TransferenciaIndex from './components/transferencias/TransferenciaIndex.vue';
-import TransferenciaCreate from './components/transferencias/TransferenciaCreate.vue';
-import TransferenciaEdit from './components/transferencias/TransferenciaEdit.vue';
+import RemesaIndex from './components/remesas/RemesaIndex.vue';
+import RemesaCreate from './components/remesas/RemesaCreate.vue';
+import RemesaEdit from './components/remesas/RemesaEdit.vue';
 
-import TransferenciaSepa from './components/transferencias/TransferenciaSepa.vue';
+import TransferenciaSepa from './components/remesas/TransferenciaSepa.vue';
+import AdeudoSepa from './components/remesas/AdeudoSepa.vue';
 
 import PdfRemesa from './components/facturas/PdfRemesa.vue';
 
@@ -376,24 +377,29 @@ export default [
                 component: DocumentoDownload,
             },
             {
-                path: '/transferencias',
-                name: 'transferencia.index',
-                component: TransferenciaIndex,
+                path: '/remesas',
+                name: 'remesa.index',
+                component: RemesaIndex,
             },
             {
-                path: '/transferencias/create',
-                name: 'transferencia.create',
-                component: TransferenciaCreate,
+                path: '/remesas/create',
+                name: 'remesa.create',
+                component: RemesaCreate,
             },
             {
-                path: '/transferencias/:id/edit',
-                name: 'transferencia.edit',
-                component: TransferenciaEdit,
+                path: '/remesas/:id/edit',
+                name: 'remesa.edit',
+                component: RemesaEdit,
             },
             {
                 path: '/sepa/transfer',
                 name: 'sepa.transfer',
                 component: TransferenciaSepa,
+            },
+            {
+                path: '/sepa/adeudo',
+                name: 'sepa.adeudo',
+                component: AdeudoSepa,
             },
             // {
             //     path: '*',

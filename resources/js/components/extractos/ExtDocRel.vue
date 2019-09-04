@@ -193,7 +193,7 @@
                             <v-data-table
                             v-model="doc_selected"
                             :headers="doc_headers"
-                            :pagination.sync="pagination"
+                            :pagination.sync="doc_pagination"
                             :items="documentos"
                             :search="doc_search"
                             rows-per-page-text="Registros por página"
@@ -246,34 +246,38 @@ import {mapActions} from "vuex";
         },
         search:"",
         headers: [
-          {
-            text: 'S',
+            {
+                text: 'S',
             align: 'left',
             sortable: false
           },
           {
-            text: 'Fecha',
+              text: 'Fecha',
             align: 'left',
             value: 'fecha'
           },
           {
-            text: 'M',
+              text: 'M',
             align: 'left',
             value: 'dh'
           },
           {
-            text: 'Concepto',
+              text: 'Concepto',
             align: 'left',
             value: 'concepto'
           },
           {
-            text: 'Importe',
+              text: 'Importe',
             align: 'left',
             value: 'importe'
           }
         ],
         selected: [],
         doc_search:"",
+        doc_pagination:{
+            sortBy: "fecha",
+            descending: true,
+        },
         doc_headers: [
           {
             text: 'S',

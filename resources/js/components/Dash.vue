@@ -225,8 +225,8 @@ export default {
             children: [
                 { text: 'Albaranes y Facturas', name: 'albaran.index' , icon: 'create_new_folder'},
                 { text: 'Remesa Domiciliaciones', name: 'adeudo.index', icon: 'cloud_download' },
-                { text: 'Transferencias', name: 'transferencia.index', icon: 'airplay' },
-                { text: 'Remesa Transferencias', name: 'sepa.transfer', icon: 'present_to_all'},
+                { text: 'Remesas', name: 'remesa.index', icon: 'airplay' },
+                { text: 'Emitir Transferencias', name: 'sepa.transfer', icon: 'present_to_all'},
                 { text: 'Imprimir facturas', name: 'facturas.print', icon: 'print'},
                 { text: 'Vencimientos', name: 'vencimiento.index' },
             ]

@@ -31,6 +31,20 @@
         <v-tooltip bottom>
             <template v-slot:activator="{ on }">
                 <v-btn
+                    v-show="id > 0"
+                    v-on="on"
+                    color="white"
+                    icon
+                    @click="printPDF"
+                >
+                    <v-icon color="primary">print</v-icon>
+                </v-btn>
+            </template>
+            <span>Mandato SEPA</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+                <v-btn
                     v-on="on"
                     color="white"
                     icon
@@ -41,6 +55,7 @@
             </template>
             <span>Clientes</span>
         </v-tooltip>
+
     </div>
 </template>
 <script>
@@ -89,6 +104,12 @@ export default {
 
             });
 
+        },
+        printPDF(){
+
+            var url = '/util/mandato/'+this.id+'/print';
+
+            window.open(url, '_blank');
         },
 
     }

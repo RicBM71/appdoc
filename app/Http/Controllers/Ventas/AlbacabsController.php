@@ -3,27 +3,21 @@
 namespace App\Http\Controllers\Ventas;
 
 use PDF;
-use App\Iva;
+
 use App\Fpago;
 use App\Cuenta;
 use App\Albacab;
 use App\Albalin;
 use App\Cliente;
-use App\Empresa;
 use App\Contador;
 use App\Retencion;
 use App\Vencimiento;
 use App\Jobs\SendFactura;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
-
-
 use App\Http\Requests\StoreAlbaranes;
-use Digitick\Sepa\PaymentInformation;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Permission\Models\Permission;
-use Digitick\Sepa\TransferFile\Factory\TransferFileFacadeFactory;
+
 
 class AlbacabsController extends Controller
 {
@@ -671,16 +665,11 @@ class AlbacabsController extends Controller
      */
     private function setPieAlb($data){
 
-        $iban_print = '';
-        $iban = str_split($data->iban,4);
-        foreach ($iban as $e){
-            $iban_print .= $e.' ';
-        }
 
         PDF::MultiCell(30,8,'Forma de Pago', '1', 'C', 0, 0, '', '', true,0,false,true,8,'M',false);
 		PDF::MultiCell(60,8,$data->fpago->nombre.' '.$data->vencimiento->nombre, '1', 'L', 0, 0, '', '', true,0,false,true,8,'M',false);
         PDF::MultiCell(26,8,'IBAN', '1', 'C', 0, 0, '', '', true,0,false,true,8,'M',false);
-        PDF::MultiCell(68,8,$iban_print, '1', 'C', 0, 1, '', '', true,0,false,true,8,'M',false);
+        PDF::MultiCell(68,8, getIbanPrint($data->iban), '1', 'C', 0, 1, '', '', true,0,false,true,8,'M',false);
 
         PDF::Ln();
         PDF::MultiCell(184,24,$data->notas, '1', 'L', 0, 0, '', '', true,0,false,true,24,'T',false);

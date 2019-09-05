@@ -18,3 +18,17 @@ function getFecha($value)
     return Carbon::parse($value)->format('d/m/Y');
 
 }
+
+function getIbanPrint($iban){
+
+    $iban_print = '';
+
+    $iban = str_split($iban,4);
+
+    foreach ($iban as $e){
+        $iban_print .= $e.' ';
+    }
+
+    return $iban_print;
+
+}

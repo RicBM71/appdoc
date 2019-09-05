@@ -118,6 +118,18 @@ Route::group([
 );
 
 
+Route::group([
+    'prefix' => 'util',
+    'namespace' => 'Util',
+    'middleware' => 'auth'],
+    function (){
+
+        Route::get('mandato/{cliente}/print', 'MandatoController@print');
+
+    }
+);
+
+
 Route::any('{all}', function () {
     return view('welcome');
 })->where(['all' => '.*']);

@@ -34,7 +34,7 @@ class StoreClientes extends FormRequest
             'provincia'     => ['nullable','string', 'max:50'],
             'telefono1'     => ['nullable','string', 'max:20'],
             'telefono2'     => ['nullable','string', 'max:20'],
-            'ftmovil'       => ['nullable','string', 'max:20'],
+            'tfmovil'       => ['nullable','string', 'max:20'],
             'contacto'      => ['nullable','string', 'max:50'],
             'email'         => ['nullable','email', 'max:50'],
             'web'           => ['nullable','string', 'max:50'],
@@ -52,7 +52,7 @@ class StoreClientes extends FormRequest
             'factura'         => ['nullable','boolean'],
         ];
 
-        \Log::info($this->filled('cif'));
+        //\Log::info($this->filled('cif'));
 
          if ($this->filled('cif'))
             $data['cif'] = ['required',   Rule::unique('clientes')->ignore($this->route('cliente')->id)->where(function ($query) {

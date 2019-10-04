@@ -89,10 +89,10 @@ const getters = {
 
     },
     hasDocumenta: (state) =>{
-        return (state.roles.indexOf('Documenta') >= 0) ? true : false;
+        return (state.permisos.indexOf('Documenta') >= 0) ? true : false;
     },
     hasFactura: (state) =>{
-        return (state.roles.indexOf('Factura') >= 0) ? true : false;
+        return (state.permisos.indexOf('Factura') >= 0) ? true : false;
     },
     hasBorraDoc: (state) =>{
         return (state.permisos.indexOf('Borra documentos') >= 0) ? true : false;

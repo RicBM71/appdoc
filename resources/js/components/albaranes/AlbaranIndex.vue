@@ -280,7 +280,7 @@ import {mapActions} from "vuex";
 
         axios.get('/ventas/albacabs')
             .then(res => {
-
+                
                 this.albaranes = res.data;
                 this.show_loading = false;
             })

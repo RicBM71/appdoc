@@ -26,6 +26,13 @@ class Cliente extends Model
 
         static::addGlobalScope(new EmpresaScope);
     }
+
+    public function setNombreAttribute($nombre)
+    {
+        $this->attributes['nombre'] = strtoupper($nombre);
+
+    }
+
     public function setCifAttribute($cif)
     {
         $this->attributes['cif'] = strtoupper($cif);

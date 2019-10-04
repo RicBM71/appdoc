@@ -16,28 +16,17 @@ class UsersTableSeeder extends Seeder
     {
         // Permission::truncate();
         // Role::truncate();
-        // User::truncate();
+        User::truncate();
 
-        $rootRole = Role::create(['name'=>'Root']);
-        $adminRole = Role::create(['name'=>'Admin']);
-        $userRole = Role::create(['name'=>'Factura']);
-        $userRole = Role::create(['name'=>'Documenta']);
+        // $rootRole = Role::create(['name'=>'Root']);
+        // $adminRole = Role::create(['name'=>'Admin']);
+        // $userRole = Role::create(['name'=>'Factura']);
+        // $userRole = Role::create(['name'=>'Documenta']);
 
-        //$verPost = Permission::create(['name'=>'Ver Posts']);
-        // $actPost = Permission::create(['name'=>'Actualizar Posts']);
-        // $crearPost = Permission::create(['name'=>'Crear Posts']);
-        // $borrarPost = Permission::create(['name'=>'Borrar Posts']);
 
-        $verUser = Permission::create(['name'=>'Borra documentos']);
-        Permission::create(['name'=>'Edita Clientes']);
-        //$actUser = Permission::create(['name'=>'Actualizar Usuarios']);
-        // $crearUser = Permission::create(['name'=>'Crear Usuarios']);
-        // $borrarUser = Permission::create(['name'=>'Borrar Usuarios']);
 
-        // $verRole = Permission::create(['name'=>'Ver Roles']);
-        // $actRole = Permission::create(['name'=>'Actualizar Roles']);
-        // $crearRole = Permission::create(['name'=>'Crear Roles']);
-        // $borrarRole = Permission::create(['name'=>'Borrar Roles']);
+        // $verUser = Permission::create(['name'=>'Borra documentos']);
+        // Permission::create(['name'=>'Edita Clientes']);
 
         $user = new User;
 
@@ -46,7 +35,7 @@ class UsersTableSeeder extends Seeder
 		$user->username = "ricardo.bm";
 		$user->password = Hash::make('123');
 		$user->save();
-        $user->assignRole($rootRole);
+     //   $user->assignRole($rootRole);
 
 
         // for ($i=2; $i <= 10  ; $i++) {

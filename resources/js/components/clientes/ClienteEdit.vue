@@ -499,6 +499,7 @@ import DocuCli from './ClienteDocumento'
 
                         axios.put(url, this.cliente)
                             .then(res => {
+                               // console.log(res);
                                 this.$toast.success(res.data.message);
                                 this.cliente = res.data.cliente;
                                 this.documentos = res.data.documentos

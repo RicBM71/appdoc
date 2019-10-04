@@ -151,6 +151,7 @@ import MenuOpe from './MenuOpe'
                     if (result){
                         axios.post(url, this.cliente)
                             .then(response => {
+                                //console.log(response);
                                 this.$router.push({ name: 'cliente.edit', params: { id: response.data.cliente.id } })
                                 this.enviando = false;
 

@@ -4,10 +4,7 @@
             <v-card-title color="indigo">
                 <h2 color="indigo">{{titulo}}</h2>
                 <v-spacer></v-spacer>
-                <menu-ope
-                    :id="documento.id"
-                    :cerrado="documento.cerrado">
-                </menu-ope>
+                <menu-ope></menu-ope>
             </v-card-title>
         </v-card>
         <v-card>

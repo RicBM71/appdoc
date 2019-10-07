@@ -4,7 +4,7 @@
         <v-tooltip bottom>
             <template v-slot:activator="{ on }">
                 <v-btn
-                v-show="hasDocumenta"
+                    v-show="hasDocumenta"
                     v-on="on"
                     color="white"
                     icon
@@ -110,6 +110,9 @@ export default {
     },
     components: {
         'my-dialog': MyDialog
+    },
+    mounted(){
+        //console.log(this.hasDocumenta);
     },
     data () {
       return {

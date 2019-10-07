@@ -14,19 +14,19 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        // Permission::truncate();
-        // Role::truncate();
+        Permission::truncate();
+        Role::truncate();
         User::truncate();
 
-        // $rootRole = Role::create(['name'=>'Root']);
-        // $adminRole = Role::create(['name'=>'Admin']);
-        // $userRole = Role::create(['name'=>'Factura']);
-        // $userRole = Role::create(['name'=>'Documenta']);
+        $rootRole = Role::create(['name'=>'Root']);
+        $adminRole = Role::create(['name'=>'Admin']);
+        $userRole = Role::create(['name'=>'Factura']);
+        $userRole = Role::create(['name'=>'Documenta']);
 
 
 
-        // $verUser = Permission::create(['name'=>'Borra documentos']);
-        // Permission::create(['name'=>'Edita Clientes']);
+        $verUser = Permission::create(['name'=>'Borra documentos']);
+        Permission::create(['name'=>'Edita Clientes']);
 
         $user = new User;
 
@@ -35,7 +35,7 @@ class UsersTableSeeder extends Seeder
 		$user->username = "ricardo.bm";
 		$user->password = Hash::make('123');
 		$user->save();
-     //   $user->assignRole($rootRole);
+       $user->assignRole($rootRole);
 
 
         // for ($i=2; $i <= 10  ; $i++) {

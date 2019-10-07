@@ -109,7 +109,8 @@ export default {
         axios.get('/dash')
             .then(res => {
                 this.setAuthUser(res.data.user);
-
+               // console.log(res.data.user);
+               // console.log(res.data.user.permisos.indexOf('Documenta') >= 0);
                 this.logo = "/storage/logos/"+this.empresaActiva+".png";
             })
             .catch(err => {

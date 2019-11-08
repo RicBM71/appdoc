@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Empresa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -48,6 +49,7 @@ class HomeController extends Controller
             $permisos_user[]=$permiso->name;
         }
 
+        $jobs  = DB::table('jobs')->count();
 
         $user = [
             'id'   => $authUser->id,
@@ -66,6 +68,7 @@ class HomeController extends Controller
        // de momento no quito filtros, ya veremos.
         $this->unloadSession($request);
 
+
         session([
             'empresa_id' => $authUser->empresa_id,
             'empresa' => Empresa::find($authUser->empresa_id),
@@ -73,7 +76,12 @@ class HomeController extends Controller
             ]);
 
         if (request()->wantsJson())
-            return (compact('user'));
+            return [
+            'user' => $user,
+            'jobs' => $jobs
+        ];
+
+           // return (compact('user'));
     }
 
     /**

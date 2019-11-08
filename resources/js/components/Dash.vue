@@ -122,6 +122,9 @@
                     <span class="hidden-sm-and-down">{{ empresaTxt }}</span>
                 </v-toolbar-title>
                 <v-spacer></v-spacer>
+                <v-btn icon v-on:click="alertjobs" v-show="jobs > 0">
+                   <span class="caption yellow--text darken-4">{{jobs}}</span> <v-icon color="yellow">notification_important</v-icon>
+                </v-btn>
                 <v-btn icon v-on:click="empresa">
                     <v-icon>work_outline</v-icon>
                 </v-btn>
@@ -177,6 +180,7 @@ export default {
         empresas:[],
         myEmpresa:false,
         empresa_id:0,
+        jobs: 0,
 
         // user: {
         //     name : ""
@@ -248,7 +252,8 @@ export default {
         axios.get('/dash')
                 .then(res => {
 
-                   // console.log(res);
+                    this.jobs = res.data.jobs;
+
                     this.setAuthUser(res.data.user);
 
                     this.empresa_id = this.user.empresa_id;
@@ -290,7 +295,7 @@ export default {
         home(){
             axios.get('/dash')
                 .then(res => {
-
+                    this.jobs = res.data.jobs;
                     this.setAuthUser(res.data.user);
 
                     this.empresa_id = this.user.empresa_id;
@@ -309,6 +314,9 @@ export default {
                 })
 
             this.$router.push({name: 'dash'});
+        },
+        alertjobs(){
+            alert("Hay "+this.jobs+" jobs pendientes de envío!");
         },
         passwd(){
             this.$router.push({name: 'edit.password'});

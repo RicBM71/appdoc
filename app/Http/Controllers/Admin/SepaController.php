@@ -232,6 +232,7 @@ class SepaController extends Controller
         // create a payment, it's possible to create multiple payments,
         // "firstPayment" is the identifier for the transactions
         // This creates a one time debit. If needed change use ::S_FIRST, ::S_RECURRING or ::S_FINAL respectively
+        //$directDebit->addPaymentInfo($PmtInfId, array(
         $directDebit->addPaymentInfo($PmtInfId, array(
             'id'                    => $PmtInfId,
             // 'dueDate'               => new \DateTime(), // optional. Otherwise default period is used
@@ -239,8 +240,8 @@ class SepaController extends Controller
             'creditorName'          => session()->get('empresa')->razon,
             'creditorAccountIBAN'   => $cuenta->iban,
             'creditorAgentBIC'      => $cuenta->bic,
-            'seqType'               => PaymentInformation::S_ONEOFF,
-            //'seqType'               => PaymentInformation::S_RECURRING,
+           // 'seqType'               => PaymentInformation::S_ONEOFF,
+            'seqType'               => PaymentInformation::S_RECURRING,
             'creditorId'            => $cuenta->sufijo_adeudo,
             'localInstrumentCode'   => 'CORE' // default. optional.
         ));

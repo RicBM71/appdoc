@@ -27,7 +27,7 @@ class RemesasController extends Controller
                             ->get();
         }else{
             $remesas = Remesa::with(['cliente'])
-                ->whereYear('fecha',date('Y'))
+                //->whereYear('fecha',date('Y'))
                 ->orderBy('fecha','desc')
                 ->get();
         }

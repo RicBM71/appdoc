@@ -28,9 +28,9 @@ class StoreContadores extends FormRequest
             'ejercicio'     => ['required', 'numeric'],
             'albaran'       => ['required','numeric','min:1000'],
             'seriealb'      => ['required','string', 'max:3'],
-            'factura'       => ['required','numeric','min:1000'],
+            'factura'       => ['required','numeric','min:0'],
             'seriefac'      => ['required','string', 'max:3'],
-            'abono'         => ['required','numeric','min:1000'],
+            'abono'         => ['required','numeric','min:0'],
             'serieabo'      => ['required','string', 'max:3'],
             'username'      => ['nullable','string'],
         ];

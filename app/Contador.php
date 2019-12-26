@@ -72,7 +72,14 @@ class Contador extends Model
 
             Contador::where('id', $contador->id)->update($arr);
 
-            return $contador->seriefac.'-'.$contador->factura;
+
+
+            $l = strlen($contador->factura);
+
+            if ($l <= 3)
+                return $contador->seriefac."-".str_repeat('0', 4-$l).$contador->factura;
+            else
+                return $contador->seriefac.'-'.$contador->factura;
 
           } catch (\Exception $e) {
                 return $e->getMessage();

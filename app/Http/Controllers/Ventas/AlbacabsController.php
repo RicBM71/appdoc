@@ -708,14 +708,20 @@ class AlbacabsController extends Controller
      */
     private function crearCabecera($alb){
 
-        $data['ejercicio']=date('Y');
+        if (date('m')==12){
+            $data['ejercicio']=date('Y')+1;
+            $data['fecha_alb']=(date('Y')+1).'-01-01';
+        }
+        else {
+            $data['ejercicio']=date('Y');
+            $data['fecha_alb']=date('Y-m-d');
+        }
         $contador = Contador::incrementaContador($data['ejercicio']);
 
         $data['empresa_id'] = $alb->empresa_id;
         $data['cliente_id'] = $alb->cliente_id;
         $data['fpago_id'] = $alb->fpago_id;
         $data['vencimiento_id'] = $alb->vencimiento_id;
-        $data['fecha_alb']=date('Y-m-d');
         $data['serie']= $contador->seriealb;
         $data['albaran']= $contador->albaran;
         $data['ejercicio']   = date('Y',strtotime($data['fecha_alb']));

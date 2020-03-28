@@ -92,7 +92,7 @@ class AdeudosController extends Controller
         }
 
         return [
-            'importe' => $imp_total_remesa,
+            'importe' => round($imp_total_remesa, 2),
             'adeudos' => $adeudos
         ];
 

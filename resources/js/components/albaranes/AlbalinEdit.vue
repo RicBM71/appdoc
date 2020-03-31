@@ -68,7 +68,7 @@
                         </v-flex>
                     </v-layout>
                     <v-layout wrap>
-                        <v-flex sm6></v-flex>
+                        <v-flex sm4></v-flex>
                         <v-flex sm2>
                             <v-text-field
                                 v-model="albalin.unidades"
@@ -93,6 +93,22 @@
                                 label="Importe Ud."
                                 data-vv-name="impuni"
                                 data-vv-as="Importe Ud."
+                                required
+                                class="inputPrice"
+                                type="number"
+                                v-on:keyup.enter="submit"
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="albalin.dto"
+                                v-validate="'required|decimal:0'"
+                                :error-messages="errors.collect('dto')"
+                                label="Dto"
+                                ref="dto"
+                                data-vv-name="dto"
+                                data-vv-as="dto"
                                 required
                                 class="inputPrice"
                                 type="number"
@@ -167,7 +183,13 @@
     computed:{
         computedImporte(){
             if (this.albalin.unidades != ""){
-                this.albalin.importe =  parseFloat(this.albalin.unidades) * parseFloat(this.albalin.impuni);
+                if (this.albalin.dto == 0)
+                    this.albalin.importe =  parseFloat(this.albalin.unidades) * parseFloat(this.albalin.impuni);
+                else{
+                    var dto = (parseFloat(this.albalin.impuni) * parseFloat(this.albalin.dto) / 100).toFixed(2);
+                    this.albalin.importe =  parseFloat(this.albalin.unidades) * (parseFloat(this.albalin.impuni) - dto);
+                }
+
                 return this.albalin.importe;
             }
         }

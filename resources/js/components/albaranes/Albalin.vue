@@ -16,6 +16,7 @@
                             <td class="text-xs-right">{{ props.item.impuni | currency('€', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false }) }}</td>
                             <td class="text-xs-right">{{ props.item.poriva | currency('%', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false }) }}</td>
                             <td class="text-xs-right">{{ props.item.porirpf| currency('%', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false }) }}</td>
+                            <td class="text-xs-right">{{ props.item.dto| currency('%', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false }) }}</td>
                             <td class="text-xs-right">{{ props.item.importe| currency('€', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false }) }}</td>
                             <td class="justify-center layout px-0">
                                 <v-icon  v-if="eje_fac==0"
@@ -41,6 +42,7 @@
                         <td class="text-xs-right font-weight-bold"></td>
                         <td class="text-xs-right font-weight-bold">{{ totales.impiva| currency('€', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false }) }}</td>
                         <td class="text-xs-right font-weight-bold">{{ totales.impirpf| currency('€', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false }) }}</td>
+                        <td></td>
                         <td class="text-xs-right font-weight-bold">{{ computedTotAlb | currency('€', 2, { thousandsSeparator:'.', decimalSeparator: ',', symbolOnLeft: false }) }}</td>
                         <td class="">
                         </td>
@@ -121,6 +123,12 @@ export default {
             text: 'IRPF',
             align: 'center',
             value: 'porirpf',
+            sortable: false
+          },
+          {
+            text: 'DTO',
+            align: 'center',
+            value: 'dto',
             sortable: false
           },
           {

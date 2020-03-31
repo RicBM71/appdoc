@@ -305,7 +305,7 @@ class PrintFacturasController extends Controller
 			PDF::MultiCell(104,6,$nombre, 'LR', 'L', 0, 0, '', '', true,0,false,true,6,'M',false);
 			PDF::MultiCell(12,6,getDecimal($row->unidades,0), 'LR', 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
 			PDF::MultiCell(20,6,getDecimal($row->impuni), 'LR', 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
-			PDF::MultiCell(12,6,getDecimal($row->impdto), 'LR', 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
+			PDF::MultiCell(12,6,getDecimal($row->dto), 'LR', 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
 			PDF::MultiCell(12,6,getDecimal($row->impiva), 'LR', 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
 			PDF::MultiCell(24,6,getDecimal($row->importe), 'LR', 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
             PDF::Ln();

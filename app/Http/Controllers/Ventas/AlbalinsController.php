@@ -94,10 +94,10 @@ class AlbalinsController extends Controller
 
         if (request()->wantsJson())
            return [
-            'albalin'   => $albalin,
-            'productos'=>  Producto::selProductos(),
-            'iva'  =>  Iva::selIvas(),
-            'irpf'  =>  Retencion::selRetenciones(),
+            'albalin'   =>  $albalin,
+            'productos' =>  Producto::selProductos(),
+            'iva'       =>  Iva::selIvas(),
+            'irpf'      =>  Retencion::selRetenciones(),
 
         ];
 
@@ -124,8 +124,8 @@ class AlbalinsController extends Controller
 
         if (request()->wantsJson())
             return [
-                'lineas' => Albalin::Albacab($albalin->albacab_id)->get(),
-                'totales' => Albalin::totalAlbaran($albalin->albacab_id)
+                'lineas'    => Albalin::Albacab($albalin->albacab_id)->get(),
+                'totales'   => Albalin::totalAlbaran($albalin->albacab_id)
             ];
 
     }

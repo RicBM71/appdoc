@@ -69,7 +69,7 @@
                         </v-flex>
                     </v-layout>
                     <v-layout wrap>
-                        <v-flex sm6></v-flex>
+                        <v-flex sm4></v-flex>
                         <v-flex sm2>
                             <v-text-field
                                 v-model="albalin.unidades"
@@ -94,6 +94,22 @@
                                 label="Importe Ud."
                                 data-vv-name="impuni"
                                 data-vv-as="Importe Ud."
+                                required
+                                class="inputPrice"
+                                type="number"
+                                v-on:keyup.enter="submit"
+                            >
+                            </v-text-field>
+                        </v-flex>
+                        <v-flex sm2>
+                            <v-text-field
+                                v-model="albalin.dto"
+                                v-validate="'required|decimal:0'"
+                                :error-messages="errors.collect('dto')"
+                                label="Dto"
+                                ref="dto"
+                                data-vv-name="dto"
+                                data-vv-as="dto"
                                 required
                                 class="inputPrice"
                                 type="number"
@@ -197,7 +213,7 @@
             this.albalin.albacab_id = this.albaran_id;
 
             var url = "/ventas/albalins";
-            
+
             this.$validator.validateAll().then((result) => {
                 if (result){
 

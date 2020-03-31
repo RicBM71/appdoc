@@ -24,7 +24,7 @@
             <v-form>
                 <v-container>
                     <v-layout row wrap>
-                        <v-flex sm4 d-flex>
+                        <v-flex sm3 d-flex>
                             <v-select
                                 v-model="cuenta_id"
                                 :items="cuentas"
@@ -32,7 +32,7 @@
                                 label="Cuenta"
                             ></v-select>
                         </v-flex>
-                        <v-flex sm3>
+                        <v-flex sm2>
                             <v-menu
                                 v-model="menu2"
                                 :close-on-content-click="false"
@@ -62,8 +62,9 @@
                                 ></v-date-picker>
                             </v-menu>
                         </v-flex>
-                        <v-flex sm2 v-if="imp_remesa > 0">
+                        <v-flex sm2>
                             <v-text-field
+                                v-if="imp_remesa > 0"
                                 v-model="imp_remesa"
                                 label="Total Remesa"
                                 readonly
@@ -72,8 +73,10 @@
                             >
                             </v-text-field>
                         </v-flex>
-                        <v-flex sm1 v-if="imp_remesa > 0">
+
+                        <v-flex sm1>
                             <v-text-field
+                                v-if="imp_remesa > 0"
                                 v-model="remesas"
                                 label="Adeudos"
                                 readonly
@@ -81,12 +84,9 @@
                             >
                             </v-text-field>
                         </v-flex>
-                    </v-layout>
-                    <v-layout>
-                        <v-flex sm4></v-flex>
-                        <v-flex sm4>
+                        <v-flex sm2>
                             <div class="text-xs-center">
-                                <v-btn @click="submit"  round :disabled="show_loading" :loading="show_loading" block  color="primary">
+                                <v-btn @click="submit"  round :disabled="show_loading" :loading="show_loading" flat  color="primary">
                                     Generar Remesa
                                 </v-btn>
                             </div>
@@ -171,16 +171,15 @@
                                 link.click()
                                 document.body.removeChild(link);
 
-
-                                this.imp_remesa = response.data.importe;
-                                this.remesas = response.data.remesas;
+                                this.imp_remesa = response.data.importe.toFixed(2);
+                                this.remesas = response.data.adeudos;
 
                                 this.$toast.success("Se ha generado correctamente la remesa");
 
                                 this.show_loading = false;
                                 })
                                 .catch(err => {
-                                    console.log(err.response);
+                                    
                                     this.$toast.error(err.response.data.message);
                                     this.show_loading = false;
                                 })

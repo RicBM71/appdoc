@@ -19,6 +19,11 @@ mix.webpackConfig({
  | file for the application as well as bundling up all the JS files.
  |
  */
+mix.options({
+    terser: {
+      extractComments: false,
+    }
+  });
 
 mix.js('resources/js/app.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css');

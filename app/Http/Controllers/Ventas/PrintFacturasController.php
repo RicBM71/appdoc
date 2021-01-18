@@ -400,6 +400,8 @@ class PrintFacturasController extends Controller
 
     private function setFirmaDigital($empresa){
 
+        \Log::info('Pasa');
+
 
         (config('app.env') == "production")
             ? $clave_firma = 'file://'.base_path('storage/crt/'.$empresa->certificado)

@@ -130,7 +130,7 @@ class PrintFacturasController extends Controller
 
             // forma de pago, vencimiento
             $this->setPieAlb($data);
-            $this->setFirmaDigital($empresa);
+            //$this->setFirmaDigital($empresa);
 
         }
 

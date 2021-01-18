@@ -482,8 +482,9 @@ class AlbacabsController extends Controller
                 'ContactInfo' => $empresa->email);
 
 
-         PDF::setSignature($clave_firma,$clave_privada,$empresa->passwd_cer,"",1,$info);
-         PDF::setSignatureAppearance(10,10,10,10,-1);
+        // quito firma digital 18.01.2021
+        // PDF::setSignature($clave_firma,$clave_privada,$empresa->passwd_cer,"",1,$info);
+        // PDF::setSignatureAppearance(10,10,10,10,-1);
 
         $x = PDF::getX();
         $y = PDF::getY();

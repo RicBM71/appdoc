@@ -28,6 +28,8 @@ class AlbacabsController extends Controller
      */
     public function index()
     {
+       // dd(xdebug_get_code_coverage());
+
         $this->authorize('create', new Albacab);
 
         if (request()->session()->has('filtro_alb')){
@@ -591,7 +593,7 @@ class AlbacabsController extends Controller
 			PDF::MultiCell(12,6,getDecimal($row->unidades,0), 'LR', 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
 			PDF::MultiCell(20,6,getDecimal($row->impuni), 'LR', 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
 			PDF::MultiCell(12,6,getDecimal($row->dto), 'LR', 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
-			PDF::MultiCell(12,6,getDecimal($row->impiva), 'LR', 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
+			PDF::MultiCell(12,6,getDecimal($row->poriva), 'LR', 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
 			PDF::MultiCell(24,6,getDecimal($row->importe), 'LR', 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
             PDF::Ln();
             $total += $row->importe;
@@ -628,28 +630,28 @@ class AlbacabsController extends Controller
 
         $trazo='LRB';
 
-        if ($totales->iva<>0){
+        if ($totales['base_iva']<>0){
 			PDF::Ln();
 			PDF::MultiCell(128,6,'', '', 'L', 0, 0, '', '', true,0,false,true,6,'M',false);
-			PDF::MultiCell(32,6,'IVA '.getCurrency($totales->poriva,'%'), $trazo, 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
-			PDF::MultiCell(24,6,getCurrency($totales->iva), $trazo, 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
+			PDF::MultiCell(32,6,'IVA '.getCurrency(21,'%'), $trazo, 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
+			PDF::MultiCell(24,6,getCurrency($totales['iva']), $trazo, 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
 		}
-		if ($totales->irpf<>0){
+		if ($totales['total_irpf']<>0){
 			PDF::Ln();
 			PDF::MultiCell(128,6,'', '', 'L', 0, 0, '', '', true,0,false,true,6,'M',false);
-			PDF::MultiCell(32,6,'IRPF '.getCurrency($totales->porirpf,'%'), $trazo, 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
-			PDF::MultiCell(24,6,getCurrency($totales->irpf), $trazo, 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
+			PDF::MultiCell(32,6,'IRPF '.getCurrency($totales['irpf'],'%'), $trazo, 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
+			PDF::MultiCell(24,6,getCurrency($totales['total_irpf']), $trazo, 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
 		}
 
 		PDF::SetFont('helvetica', 'B', 9, '', false);
 		PDF::Ln();
 		PDF::MultiCell(128,6,'', '', 'L', 0, 0, '', '', true,0,false,true,6,'M',false);
 		PDF::MultiCell(32,6,'TOTAL', $trazo, 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
-		PDF::MultiCell(24,6,getCurrency($totales->importe), $trazo, 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
+		PDF::MultiCell(24,6,getCurrency($totales['total']), $trazo, 'R', 0, 0, '', '', true,0,false,true,6,'M',false);
 
 		PDF::SetFont('helvetica', '', 9, '', false);
 
-		if ($totales->iva==0)
+		if ($totales['base_iva']==0)
 			$texto='*IVA: Actividad exenta según artículo 20 IVA';
 		else
 			$texto="";

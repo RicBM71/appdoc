@@ -318,7 +318,8 @@ class ExtractosController extends Controller
 					break;
                 case '33':	// fin de cuenta.
 
-                    $this->movicuen['concepto'] = utf8_encode($concepto);
+                    //$this->movicuen['concepto'] = utf8_encode($concepto);
+                    $this->movicuen['concepto'] = $concepto;
                     $reg = Extracto::create($this->movicuen);
 					$registros++;
 
@@ -376,9 +377,10 @@ class ExtractosController extends Controller
 
 	private function conceptos($linea){
 
-        $concepto = (trim(substr($linea, 4, 38)).trim(substr($linea, 42, 38))).' ';
+        $concepto = (trim(substr($linea, 4, 38)).trim(substr($linea, 42, 38)));
 
-        $concepto = strtoupper(utf8_encode($concepto));
+        //$concepto = strtoupper(utf8_encode($concepto));
+
 
 		// buscamos la partida correspondiente.
 

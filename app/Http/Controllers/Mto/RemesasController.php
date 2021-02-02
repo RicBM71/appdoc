@@ -163,7 +163,7 @@ class RemesasController extends Controller
         $remesa->update($data);
 
         if (request()->wantsJson())
-            return ['remesa'=>$remesa, 'message' => 'La remesa ha sido modficada'];
+            return ['remesa'=>$remesa, 'message' => 'La remesa ha sido modificada'];
     }
 
     /**

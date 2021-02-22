@@ -81,13 +81,13 @@ class AdeudosController extends Controller
 
             $remesa['concepto']='Factura '.$row->factura;
             $remesa['enviada'] = false;
-            $remesa['importe'] = $total->importe;
+            $remesa['importe'] = $total['total'];
 
             $remesa['username'] = session()->get('username');
 
             $reg = Remesa::create($remesa);
 
-            $imp_total_remesa += $total->importe;
+            $imp_total_remesa += $total['total'];
             $adeudos++;
         }
 

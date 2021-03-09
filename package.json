@@ -23,7 +23,7 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
-        "elliptic": ">=6.5.3",
+        "elliptic": ">=6.5.4",
         "kind-of": ">=6.0.3",
         "moment": "^2.28.0",
         "v-currency-field": "^1.0.8",

@@ -91,7 +91,7 @@ class Albalin extends Model
         }
 
         $data['desglose_iva'] = $desglose_iva;
-        $data['total'] = round($data['importe'] + $data['iva'] - $data['irpf'], 2);
+        $data['total'] = round($data['importe'] + $data['iva'] - $data['total_irpf'], 2);
 
 
         return $data;
